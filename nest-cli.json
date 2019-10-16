@@ -1,0 +1,102 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/gateway-admin/src",
+  "monorepo": true,
+  "root": "apps/gateway-admin",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/gateway-admin/tsconfig.app.json"
+  },
+  "projects": {
+    "gateway-admin": {
+      "type": "application",
+      "root": "apps/gateway-admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway-admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway-admin/tsconfig.app.json"
+      }
+    },
+    "service-user": {
+      "type": "application",
+      "root": "apps/service-user",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-user/tsconfig.app.json"
+      }
+    },
+    "service-auth": {
+      "type": "application",
+      "root": "apps/service-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-auth/tsconfig.app.json"
+      }
+    },
+    "service-project": {
+      "type": "application",
+      "root": "apps/service-project",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-project/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-project/tsconfig.app.json"
+      }
+    },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
+    "graphql-gateway": {
+      "type": "library",
+      "root": "libs/graphql-gateway",
+      "entryFile": "index",
+      "sourceRoot": "libs/graphql-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/graphql-gateway/tsconfig.lib.json"
+      }
+    },
+    "nestjs-event-store": {
+      "type": "library",
+      "root": "libs/nestjs-event-store",
+      "entryFile": "index",
+      "sourceRoot": "libs/nestjs-event-store/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nestjs-event-store/tsconfig.lib.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "repository": {
+      "type": "library",
+      "root": "libs/repository",
+      "entryFile": "index",
+      "sourceRoot": "libs/repository/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/repository/tsconfig.lib.json"
+      }
+    },
+    "nest-casbin": {
+      "type": "library",
+      "root": "libs/nest-casbin",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-casbin/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-casbin/tsconfig.lib.json"
+      }
+    }
+  }
+}

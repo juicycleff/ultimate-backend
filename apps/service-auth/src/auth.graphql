@@ -1,0 +1,25 @@
+type AuthPayload {
+    token: String!
+}
+
+type BooleanPayload {
+    success: Boolean!
+}
+
+extend type Mutation {
+    login(input: LoginInput!): AuthPayload!
+    logout: BooleanPayload!
+    register(input: RegisterInput!):  AuthPayload!
+}
+
+input LoginInput {
+    identifier: String!
+    password: String!
+}
+
+input RegisterInput {
+    firstname: String!
+    lastname: String!
+    email: String!
+    password: String!
+}

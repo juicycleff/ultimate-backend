@@ -1,0 +1,25 @@
+#import * from "/shared.graphql";
+
+type User implements Node @key(fields: "id") {
+    """Type ID (Unique)"""
+    id: ID!
+
+    """Type creation timestamp (The timestamp the data was created)"""
+    createdAt: DateTime!
+
+    """Type update timestamp (The timestamp the data was created)"""
+    updatedAt: DateTime!
+
+    """User firstname"""
+    firstname: String!
+
+    """User lastname"""
+    lastname: String!
+
+    """User email"""
+    email: String!
+}
+
+extend type Query {
+    me: User!
+}

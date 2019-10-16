@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@graphqlcqrs/core": [
+        "libs/core/src"
+      ],
+      "@graphqlcqrs/core/*": [
+        "libs/core/src/*"
+      ],
+      "@graphqlcqrs/graphql-gateway": [
+        "libs/graphql-gateway/src"
+      ],
+      "@graphqlcqrs/graphql-gateway/*": [
+        "libs/graphql-gateway/src/*"
+      ],
+      "@graphqlcqrs/nestjs-event-store": [
+        "libs/nestjs-event-store/src"
+      ],
+      "@graphqlcqrs/nestjs-event-store/*": [
+        "libs/nestjs-event-store/src/*"
+      ],
+      "@graphqlcqrs/common": [
+        "libs/common/src"
+      ],
+      "@graphqlcqrs/common/*": [
+        "libs/common/src/*"
+      ],
+      "@juicycleff/nestjs-influxdb": [
+        "libs/nestjs-influxdb/src"
+      ],
+      "@juicycleff/nestjs-influxdb/*": [
+        "libs/nestjs-influxdb/src/*"
+      ],
+      "@graphqlcqrs/repository": [
+        "libs/repository/src"
+      ],
+      "@graphqlcqrs/repository/*": [
+        "libs/repository/src/*"
+      ],
+      "@graphqlcqrs/nest-casbin": [
+        "libs/nest-casbin/src"
+      ],
+      "@graphqlcqrs/nest-casbin/*": [
+        "libs/nest-casbin/src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

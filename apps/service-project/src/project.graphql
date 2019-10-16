@@ -1,0 +1,38 @@
+#import * from "/shared.graphql";
+
+extend type User @key(fields: "id") {
+    id: ID! @external
+
+    projects(input: Paginate): [Project!]
+}
+
+type Project implements Node @key(fields: "id") {
+    """Type ID (Unique)"""
+    id: ID!
+
+    """Type creation timestamp (The timestamp the data was created)"""
+    createdAt: DateTime!
+
+    """Type update timestamp (The timestamp the data was created)"""
+    updatedAt: DateTime!
+
+    """Project firstname"""
+    name: String!
+
+    owner: User!
+}
+
+extend type Query {
+    project(id: ID!): Project!
+    projects(paginate: Paginate): [Project!]
+}
+
+extend type Mutation {
+    createProject(input: CreateProjectInput!): Project!
+    removeProject(id: ID!):  Project!
+}
+
+input CreateProjectInput {
+    name: String!
+    description: String
+}
