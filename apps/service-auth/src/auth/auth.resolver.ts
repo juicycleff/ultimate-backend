@@ -7,6 +7,7 @@ export class AuthResolver {
 
   @Mutation('login')
   async login(@Args('input') {identifier, password}: any, @Context() context: any) {
+    console.log(context.req.headers);
     const { user } = await context.authenticate('graphql-local', { email: identifier, password });
     context.login(user);
     return {

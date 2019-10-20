@@ -1,0 +1,19 @@
+scalar JSON
+
+scalar DateTime
+
+interface Node {
+    """Type ID (Unique)"""
+    id: ID!
+
+    """Type creation timestamp (The timestamp the data was created)"""
+    createdAt: DateTime!
+
+    """Type update timestamp (The timestamp the data was created)"""
+    updatedAt: DateTime!
+}
+
+input Paginate {
+    first: Int
+    offset: Int
+}

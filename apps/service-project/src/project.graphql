@@ -1,4 +1,4 @@
-#import * from "/shared.graphql";
+#import * from "./shared.graphql";
 
 extend type User @key(fields: "id") {
     id: ID! @external

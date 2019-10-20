@@ -1,41 +1,33 @@
 import {AggregateRoot} from '@nestjs/cqrs';
 import {IsNotEmpty, IsDateString} from 'class-validator';
+import { ObjectID } from 'mongodb';
 import { DtoMapperUtils } from '@graphqlcqrs/common';
-import {
-  Column,
-  UpdateDateColumn,
-  CreateDateColumn,
-  VersionColumn,
-  PrimaryColumn,
-  Generated,
-} from 'typeorm';
+import { Before, ObjectIdColumn } from '../decorators';
 import {BaseDto} from '../dtos';
 
 export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateRoot {
 
   @IsNotEmpty()
-  @PrimaryColumn({ type: 'uuid' })
-  @Generated('uuid')
-  id: string;
-
-  /* @IsUUID()
-  @Index({ unique: true })
-  @Column({ generated: 'uuid', nullable: false, unique: true })
-  appSpecificId?: string; */
+  @ObjectIdColumn()
+  id: ObjectID;
 
   @IsDateString()
-  @CreateDateColumn({ name: 'created_at', nullable: false, type: 'timestamp without time zone' })
+  // @Column({ nullable: false })
   createdAt?: Date | string;
 
   @IsDateString()
-  @UpdateDateColumn({ name: 'updated_at', nullable: false, type: 'timestamp without time zone' })
+  // @Column({ nullable: true })
   updatedAt?: Date | string;
 
   @IsDateString()
-  @Column({ name: 'deleted_at', nullable: true, type: 'timestamp' })
+  // @Column()
   deletedAt?: Date | string;
 
-  @VersionColumn()
+  @IsDateString()
+  // @Column({ default: false })
+  deleted?: boolean;
+
+  // @VersionColumn()
   version?: number;
 
   abstract toDtoClass?: new (entity: BaseEntity, options?: any) => T;
@@ -48,6 +40,22 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateR
    * Soft delete
    */
   public remove(): void {
+    this.deletedAt = new Date();
+  }
+
+  @Before('update')
+  beforeInsert() {
+    this.createdAt = new Date();
+  }
+
+  @Before('update')
+  updateDates() {
+    this.updatedAt = new Date();
+  }
+
+  @Before('remove')
+  updateRemove() {
+    this.deleted = true;
     this.deletedAt = new Date();
   }
 }

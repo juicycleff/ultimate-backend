@@ -1,0 +1,14 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# list of Resource Config to be Applied
+resources:
+  - deployment.yaml
+
+# namespace to deploy all Resources to
+namespace: default
+
+# labels added to all Resources
+commonLabels:
+  app: marviio

@@ -16,14 +16,10 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
   @Column({ unique: true, nullable: false  })
   email: string;
 
-  @OneToOne(type => AuthEntity, hostAuth => hostAuth.user)
-  @JoinColumn()
-  auth: AuthEntity;
+  @Column(type => AuthEntity)
+  auth?: AuthEntity;
 
-  @OneToMany(type => ProjectEntity, project => project.owner, {
-    lazy: true,
-    nullable: true,
-  })
+  @Column(type => ProjectEntity)
   projects?: ProjectEntity[];
 
   toDtoClass?: new(entity: BaseEntity, options?: any) => UserResponseDto;

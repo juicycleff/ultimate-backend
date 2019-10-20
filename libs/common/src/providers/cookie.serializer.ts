@@ -10,5 +10,4 @@ export class CookieSerializer extends PassportSerializer {
   deserializeUser(payload: any, done: (a: any, b: any) => void): any {
     done(null, payload);
   }
-
 }

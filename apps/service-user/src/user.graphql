@@ -1,4 +1,4 @@
-#import * from "/shared.graphql";
+#import * from "./shared.graphql";
 
 type User implements Node @key(fields: "id") {
     """Type ID (Unique)"""
@@ -22,4 +22,5 @@ type User implements Node @key(fields: "id") {
 
 extend type Query {
     me: User!
+    user(id: ID!): User
 }

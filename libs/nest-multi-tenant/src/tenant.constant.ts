@@ -1,0 +1,1 @@
+export const CONTINUATION_KEY = 'MULTI_CON_XXX-KEY';

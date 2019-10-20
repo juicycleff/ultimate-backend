@@ -1,9 +1,15 @@
-import { GatewayConfig, ServiceEndpointDefinition } from '@apollo/gateway';
-import { GraphQLDataSource } from '@apollo/gateway/src/datasources/types';
+import { GatewayConfig } from '@apollo/gateway';
 import { GqlModuleOptions } from '@nestjs/graphql';
 import { Omit } from '@nestjs/graphql/dist/interfaces/gql-module-options.interface';
 
 // tslint:disable-next-line
-export interface IDistributedGatewayOptions extends Pick<GqlModuleOptions, 'path' | 'disableHealthCheck' | 'onHealthCheck' | 'cors' | 'bodyParserConfig' | 'installSubscriptionHandlers'>, Omit<GatewayConfig, 'buildService'> {}
+export interface IDistributedGatewayOptions extends Pick<GqlModuleOptions, 'path' | 'disableHealthCheck' | 'onHealthCheck' | 'cors' | 'bodyParserConfig' | 'installSubscriptionHandlers' | 'context' | 'subscriptions' | 'playground'>, Omit<GatewayConfig, ''>, IServiceList {}
 
-export type BuildService = (definition: ServiceEndpointDefinition) => GraphQLDataSource;
+interface IServiceList {
+  serviceList: ServiceListItem[];
+}
+
+interface ServiceListItem {
+ name: string;
+ url: string;
+}

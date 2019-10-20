@@ -1,0 +1,311 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: eventstore
+    name: eventstore
+  spec:
+    ports:
+    - name: "2113"
+      port: 2113
+      targetPort: 2113
+    - name: "1113"
+      port: 1113
+      targetPort: 1113
+    selector:
+      io.kompose.service: eventstore
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.expose.tls-secret: my-secret
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-admin
+    name: gateway-admin
+  spec:
+    ports:
+    - name: "4000"
+      port: 4000
+      targetPort: 4000
+    selector:
+      io.kompose.service: gateway-admin
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-auth
+    name: services-auth
+  spec:
+    ports:
+    - name: "9900"
+      port: 9900
+      targetPort: 9900
+    selector:
+      io.kompose.service: services-auth
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-project
+    name: services-project
+  spec:
+    ports:
+    - name: "9100"
+      port: 9100
+      targetPort: 9100
+    selector:
+      io.kompose.service: services-project
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-user
+    name: services-user
+  spec:
+    ports:
+    - name: "9000"
+      port: 9000
+      targetPort: 9000
+    selector:
+      io.kompose.service: services-user
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: eventstore
+    name: eventstore
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: eventstore
+      spec:
+        containers:
+        - image: eventstore/eventstore
+          name: eventstore-node
+          ports:
+          - containerPort: 2113
+          - containerPort: 1113
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: eventstore
+    name: eventstore
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: eventstore
+            servicePort: 2113
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.expose.tls-secret: my-secret
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-admin
+    name: gateway-admin
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: gateway-admin
+      spec:
+        containers:
+        - env:
+          - name: AUTH_ENDPOINT
+            value: http://services-auth:9900/graphql
+          - name: AUTH_PATH
+            value: auth
+          - name: PORT
+            value: "4000"
+          - name: PROJECT_ENDPOINT
+            value: http://services-project:9100/graphql
+          - name: PROJECT_PATH
+            value: project
+          - name: USER_ENDPOINT
+            value: http://services-auth:9000/graphql
+          - name: USER_PATH
+            value: user
+          image: ultimate-backend/gateway-admin
+          name: gateway-admin
+          ports:
+          - containerPort: 4000
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-admin
+    name: gateway-admin
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: gateway-admin
+            servicePort: 4000
+    tls:
+    - hosts:
+      - "true"
+      secretName: my-secret
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-auth
+    name: services-auth
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-auth
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9900"
+          image: ultimate-backend/service-auth
+          name: services-auth
+          ports:
+          - containerPort: 9900
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-project
+    name: services-project
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-project
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9100"
+          image: ultimate-backend/service-project
+          name: services-project
+          ports:
+          - containerPort: 9100
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-user
+    name: services-user
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-user
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9000"
+          image: ultimate-backend/service-user
+          name: services-user
+          ports:
+          - containerPort: 9000
+          resources: {}
+        restartPolicy: Always
+  status: {}
+kind: List
+metadata: {}
+

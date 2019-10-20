@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GraphqlDistributedModule } from '@graphqlcqrs/graphql-gateway/graphql-distributed.module';
+import { GraphqlDistributedModule } from '@graphqlcqrs/graphql-gateway';
 import * as path from 'path';
 import { buildContext } from 'graphql-passport';
 import { AppController } from './app.controller';

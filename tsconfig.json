@@ -53,6 +53,12 @@
       ],
       "@graphqlcqrs/nest-casbin/*": [
         "libs/nest-casbin/src/*"
+      ],
+      "@juicycleff/nest-multi-tenant": [
+        "libs/nest-multi-tenant/src"
+      ],
+      "@juicycleff/nest-multi-tenant/*": [
+        "libs/nest-multi-tenant/src/*"
       ]
     }
   },

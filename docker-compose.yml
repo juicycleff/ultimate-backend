@@ -1,0 +1,76 @@
+version: '3.2'
+
+services:
+
+  services-auth:
+    build:
+      context: .
+      dockerfile: docker/prod/service-auth.Dockerfile
+    image: ultimate-backend/service-auth
+    restart: always
+    ports:
+      - 9900:9900
+    environment:
+      - PORT=9900
+
+  services-project:
+    build:
+      context: .
+      dockerfile: docker/prod/service-project.Dockerfile
+    image: ultimate-backend/service-project
+    restart: always
+    ports:
+      - 9100:9100
+    environment:
+      - PORT=9100
+
+  services-user:
+    build:
+      context: .
+      dockerfile: docker/prod/service-user.Dockerfile
+    image: ultimate-backend/service-user
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - PORT=9000
+
+  gateway-admin:
+    build:
+      context: .
+      dockerfile: docker/prod/gateway-admin.Dockerfile
+    image: ultimate-backend/gateway-admin
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      - PORT=4000
+      - PROJECT_ENDPOINT=http://services-project:9100/graphql
+      - PROJECT_PATH=project
+      - AUTH_ENDPOINT=http://services-auth:9900/graphql
+      - AUTH_PATH=auth
+      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_PATH=user
+
+    depends_on:
+      - services-auth
+      - services-project
+      - services-user
+    links:
+      - services-auth
+      - services-project
+      - services-user
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
+      kompose.service.expose.tls-secret: "my-secret"
+
+  eventstore:
+    container_name: eventstore-node
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    image: eventstore/eventstore
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"

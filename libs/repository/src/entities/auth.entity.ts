@@ -1,23 +1,23 @@
-import {Entity, Column, OneToOne, BeforeInsert, BeforeUpdate} from 'typeorm';
 import { generateHashedPassword } from '@graphqlcqrs/common/utils';
 import {AuthResponseDto} from '../dtos/response';
 import {BaseEntity} from './base-entity';
 import {UserEntity} from './user.entity';
 import { LocalAuth } from './embeded/social';
+import { Before, Entity } from '../decorators';
 
 @Entity()
 export class AuthEntity extends BaseEntity<AuthResponseDto> {
 
-  @Column( type => LocalAuth, {})
+  // @Column( type => LocalAuth, {})
   local: LocalAuth;
 
-  @OneToOne(type => UserEntity, user => user.auth)
+  // @Column(type => UserEntity)
   user?: UserEntity;
 
   toDtoClass: new(entity: BaseEntity, options?: any) => AuthResponseDto;
 
-  @BeforeInsert()
-  @BeforeUpdate()
+  @Before('save')
+  @Before('update')
   enrichName() {
     this.local.hashedPassword = generateHashedPassword(this.local.hashedPassword);
   }

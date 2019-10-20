@@ -97,6 +97,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/nest-casbin/tsconfig.lib.json"
       }
+    },
+    "nest-multi-tenant": {
+      "type": "library",
+      "root": "libs/nest-multi-tenant",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-multi-tenant/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-multi-tenant/tsconfig.lib.json"
+      }
     }
   }
 }

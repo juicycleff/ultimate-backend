@@ -3,8 +3,8 @@ import { DynamicModule, Inject, Module, OnModuleInit, Optional } from '@nestjs/c
 import { HttpAdapterHost } from '@nestjs/core';
 import { ApolloServer } from 'apollo-server-express';
 
-import { BuildService, IDistributedGatewayOptions } from './interfaces';
-import { DISTRIBUTED_GATEWAY_BUILD_SERVICE, DISTRIBUTED_GATEWAY_OPTIONS } from './tokens';
+import { IDistributedGatewayOptions } from './interfaces';
+import { DISTRIBUTED_GATEWAY_OPTIONS } from './tokens';
 
 @Module({})
 export class GraphqlDistributedGatewayModule implements OnModuleInit {
@@ -25,8 +25,6 @@ export class GraphqlDistributedGatewayModule implements OnModuleInit {
   constructor(
     @Optional()
     private readonly httpAdapterHost: HttpAdapterHost,
-    @Optional() @Inject(DISTRIBUTED_GATEWAY_BUILD_SERVICE)
-    private readonly buildService: BuildService,
     @Inject(DISTRIBUTED_GATEWAY_OPTIONS)
     private readonly options: IDistributedGatewayOptions,
   ) {}
@@ -50,8 +48,9 @@ export class GraphqlDistributedGatewayModule implements OnModuleInit {
         cors,
         bodyParserConfig,
         installSubscriptionHandlers,
+        buildService,
+        ...rest
       },
-      buildService,
     } = this;
 
     const gateway = new ApolloGateway({
@@ -61,11 +60,9 @@ export class GraphqlDistributedGatewayModule implements OnModuleInit {
       buildService,
     });
 
-    const { schema, executor } = await gateway.load();
-
     this.apolloServer = new ApolloServer({
-      executor,
-      schema,
+      gateway,
+      ...rest,
     });
 
     this.apolloServer.applyMiddleware({
