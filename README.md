@@ -68,26 +68,16 @@ $ yarn run test:cov
 ### System Benefits
 
 ### Requirements
-
-List of required data, event store and cache systems
- - [x] [Event Store (Event Source datastore)](https://eventstore.org)
- - [x] [Redis (For cache database calls and graphql queries)](https://redis.io/)
- - [x] [MongoDB (Database, can be easily replaced)](https://www.mongodb.com/)
-
-System stack and frameworks
- - [x] [TypeORM](https://typeorm.io)
- - [x] [NodeJS (System runtime)](https://nodejs.org)
- - [x] [Typescript](https://www.typescriptlang.org)
- - [x] [Apollo Server](https://www.apollographql.com/docs/apollo-server)
- - [x] [NestJS (Server Framework)](https://nestjs.com)
- - [x] [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction)
- - [x] [Express JS](https://expressjs.com)
- - [x] [Fastify](https://www.fastify.io)
-
-Containerization and deployment stack.
- - [x] [Docker](https://www.docker.com/)
- - [x] [Kubernetes](https://kubernetes.io/)
- - [x] [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/)
+| Store and Cache                                                           | Stack and frameworks                          | Deployment                            |
+|---------------------------------------------------------------------------|-----------------------------------------------|----------------------------------------|
+| [Event Store (Event Source datastore)](https://eventstore.org)            | [TypeORM](https://typeorm.io)                 | [Docker](https://www.docker.com/) |
+| [Redis (For cache database calls and graphql queries)](https://redis.io/) | [NodeJS (System runtime)](https://nodejs.org) | [Kubernetes](https://kubernetes.io/) |
+| [MongoDB (Database, can be easily replaced)](https://www.mongodb.com/)    | [Typescript](https://www.typescriptlang.org)  | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
+|                                                                           | [Apollo Server](https://www.apollographql.com/docs/apollo-server) |   |
+|                                                                           | [NestJS (Server Framework)](https://nestjs.com) |   |
+|                                                                           | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |   |
+|                                                                           | [Express JS](https://expressjs.com)            |   |
+|                                                                           | [Fastify](https://www.fastify.io)              |   |
 
 ## License
 
