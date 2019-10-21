@@ -30,9 +30,9 @@ Software features
 ### Requirements
 | Store and Cache                                                           | Stack and frameworks                          | Deployment                            |
 |---------------------------------------------------------------------------|-----------------------------------------------|----------------------------------------|
-| [Event Store (Event Source datastore)](https://eventstore.org)            | [TypeORM](https://typeorm.io)                 | [Docker](https://www.docker.com/) |
-| [Redis (For cache database calls and graphql queries)](https://redis.io/) | [NodeJS (System runtime)](https://nodejs.org) | [Kubernetes](https://kubernetes.io/) |
-| [MongoDB (Database, can be easily replaced)](https://www.mongodb.com/)    | [Typescript](https://www.typescriptlang.org)  | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
+| [Event Store (Event Source Store)](https://eventstore.org)            | [TypeORM](https://typeorm.io)                 | [Docker](https://www.docker.com/) |
+| [Redis (cache)](https://redis.io/) | [NodeJS (System runtime)](https://nodejs.org) | [Kubernetes](https://kubernetes.io/) |
+| [MongoDB (Database)](https://www.mongodb.com/)    | [Typescript](https://www.typescriptlang.org)  | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
 |                                                                           | [Apollo Server](https://www.apollographql.com/docs/apollo-server) |   |
 |                                                                           | [NestJS (Server Framework)](https://nestjs.com) |   |
 |                                                                           | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |   |
