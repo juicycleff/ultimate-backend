@@ -3,13 +3,14 @@ ULTIMATE BACKEND
 </h1>
   
 <p align="center">
-  This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use.
+  (WiP): This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use.
 </p>
     <p align="center">
 </p>
 
 ## Description
-You can clone and test it out. Working as is with authentication using Stateles JWT pattern. I will be updating the readme with proper guidelines on how to use 
+This should be the go to backend base for your next scalable project. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
+to identify your tenants. The goal is to give your next big project that extra leap to awesomeness.
 
 ## Features
 Software features
@@ -19,11 +20,11 @@ Software features
  - [x] User
  - [x] Event Sourcing
  - [x] Federated GraphQL Microservice
- - [x] Emailing Queue
+ - [ ] Emailing Queue
  - [ ] Authentication by session
- - [ ] RBAC
+ - [x] RBAC (WiP)
  - [ ] Security
- - [x] Multi Tenancy
+ - [x] Multi Tenancy (WiP)
  - [ ] React Website
  
 ## Installation
