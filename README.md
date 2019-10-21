@@ -33,6 +33,30 @@ Software features
 $ yarn bootstrap
 ```
 
+## Running the auth microservice app
+```bash
+# development for admin gateway
+$ yarn run start gateway-admin
+
+# watch mode for admin gateway
+$ yarn run start:dev gateway-admin
+
+# production mode for admin gateway
+$ yarn run start:prod
+```
+
+## Test
+```bash
+# unit tests
+$ yarn run test
+
+# e2e tests
+$ yarn run test:e2e
+
+# test coverage
+$ yarn run test:cov
+```
+
 ## System
 
 ### The Problem
@@ -64,33 +88,6 @@ Containerization and deployment stack.
  - [x] [Docker](https://www.docker.com/)
  - [x] [Kubernetes](https://kubernetes.io/)
  - [x] [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/)
-
-
-## Running the auth microservice app
-
-```bash
-# development for auth microservice
-$ yarn run run:service:auth
-
-# watch mode
-$ yarn run run:service:auth:dev
-
-# production mode
-$ yarn run run:service:auth:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## License
 
