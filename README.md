@@ -11,6 +11,21 @@ ULTIMATE BACKEND
 ## Description
 You can clone and test it out. Working as is with authentication using Stateles JWT pattern. I will be updating the readme with proper guidelines on how to use 
 
+## Features
+Software features
+
+ - [x] CQRS
+ - [x] Authentication by stateful session
+ - [x] User
+ - [x] Event Sourcing
+ - [x] Federated GraphQL Microservice
+ - [x] Emailing Queue
+ - [ ] Authentication by session
+ - [ ] RBAC
+ - [ ] Security
+ - [x] Multi Tenancy
+ - [ ] React Website
+ 
 ## Installation
 
 ```bash
@@ -32,7 +47,7 @@ $ yarn bootstrap
 List of required data, event store and cache systems
  - [x] [Event Store (Event Source datastore)](https://eventstore.org)
  - [x] [Redis (For cache database calls and graphql queries)](https://redis.io/)
- - [x] [CoackroachDB (Database, can be easily replaced)](https://www.cockroachlabs.com/)
+ - [x] [MongoDB (Database, can be easily replaced)](https://www.mongodb.com/)
 
 System stack and frameworks
  - [x] [TypeORM](https://typeorm.io)
@@ -75,21 +90,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Features
-Software features
-
- - [x] CQRS
- - [x] Authentication by stateless JWT
- - [x] User
- - [x] Event Sourcing
- - [x] Federated GraphQL Microservice
- - [x] Emailing Queue
- - [ ] Authentication by session
- - [ ] RBAC
- - [ ] Security
- - [ ] Multi Tenancy
- - [ ] React Website
 
 ## License
 
