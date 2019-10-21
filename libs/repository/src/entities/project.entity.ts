@@ -1,14 +1,14 @@
-import { IsNotEmpty } from 'class-validator';
-import { Column } from 'typeorm';
+// import { IsNotEmpty } from 'class-validator';
 import {ProjectResponseDto} from '../dtos/response';
 import {BaseEntity} from './base-entity';
 import { UserEntity } from './user.entity';
-import { Entity } from '../decorators';
+import { Entity } from '@juicycleff/nest-multi-tenant/database/mongo/decorators/entity.decorator';
+import { Column } from 'typeorm';
 
 @Entity({ name: 'project' })
 export class ProjectEntity extends BaseEntity<ProjectResponseDto> {
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   @Column()
   name: string;
 

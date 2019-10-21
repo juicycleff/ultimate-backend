@@ -28,6 +28,7 @@ export interface CollectionProps {
   capped?: boolean;
   size?: number;
   max?: number;
+  supportTenant?: boolean;
   indexes?: IndexDefinition[];
 }
 
@@ -48,6 +49,6 @@ export interface Document {
 }
 
 export interface DBSource {
-  client: Promise<MongoClient>;
-  db: Promise<Db>;
+  client: Promise<MongoClient> | MongoClient;
+  db: Promise<Db> | Db;
 }

@@ -1,9 +1,8 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { MongoModuleOptions } from 'nest-mongodb';
 import { CONTEXT } from '@nestjs/graphql';
-import { TenantInfo, TenantDatabaseStrategy } from './';
+import { TenantInfo, TenantDatabaseStrategy, MongoModuleOptions } from './';
 
 @Injectable({ scope: Scope.REQUEST })
 export class NestMultiTenantService {
@@ -16,14 +15,25 @@ export class NestMultiTenantService {
     let req = null;
 
     if (this.context) {
-      req = this.context.request;
+      req = this.context.req;
     } else {
       req = this.request;
     }
 
     // @ts-ignore
     const tenantInfo = req.tenantInfo as TenantInfo;
-    let uri = '';
+    let uri = process.env.DATABASE_URI || 'mongodb://localhost/test';
+
+    if (tenantInfo === null || tenantInfo === undefined) {
+      return {
+        uri: process.env.DATABASE_URI || 'mongodb://localhost/test',
+        dbName: process.env.DATABASE_NAME || 'test',
+        clientOptions: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        },
+      };
+    }
 
     if (!tenantInfo.config.enabled) {
       return {

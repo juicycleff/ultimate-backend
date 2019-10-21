@@ -5,6 +5,10 @@ import { buildContext } from 'graphql-passport';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { MongoModule } from '@juicycleff/nest-multi-tenant/database';
+import { NestMultiTenantService } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.service';
+import { NestMultiTenantModule } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.module';
+import { RepositoryModule } from '@graphqlcqrs/repository';
 
 @Module({
   imports: [
@@ -17,7 +21,14 @@ import { AuthModule } from './auth/auth.module';
           'editor.theme': 'light',
         },
       },
+      cors: {
+        preflightContinue: true,
+        credentials: true,
+      },
       context: ({ req, res }) => buildContext({ req, res }),
+    }),
+    MongoModule.forRootAsync({
+      useExisting: NestMultiTenantService,
     }),
     AuthModule,
   ],

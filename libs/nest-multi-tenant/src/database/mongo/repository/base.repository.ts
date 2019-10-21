@@ -354,4 +354,8 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     return document;
   }
+
+  private exec() {
+    // good
+  }
 }

@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import {IsLowercase} from 'class-validator';
+// import {IsLowercase} from 'class-validator';
 
 export class FacebookAuth {
 
@@ -32,7 +32,7 @@ export class GoogleAuth {
 }
 
 export class LocalAuth {
-  @IsLowercase()
+  // @IsLowercase()
   // @Column({ nullable: true, type: 'varchar' })
   email: string;
 

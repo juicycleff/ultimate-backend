@@ -1,29 +1,29 @@
 import {AggregateRoot} from '@nestjs/cqrs';
-import {IsNotEmpty, IsDateString} from 'class-validator';
+// import {IsNotEmpty, IsDateString} from 'class-validator';
 import { ObjectID } from 'mongodb';
 import { DtoMapperUtils } from '@graphqlcqrs/common';
-import { Before, ObjectIdColumn } from '../decorators';
 import {BaseDto} from '../dtos';
+import { Before, ObjectIdColumn } from '@juicycleff/nest-multi-tenant';
 
 export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateRoot {
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   @ObjectIdColumn()
   id: ObjectID;
 
-  @IsDateString()
+  // @IsDateString()
   // @Column({ nullable: false })
   createdAt?: Date | string;
 
-  @IsDateString()
+  // @IsDateString()
   // @Column({ nullable: true })
   updatedAt?: Date | string;
 
-  @IsDateString()
+  // @IsDateString()
   // @Column()
   deletedAt?: Date | string;
 
-  @IsDateString()
+  // @IsDateString()
   // @Column({ default: false })
   deleted?: boolean;
 

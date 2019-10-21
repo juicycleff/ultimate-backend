@@ -6,9 +6,13 @@ import * as hash from 'object-hash';
 import { getClientToken, getContainerToken, getDbToken } from './mongo.util';
 import { DEFAULT_MONGO_CLIENT_OPTIONS, DEFAULT_MONGO_CONTAINER_NAME, MONGO_CONTAINER_NAME, MONGO_MODULE_OPTIONS } from './mongo.constants';
 import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces/mongo-options.interface';
+import { NestMultiTenantModule } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.module';
+import { NestMultiTenantService } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.service';
 
 @Global()
-@Module({})
+@Module({
+  imports: [NestMultiTenantModule],
+})
 export class MongoCoreModule implements OnModuleDestroy {
   constructor(
     @Inject(MONGO_CONTAINER_NAME) private readonly containerName: string,

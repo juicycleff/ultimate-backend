@@ -19,6 +19,10 @@ import { HeadersDatasource } from './headers.datasource';
       buildService({ url }) {
         return new HeadersDatasource({ url });
       },
+      cors: {
+        preflightContinue: true,
+        credentials: true,
+      },
       playground: {
         workspaceName: 'Admin Gateway',
         settings: {

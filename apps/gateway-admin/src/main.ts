@@ -1,24 +1,27 @@
 import { NestFactory } from '@nestjs/core';
-import { ApolloGateway } from '@apollo/gateway';
+import * as cookieParser from 'cookie-parser';
+import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
+import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
+import { TenantDatabaseStrategy, TenantResolverType } from '@juicycleff/nest-multi-tenant/tenant.enum';
+import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
-import { HeadersDatasource } from './headers.datasource';
-
-// Initialize an ApolloGateway instance and pass it an array of implementing
-// service names and URLs
-export const gateway = new ApolloGateway({
-  serviceList: [
-    { name: 'auth', url: 'http://localhost:9900/graphql' },
-    { name: 'user', url: 'http://localhost:9000/graphql' },
-    { name: 'project', url: 'http://localhost:9100/graphql' },
-    // more services
-  ],
-  buildService({ url }) {
-    return new HeadersDatasource({ url });
-  },
-});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(4000);
+
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+  });
+  app.use(bloodTearsMiddleware);
+  app.use(enableMultiTenancy({
+    enabled: true,
+    resolverType: TenantResolverType.Domain,
+    databaseStrategy: TenantDatabaseStrategy.DataIsolation,
+  }));
+  AppUtils.killAppWithGrace(app);
+  app.use(cookieParser());
+
+  await app.listen(parseInt(process.env.PORT, 10) || 4000);
 }
 bootstrap();

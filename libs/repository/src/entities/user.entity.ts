@@ -1,8 +1,9 @@
-import {Entity, Column, OneToOne, JoinColumn, OneToMany} from 'typeorm';
 import {UserResponseDto} from '../dtos/response';
 import {AuthEntity} from './auth.entity';
 import {BaseEntity} from './base-entity';
 import { ProjectEntity } from './project.entity';
+import { Entity } from '@juicycleff/nest-multi-tenant/database/mongo/decorators/entity.decorator';
+import { Column } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity<UserResponseDto> {

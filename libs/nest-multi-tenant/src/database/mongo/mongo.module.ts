@@ -56,7 +56,7 @@ export class MongoModule {
     const providers = createMongoProviders(connectionName, collections);
     return {
       module: MongoModule,
-      providers: providers,
+      providers,
       exports: providers,
     };
   }

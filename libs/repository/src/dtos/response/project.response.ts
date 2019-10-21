@@ -1,7 +1,7 @@
-import {IsNotEmpty} from 'class-validator';
+// import {IsNotEmpty} from 'class-validator';
 import {BaseDto} from '../base.dto';
 
 export class ProjectResponseDto extends BaseDto {
-  @IsNotEmpty()
+  // @IsNotEmpty()
   name: string;
 }

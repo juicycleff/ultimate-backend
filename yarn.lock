@@ -1637,6 +1637,17 @@ aproba@^1.0.3, aproba@^1.1.1:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
+archetype@0.8.x:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/archetype/-/archetype-0.8.8.tgz#44cfa47c70fc58e2932137ba120a8a1e3c053cb3"
+  integrity sha512-isdIbFfT3zXVan34hmxIwI8A5/8lo9MaYmwXF1iYWCnJS1GvKKnZ4GrXoOUgKdUMCiB/wdguRXeStCUQhFjexg==
+  dependencies:
+    lodash.clonedeep "4.x"
+    lodash.set "4.x"
+    lodash.unset "4.x"
+    mpath "0.5.1"
+    standard-error "1.1.0"
+
 are-we-there-yet@~1.1.2:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/are-we-there-yet/-/are-we-there-yet-1.1.5.tgz#4b35c2944f062a8bfcda66410760350fe9ddfc21"
@@ -2527,6 +2538,14 @@ concat-stream@^1.5.0, concat-stream@^1.5.2:
     inherits "^2.0.3"
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
+
+connect-mongodb-session@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/connect-mongodb-session/-/connect-mongodb-session-2.2.0.tgz#3d70bc9912756bfdfd2aeeda4def1fd9e07c69a6"
+  integrity sha512-7TMsEKzL8Fys9h7jU4MP1Qg2rySokjyFk7diQJITaDKcweWakXcLI9jDeg0h99b7i45ooUKg41VPfQp8hVYoYQ==
+  dependencies:
+    archetype "0.8.x"
+    mongodb "3.2.x"
 
 consola@^2.3.0:
   version "2.10.1"
@@ -5265,6 +5284,11 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash.clonedeep@4.x:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -5315,6 +5339,11 @@ lodash.once@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
 
+lodash.set@4.x:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
+  integrity sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=
+
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
@@ -5329,6 +5358,11 @@ lodash.transform@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.transform/-/lodash.transform-4.6.0.tgz#12306422f63324aed8483d3f38332b5f670547a0"
   integrity sha1-EjBkIvYzJK7YSD0/ODMrX2cFR6A=
+
+lodash.unset@4.x:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/lodash.unset/-/lodash.unset-4.5.2.tgz#370d1d3e85b72a7e1b0cdf2d272121306f23e4ed"
+  integrity sha1-Nw0dPoW3Kn4bDN8tJyEhMG8j5O0=
 
 lodash.xorby@^4.7.0:
   version "4.7.0"
@@ -5685,6 +5719,17 @@ mongo-cursor-pagination@^7.1.0:
     semver "^5.4.1"
     underscore "^1.8.3"
 
+mongodb-core@3.2.7:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.2.7.tgz#a8ef1fe764a192c979252dacbc600dc88d77e28f"
+  integrity sha512-WypKdLxFNPOH/Jy6i9z47IjG2wIldA54iDZBmHMINcgKOUcWJh8og+Wix76oGd7EyYkHJKssQ2FAOw5Su/n4XQ==
+  dependencies:
+    bson "^1.1.1"
+    require_optional "^1.0.1"
+    safe-buffer "^5.1.2"
+  optionalDependencies:
+    saslprep "^1.0.0"
+
 mongodb-extended-json@^1.7.1:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/mongodb-extended-json/-/mongodb-extended-json-1.10.2.tgz#605fab5ad14dbdbeff6d5f373dd87c37d835269b"
@@ -5698,6 +5743,14 @@ mongodb-extended-json@^1.7.1:
     lodash.transform "^4.6.0"
     moment "^2.10.6"
     raf "^3.1.0"
+
+mongodb@3.2.x:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.2.7.tgz#8ba149e4be708257cad0dea72aebb2bbb311a7ac"
+  integrity sha512-2YdWrdf1PJgxcCrT1tWoL6nHuk6hCxhddAAaEh8QJL231ci4+P9FLyqopbTm2Z2sAU6mhCri+wd9r1hOcHdoMw==
+  dependencies:
+    mongodb-core "3.2.7"
+    safe-buffer "^5.1.2"
 
 mongodb@^3.3.3:
   version "3.3.3"
@@ -5721,6 +5774,11 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+mpath@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.5.1.tgz#17131501f1ff9e6e4fbc8ffa875aa7065b5775ab"
+  integrity sha512-H8OVQ+QEz82sch4wbODFOz+3YQ61FYz/z3eJ5pIdbMEaUzDqA268Wd+Vt4Paw9TJfvDgVKaayC0gBzMIw2jhsg==
 
 ms@2.0.0:
   version "2.0.0"
@@ -5826,11 +5884,6 @@ neo-async@^2.5.0, neo-async@^2.6.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
-
-nest-mongodb@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/nest-mongodb/-/nest-mongodb-6.1.0.tgz#92643982690a50464f0a236e4d3bf30f7bb40f20"
-  integrity sha512-bxK8ADX+fKnH8wY0Q4G9/wA6jYU+Pjz7gzJE9OK1Tg3RZBcfvrnkLaVRvrOPHhBn3UUJl6tzZlf2W0iCo+FAog==
 
 next-tick@1, next-tick@^1.0.0:
   version "1.0.0"
@@ -7128,6 +7181,11 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
 
+set-cookie-parser@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/set-cookie-parser/-/set-cookie-parser-2.4.0.tgz#0b3b2ca28188d830fe7a0a04308cdc8e632d8327"
+  integrity sha512-qYs5vMi1s6HB3nNmlPWQpd8rx/tubHGKHiTcmb3k5QqDYQFQSmWnJqayLaG3pODo5TCZc8jgqKhsOdicmZK2kg==
+
 set-value@^2.0.0, set-value@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/set-value/-/set-value-2.0.1.tgz#a18d40530e6f07de4228c7defe4227af8cad005b"
@@ -7365,6 +7423,11 @@ stack-utils@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/stack-utils/-/stack-utils-1.0.2.tgz#33eba3897788558bebfc2db059dc158ec36cebb8"
   integrity sha512-MTX+MeG5U994cazkjd/9KNAapsHnibjMLnfXodlkXw76JEea0UiNzrqidzo1emMwk7w5Qhc9jd4Bn9TBb1MFwA==
+
+standard-error@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/standard-error/-/standard-error-1.1.0.tgz#23e5168fa1c0820189e5812701a79058510d0d34"
+  integrity sha1-I+UWj6HAggGJ5YEnAaeQWFENDTQ=
 
 static-extend@^0.1.1:
   version "0.1.2"

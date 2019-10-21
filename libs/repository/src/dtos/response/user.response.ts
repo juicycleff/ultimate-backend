@@ -1,13 +1,13 @@
-import {IsNotEmpty} from 'class-validator';
+// import {IsNotEmpty} from 'class-validator';
 import {BaseDto} from '../base.dto';
 
 export class UserResponseDto extends BaseDto {
-  @IsNotEmpty()
+  // @IsNotEmpty()
   firstname: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   lastname: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   email: string;
 }

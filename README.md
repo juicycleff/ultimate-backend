@@ -1,9 +1,9 @@
 <h1 align="center">
-GraphQL CQRS Microservice Boilerplate
+ULTIMATE BACKEND
 </h1>
   
 <p align="center">
-  This is a boilerplate for showing advance microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use.
+  This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use.
 </p>
     <p align="center">
 </p>

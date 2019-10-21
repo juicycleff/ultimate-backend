@@ -8,6 +8,10 @@ import { SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    credentials: true,
+    preflightContinue: true,
+  });
   app.enableShutdownHooks();
   app.use(bloodTearsMiddleware);
   AppUtils.killAppWithGrace(app);

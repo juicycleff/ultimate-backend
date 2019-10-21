@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RepositoryService } from './repository.service';
+import { AuthRepository } from '@graphqlcqrs/repository/repositories/auth.repository';
 
 @Module({
-  providers: [RepositoryService],
-  exports: [RepositoryService],
+  providers: [AuthRepository],
+  exports: [AuthRepository],
 })
 export class RepositoryModule {}

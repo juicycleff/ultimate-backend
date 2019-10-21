@@ -1,7 +1,8 @@
 import {BaseEntity} from '../entities';
+import { ObjectID } from 'mongodb';
 
 export class BaseDto {
-  id: string;
+  id: string | ObjectID;
   createdAt: Date | string;
   updatedAt: Date | string;
 
