@@ -46,7 +46,7 @@ Software features
 $ yarn bootstrap
 ```
 
-## Running the auth microservice app
+## Running the admin gateway microservice
 ```bash
 # development for admin gateway
 $ yarn run start gateway-admin
