@@ -15,16 +15,16 @@ to identify your tenants. The goal is to give your next big project that extra l
 ## Features
 Software features
 
- - [x] CQRS
- - [x] Authentication by stateful session
- - [x] User
- - [x] Event Sourcing
- - [x] Federated GraphQL Microservice
+ - ✅ CQRS
+ - ✅ Authentication by stateful session
+ - ✅ User
+ - ✅ Event Sourcing
+ - ✅ Federated GraphQL Microservice
  - [ ] Emailing Queue
  - [ ] Authentication by session
- - [x] RBAC (WiP)
+ - ✅ RBAC (WiP)
  - [ ] Security
- - [x] Multi Tenancy (WiP)
+ - ✅ Multi Tenancy (WiP)
  - [ ] React Website
  
 ## Installation
