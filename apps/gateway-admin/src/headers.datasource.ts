@@ -5,7 +5,7 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
   willSendRequest({ request, context }) {
 
     if (context.req) {
-      if (context.req && context.req.headers) {
+      if (context.req.headers) {
         const ctxHeaders = context.req.headers;
 
         for (const key in ctxHeaders) {
@@ -14,9 +14,15 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
           }
         }
       }
-      if (context.req && context.req.cookies) {
+      if (context.req.cookies) {
         // tslint:disable-next-line:no-console
         console.log('cookies', context.req.cookies);
+      }
+      if (context.req.tenantInfo) {
+        // tslint:disable-next-line:no-console
+        console.log('tenantInfo start', context.req.tenantInfo);
+        request.tenantInfo = context.req.tenantInfo;
+        request.http.headers.set('x-tenant-info', JSON.stringify(context.req.tenantInfo));
       }
     }
   }

@@ -4,3 +4,4 @@ export * from './interfaces';
 export * from './tenant.enum';
 export * from './tenant.constant';
 export * from './database';
+export * from './enums';

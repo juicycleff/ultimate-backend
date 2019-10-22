@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { AuthRepository } from '@graphqlcqrs/repository/repositories/auth.repository';
+import { AuthEntity } from '@graphqlcqrs/repository/entities';
 
 @Injectable()
 export class AuthService {
   constructor(private authRepository: AuthRepository) {}
 
-  async create(cat: any) {
-    // @ts-ignore
-    return await this.authRepository.create({
-      local: {
-        email: 'juicycleff@gmail.com',
-        hashedPassword: 'green',
-      },
-    }); // save(cat);
+  async create(auth: Partial<AuthEntity> | AuthEntity) {
+    try {
+      return await this.authRepository.create(auth);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async validateUser(email: string, pass: string): Promise<any> {

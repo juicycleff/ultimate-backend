@@ -10,33 +10,31 @@ export const tenantNamespace = createNamespace(CONTINUATION_KEY);
 export function enableMultiTenancy(option: MultiTenancyConfig) {
 
   if (option.resolverType === TenantResolverType.Domain) {
-    return vhost('*.localhost:9900', (req, res, next) => {
-      // for match of "foo.bar.example.com:8080" against "*.*.example.com":
-      console.dir(req.vhost.host); // => 'foo.bar.example.com:8080'
-      console.dir(req.vhost.hostname); // => 'foo.bar.example.com'
-      console.dir(req.vhost.length); // => 2
-      console.dir(req.vhost[0]); // => 'foo'
-      console.dir(req.vhost[1]); // => 'bar'
-
+    return vhost('*.localhost', (req, res, next) => {
       if (!option.enabled) {
         next();
       }
 
-      const tenantInfo: TenantInfo = {};
-
-      if (option.resolverType === TenantResolverType.Domain && req.subdomains.length) {
-        tenantInfo.tenant = req.subdomains[0];
-        tenantNamespace.run(() => {
-          tenantNamespace.set('tenant', tenantInfo);
-          next();
-        });
+      if (req.vhost.length) {
+        const tenantInfo: TenantInfo = {
+          tenant: req.vhost.length && req.vhost[0],
+          config: {
+            ...option,
+          },
+        } as TenantInfo;
+        req.tenantInfo = tenantInfo;
+        next();
+      } else {
+        next();
       }
     });
   }
+
   return (req, res: Response, next) => {
     if (!option.enabled) {
       next();
     }
+    console.log('Jumpp3');
 
     const tenant = {
       id: null,
@@ -44,9 +42,8 @@ export function enableMultiTenancy(option: MultiTenancyConfig) {
 
     if (option.resolverType === TenantResolverType.Cookie) {
       // tenant.id = req.cookie
+      console.log(req.cookies);
     }
-
-    console.log(req.cookies);
     next();
   };
 }

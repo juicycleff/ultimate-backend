@@ -2,6 +2,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { AuthService } from './auth.service';
+import { AuthEntity } from '@graphqlcqrs/repository/entities';
 
 @Resolver('AuthPayload')
 export class AuthResolver {
@@ -13,10 +14,15 @@ export class AuthResolver {
   async login(@Args('input') {identifier, password}: any, @Context() context: any) {
     console.log('************************');
     console.log(context.req.session);
-    const gt = await this.authService.create({
-      name: 'catty',
-      sound: 'meow',
-    });
+    let auth = new AuthEntity();
+    // @ts-ignore
+    auth = {
+      local: {
+        email: 'rex@gmail.com',
+        hashedPassword: 'blaaaaab',
+      },
+    };
+    const gt = await this.authService.create(auth);
     // console.log(gt);
     console.log('************************');
     const { user } = await context.authenticate('graphql-local', { email: identifier, password });

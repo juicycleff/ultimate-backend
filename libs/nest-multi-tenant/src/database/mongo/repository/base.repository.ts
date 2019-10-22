@@ -1,8 +1,6 @@
-import { Collection, ObjectID, DeleteWriteOpResultObject } from 'mongodb';
-import {
-  COLLECTION_KEY, CollectionProps, DBSource, FindRequest,
-  POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest,
-} from '../interfaces';
+import { Collection, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
+import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
+import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
 
 // that class only can be extended
 export class BaseRepository <DOC, DTO = DOC> {
@@ -51,7 +49,7 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     const results: DOC[] = [];
     for (const result of found) {
-      results.push(await this.invokeEvents(POST_KEY, ['find', 'findMany'], this.toggleId(result, false)));
+      results.push(await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], this.toggleId(result, false)));
     }
 
     return results;
@@ -70,7 +68,7 @@ export class BaseRepository <DOC, DTO = DOC> {
     let document = await collection.findOne(conditions);
     if (document) {
       document = this.toggleId(document, false);
-      document = await this.invokeEvents(POST_KEY, ['find', 'findOne'], document);
+      document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
       return document;
     }
   }
@@ -109,7 +107,7 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     for (let document of newDocuments) {
       document = this.toggleId(document, false);
-      document = await this.invokeEvents(POST_KEY, ['find', 'findMany'], document);
+      document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], document);
       results.push(document);
     }
 
@@ -123,15 +121,18 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseRepository
    */
-  async create(document: DTO): Promise<DOC> {
+  async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
-    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['save', 'create'], document);
+    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
+
+    console.log(eventResult);
+
     const res = await collection.insertOne(eventResult as DOC);
 
     let newDocument = res.ops[0];
     // @ts-ignore
     newDocument = this.toggleId(newDocument, false);
-    newDocument = await this.invokeEvents(POST_KEY, ['save', 'create'], newDocument);
+    newDocument = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocument);
     // @ts-ignore
     return newDocument;
   }
@@ -149,7 +150,7 @@ export class BaseRepository <DOC, DTO = DOC> {
     // @ts-ignore
     const id = new ObjectID(document.id);  // flip/flop ids
 
-    const updates = await this.invokeEvents(PRE_KEY, ['save'], document);
+    const updates = await this.invokeEvents(PRE_KEY, ['SAVE'], document);
     delete updates.id;
     delete updates._id;
     const query = { _id: id };
@@ -166,7 +167,7 @@ export class BaseRepository <DOC, DTO = DOC> {
     // @ts-ignore
     delete newDocument._id;
 
-    newDocument = await this.invokeEvents(POST_KEY, ['save'], newDocument);
+    newDocument = await this.invokeEvents(POST_KEY, ['SAVE'], newDocument);
     return newDocument;
   }
 
@@ -195,7 +196,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   async findOneAndUpdate(req: UpdateRequest): Promise<DOC> {
     const collection = await this.collection;
-    const updates = await this.invokeEvents(PRE_KEY, ['update', 'updateOne'], req.updates);
+    const updates = await this.invokeEvents(PRE_KEY, ['UPDATE', 'UPDATE_ONE'], req.updates);
 
     const res = await collection.findOneAndUpdate(req.conditions, updates, {
       upsert: req.upsert,
@@ -204,7 +205,7 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     let document = res.value;
     document = this.toggleId(document, false);
-    document = await this.invokeEvents(POST_KEY, ['update', 'updateOne'], document);
+    document = await this.invokeEvents(POST_KEY, ['UPDATE', 'UPDATE_ONE'], document);
     return document;
   }
 
@@ -229,9 +230,9 @@ export class BaseRepository <DOC, DTO = DOC> {
   async deleteOne(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
 
-    await this.invokeEvents(PRE_KEY, ['delete', 'deleteOne'], conditions);
-    const deleteResult = collection.deleteOne(conditions);
-    await this.invokeEvents(POST_KEY, ['delete', 'deleteOne'], deleteResult);
+    await this.invokeEvents(PRE_KEY, ['DELETE', 'DELETE_ONE'], conditions);
+    const deleteResult = await collection.deleteOne(conditions);
+    await this.invokeEvents(POST_KEY, ['DELETE', 'DELETE_ONE'], deleteResult);
 
     return deleteResult;
   }
@@ -246,11 +247,23 @@ export class BaseRepository <DOC, DTO = DOC> {
   async deleteMany(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
 
-    await this.invokeEvents(PRE_KEY, ['delete', 'deleteMany'], conditions);
-    const deleteResult = collection.deleteMany(conditions);
-    await this.invokeEvents(POST_KEY, ['delete', 'deleteMany'], deleteResult);
+    await this.invokeEvents(PRE_KEY, ['DELETE_ONE', 'DELETE_MANY'], conditions);
+    const deleteResult = await collection.deleteMany(conditions);
+    await this.invokeEvents(POST_KEY, ['DELETE_ONE', 'DELETE_MANY'], deleteResult);
 
     return deleteResult;
+  }
+
+  /**
+   * Delete multiple records
+   *
+   * @param {*} conditions
+   * @returns {Promise<any>}
+   * @memberof BaseRepository
+   */
+  async exists(conditions: any): Promise<boolean> {
+    const collection = await this.collection;
+    return await collection.find(conditions).count() > 0;
   }
 
   /**
@@ -341,12 +354,14 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseRepository
    */
-  private async invokeEvents(type: string, fns: string[], document: any): Promise<any> {
+  private async invokeEvents(type: string, fns: DataEvents[], document: any): Promise<any> {
+    const test = Reflect.getMetadata('entity', this) || [];
+    console.log(document, test);
     for (const fn of fns) {
       const events = Reflect.getMetadata(`${type}_${fn}`, this) || [];
       for (const event of events) {
         document = event.bind(this)(document);
-        if (typeof document.then === 'function') {
+        if (document !== undefined && typeof document.then === 'function') {
           document = await document;
         }
       }

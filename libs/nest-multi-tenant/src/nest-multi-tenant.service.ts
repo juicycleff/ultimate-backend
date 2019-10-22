@@ -20,8 +20,13 @@ export class NestMultiTenantService {
       req = this.request;
     }
 
+    let tenantFromHeader = req.headers['x-tenant-info'];
+    if (tenantFromHeader) {
+      tenantFromHeader = JSON.parse(req.headers['x-tenant-info']);
+    }
+
     // @ts-ignore
-    const tenantInfo = req.tenantInfo as TenantInfo;
+    const tenantInfo = tenantFromHeader as TenantInfo;
     let uri = process.env.DATABASE_URI || 'mongodb://localhost/test';
 
     if (tenantInfo === null || tenantInfo === undefined) {
