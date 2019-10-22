@@ -8,6 +8,9 @@ ULTIMATE BACKEND
     <p align="center">
 </p>
 
+<a href="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=for-the-badge" alt="License"/></a>
+<a href="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" alt="Snyk"/></a>
+
 ## Description
 This should be the go to backend base for your next scalable project. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness.

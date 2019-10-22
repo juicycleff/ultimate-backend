@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphqlDistributedGatewayModule } from '@graphqlcqrs/graphql-gateway';
@@ -6,6 +6,7 @@ import { HeadersDatasource } from './headers.datasource';
 
 @Module({
   imports: [
+    CacheModule.register(),
     GraphqlDistributedGatewayModule.forRoot({
       subscriptions: false,
       path: '/graphql',

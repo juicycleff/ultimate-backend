@@ -21,7 +21,6 @@ async function bootstrap() {
   }));
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());
-
   await app.listen(parseInt(process.env.PORT, 10) || 4000);
 }
 bootstrap();

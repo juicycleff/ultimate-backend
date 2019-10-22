@@ -32,6 +32,12 @@ export interface CollectionProps {
   indexes?: IndexDefinition[];
 }
 
+export interface EntityProps {
+  name?: string;
+  supportTenant?: boolean;
+  indexes?: IndexDefinition[];
+}
+
 export interface IndexDefinition {
   // The fields to index on
   fields: { [fieldName: string]: string | any };
