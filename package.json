@@ -17,13 +17,15 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/gateway-admin/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "test": "jest",
+    "test": "snyk test && jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
     "kompose": "kompose convert -o deployment.yaml",
-    "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s"
+    "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "@apollo/gateway": "^0.10.6",
@@ -95,6 +97,7 @@
     "@types/supertest": "^2.0.8",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "snyk": "^1.236.1",
     "supertest": "^4.0.2",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.1.1",
