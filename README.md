@@ -43,7 +43,7 @@ Software features
 ## Installation
 
 ```bash
-$ yarn bootstrap
+$ yarn
 ```
 
 ## Running the admin gateway microservice

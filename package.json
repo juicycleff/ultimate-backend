@@ -1,8 +1,12 @@
 {
-  "name": "gateway-admin",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "name": "ultimate-backend",
+  "version": "0.0.2-alpha2",
+  "description": "This is an enterprise scale advanced microservice pattern with GraphQL",
+  "author": {
+    "name": "Rex Isaac Raphael",
+    "email": "rex.rahael@outlook.com",
+    "url": "https://xraph.com"
+  },
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -18,10 +22,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
-    "kompose": "kompose convert -o deployment.yaml"
+    "kompose": "kompose convert -o deployment.yaml",
+    "docs": "npx compodoc --theme material -p tsconfig.json -s"
   },
   "dependencies": {
     "@apollo/gateway": "^0.10.6",
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/cqrs": "^6.0.1",
