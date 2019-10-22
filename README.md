@@ -21,7 +21,6 @@ Software features
  * ✅ Event Sourcing
  * ✅ Federated GraphQL Microservice
  * ❌ Emailing Queue
- * ❌ Authentication by session
  * ✅ Role Based Access Control (WiP)
  * ❌ Security
  * ✅ Multi Tenancy (WiP)

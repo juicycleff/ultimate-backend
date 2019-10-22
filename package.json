@@ -23,7 +23,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
     "kompose": "kompose convert -o deployment.yaml",
-    "docs": "npx compodoc --theme material -p tsconfig.json -s"
+    "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s"
   },
   "dependencies": {
     "@apollo/gateway": "^0.10.6",
