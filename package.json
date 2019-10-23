@@ -17,6 +17,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/gateway-admin/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
+    "lint-md": "remark .",
     "test": "snyk test && jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -99,6 +100,10 @@
     "@types/supertest": "^2.0.8",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "remark-cli": "^7.0.0",
+    "remark-lint-emphasis-marker": "^1.0.3",
+    "remark-lint-strong-marker": "^1.0.3",
+    "remark-preset-lint-recommended": "^3.0.3",
     "snyk": "^1.236.1",
     "supertest": "^4.0.2",
     "ts-jest": "^24.1.0",
@@ -135,5 +140,10 @@
       "@graphqlcqrs/nest-casbin/(.*)": "<rootDir>/libs/nest-casbin/src/$1",
       "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1"
     }
+  },
+  "remarkConfig": {
+    "plugins": [
+      "remark-preset-lint-recommended"
+    ]
   }
 }
