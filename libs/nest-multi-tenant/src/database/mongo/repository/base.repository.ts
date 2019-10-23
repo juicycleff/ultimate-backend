@@ -1,4 +1,5 @@
 import { Collection, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
+import { CacheStore } from '@nestjs/common';
 import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
 
@@ -14,9 +15,11 @@ export class BaseRepository <DOC, DTO = DOC> {
   /**
    * Creates an instance of BaseRepository.
    * @param {DBSource} dbSource Your MongoDB connection
+   * @param cacheStore
+   * @param opts
    * @memberof BaseRepository
    */
-  constructor(public dbSource: DBSource, opts?: CollectionProps) {
+  constructor(public dbSource: DBSource, cacheStore?: CacheStore, opts?: CollectionProps) {
     this.options = Object.assign({}, opts, Reflect.getMetadata(COLLECTION_KEY, this));
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');

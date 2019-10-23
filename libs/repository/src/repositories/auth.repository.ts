@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, CACHE_MANAGER, CacheStore } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { BaseRepository, EntityRepository, InjectDb, InjectClient, Before } from '@juicycleff/nest-multi-tenant';
 import {AuthEntity} from '../entities';
@@ -10,11 +10,12 @@ export class AuthRepository extends BaseRepository<AuthEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,
+    @Inject(CACHE_MANAGER) private readonly cacheStore: CacheStore,
   ) {
     super({
       client: dbc,
       db,
-    });
+    }, cacheStore);
   }
 
   @Before('SAVE', 'CREATE')
