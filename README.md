@@ -8,12 +8,12 @@ ULTIMATE BACKEND
     <p align="center">
 </p>
 
-<a href="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=for-the-badge" alt="License"/></a>
-<a href="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" alt="Snyk"/></a>
-<a href="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=for-the-badge" alt="Code Size"/></a>
-<a href="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=for-the-badge" alt="Version"/></a>
-<a href="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=for-the-badge" alt="Top Language"/></a>
-<a href="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=for-the-badge" target="_blank"><img src="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=for-the-badge" alt="Top Language"/></a>
+<a href="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=flat-square" target="_blank"><img src="https://img.shields.io/github/license/juicycleff/ultimate-backend?style=flat-square" alt="License"/></a>
+<a href="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=flat-square" target="_blank"><img src="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=flat-square" alt="Snyk"/></a>
+<a href="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=flat-square" target="_blank"><img src="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=flat-square" alt="Code Size"/></a>
+<a href="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=flat-square" target="_blank"><img src="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=flat-square" alt="Version"/></a>
+<a href="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=flat-square" target="_blank"><img src="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=flat-square" alt="Top Language"/></a>
+<a href="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=flat-square" target="_blank"><img src="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=flat-square" alt="Top Language"/></a>
 
 ## Description
 
@@ -37,16 +37,16 @@ Software features
 
 ### Requirements
 
-| Store and Cache                                                           | Stack and frameworks                          | Deployment                            |
-|---------------------------------------------------------------------------|-----------------------------------------------|----------------------------------------|
-| [Event Store (Event Source Store)](https://eventstore.org)            | [TypeORM](https://typeorm.io)                 | [Docker](https://www.docker.com/) |
+| Store and Cache | Stack and frameworks | Deployment |
+|-----------------|----------------------|------------|
+| [Event Store (Event Source Store)](https://eventstore.org)| [TypeORM](https://typeorm.io) | [Docker](https://www.docker.com/) |
 | [Redis (cache)](https://redis.io/) | [NodeJS (System runtime)](https://nodejs.org) | [Kubernetes](https://kubernetes.io/) |
-| [MongoDB (Database)](https://www.mongodb.com/)    | [Typescript](https://www.typescriptlang.org)  | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
-|                                                                           | [Apollo Server](https://www.apollographql.com/docs/apollo-server) |   |
-|                                                                           | [NestJS (Server Framework)](https://nestjs.com) |   |
-|                                                                           | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |   |
-|                                                                           | [Express JS](https://expressjs.com)            |   |
-|                                                                           | [Fastify](https://www.fastify.io)              |   |
+| [MongoDB (Database)](https://www.mongodb.com/) | [Typescript](https://www.typescriptlang.org) | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
+|                  | [Apollo Server](https://www.apollographql.com/docs/apollo-server) |   |
+|                  | [NestJS (Server Framework)](https://nestjs.com) |   |
+|                  | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |   |
+|                  | [Express JS](https://expressjs.com) |   |
+|                  | [Fastify](https://www.fastify.io) |   |
 
 ## Installation
 
