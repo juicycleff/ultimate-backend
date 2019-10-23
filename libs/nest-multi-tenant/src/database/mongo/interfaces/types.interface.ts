@@ -29,6 +29,7 @@ export interface CollectionProps {
   size?: number;
   max?: number;
   supportTenant?: boolean;
+  caching?: boolean;
   indexes?: IndexDefinition[];
 }
 
