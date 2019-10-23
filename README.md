@@ -3,7 +3,7 @@ ULTIMATE BACKEND
 </h1>
   
 <p align="center">
-  (WiP): This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use.
+  (WiP): This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern.
 </p>
     <p align="center">
 </p>
@@ -12,7 +12,7 @@ ULTIMATE BACKEND
 <a href="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/snyk/vulnerabilities/github/juicycleff/ultimate-backend?style=for-the-badge" alt="Snyk"/></a>
 
 ## Description
-This should be the go to backend base for your next scalable project. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
+This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness.
 
 ## Features
