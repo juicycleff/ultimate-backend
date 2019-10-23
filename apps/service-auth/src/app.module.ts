@@ -5,10 +5,8 @@ import { buildContext } from 'graphql-passport';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { MongoModule } from '@juicycleff/nest-multi-tenant/database';
-import { NestMultiTenantService } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.service';
-import { NestMultiTenantModule } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.module';
-import { RepositoryModule } from '@graphqlcqrs/repository';
+import { MongoModule, NestMultiTenantService } from '@juicycleff/nest-multi-tenant';
+import { CommonModule } from '@graphqlcqrs/common';
 
 @Module({
   imports: [
@@ -30,6 +28,7 @@ import { RepositoryModule } from '@graphqlcqrs/repository';
     MongoModule.forRootAsync({
       useExisting: NestMultiTenantService,
     }),
+    CommonModule,
     AuthModule,
   ],
   controllers: [AppController],

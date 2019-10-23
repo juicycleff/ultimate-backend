@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { Strategy } from 'passport-facebook';
 import { AuthService } from '../auth.service';
 
@@ -13,13 +13,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(email: string, password: string): Promise<any> {
-    const user = await this.authService.validateUser(email, password);
-    console.log('user');
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    return user;
+  async validate(): Promise<any> {
+    // TODO: implement this
+    throw new NotImplementedException();
   }
 }
