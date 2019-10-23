@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Request } from '@nestjs/common';
+import { Controller, Get, Post, Req, Request, NotImplementedException } from '@nestjs/common';
 import * as passport from 'passport';
 
 @Controller('auth')
@@ -14,6 +14,7 @@ export class AuthController {
 
   @Post('/facebook/callback')
   async facebookLoginCallback(@Req() req: Request) {
-    console.log('/callback');
+    // TODO: implement facebook login
+    throw new NotImplementedException();
   }
 }

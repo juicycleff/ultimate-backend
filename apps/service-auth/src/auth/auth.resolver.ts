@@ -12,23 +12,22 @@ export class AuthResolver {
 
   @Mutation('login')
   async login(@Args('input') {identifier, password}: any, @Context() context: any) {
-    console.log('************************');
-    console.log(context.req.session);
-    let auth = new AuthEntity();
-    // @ts-ignore
-    auth = {
+    // TODO: implement this
+
+    // This is only for dev, it's not a functional piece yet
+    const authPayload = {
       local: {
         email: 'rex@gmail.com',
         hashedPassword: 'blaaaaab',
       },
-    };
-    const gt = await this.authService.create(auth);
-    // console.log(gt);
-    console.log('************************');
+    } as AuthEntity;
+
+    const auth = await this.authService.create(authPayload);
+
     const { user } = await context.authenticate('graphql-local', { email: identifier, password });
     context.login(user);
     return {
-      token: 'fgggfg',
+      token: auth.id,
       user,
     };
   }

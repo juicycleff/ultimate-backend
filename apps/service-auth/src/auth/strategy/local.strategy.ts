@@ -10,7 +10,6 @@ export class LocalStrategy extends PassportStrategy(GraphQLLocalStrategy) {
   }
 
   async validate(email: string, password: string): Promise<any> {
-    console.log('ggggfgf')
     if (email && password) {
       const user = await this.authService.validateUser(email, password);
       if (!user) {

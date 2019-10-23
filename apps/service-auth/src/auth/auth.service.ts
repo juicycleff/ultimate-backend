@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AuthRepository } from '@graphqlcqrs/repository/repositories/auth.repository';
 import { AuthEntity } from '@graphqlcqrs/repository/entities';
+import { AppLogger } from '@graphqlcqrs/common/services/app-logger.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private authRepository: AuthRepository) {}
+  constructor(
+    private authRepository: AuthRepository,
+    private logger: AppLogger,
+  ) {}
 
   async create(auth: Partial<AuthEntity> | AuthEntity) {
     try {
       return await this.authRepository.create(auth);
     } catch (e) {
-      console.log(e);
+      this.logger.log(e);
     }
   }
 
