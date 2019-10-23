@@ -13,6 +13,7 @@ ULTIMATE BACKEND
 <a href="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/languages/code-size/juicycleff/ultimate-backend?style=for-the-badge" alt="Code Size"/></a>
 <a href="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/package-json/v/juicycleff/ultimate-backend?style=for-the-badge" alt="Version"/></a>
 <a href="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/languages/top/juicycleff/ultimate-backend?style=for-the-badge" alt="Top Language"/></a>
+<a href="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=for-the-badge" target="_blank"><img src="https://img.shields.io/codacy/grade/dc460840375d4ac995f5647a5ed10179?style=for-the-badge" alt="Top Language"/></a>
 
 ## Description
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
