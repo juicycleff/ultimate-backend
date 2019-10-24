@@ -2,7 +2,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphqlDistributedGatewayModule } from '@graphqlcqrs/graphql-gateway';
-import { HeadersDatasource } from './headers.datasource';
+import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasource';
 
 @Module({
   imports: [

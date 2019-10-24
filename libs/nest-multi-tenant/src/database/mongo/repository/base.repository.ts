@@ -128,8 +128,6 @@ export class BaseRepository <DOC, DTO = DOC> {
     const collection = await this.collection;
     const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
 
-    console.log(eventResult);
-
     const res = await collection.insertOne(eventResult as DOC);
 
     let newDocument = res.ops[0];
@@ -359,7 +357,6 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   private async invokeEvents(type: string, fns: DataEvents[], document: any): Promise<any> {
     const test = Reflect.getMetadata('entity', this) || [];
-    console.log(document, test);
     for (const fn of fns) {
       const events = Reflect.getMetadata(`${type}_${fn}`, this) || [];
       for (const event of events) {
@@ -375,5 +372,18 @@ export class BaseRepository <DOC, DTO = DOC> {
 
   private exec() {
     // good
+  }
+
+  public onSave(): { createdAt: string; updatedAt: string } {
+    return {
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  public onUpdate(): { updatedAt: string } {
+    return {
+      updatedAt: new Date().toISOString(),
+    };
   }
 }

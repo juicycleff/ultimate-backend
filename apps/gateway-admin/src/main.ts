@@ -16,8 +16,8 @@ async function bootstrap() {
   app.use(bloodTearsMiddleware);
   app.use(enableMultiTenancy({
     enabled: true,
-    resolverType: TenantResolverType.Domain,
-    databaseStrategy: TenantDatabaseStrategy.DataIsolation,
+    resolverType: TenantResolverType.Header,
+    databaseStrategy: TenantDatabaseStrategy.Both,
   }));
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());

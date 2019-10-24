@@ -10,9 +10,7 @@ import { NestMultiTenantModule } from '@juicycleff/nest-multi-tenant/nest-multi-
 import { NestMultiTenantService } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.service';
 
 @Global()
-@Module({
-  imports: [NestMultiTenantModule],
-})
+@Module({})
 export class MongoCoreModule implements OnModuleDestroy {
   constructor(
     @Inject(MONGO_CONTAINER_NAME) private readonly containerName: string,

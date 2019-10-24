@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/service-auth.Dockerfile
-    image: ultimate-backend/service-auth
+    image: ultimatebackend/service-auth
     restart: always
     ports:
       - 9900:9900
@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/service-project.Dockerfile
-    image: ultimate-backend/service-project
+    image: ultimatebackend/service-project
     restart: always
     ports:
       - 9100:9100
@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/service-user.Dockerfile
-    image: ultimate-backend/service-user
+    image: ultimatebackend/service-user
     restart: always
     ports:
       - 9000:9000
@@ -39,7 +39,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/gateway-admin.Dockerfile
-    image: ultimate-backend/gateway-admin
+    image: ultimatebackend/gateway-admin
     restart: always
     ports:
       - 4000:4000

@@ -1,7 +1,7 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { Adapter, Enforcer } from 'casbin';
-import { ConnectionOptions } from 'typeorm';
-import TypeORMAdapter from 'typeorm-adapter';
+import { newEnforcer } from 'casbin';
+import { MongoClientOptions } from 'mongodb';
+import { MongoAdapter } from 'casbin-mongodb-adapter';
 import { NestCasbinService } from './nest-casbin.service';
 import { CASBIN_ENFORCER } from './nest-casbin.constants';
 
@@ -11,15 +11,22 @@ import { CASBIN_ENFORCER } from './nest-casbin.constants';
 })
 export class NestCasbinModule {
   public static forRootAsync(
-    dbConnectionOptions: ConnectionOptions,
+    uri: string,
     casbinModelPath: string,
+    databaseName: string,
+    collectionName: string,
+    clientOptions?: MongoClientOptions,
   ): DynamicModule {
     const casbinEnforcerProvider: Provider = {
       provide: CASBIN_ENFORCER,
       useFactory: async () => {
-        const adapter = await TypeORMAdapter.newAdapter(dbConnectionOptions);
-        const enforcer = await new Enforcer();
-        await enforcer.initWithAdapter(casbinModelPath, (adapter as any) as Adapter);
+        const adapter = await MongoAdapter.newAdapter({
+          uri: 'mongodb://localhost:27017',
+          collectionName: 'casbin',
+          databaseName: 'node-casbin-official',
+          option: clientOptions,
+        });
+        const enforcer = await newEnforcer(casbinModelPath, adapter);
         await enforcer.loadPolicy();
         return enforcer;
       },
