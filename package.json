@@ -49,7 +49,7 @@
     "bcrypt": "^3.0.6",
     "cache-manager": "^2.10.0",
     "casbin": "^3.0.4",
-    "casbin-mongodb-adapter": "^1.0.3",
+    "casbin-mongodb-adapter": "^1.0.5",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.10.2",
     "codacy-coverage": "^3.4.0",
@@ -134,13 +134,13 @@
     ],
     "moduleNameMapper": {
       "@graphqlcqrs/core/(.*)": "<rootDir>/libs/core/src/$1",
-      "@graphqlcqrs/graphql-gateway/(.*)": "<rootDir>/libs/graphql-gateway/src/$1",
       "@graphqlcqrs/nestjs-event-store/(.*)": "<rootDir>/libs/nestjs-event-store/src/$1",
       "@graphqlcqrs/common/(.*)": "<rootDir>/libs/common/src/$1",
       "@juicycleff/nestjs-influxdb/(.*)": "<rootDir>/libs/nestjs-influxdb/src/$1",
       "@graphqlcqrs/repository/(.*)": "<rootDir>/libs/repository/src/$1",
       "@graphqlcqrs/nest-casbin/(.*)": "<rootDir>/libs/nest-casbin/src/$1",
-      "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1"
+      "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1",
+      "graphqlcqrs/nestjs-graphql-gateway/(.*)": "<rootDir>/libs/nestjs-graphql-gateway/src/$1"
     }
   },
   "remarkConfig": {

@@ -16,7 +16,7 @@ describe('NestCasbinService', () => {
       const adapter = await MongoAdapter.newAdapter({
         uri: 'mongodb://localhost:27017',
         collectionName: 'casbin',
-        databaseName: 'node-casbin-official'
+        databaseName: 'node-casbin-official',
       });
       const e = await newEnforcer(model, adapter);
       await e.loadPolicy();

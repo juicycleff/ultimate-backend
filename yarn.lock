@@ -2756,10 +2756,10 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-casbin-mongodb-adapter@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/casbin-mongodb-adapter/-/casbin-mongodb-adapter-1.0.3.tgz#a60218ab190ec18729bfe57d98dcd22040eb0b15"
-  integrity sha512-U2dWnxvxRqKA4TqimtuimWPHKQdOPQd3BslYbTWf9rODKIl35u/DdWa0utWxNt5s90k81mZXVX53Ux4HXfBCPQ==
+casbin-mongodb-adapter@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/casbin-mongodb-adapter/-/casbin-mongodb-adapter-1.0.5.tgz#d50d0a6f995f2f76633244ed3c9ebf8464acd008"
+  integrity sha512-wbxi81dnzUY9YZzktUGsRtglbzV+CuVCrw3DnVzsmH2gP3Q9+zIHcWV6Boz+rA/Gq65ef7TYDhH8MqIQQLbeww==
   dependencies:
     casbin "^3.0.4"
     mongodb "^3.3.3"
