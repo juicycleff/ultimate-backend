@@ -25,7 +25,7 @@ steps:
     displayName: 'Install yarn'
 
   - script: |
-      yarn bootstrap
+      yarn
     displayName: 'Bootstrap project'
 
   - task: DockerCompose@0

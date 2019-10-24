@@ -189,7 +189,7 @@ items:
             value: http://services-auth:9000/graphql
           - name: USER_PATH
             value: user
-          image: ultimate-backend/gateway-admin
+          image: ultimatebackend/gateway-admin
           name: gateway-admin
           ports:
           - containerPort: 4000
@@ -239,7 +239,7 @@ items:
         - env:
           - name: PORT
             value: "9900"
-          image: ultimate-backend/service-auth
+          image: ultimatebackend/service-auth
           name: services-auth
           ports:
           - containerPort: 9900
@@ -269,7 +269,7 @@ items:
         - env:
           - name: PORT
             value: "9100"
-          image: ultimate-backend/service-project
+          image: ultimatebackend/service-project
           name: services-project
           ports:
           - containerPort: 9100
@@ -299,7 +299,7 @@ items:
         - env:
           - name: PORT
             value: "9000"
-          image: ultimate-backend/service-user
+          image: ultimatebackend/service-user
           name: services-user
           ports:
           - containerPort: 9000
