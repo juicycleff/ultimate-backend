@@ -106,6 +106,42 @@
       "compilerOptions": {
         "tsConfigPath": "libs/nest-multi-tenant/tsconfig.lib.json"
       }
+    },
+    "service-tenant": {
+      "type": "application",
+      "root": "apps/service-tenant",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-tenant/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-tenant/tsconfig.app.json"
+      }
+    },
+    "service-payment": {
+      "type": "application",
+      "root": "apps/service-payment",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-payment/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-payment/tsconfig.app.json"
+      }
+    },
+    "service-notification": {
+      "type": "application",
+      "root": "apps/service-notification",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-notification/tsconfig.app.json"
+      }
+    },
+    "gateway-client": {
+      "type": "application",
+      "root": "apps/gateway-client",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway-client/tsconfig.app.json"
+      }
     }
   }
 }

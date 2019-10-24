@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World! From Admin Gateway"', () => {
-      expect(appController.getHello()).toBe('Hello World! From Admin Gateway');
+    it('should return "Hello World! From Client Gateway"', () => {
+      expect(appController.getHello()).toBe('Hello World! From Client Gateway');
     });
   });
 });

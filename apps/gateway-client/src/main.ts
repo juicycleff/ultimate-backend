@@ -16,11 +16,11 @@ async function bootstrap() {
   app.use(bloodTearsMiddleware);
   app.use(enableMultiTenancy({
     enabled: true,
-    resolverType: TenantResolverType.Header,
-    databaseStrategy: TenantDatabaseStrategy.Both,
+    resolverType: TenantResolverType.Domain,
+    databaseStrategy: TenantDatabaseStrategy.DataIsolation,
   }));
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());
-  await app.listen(parseInt(process.env.PORT, 10) || 4000);
+  await app.listen(parseInt(process.env.PORT, 10) || 5000);
 }
 bootstrap();
