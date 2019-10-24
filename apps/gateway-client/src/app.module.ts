@@ -12,8 +12,6 @@ import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasourc
       path: '/graphql',
       context: context => context,
       serviceList: [
-        { name: 'auth', url: 'http://localhost:9900/graphql' },
-        { name: 'user', url: 'http://localhost:9000/graphql' },
         { name: 'project', url: 'http://localhost:9100/graphql' },
         // more services
       ],

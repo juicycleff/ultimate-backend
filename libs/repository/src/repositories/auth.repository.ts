@@ -5,7 +5,15 @@ import {AuthEntity} from '../entities';
 import { generateHashedPassword } from '@graphqlcqrs/common/utils';
 
 @Injectable()
-@EntityRepository({ name: 'authentication' })
+@EntityRepository({
+  name: 'authentication',
+  indexes: [
+    {
+      fields: { 'local.email': 1 },
+      options: { unique: true},
+    },
+  ],
+})
 export class AuthRepository extends BaseRepository<AuthEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
@@ -19,22 +27,22 @@ export class AuthRepository extends BaseRepository<AuthEntity> {
   }
 
   @Before('SAVE', 'CREATE')
-  private onSave(data: Partial<AuthEntity>): Partial<AuthEntity> {
+  private onSaveData(data: Partial<AuthEntity>): Partial<AuthEntity> {
     return {
       ...data,
       local: {
         email: data.local.email,
         hashedPassword: generateHashedPassword(data.local.hashedPassword),
       },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      ...this.onSave(),
     };
   }
 
   @Before('UPDATE')
-  private onUpdate(data: Partial<AuthEntity>) {
-    return data = {
-      updatedAt: new Date().toISOString(),
+  private onUpdateData(data: Partial<AuthEntity>) {
+    return {
+      ...data,
+      ...this.onUpdate(),
     };
   }
 }
