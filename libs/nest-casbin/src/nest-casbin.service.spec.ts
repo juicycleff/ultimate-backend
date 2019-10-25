@@ -12,11 +12,11 @@ describe('NestCasbinService', () => {
   const casbinEnforcerProvider: Provider = {
     provide: CASBIN_ENFORCER,
     useFactory: async () => {
-      const model = path.resolve(__dirname, 'test-files/rbac_model.conf');
+      const model = path.resolve(__dirname, '../test-files/rbac_model.conf');
       const adapter = await MongoAdapter.newAdapter({
         uri: 'mongodb://localhost:27017',
         collectionName: 'casbin',
-        databaseName: 'node-casbin-official',
+        databaseName: 'casbindb',
       });
       const e = await newEnforcer(model, adapter);
       await e.loadPolicy();

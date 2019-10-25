@@ -30,12 +30,6 @@
       "@graphqlcqrs/common/*": [
         "libs/common/src/*"
       ],
-      "@juicycleff/nestjs-influxdb": [
-        "libs/nestjs-influxdb/src"
-      ],
-      "@juicycleff/nestjs-influxdb/*": [
-        "libs/nestjs-influxdb/src/*"
-      ],
       "@graphqlcqrs/repository": [
         "libs/repository/src"
       ],

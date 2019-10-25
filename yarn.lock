@@ -5373,6 +5373,16 @@ http-auth@3.1.x:
     bcryptjs "^2.3.0"
     uuid "^3.0.0"
 
+http-auth@3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/http-auth/-/http-auth-3.2.4.tgz#285ae2024dc734a729a087508b630fc8f595f711"
+  integrity sha512-jeWAPP0UbI3dM6knyYbYbMvBoxwXGQp0eu70GGV9Ezo/pHmpv1dFLwM0CtaG+GFqUBkGZM/V8Jp/0gXFYwIOUQ==
+  dependencies:
+    apache-crypt "^1.1.2"
+    apache-md5 "^1.0.6"
+    bcryptjs "^2.3.0"
+    uuid "^3.0.0"
+
 http-errors@1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.7.2.tgz#4f5029cf13239f31036e5b2e55292bcfbcc85c8f"

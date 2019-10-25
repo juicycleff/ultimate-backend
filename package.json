@@ -65,6 +65,7 @@
     "graphql-tools": "^4.0.5",
     "greenlock-express": "2.x",
     "greenlock-store-fs": "3",
+    "http-auth": "3.2.4",
     "influx": "^5.4.2",
     "json-stable-stringify": "^1.0.1",
     "lodash": "^4.17.15",
@@ -116,6 +117,11 @@
     "typescript": "^3.6.3"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
     "moduleFileExtensions": [
       "js",
       "json",
@@ -136,7 +142,6 @@
       "@graphqlcqrs/core/(.*)": "<rootDir>/libs/core/src/$1",
       "@graphqlcqrs/nestjs-event-store/(.*)": "<rootDir>/libs/nestjs-event-store/src/$1",
       "@graphqlcqrs/common/(.*)": "<rootDir>/libs/common/src/$1",
-      "@juicycleff/nestjs-influxdb/(.*)": "<rootDir>/libs/nestjs-influxdb/src/$1",
       "@graphqlcqrs/repository/(.*)": "<rootDir>/libs/repository/src/$1",
       "@graphqlcqrs/nest-casbin/(.*)": "<rootDir>/libs/nest-casbin/src/$1",
       "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1",
