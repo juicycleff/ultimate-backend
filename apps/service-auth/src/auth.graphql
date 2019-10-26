@@ -1,5 +1,11 @@
+
+extend type User @key(fields: "id") {
+    id: ID! @external
+}
+
 type AuthPayload {
-    token: String!
+    id: ID!
+    user: User!
 }
 
 type BooleanPayload {

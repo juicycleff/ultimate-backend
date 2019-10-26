@@ -1,8 +1,9 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
+import { UserInputError } from 'apollo-server-express';
 import { AuthService } from './auth.service';
-import { AuthEntity } from '@graphqlcqrs/repository/entities';
+import { AuthPayload, LoginInput, RegisterInput } from '../graphql';
 
 @Resolver('AuthPayload')
 export class AuthResolver {
@@ -11,23 +12,37 @@ export class AuthResolver {
   ) {}
 
   @Mutation('login')
-  async login(@Args('input') {identifier, password}: any, @Context() context: any) {
-    // TODO: implement this
+  async login(@Args('input') {identifier, password}: LoginInput, @Context() context: any): Promise<AuthPayload> {
+    /**
+     * Graphql input validation checks
+     */
+    const validationErrors = {};
+    if (!identifier) {
+      validationErrors[identifier] = 'MISSING_VALUE';
+      throw new UserInputError('Missing user login identifier', { validationErrors });
+    }
+    if (!password) {
+      validationErrors[password] = 'MISSING_VALUE';
+      throw new UserInputError('Missing user login password', { validationErrors });
+    }
 
-    // This is only for dev, it's not a functional piece yet
-    const authPayload = {
-      local: {
-        email: 'rex@gmail.com',
-        hashedPassword: 'blaaaaab',
-      },
-    } as AuthEntity;
+    // Authenticate against passport local strategy
+    const entity = await context.authenticate('graphql-local', { email: identifier, password });
+    context.login(entity.user);
 
-    const auth = await this.authService.create(authPayload);
+    return {
+      id: entity.user.auth.id,
+      user: entity.user.user,
+    };
+  }
 
-    const { user } = await context.authenticate('graphql-local', { email: identifier, password });
+  @Mutation('register')
+  async register(@Args('input') cmd: RegisterInput, @Context() context: any) {
+    const { auth, user } = await this.authService.register(cmd);
+
     context.login(user);
     return {
-      token: auth.id,
+      id: auth.id,
       user,
     };
   }
@@ -36,7 +51,7 @@ export class AuthResolver {
   @Mutation('logout')
   async logout(@Context() context: any) {
     try {
-      // await context.logout();
+      await context.logout();
       return {
         success: true,
       };

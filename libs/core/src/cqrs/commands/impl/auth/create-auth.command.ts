@@ -3,7 +3,7 @@ import { AuthEntity } from '@graphqlcqrs/repository';
 
 export class CreateAuthCommand implements ICommand {
   constructor(
-    public readonly auth: AuthEntity,
+    public readonly auth: Partial<AuthEntity>,
     // tslint:disable-next-line:no-empty
   ) {}
 }

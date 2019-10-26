@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { BaseRepository, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
-import { ProjectEntity, TenantMemberEntity } from '../entities';
+import { TenantMemberEntity } from '../entities';
 
 @Injectable()
 @EntityRepository({

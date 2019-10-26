@@ -11,18 +11,11 @@ import { MongoModuleAsyncOptions } from './interfaces';
 export class MongoModule {
   /**
    * Inject the MongoDB driver synchronously.
-   * @param uri The database URI
-   * @param dbName The database name
-   * @param options Options for the MongoClient that will be created
-   * @param connectionName A unique name for the connection.  If not specified, a default name
    * will be used.
+   * @param option
    */
-  static forRoot(
-    uri: string,
-    dbName: string,
-    options?: MongoClientOptions,
-    connectionName?: string,
-  ): DynamicModule {
+  static forRoot(option: MongoModuleOption): DynamicModule {
+    const { uri, dbName, options, connectionName } = option;
     return {
       module: MongoModule,
       imports: [
@@ -60,4 +53,11 @@ export class MongoModule {
       exports: providers,
     };
   }
+}
+
+interface MongoModuleOption {
+  uri: string;
+  dbName: string;
+  options?: MongoClientOptions;
+  connectionName?: string;
 }

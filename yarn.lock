@@ -447,6 +447,11 @@
     iterall "^1.1.3"
     uuid "^3.1.0"
 
+"@konfy/graphql-mongo-query@^1.3.5":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@konfy/graphql-mongo-query/-/graphql-mongo-query-1.3.5.tgz#990198c0c0a8b3e3f9f082c031965a59445d29eb"
+  integrity sha512-RL239tahdzlAERV6yM6aBN3NwTaeuS2lfpnJecf5Exb/vo4DThyd/0O+97WrpQbWn56VtvyzL2W6JBXTVfugAQ==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -2756,10 +2761,10 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-casbin-mongodb-adapter@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/casbin-mongodb-adapter/-/casbin-mongodb-adapter-1.0.3.tgz#a60218ab190ec18729bfe57d98dcd22040eb0b15"
-  integrity sha512-U2dWnxvxRqKA4TqimtuimWPHKQdOPQd3BslYbTWf9rODKIl35u/DdWa0utWxNt5s90k81mZXVX53Ux4HXfBCPQ==
+casbin-mongodb-adapter@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/casbin-mongodb-adapter/-/casbin-mongodb-adapter-1.0.5.tgz#d50d0a6f995f2f76633244ed3c9ebf8464acd008"
+  integrity sha512-wbxi81dnzUY9YZzktUGsRtglbzV+CuVCrw3DnVzsmH2gP3Q9+zIHcWV6Boz+rA/Gq65ef7TYDhH8MqIQQLbeww==
   dependencies:
     casbin "^3.0.4"
     mongodb "^3.3.3"
@@ -3832,10 +3837,10 @@ dotenv@^6.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
 
-dotenv@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.1.0.tgz#d811e178652bfb8a1e593c6dd704ec7e90d85ea2"
-  integrity sha512-GUE3gqcDCaMltj2++g6bRQ5rBJWtkWTmqmD0fo1RnnMuUqHNCt2oTPeDnS9n6fKYvlhn7AeBkb38lymBtWBQdA==
+dotenv@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 dotnet-deps-parser@4.5.2:
   version "4.5.2"
@@ -5073,10 +5078,10 @@ graphql-import@0.7.1:
     lodash "^4.17.4"
     resolve-from "^4.0.0"
 
-graphql-passport@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/graphql-passport/-/graphql-passport-0.4.0.tgz#b238e910a852f1ad35cf54a7bab4f982146dee04"
-  integrity sha512-M68ewrQ88qVbdomlN9xh637VtxTAJcC2CYFCnKyqShDRpYcmGefSJIy1i2XTz+c29/exE9/ab8L2jbQpyXPC9w==
+graphql-passport@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-passport/-/graphql-passport-0.5.0.tgz#7d56b886e5f2d10511d4f0844dfaef42eb3b4487"
+  integrity sha512-k+7jz8BbjY7UL81tww1x31ELzq1EdF8ioBZRJn4cN8uXYw+ydMjcb/BwYAOLUZxmCQVtH8u/4s+aXLNqX1UJ+Q==
   dependencies:
     passport-strategy "^1.0.0"
     util "^0.12.1"
@@ -5367,6 +5372,16 @@ http-auth@3.1.x:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/http-auth/-/http-auth-3.1.3.tgz#945cfadd66521eaf8f7c84913d377d7b15f24e31"
   integrity sha1-lFz63WZSHq+PfISRPTd9exXyTjE=
+  dependencies:
+    apache-crypt "^1.1.2"
+    apache-md5 "^1.0.6"
+    bcryptjs "^2.3.0"
+    uuid "^3.0.0"
+
+http-auth@3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/http-auth/-/http-auth-3.2.4.tgz#285ae2024dc734a729a087508b630fc8f595f711"
+  integrity sha512-jeWAPP0UbI3dM6knyYbYbMvBoxwXGQp0eu70GGV9Ezo/pHmpv1dFLwM0CtaG+GFqUBkGZM/V8Jp/0gXFYwIOUQ==
   dependencies:
     apache-crypt "^1.1.2"
     apache-md5 "^1.0.6"
@@ -10914,7 +10929,7 @@ type-fest@^0.5.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.5.2.tgz#d6ef42a0356c6cd45f49485c3b6281fc148e48a2"
   integrity sha512-DWkS49EQKVX//Tbupb9TFa19c7+MK1XmzkrZUR8TAktmE/DizXoaoJV6TZ/tSIPXipqNiRI6CyAe7x69Jb6RSw==
 
-type-graphql@^0.17.3:
+type-graphql@^0.17.3, type-graphql@^0.17.5:
   version "0.17.5"
   resolved "https://registry.yarnpkg.com/type-graphql/-/type-graphql-0.17.5.tgz#7f2f189ff7b9faef33537291ef333ff9adbee21c"
   integrity sha512-wscr63K0j9UKcX/nBTySamLd7nMZeYKmADk8A9sVmcPh+clNJUAw96784dg2VZn/sUdmN1y2AeKzmTjCfVB5sA==

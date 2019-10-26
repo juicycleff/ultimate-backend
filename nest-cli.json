@@ -53,15 +53,6 @@
         "tsConfigPath": "libs/core/tsconfig.lib.json"
       }
     },
-    "graphql-gateway": {
-      "type": "library",
-      "root": "libs/graphql-gateway",
-      "entryFile": "index",
-      "sourceRoot": "libs/graphql-gateway/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/graphql-gateway/tsconfig.lib.json"
-      }
-    },
     "nestjs-event-store": {
       "type": "library",
       "root": "libs/nestjs-event-store",
@@ -141,6 +132,15 @@
       "sourceRoot": "apps/gateway-client/src",
       "compilerOptions": {
         "tsConfigPath": "apps/gateway-client/tsconfig.app.json"
+      }
+    },
+    "nestjs-graphql-gateway": {
+      "type": "library",
+      "root": "libs/nestjs-graphql-gateway",
+      "entryFile": "index",
+      "sourceRoot": "libs/nestjs-graphql-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nestjs-graphql-gateway/tsconfig.lib.json"
       }
     }
   }

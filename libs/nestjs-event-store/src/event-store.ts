@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
 import axios from 'axios';
 import { Subject } from 'rxjs';
@@ -39,7 +39,6 @@ export class EventStore implements IEventPublisher, IMessageSource {
     if (event === undefined) { return; }
     if (event === null) { return; }
 
-    // @ts-ignore
     const category = Object.keys(event)[0];
 
     const categoryId = event[category].id;
@@ -48,8 +47,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
     try {
       await this.eventStore.client.writeEvent(streamName, type, event);
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.trace(err);
+      Logger.error(err, err, 'EventStore');
     }
   }
 
@@ -91,8 +89,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
     };
 
     const onDropped = (subscription, reason, error) => {
-      // tslint:disable-next-line:no-console
-      console.trace(subscription, reason, error);
+      Logger.error(error, reason, subscription);
     };
 
     try {
@@ -100,8 +97,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
         await this.eventStore.client.subscribeToStream(streamName, onEvent, onDropped, this.resolveLinkTos);
       }
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.trace(err);
+      Logger.error(err, err, 'EventStore');
     }
   }
 

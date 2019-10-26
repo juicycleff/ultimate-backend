@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import {AuthEntity} from '../../../../data/entities';
+import { AuthEntity } from '@graphqlcqrs/repository/entities';
 
 export class AuthCreatedEvent implements IEvent {
   constructor(

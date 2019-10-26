@@ -32,7 +32,5 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateR
 
   toDtoClass?: new (entity: BaseEntity, options?: any) => T;
 
-  toDto(options?: any) {
-    return DtoMapperUtils.toDto(this.toDtoClass, this, options);
-  }
+  toDto = (options?: any) => DtoMapperUtils.toDto(this.toDtoClass, this, options);
 }

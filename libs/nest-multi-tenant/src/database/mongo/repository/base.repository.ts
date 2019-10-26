@@ -8,6 +8,9 @@ export class BaseRepository <DOC, DTO = DOC> {
   collection: Promise<Collection<DOC>>;
   readonly options: CollectionProps;
 
+  // tslint:disable-next-line:variable-name
+  private _count: number;
+
   // get options(): CollectionProps {
   //   return Reflect.getMetadata(COLLECTION_KEY, this);
   // }
@@ -68,7 +71,8 @@ export class BaseRepository <DOC, DTO = DOC> {
   async findOne(conditions: object): Promise<DOC> {
     const collection = await this.collection;
 
-    let document = await collection.findOne(conditions);
+    const prunedConditions = this.toggleId(conditions, true);
+    let document = await collection.findOne(prunedConditions);
     if (document) {
       document = this.toggleId(document, false);
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
@@ -262,7 +266,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<any>}
    * @memberof BaseRepository
    */
-  async exists(conditions: any): Promise<boolean> {
+  public async exist(conditions: any): Promise<boolean> {
     const collection = await this.collection;
     return await collection.find(conditions).count() > 0;
   }
@@ -370,7 +374,12 @@ export class BaseRepository <DOC, DTO = DOC> {
     return document;
   }
 
-  private exec() {
+  public count(count: number) {
+    this._count = count;
+    return this;
+  }
+
+  public exec() {
     // good
   }
 

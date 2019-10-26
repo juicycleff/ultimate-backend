@@ -5,7 +5,11 @@ import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 async function bootstrap() {
+
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({

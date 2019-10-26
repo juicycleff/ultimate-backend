@@ -1,7 +1,8 @@
 import {IQuery} from '@nestjs/cqrs';
-import { LocalAuth } from '@graphqlcqrs/repository/entities';
+import { AuthEntity } from '@graphqlcqrs/repository/entities';
+import { FindConditions } from '@graphqlcqrs/common/helpers/find-condtion.type';
 
 export class AuthExistQuery implements IQuery {
   constructor(
-    public readonly localAuth: LocalAuth) {}
+    public readonly where: FindConditions<AuthEntity>) {}
 }
