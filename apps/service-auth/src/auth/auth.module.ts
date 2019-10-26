@@ -14,8 +14,10 @@ import {
   AuthEventHandlers,
   AuthQueryHandlers,
   UserCommandHandlers,
-  UserCreatedEvent, UserEventHandlers, UserQueryHandlers,
-} from '@graphqlcqrs/core/cqrs';
+  UserCreatedEvent,
+  UserEventHandlers,
+  UserQueryHandlers,
+} from '@graphqlcqrs/core';
 import { AuthSagas } from './sagas';
 
 @Module({
@@ -68,10 +70,6 @@ export class AuthModule {
     this.eventStore.setEventHandlers(this.eventHandlers);
     this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
     this.event$.publisher = this.eventStore;
-
-    this.event$.register(AuthEventHandlers);
-    this.command$.register(AuthCommandHandlers);
-    this.command$.register(UserCommandHandlers);
     this.event$.registerSagas([AuthSagas]);
   }
 
