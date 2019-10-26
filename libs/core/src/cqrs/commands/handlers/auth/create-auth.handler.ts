@@ -1,13 +1,14 @@
 import {Logger} from '@nestjs/common';
-import {CommandHandler, ICommandHandler, EventPublisher} from '@nestjs/cqrs';
+import {CommandHandler, ICommandHandler, EventBus} from '@nestjs/cqrs';
 import { AuthRepository, AuthEntity } from '@graphqlcqrs/repository';
 import { CreateAuthCommand } from '../../impl';
+import { AuthCreatedEvent } from '../../../';
 
 @CommandHandler(CreateAuthCommand)
 export class CreateAuthHandler implements ICommandHandler<CreateAuthCommand> {
   constructor(
     private readonly authRepository: AuthRepository,
-    private readonly publisher: EventPublisher,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateAuthCommand): Promise<AuthEntity> {
@@ -15,15 +16,9 @@ export class CreateAuthHandler implements ICommandHandler<CreateAuthCommand> {
     const { auth } = command;
 
     try {
-      /* const temp = await this.authRepository.create(classToPlain(auth));
-      const saved = await this.authRepository.store(temp);
-      const result = plainToClass(AuthEntity, saved);
-      const pub = this.publisher.mergeObjectContext(result);
-
-      pub.notify(result);
-      pub.commit();
-      return result; */
-      return null;
+      const result = await this.authRepository.create(auth);
+      this.eventBus.publish(new AuthCreatedEvent(result));
+      return result;
     } catch (error) {
       Logger.log(error, 'CreateAuthHandler');
     }

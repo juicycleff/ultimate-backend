@@ -31,6 +31,7 @@
   "dependencies": {
     "@apollo/gateway": "^0.10.6",
     "@compodoc/compodoc": "^1.1.11",
+    "@konfy/graphql-mongo-query": "^1.3.5",
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/cqrs": "^6.0.1",
@@ -56,12 +57,12 @@
     "connect-mongodb-session": "^2.2.0",
     "continuation-local-storage": "^3.2.1",
     "cookie-parser": "^1.4.4",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "express-session": "^1.17.0",
     "fastify-swagger": "^2.4.0",
     "geteventstore-promise2": "^3.1.2",
     "graphql": "^14.5.8",
-    "graphql-passport": "^0.4.0",
+    "graphql-passport": "^0.5.0",
     "graphql-tools": "^4.0.5",
     "greenlock-express": "2.x",
     "greenlock-store-fs": "3",
@@ -82,6 +83,7 @@
     "set-cookie-parser": "^2.4.0",
     "sinon": "^7.5.0",
     "swagger-ui-express": "^4.1.2",
+    "type-graphql": "^0.17.5",
     "typeorm": "^0.2.19",
     "typeorm-linq-repository": "^1.0.1",
     "typeorm-transactional-cls-hooked": "^0.1.8",
@@ -145,7 +147,7 @@
       "@graphqlcqrs/repository/(.*)": "<rootDir>/libs/repository/src/$1",
       "@graphqlcqrs/nest-casbin/(.*)": "<rootDir>/libs/nest-casbin/src/$1",
       "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1",
-      "graphqlcqrs/nestjs-graphql-gateway/(.*)": "<rootDir>/libs/nestjs-graphql-gateway/src/$1"
+      "@graphqlcqrs/nestjs-graphql-gateway/(.*)": "<rootDir>/libs/nestjs-graphql-gateway/src/$1"
     }
   },
   "remarkConfig": {

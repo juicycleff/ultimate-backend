@@ -48,10 +48,10 @@
       "@juicycleff/nest-multi-tenant/*": [
         "libs/nest-multi-tenant/src/*"
       ],
-      "graphqlcqrs/nestjs-graphql-gateway": [
+      "@graphqlcqrs/nestjs-graphql-gateway": [
         "libs/nestjs-graphql-gateway/src"
       ],
-      "graphqlcqrs/nestjs-graphql-gateway/*": [
+      "@graphqlcqrs/nestjs-graphql-gateway/*": [
         "libs/nestjs-graphql-gateway/src/*"
       ]
     }

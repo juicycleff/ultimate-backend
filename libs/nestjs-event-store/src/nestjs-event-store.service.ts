@@ -7,9 +7,7 @@ export class NestjsEventStoreService {
   constructor() {
     return {
       provide: ProvidersConstants.EVENT_STORE_PROVIDER,
-      useFactory: (
-        eventStoreConfig?: any,
-      ): any => {
+      useFactory: (eventStoreConfig?: any): any => {
         if (eventStoreConfig === 'EVENT_STORE_CONFIG_USE_ENV') {
           return new NestjsEventStore();
         }

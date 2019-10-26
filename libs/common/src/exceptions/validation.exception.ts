@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus} from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import {ValidatorOptions} from '@nestjs/common/interfaces/external/validator-options.interface';
 
 export class ValidationError extends HttpException {
@@ -8,6 +8,6 @@ export class ValidationError extends HttpException {
     super(messages && messages.length > 0 ? messages[0] : 'Validation Error', HttpStatus.BAD_REQUEST);
     this.messages = messages;
     // tslint:disable-next-line:no-console
-    console.log(JSON.stringify(metaData, null, 2));
+    Logger.log(JSON.stringify(metaData, null, 2));
   }
 }

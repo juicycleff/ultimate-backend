@@ -26,7 +26,7 @@ export class AuthRepository extends BaseRepository<AuthEntity> {
     }, cacheStore);
   }
 
-  @Before('SAVE', 'CREATE')
+  @Before('CREATE')
   private onSaveData(data: Partial<AuthEntity>): Partial<AuthEntity> {
     return {
       ...data,

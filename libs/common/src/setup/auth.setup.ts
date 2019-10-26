@@ -4,10 +4,13 @@ import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
 import * as connectMongodbSession from 'connect-mongodb-session';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 const MongoDBStore = connectMongodbSession(session);
 
 const store = new MongoDBStore({
-  uri: 'mongodb://localhost:27017/test',
+  uri: `${process.env.MONGO_DB_SERVER_URI + 'service-auth'}` || 'mongodb://localhost:27017/test',
   collection: 'session',
 });
 

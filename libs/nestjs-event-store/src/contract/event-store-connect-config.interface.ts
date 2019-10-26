@@ -15,7 +15,7 @@ export interface IEventStoreConnectConfig {
   };
   http: {
     protocol?: string;
-    port?: string;
+    port?: number;
   };
 }
 

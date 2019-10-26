@@ -1,27 +1,39 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
-import { NestjsEventStoreService } from './nestjs-event-store.service';
 import { EventStoreOptionConfig } from './event-store-option.config';
 import { ProvidersConstants } from './nestjs-event-store.constant';
 import { EventStore } from './event-store';
 import { IEventStoreConnectConfig } from './contract/event-store-connect-config.interface';
+import { eventStoreProviders } from './nestjs-event-store.provider';
 
 @Global()
 @Module({
-  providers: [NestjsEventStoreService],
-  exports: [NestjsEventStoreService],
+  providers: [
+    ...eventStoreProviders,
+    {
+      provide: 'EVENT_STORE_CONFIG',
+      useValue: 'EVENT_STORE_CONFIG_USE_ENV',
+    },
+  ],
+  exports: [
+    ...eventStoreProviders,
+    {
+      provide: 'EVENT_STORE_CONFIG',
+      useValue: 'EVENT_STORE_CONFIG_USE_ENV',
+    },
+  ],
 })
 export class NestjsEventStoreModule {
   static forRoot(option: IEventStoreConnectConfig): DynamicModule {
+    const configProv = {
+        provide: ProvidersConstants.EVENT_STORE_CONNECTION_CONFIG_PROVIDER,
+        useValue: {
+          ...option,
+        },
+      };
     return {
       module: NestjsEventStoreModule,
-      providers: [
-        {
-          provide: ProvidersConstants.EVENT_STORE_CONNECTION_CONFIG_PROVIDER,
-          useValue: {
-            ...option,
-          },
-        },
-      ],
+      providers: [configProv],
+      exports: [configProv],
     };
   }
 

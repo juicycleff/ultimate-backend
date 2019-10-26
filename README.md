@@ -50,7 +50,6 @@ Software features
 |                                                            | [Express JS](https://expressjs.com)                                                        |                                                                                |
 |                                                            | [Fastify](https://www.fastify.io)                                                          |                                                                                |
 
-
 ## Installation
 
 ```bash

@@ -34,7 +34,6 @@ export function enableMultiTenancy(option: MultiTenancyConfig) {
     if (!option.enabled) {
       next();
     }
-    console.log('Jumpp3');
 
     const tenant = {
       id: null,
@@ -42,7 +41,7 @@ export function enableMultiTenancy(option: MultiTenancyConfig) {
 
     if (option.resolverType === TenantResolverType.Cookie) {
       // tenant.id = req.cookie
-      console.log(req.cookies);
+      // console.log(req.cookies);
     }
     next();
   };
