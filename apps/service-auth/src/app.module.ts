@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import * as path from 'path';
 import { buildContext } from 'graphql-passport';
+import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
+import { CqrsModule } from '@nestjs/cqrs';
+import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
-import { GraphqlDistributedModule } from '@graphqlcqrs/nestjs-graphql-gateway';
-import { CqrsModule } from '@nestjs/cqrs';
-import { NestjsEventStoreModule } from '@graphqlcqrs/nestjs-event-store/nestjs-event-store.module';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();

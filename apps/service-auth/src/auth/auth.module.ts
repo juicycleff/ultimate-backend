@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CookieSerializer } from '@graphqlcqrs/common';
 import { RepositoryModule } from '@graphqlcqrs/repository/repository.module';
+import { EventStore } from '@juicycleff/nestjs-event-store';
 import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
 import { NestjsEventStoreModule } from '@graphqlcqrs/nestjs-event-store/nestjs-event-store.module';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { FacebookStrategy, LocalStrategy } from './strategy';
 import { AuthController } from './auth.controller';
-import { EventStore } from '@graphqlcqrs/nestjs-event-store/event-store';
 import {
   AuthCommandHandlers,
   AuthCreatedEvent,

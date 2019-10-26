@@ -18,12 +18,6 @@
       "@graphqlcqrs/core/*": [
         "libs/core/src/*"
       ],
-      "@graphqlcqrs/nestjs-event-store": [
-        "libs/nestjs-event-store/src"
-      ],
-      "@graphqlcqrs/nestjs-event-store/*": [
-        "libs/nestjs-event-store/src/*"
-      ],
       "@graphqlcqrs/common": [
         "libs/common/src"
       ],
@@ -36,23 +30,11 @@
       "@graphqlcqrs/repository/*": [
         "libs/repository/src/*"
       ],
-      "@graphqlcqrs/nest-casbin": [
-        "libs/nest-casbin/src"
-      ],
-      "@graphqlcqrs/nest-casbin/*": [
-        "libs/nest-casbin/src/*"
-      ],
       "@juicycleff/nest-multi-tenant": [
         "libs/nest-multi-tenant/src"
       ],
       "@juicycleff/nest-multi-tenant/*": [
         "libs/nest-multi-tenant/src/*"
-      ],
-      "@graphqlcqrs/nestjs-graphql-gateway": [
-        "libs/nestjs-graphql-gateway/src"
-      ],
-      "@graphqlcqrs/nestjs-graphql-gateway/*": [
-        "libs/nestjs-graphql-gateway/src/*"
       ]
     }
   },

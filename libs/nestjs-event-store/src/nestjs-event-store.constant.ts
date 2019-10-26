@@ -1,5 +1,0 @@
-export const ProvidersConstants = {
-  EVENT_STORE_PROVIDER: 'EVENT_STORE_PROVIDER',
-  EVENT_STORE_STREAM_CONFIG_PROVIDER: 'EsStreamConfig',
-  EVENT_STORE_CONNECTION_CONFIG_PROVIDER: 'EsConnectionConfig',
-};
