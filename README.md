@@ -3,7 +3,7 @@ ULTIMATE BACKEND
 </h1>
   
 <p align="center">
-  (WiP): This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern.
+  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL, based on Domain  (DDD) using the command query responsibility segregation (CQRS) design pattern.
 </p>
     <p align="center">
 </p>
@@ -19,7 +19,7 @@ ULTIMATE BACKEND
 
 ## Description
 
-This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremly slim and scalable, with distributed data request and process handling and built from the ground up for production use. It comes with Multi-Tenancy, following different multi-tenancy database strategy as well as different resolver patterns
+This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness.
 
 ## Features
@@ -27,6 +27,7 @@ to identify your tenants. The goal is to give your next big project that extra l
 Software features
 
 *   ✅ CQRS
+*   ✅ Software as a Service
 *   ✅ Authentication by stateful session
 *   ✅ User
 *   ✅ Event Sourcing
