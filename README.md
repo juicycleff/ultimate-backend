@@ -89,8 +89,6 @@ $ yarn run test:cov
 
 ### System Architecture & Design
 
-### System requirements
-
 ### System Benefits
 
 ## License

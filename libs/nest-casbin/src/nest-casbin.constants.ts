@@ -1,1 +1,0 @@
-export const CASBIN_ENFORCER = 'CASBIN_ENFORCER';
