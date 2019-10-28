@@ -5,23 +5,22 @@
  */
 
 /* tslint:disable */
-export interface LoginInput {
+export class LoginInput {
     identifier: string;
     password: string;
 }
 
-export interface RegisterInput {
+export class RegisterInput {
     firstname: string;
     lastname: string;
     email: string;
     password: string;
 }
 
-export interface AuthPayload {
+export class AuthPayload {
     id: string;
-    user: any;
 }
 
-export interface BooleanPayload {
+export class BooleanPayload {
     success: boolean;
 }

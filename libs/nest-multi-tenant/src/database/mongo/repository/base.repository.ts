@@ -2,14 +2,12 @@ import { Collection, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
 import { CacheStore } from '@nestjs/common';
 import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
+import { TenantData } from '@juicycleff/nest-multi-tenant/interfaces';
 
 // that class only can be extended
 export class BaseRepository <DOC, DTO = DOC> {
   collection: Promise<Collection<DOC>>;
   readonly options: CollectionProps;
-
-  // tslint:disable-next-line:variable-name
-  private _count: number;
 
   // get options(): CollectionProps {
   //   return Reflect.getMetadata(COLLECTION_KEY, this);
@@ -20,9 +18,10 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @param {DBSource} dbSource Your MongoDB connection
    * @param cacheStore
    * @param opts
+   * @param tenantData
    * @memberof BaseRepository
    */
-  constructor(public dbSource: DBSource, cacheStore?: CacheStore, opts?: CollectionProps) {
+  constructor(public dbSource: DBSource, cacheStore?: CacheStore, opts?: CollectionProps, tenantData?: TenantData) {
     this.options = Object.assign({}, opts, Reflect.getMetadata(COLLECTION_KEY, this));
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');
@@ -374,13 +373,13 @@ export class BaseRepository <DOC, DTO = DOC> {
     return document;
   }
 
-  public count(count: number) {
-    this._count = count;
+  public count() {
+    // this._count = count;
     return this;
   }
 
-  public exec() {
-    // good
+  public initTenantKeys() {
+    // TODO: Initialize tenant data isolation
   }
 
   public onSave(): { createdAt: string; updatedAt: string } {

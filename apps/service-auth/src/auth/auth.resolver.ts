@@ -32,18 +32,16 @@ export class AuthResolver {
 
     return {
       id: entity.user.auth.id,
-      user: entity.user.user,
     };
   }
 
   @Mutation('register')
-  async register(@Args('input') cmd: RegisterInput, @Context() context: any) {
+  async register(@Args('input') cmd: RegisterInput, @Context() context: any): Promise<AuthPayload> {
     const { auth, user } = await this.authService.register(cmd);
 
     context.login(user);
     return {
-      id: auth.id,
-      user,
+      id: auth.id.toHexString(),
     };
   }
 

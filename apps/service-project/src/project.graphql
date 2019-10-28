@@ -1,11 +1,5 @@
 #import * from "./shared.graphql";
 
-extend type User @key(fields: "id") {
-    id: ID! @external
-
-    projects(input: Paginate): [Project!]
-}
-
 type Project implements Node @key(fields: "id") {
     """Type ID (Unique)"""
     id: ID!
@@ -18,8 +12,6 @@ type Project implements Node @key(fields: "id") {
 
     """Project firstname"""
     name: String!
-
-    owner: User!
 }
 
 extend type Query {

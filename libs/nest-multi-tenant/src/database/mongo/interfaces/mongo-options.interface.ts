@@ -8,6 +8,7 @@ export interface MongoModuleOptions {
   uri: string;
   dbName: string;
   clientOptions?: any;
+  tenantName?: string;
 }
 
 export interface MongoOptionsFactory {

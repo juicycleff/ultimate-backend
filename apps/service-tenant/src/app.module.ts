@@ -4,6 +4,8 @@ import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CommonModule } from '@graphqlcqrs/common';
+import { MongoModule } from '@juicycleff/nest-multi-tenant';
 
 @Module({
   imports: [
@@ -17,6 +19,11 @@ import { AppService } from './app.service';
         },
       },
       context: ({ req, res }) => buildContext({ req, res }),
+    }),
+    CommonModule,
+    MongoModule.forRoot({
+      uri: `${process.env.MONGO_DB_SERVER_URI}${process.env.MONGODB_DB_NAME}`,
+      dbName: process.env.MONGODB_DB_NAME,
     }),
   ],
   controllers: [AppController],

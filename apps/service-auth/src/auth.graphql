@@ -1,11 +1,11 @@
 
 extend type User @key(fields: "id") {
     id: ID! @external
+    auth: AuthPayload
 }
 
-type AuthPayload {
+type AuthPayload @key(fields: "id") {
     id: ID!
-    user: User!
 }
 
 type BooleanPayload {

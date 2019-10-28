@@ -20,6 +20,7 @@ require('dotenv').config();
       typePaths: [path.join(process.cwd() + '/apps/service-auth/src', '/**/*.graphql')],
       /* definitions: {
         path: join(process.cwd() + '/apps/service-auth/', 'src/graphql.ts'),
+        outputAs: 'class',
       }, */
       introspection: true,
       playground: {

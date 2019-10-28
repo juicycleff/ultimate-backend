@@ -12,6 +12,7 @@ async function bootstrap() {
     credentials: true,
     preflightContinue: true,
   });
+
   app.enableShutdownHooks();
   app.use(bloodTearsMiddleware);
   AppUtils.killAppWithGrace(app);
