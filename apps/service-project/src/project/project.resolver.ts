@@ -1,11 +1,19 @@
 import { Args, Mutation, Parent, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
-// import { plainToClass } from 'class-transformer';
 import { Paginate } from '@graphqlcqrs/repository/dtos/paginate.dto';
+import { ProjectService } from './project.service';
 
 @Resolver('Project')
 export class ProjectResolver {
+  constructor(private readonly projectService: ProjectService) {}
+
   @Mutation()
   async createProject(@Args('input') input: any): Promise<any> {
+    // const result = await this.projectService.test();
+    return null; // plainToClass(, result);
+  }
+
+  @Mutation()
+  async removeProject(@Args('input') input: any): Promise<any> {
     // const result = await this.projectService.create(input, user);
     return null; // plainToClass(, result);
   }

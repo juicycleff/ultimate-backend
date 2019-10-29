@@ -25,6 +25,14 @@ export function getReactiveClientToken(containerName: string = DEFAULT_MONGO_CON
 }
 
 /**
+ * @description Get a token for the current tenant name for the given connection name
+ * @param containerName The unique name for the container
+ */
+export function getCurrentTenantToken(containerName: string = DEFAULT_MONGO_CONTAINER_NAME) {
+  return `${containerName}CurrentTenant`;
+}
+
+/**
  * Get a token for the Mongo Db object for the given connection name
  * @param containerName The unique name for the container
  */

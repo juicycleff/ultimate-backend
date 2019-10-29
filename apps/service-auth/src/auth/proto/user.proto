@@ -1,0 +1,19 @@
+
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc FindOne (Empty) returns (User)
+}
+
+message Empty {
+  string email = 1;
+}
+
+message User {
+  string id = 1;
+  string firstname = 2;
+  string lastname = 3;
+  string email = 4;
+}

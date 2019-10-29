@@ -1,5 +1,10 @@
 #import * from "./shared.graphql";
 
+extend type AuthPayload @key(fields: "id") {
+    id: ID! @external
+    user: User
+}
+
 type User implements Node @key(fields: "id") {
     """Type ID (Unique)"""
     id: ID!

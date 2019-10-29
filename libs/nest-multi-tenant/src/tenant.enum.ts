@@ -3,6 +3,7 @@ export enum TenantResolverType {
   QueryString,
   Cookie,
   Header,
+  Query,
 }
 
 export enum TenantDatabaseStrategy {

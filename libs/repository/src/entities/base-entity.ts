@@ -9,7 +9,7 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateR
 
   // @IsNotEmpty()
   @ObjectIdColumn()
-  id: ObjectID;
+  id: ObjectID | string;
 
   // @IsDateString()
   // @Column({ nullable: false })

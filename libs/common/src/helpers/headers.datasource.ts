@@ -14,9 +14,7 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
           }
         }
       }
-      if (context.req.cookies) {
-        // TODO: Handle passing cookies to federated services
-      }
+
       if (context.req.tenantInfo) {
         request.tenantInfo = context.req.tenantInfo;
         request.http.headers.set('x-tenant-info', JSON.stringify(context.req.tenantInfo));

@@ -9,7 +9,9 @@ export class NestMultiTenantService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @Inject(CONTEXT) private readonly context,
-  ) {}
+  ) {
+    console.log('tenantFromHeader');
+  }
 
   async createMongoOptions(): Promise<MongoModuleOptions> {
     let req = null;
@@ -27,22 +29,11 @@ export class NestMultiTenantService {
 
     // @ts-ignore
     const tenantInfo = tenantFromHeader as TenantInfo;
-    let uri = process.env.DATABASE_URI || 'mongodb://localhost/test';
+    let uri = process.env.DATABASE_URI || 'mongodb://localhost/demo';
 
-    if (tenantInfo === null || tenantInfo === undefined) {
+    if (tenantInfo === null || tenantInfo === undefined || !tenantInfo.config.enabled) {
       return {
-        uri: process.env.DATABASE_URI || 'mongodb://localhost/test',
-        dbName: process.env.DATABASE_NAME || 'test',
-        clientOptions: {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        },
-      };
-    }
-
-    if (!tenantInfo.config.enabled) {
-      return {
-        uri: process.env.DATABASE_URI || 'mongodb://localhost/test',
+        uri: process.env.DATABASE_URI || 'mongodb://localhost/demo',
         dbName: process.env.DATABASE_NAME || 'test',
         clientOptions: {
           useNewUrlParser: true,
@@ -56,15 +47,19 @@ export class NestMultiTenantService {
 
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DatabaseIsolation) {
       if (tenantInfo.connectionString) {
-        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/test';
+        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/demo';
       } else {
         uri = appConString || 'mongodb://localhost/' + tenantInfo.tenant;
       }
     }
 
+    let tenantName;
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.Both) {
       if (tenantInfo.connectionString) {
-        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/test';
+        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/demo';
+      } else {
+        uri = process.env.DATABASE_URI || 'mongodb://localhost/demo';
+        tenantName = tenantInfo.tenant;
       }
     }
 
@@ -75,6 +70,7 @@ export class NestMultiTenantService {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       },
+      tenantName,
     };
   }
 
