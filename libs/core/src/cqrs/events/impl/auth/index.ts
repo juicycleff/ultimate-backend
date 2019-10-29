@@ -1,3 +1,2 @@
-export * from './auth-created.event';
-export * from './auth-deleted.event';
-export * from './auth-updated.event';
+export * from './user-loggedin.event';
+export * from './user-registered.event';

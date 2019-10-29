@@ -1,9 +1,7 @@
-import { AuthCreatedHandler } from './auth-created.handler';
-import { AuthDeletedHandler } from './auth-deleted.handler';
-import { AuthUpdatedHandler } from './auth-updated.handler';
+import { UserLoggedInHandler } from './user-loggedin.handler';
+import { UserRegisteredHandler } from './user-registered.handler';
 
 export const AuthEventHandlers = [
-  AuthCreatedHandler,
-  AuthUpdatedHandler,
-  AuthDeletedHandler,
+  UserRegisteredHandler,
+  UserLoggedInHandler,
 ];

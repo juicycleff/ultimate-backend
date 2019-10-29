@@ -1,1 +1,2 @@
-export * from './create-auth.command';
+export * from './login-user.command';
+export * from './register-user.command';

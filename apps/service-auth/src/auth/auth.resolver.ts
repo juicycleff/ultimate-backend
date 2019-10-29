@@ -4,11 +4,14 @@ import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { UserInputError } from 'apollo-server-express';
 import { AuthService } from './auth.service';
 import { AuthPayload, LoginInput, RegisterInput } from '../graphql';
+import { CommandBus } from '@nestjs/cqrs';
+import { RegisterUserCommand } from '@graphqlcqrs/core/cqrs';
 
 @Resolver('AuthPayload')
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   @Mutation('login')
@@ -27,21 +30,22 @@ export class AuthResolver {
     }
 
     // Authenticate against passport local strategy
-    const entity = await context.authenticate('graphql-local', { email: identifier, password });
-    context.login(entity.user);
+    const auth = await context.authenticate('graphql-local', { email: identifier, password });
+    context.login(auth.user);
 
     return {
-      id: entity.user.auth.id,
+      id: auth.user.id,
     };
   }
 
   @Mutation('register')
   async register(@Args('input') cmd: RegisterInput, @Context() context: any): Promise<AuthPayload> {
-    const { auth, user } = await this.authService.register(cmd);
+    const user = await this.commandBus.execute(new RegisterUserCommand(cmd));
 
+    console.log(user);
     context.login(user);
     return {
-      id: auth.id.toHexString(),
+      id: user.id,
     };
   }
 

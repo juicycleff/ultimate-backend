@@ -10,7 +10,6 @@ import { UserModule } from './user/user.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { AuthPayloadModule } from './auth-payload/auth-payload.module';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { join } from 'path';
 
 @Module({
   imports: [

@@ -10,6 +10,6 @@ export class AuthPayloadResolver {
 
   @ResolveProperty('user')
   async user(@Parent() auth: any): Promise<User> {
-    return plainToClass(User, await this.userService.findOne({ authId: new ObjectID(auth.id)}));
+    return plainToClass(User, await this.userService.findOne({ id: auth.id }));
   }
 }

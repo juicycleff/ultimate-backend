@@ -5,6 +5,6 @@ import { UserDeletedEvent } from '../../impl/user';
 @EventsHandler(UserDeletedEvent)
 export class UserDeletedHandler implements IEventHandler<UserDeletedEvent> {
   handle(event: UserDeletedEvent): any {
-    Logger.log(event, 'UserDeletedEvent'); // write here
+    Logger.log(event, 'UserCreatedEvent'); // write here
   }
 }

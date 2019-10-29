@@ -10,13 +10,9 @@ import { FacebookStrategy, LocalStrategy } from './strategy';
 import { AuthController } from './auth.controller';
 import {
   AuthCommandHandlers,
-  AuthCreatedEvent,
+  UserLoggedInEvent,
+  UserRegisteredEvent,
   AuthEventHandlers,
-  AuthQueryHandlers,
-  UserCommandHandlers,
-  UserCreatedEvent,
-  UserEventHandlers,
-  UserQueryHandlers,
 } from '@graphqlcqrs/core';
 import { AuthSagas } from './sagas';
 
@@ -25,7 +21,7 @@ import { AuthSagas } from './sagas';
     RepositoryModule,
     CqrsModule,
     NestjsEventStoreModule.forFeature({
-      name: 'auth',
+      name: 'user',
       resolveLinkTos: false,
     }),
   ],
@@ -36,33 +32,15 @@ import { AuthSagas } from './sagas';
     LocalStrategy,
     CookieSerializer,
     ...AuthCommandHandlers,
-    ...AuthQueryHandlers,
     ...AuthEventHandlers,
-    ...UserQueryHandlers,
-    ...UserCommandHandlers,
-    ...UserEventHandlers,
     FacebookStrategy,
   ],
   controllers: [AuthController],
-  exports: [
-    AuthService,
-    AuthResolver,
-    LocalStrategy,
-    CookieSerializer,
-    ...AuthCommandHandlers,
-    ...AuthQueryHandlers,
-    ...AuthEventHandlers,
-    ...UserQueryHandlers,
-    ...UserCommandHandlers,
-    ...UserEventHandlers,
-    FacebookStrategy,
-  ],
 })
 export class AuthModule {
   constructor(
     private readonly command$: CommandBus,
     private readonly event$: EventBus,
-    private readonly authSagas: AuthSagas,
     private readonly eventStore: EventStore,
   ) {}
 
@@ -70,11 +48,10 @@ export class AuthModule {
     this.eventStore.setEventHandlers(this.eventHandlers);
     this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
     this.event$.publisher = this.eventStore;
-    this.event$.registerSagas([AuthSagas]);
   }
 
   eventHandlers = {
-    AuthCreatedEvent: (data) => new AuthCreatedEvent(data),
-    UserCreatedEvent: (data) => new UserCreatedEvent(data),
+    UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
+    UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
   };
 }

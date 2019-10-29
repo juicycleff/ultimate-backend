@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { EventStore, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
 import {
+  AuthCommandHandlers, AuthEventHandlers,
   UserCommandHandlers,
   UserCreatedEvent,
-  UserEventHandlers,
-  UserQueryHandlers,
+  UserEventHandlers, UserLoggedInEvent,
+  UserQueryHandlers, UserRegisteredEvent,
 } from '@graphqlcqrs/core/cqrs';
 import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
@@ -27,6 +28,8 @@ import { UserController } from './user.controller';
     ...UserQueryHandlers,
     ...UserCommandHandlers,
     ...UserEventHandlers,
+    ...AuthCommandHandlers,
+    ...AuthEventHandlers,
   ],
   exports: [UserService],
   controllers: [UserController],
@@ -46,5 +49,7 @@ export class UserModule {
 
   eventHandlers = {
     UserCreatedEvent: (data) => new UserCreatedEvent(data),
+    UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
+    UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
   };
 }
