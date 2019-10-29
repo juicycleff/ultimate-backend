@@ -42,13 +42,12 @@ Software features
 
 | Store and Cache                                            | Stack and frameworks                                                                       | Deployment                                                                     |
 |------------------------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
-| [Event Store (Event Source Store)](https://eventstore.org) | [TypeORM](https://typeorm.io)                                                              | [Docker](https://www.docker.com/)                                              |
-| [Redis (cache)](https://redis.io/)                         | [NodeJS (System runtime)](https://nodejs.org)                                              | [Kubernetes](https://kubernetes.io/)                                           |
+| [Event Store (Event Source Store)](https://eventstore.org) | [NestJS (Server Framework)](https://nestjs.com)                                            | [Docker](https://www.docker.com/)                                              |
+| [HazelCast (cache)](https://hazelcast.com/)                | [NodeJS (System runtime)](https://nodejs.org)                                              | [Kubernetes](https://kubernetes.io/)                                           |
 | [MongoDB (Database)](https://www.mongodb.com/)             | [Typescript](https://www.typescriptlang.org)                                               | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
 |                                                            | [Apollo Server](https://www.apollographql.com/docs/apollo-server)                          |                                                                                |
-|                                                            | [NestJS (Server Framework)](https://nestjs.com)                                            |                                                                                |
-|                                                            | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |                                                                                |
-|                                                            | [Express JS](https://expressjs.com)                                                        |                                                                                |
+|                                                            | [Express JS](https://expressjs.com)                                          |                                                                                |
+|                                                            | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |                                                                                |                                                                               |
 |                                                            | [Fastify](https://www.fastify.io)                                                          |                                                                                |
 
 ## Installation
