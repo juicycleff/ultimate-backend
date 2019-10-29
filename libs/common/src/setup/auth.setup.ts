@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
+import * as useragent from 'express-useragent';
 import * as connectMongodbSession from 'connect-mongodb-session';
 
 // tslint:disable-next-line:no-var-requires
@@ -34,6 +35,7 @@ export function authSetup(app: INestApplication) {
   app.use(passportMiddleware);
   app.use(passportSessionMiddleware);
   app.use(cookieParser());
+  app.use(useragent.express());
 
   // @ts-ignore
   app.set('subdomain offset', 1); // Enable sub domain in app
