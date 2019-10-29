@@ -32,7 +32,7 @@ Software features
 *   ✅ User
 *   ✅ Event Sourcing
 *   ✅ Federated GraphQL Microservice
-*   ❌ Emailing Queue
+*   ✅ Emailing Queue
 *   ✅ Role Based Access Control (WiP)
 *   ❌ Security
 *   ✅ Multi Tenancy (WiP)

@@ -22,7 +22,7 @@ extend type Mutation {
 
     refreshTokens(accessToken: String!, refreshToken: String!): AuthPayload
 
-    verifyEmail(token: String!): BooleanPayload
+    verifyEmail(email: String!, token: Int!): BooleanPayload
     resetPassword(token: String!, newPassword: String!): AuthPayload
 
     sendVerificationEmail(email: String!): BooleanPayload

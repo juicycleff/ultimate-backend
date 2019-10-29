@@ -1,5 +1,6 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
+import { merge } from 'lodash';
 import { BaseRepository, Before, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
 import { UserEntity } from '../entities';
 import { generateHashedPassword } from '@graphqlcqrs/common/utils';
@@ -10,7 +11,7 @@ import { generateHashedPassword } from '@graphqlcqrs/common/utils';
   indexes: [
     {
       fields: { 'emails.address': 1 },
-      options: { unique: true},
+      options: { unique: true, sparse: true },
     },
     {
       fields: { username: 1 },
@@ -42,10 +43,7 @@ export class UserRepository extends BaseRepository<UserEntity> {
   }
 
   @Before('UPDATE')
-  private onUpdateData(data: Partial<UserEntity>) {
-    return {
-      ...data,
-      ...this.onUpdate(),
-    };
+  private onUpdateData(data: Partial<any>) {
+    return merge(data, this.onUpdate());
   }
 }

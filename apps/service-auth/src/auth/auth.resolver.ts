@@ -4,8 +4,8 @@ import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 import { AuthService } from './auth.service';
 import { CommandBus } from '@nestjs/cqrs';
-import { RegisterUserCommand } from '@graphqlcqrs/core/cqrs';
-import { AuthPayload, LoginInput, RegisterInput, ServiceTypes } from '@graphqlcqrs/core/dto';
+import { RegisterUserCommand, VerifyEmailCommand } from '@graphqlcqrs/core/cqrs';
+import { AuthPayload, BooleanPayload, LoginInput, RegisterInput, ServiceTypes } from '@graphqlcqrs/core/dto';
 import { IdentifyMachineUtils } from '@graphqlcqrs/common/utils/identify-machine.utils';
 
 @Resolver('AuthPayload')
@@ -59,11 +59,14 @@ export class AuthResolver {
   async register(@Args('input') cmd: RegisterInput, @Context() context: any): Promise<AuthPayload> {
     const user = await this.commandBus.execute(new RegisterUserCommand(cmd));
 
-    context.login(user);
     return {
       id: user.id,
-      sessionId: context.req.sessionID,
     };
+  }
+
+  @Mutation('verifyEmail')
+  async verifyEmail(@Args('token') token: number, @Args('email') email: string, @Context() context: any): Promise<BooleanPayload> {
+    return await this.commandBus.execute(new VerifyEmailCommand(token, email));
   }
 
   @UseGuards(GqlAuthGuard)

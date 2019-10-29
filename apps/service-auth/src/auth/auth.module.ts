@@ -13,6 +13,7 @@ import {
   UserLoggedInEvent,
   UserRegisteredEvent,
   AuthEventHandlers,
+  EmailVerifiedEvent,
 } from '@graphqlcqrs/core';
 import { AuthSagas } from './sagas';
 
@@ -53,5 +54,6 @@ export class AuthModule {
   eventHandlers = {
     UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
     UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
+    EmailVerifiedEvent: (data) => new EmailVerifiedEvent(data),
   };
 }

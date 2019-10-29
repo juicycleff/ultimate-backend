@@ -6,6 +6,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
