@@ -20,9 +20,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
     try {
 
       const userExist: boolean = await this.userRepository.exist({
-        local: {
-          email: cmd.email,
-        },
+        'emails.address': cmd.email,
       });
 
       if (userExist) {

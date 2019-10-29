@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserEntity, UserRepository } from '@graphqlcqrs/repository';
+import { ApolloError } from 'apollo-server-express';
 import { validPassword } from '@graphqlcqrs/common/utils';
 import { ValidationError } from '@graphqlcqrs/common/exceptions';
 import { LoginUserCommand } from '../../impl';
@@ -58,6 +59,7 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
       return user;
     } catch (error) {
       Logger.log(error, 'LoginUserHandler');
+      throw new ApolloError(error.message);
     }
   }
 

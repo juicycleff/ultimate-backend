@@ -183,9 +183,10 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseRepository
    */
-  async findOneByIdAndUpdate(id: string, req: UpdateByIdRequest): Promise<DOC> {
+  async findOneByIdAndUpdate(id: string | ObjectID, req: UpdateByIdRequest): Promise<DOC> {
+    const entId = typeof id === 'string' ? new ObjectID(id) : id;
     return this.findOneAndUpdate({
-      conditions: { _id: new ObjectID(id) },
+      conditions: { _id: entId },
       updates: req.updates,
       upsert: req.upsert,
     });
@@ -389,9 +390,11 @@ export class BaseRepository <DOC, DTO = DOC> {
     };
   }
 
-  public onUpdate(): { updatedAt: string } {
+  public onUpdate(): any {
     return {
-      updatedAt: new Date().toISOString(),
+      $set: {
+        updatedAt: new Date().toISOString(),
+      },
     };
   }
 }
