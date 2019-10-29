@@ -29,12 +29,12 @@ export class AuthService {
    * @return {Promise<UserEntity>} Result from the validation
    * @access public
    * @memberOf AuthService
-   * @param {string} email
-   * @param {string} password
+   * @param input
    */
-  public async validateUser(email: string, password: string): Promise<UserEntity> {
+  public async validateUser(input: LoginInput): Promise<UserEntity> {
     try {
-      return await this.loginCmd({ identifier: email, password });
+      console.log('Hii');
+      return await this.loginCmd(input);
     } catch (e) {
       Logger.log(e, 'ValidateUser');
       throw new AuthenticationError(e.message);

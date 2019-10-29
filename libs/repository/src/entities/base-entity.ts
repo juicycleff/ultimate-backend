@@ -13,11 +13,11 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateR
 
   // @IsDateString()
   // @Column({ nullable: false })
-  createdAt?: Date | string;
+  createdAt!: Date | string;
 
   // @IsDateString()
   // @Column({ nullable: true })
-  updatedAt?: Date | string;
+  updatedAt!: Date | string;
 
   // @IsDateString()
   // @Column()
@@ -28,7 +28,7 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateR
   deleted?: boolean;
 
   // @VersionColumn()
-  version?: number;
+  version!: number;
 
   toDtoClass?: new (entity: BaseEntity, options?: any) => T;
 

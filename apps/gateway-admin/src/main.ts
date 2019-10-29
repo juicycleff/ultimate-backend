@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
+import * as useragent from 'express-useragent';
 import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
@@ -29,6 +30,7 @@ async function bootstrap() {
   }));
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());
+  app.use(useragent.express());
   await app.listen(parseInt(process.env.PORT, 10) || 4000);
 }
 

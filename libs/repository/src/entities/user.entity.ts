@@ -12,6 +12,8 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
 
   username?: string;
 
+  deactivated!: boolean;
+
   emails?: [
     {
       address: string,
