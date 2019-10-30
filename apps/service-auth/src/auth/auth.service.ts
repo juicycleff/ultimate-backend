@@ -33,7 +33,6 @@ export class AuthService {
    */
   public async validateUser(input: LoginInput): Promise<UserEntity> {
     try {
-      console.log('Hii');
       return await this.loginCmd(input);
     } catch (e) {
       Logger.log(e, 'ValidateUser');
