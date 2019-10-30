@@ -56,12 +56,8 @@ export class AuthResolver {
   }
 
   @Mutation('register')
-  async register(@Args('input') cmd: RegisterInput, @Context() context: any): Promise<AuthPayload> {
-    const user = await this.commandBus.execute(new RegisterUserCommand(cmd));
-
-    return {
-      id: user.id,
-    };
+  async register(@Args('input') cmd: RegisterInput, @Context() context: any): Promise<BooleanPayload> {
+    return await this.commandBus.execute(new RegisterUserCommand(cmd));
   }
 
   @Mutation('verifyEmail')

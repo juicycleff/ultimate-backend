@@ -34,8 +34,9 @@ Software features
 *   ✅ Federated GraphQL Microservice
 *   ✅ Emailing Queue
 *   ✅ Role Based Access Control (WiP)
-*   ❌ Security
 *   ✅ Multi Tenancy (WiP)
+*   ❌ Security
+*   ❌ Reactive health check for federated service and rebuilding gateway schema
 *   ❌ React Website
 
 ### Requirements

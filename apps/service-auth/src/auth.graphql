@@ -18,7 +18,7 @@ extend type Mutation {
 
     login(input: LoginInput!): AuthPayload!
     logout: BooleanPayload!
-    register(input: RegisterInput!):  AuthPayload!
+    register(input: RegisterInput!): BooleanPayload!
 
     refreshTokens(accessToken: String!, refreshToken: String!): AuthPayload
 

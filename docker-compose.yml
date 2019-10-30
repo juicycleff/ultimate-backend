@@ -12,6 +12,8 @@ services:
       - 9900:9900
     environment:
       - PORT=9900
+    labels:
+      kompose.service.type: clusterip
 
   services-project:
     build:
@@ -23,6 +25,8 @@ services:
       - 9100:9100
     environment:
       - PORT=9100
+    labels:
+      kompose.service.type: clusterip
 
   services-user:
     build:
@@ -34,6 +38,47 @@ services:
       - 9000:9000
     environment:
       - PORT=9000
+    labels:
+      kompose.service.type: clusterip
+
+  services-notification:
+    build:
+      context: .
+      dockerfile: docker/prod/service-notification.Dockerfile
+    image: ultimatebackend/service-notification
+    restart: always
+    ports:
+      - 9400:9400
+    environment:
+      - PORT=9400
+    labels:
+      kompose.service.type: clusterip
+
+  services-tenant:
+    build:
+      context: .
+      dockerfile: docker/prod/service-tenant.Dockerfile
+    image: ultimatebackend/service-tenant
+    restart: always
+    ports:
+      - 9200:9200
+    environment:
+      - PORT=9200
+    labels:
+      kompose.service.type: clusterip
+
+  services-payment:
+    build:
+      context: .
+      dockerfile: docker/prod/service-payment.Dockerfile
+    image: ultimatebackend/service-payment
+    restart: always
+    ports:
+      - 9300:9300
+    environment:
+      - PORT=9300
+    labels:
+      kompose.service.type: clusterip
 
   gateway-admin:
     build:
@@ -63,7 +108,31 @@ services:
     labels:
       kompose.service.type: loadbalancer
       kompose.service.expose: "true"
-      kompose.service.expose.tls-secret: "my-secret"
+
+  gateway-client:
+    build:
+      context: .
+      dockerfile: docker/prod/gateway-client.Dockerfile
+    image: ultimatebackend/gateway-client
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - PORT=5000
+      - PROJECT_ENDPOINT=http://services-project:9100/graphql
+      - PROJECT_PATH=project
+      - AUTH_ENDPOINT=http://services-auth:9900/graphql
+      - AUTH_PATH=auth
+      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_PATH=user
+
+    depends_on:
+      - services-project
+    links:
+      - services-project
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
 
   eventstore:
     container_name: eventstore-node

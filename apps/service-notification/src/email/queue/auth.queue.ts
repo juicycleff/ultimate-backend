@@ -9,26 +9,59 @@ import { Job } from 'bull';
 import { Logger } from '@nestjs/common';
 import { EmailService } from '../email.service';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
-import { EmailVerifiedEvent } from '@graphqlcqrs/core/cqrs';
+// import { ConfigService } from '@graphqlcqrs/common/services/config.service';
 
 @Queue({ name: 'auth_queue' })
 export class AuthQueue {
   private readonly logger = new Logger(this.constructor.name);
-  constructor(private readonly service: EmailService) {}
+  constructor(
+    private readonly service: EmailService,
+    // private readonly configService: ConfigService,
+  ) {}
 
   @QueueProcess({ name: 'UserRegistered' })
   async processUserRegister(job: Job<UserEntity>) {
-    await this.service.sendRegisterEmail(job.data);
+    if (job.data) { return; }
+
+    const user = job.data;
+    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+
+    await this.service.sendEmail({
+      to: userEmail.address,
+      from: 'noreply@demo.com',
+      subject: 'Thank for registering',
+      text: `Here is your verification code ${userEmail.verificationCode}`, // plaintext body
+    });
   }
 
   @QueueProcess({ name: 'UserLoggedIn' })
   async processUserLogged(job: Job<UserEntity>) {
-    await this.service.sendLoggedInEmail(job.data);
+    if (job.data) { return; }
+
+    const user = job.data;
+    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+
+    await this.service.sendEmail({
+      to: userEmail.address,
+      from: 'noreply@demo.com',
+      subject: 'User Logged In',
+      text: 'You just logged into this device',
+    });
   }
 
   @QueueProcess({ name: 'EmailVerified' })
   async processEmailVerified(job: Job<UserEntity>) {
-    await this.service.sendWelcomeEmail(job.data);
+    if (job.data) { return; }
+
+    const user = job.data;
+    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+
+    await this.service.sendEmail({
+      to: userEmail.address,
+      from: 'noreply@demo.com',
+      subject: 'Hurray! Welcome',
+      text: `Your account has been verified successfully, you can now log in.`, // plaintext body
+    });
   }
 
   @OnQueueActive()
