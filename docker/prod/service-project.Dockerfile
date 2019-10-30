@@ -11,6 +11,7 @@ COPY package.json /usr/src/app/
 
 RUN npm install -g @nestjs/cli
 RUN npm install rimraf -g
+RUN npm install -g npx
 RUN yarn
 
 COPY . /usr/src/app

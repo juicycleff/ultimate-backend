@@ -31,7 +31,6 @@ items:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
       kompose.service.expose: "true"
-      kompose.service.expose.tls-secret: my-secret
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -53,6 +52,29 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-client
+    name: gateway-client
+  spec:
+    ports:
+    - name: "5000"
+      port: 5000
+      targetPort: 5000
+    selector:
+      io.kompose.service: gateway-client
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:
@@ -65,6 +87,7 @@ items:
       targetPort: 9900
     selector:
       io.kompose.service: services-auth
+    type: ClusterIP
   status:
     loadBalancer: {}
 - apiVersion: v1
@@ -72,6 +95,49 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-notification
+    name: services-notification
+  spec:
+    ports:
+    - name: "9400"
+      port: 9400
+      targetPort: 9400
+    selector:
+      io.kompose.service: services-notification
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-payment
+    name: services-payment
+  spec:
+    ports:
+    - name: "9300"
+      port: 9300
+      targetPort: 9300
+    selector:
+      io.kompose.service: services-payment
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:
@@ -84,6 +150,7 @@ items:
       targetPort: 9100
     selector:
       io.kompose.service: services-project
+    type: ClusterIP
   status:
     loadBalancer: {}
 - apiVersion: v1
@@ -91,6 +158,28 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-tenant
+    name: services-tenant
+  spec:
+    ports:
+    - name: "9200"
+      port: 9200
+      targetPort: 9200
+    selector:
+      io.kompose.service: services-tenant
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:
@@ -103,6 +192,7 @@ items:
       targetPort: 9000
     selector:
       io.kompose.service: services-user
+    type: ClusterIP
   status:
     loadBalancer: {}
 - apiVersion: extensions/v1beta1
@@ -157,7 +247,6 @@ items:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
       kompose.service.expose: "true"
-      kompose.service.expose.tls-secret: my-secret
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -210,10 +299,6 @@ items:
         - backend:
             serviceName: gateway-admin
             servicePort: 4000
-    tls:
-    - hosts:
-      - "true"
-      secretName: my-secret
   status:
     loadBalancer: {}
 - apiVersion: extensions/v1beta1
@@ -221,6 +306,67 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.expose: "true"
+      kompose.service.type: loadbalancer
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-client
+    name: gateway-client
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: gateway-client
+      spec:
+        containers:
+        - env:
+          - name: AUTH_ENDPOINT
+            value: http://services-auth:9900/graphql
+          - name: AUTH_PATH
+            value: auth
+          - name: PORT
+            value: "5000"
+          - name: PROJECT_ENDPOINT
+            value: http://services-project:9100/graphql
+          - name: PROJECT_PATH
+            value: project
+          - name: USER_ENDPOINT
+            value: http://services-auth:9000/graphql
+          - name: USER_PATH
+            value: user
+          image: ultimatebackend/gateway-client
+          name: gateway-client
+          ports:
+          - containerPort: 5000
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: gateway-client
+    name: gateway-client
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: gateway-client
+            servicePort: 5000
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:
@@ -251,6 +397,69 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-notification
+    name: services-notification
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-notification
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9400"
+          image: ultimatebackend/service-notification
+          name: services-notification
+          ports:
+          - containerPort: 9400
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-payment
+    name: services-payment
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-payment
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9300"
+          image: ultimatebackend/service-payment
+          name: services-payment
+          ports:
+          - containerPort: 9300
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:
@@ -281,6 +490,38 @@ items:
   metadata:
     annotations:
       kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
+      kompose.version: 1.17.0 (a74acad)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: services-tenant
+    name: services-tenant
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: services-tenant
+      spec:
+        containers:
+        - env:
+          - name: PORT
+            value: "9200"
+          image: ultimatebackend/service-tenant
+          name: services-tenant
+          ports:
+          - containerPort: 9200
+          resources: {}
+        restartPolicy: Always
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
     labels:

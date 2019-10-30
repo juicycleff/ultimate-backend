@@ -16,5 +16,8 @@ RUN yarn
 
 COPY . /usr/src/app
 
-EXPOSE 4000
-CMD ["yarn", "start", "gateway-admin"]
+# Build production files
+RUN yarn build service-auth
+
+EXPOSE 9400
+CMD ["node", "dist/apps/service-notification/main.js"]
