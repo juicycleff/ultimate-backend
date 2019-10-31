@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
+import { join } from 'path';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -19,7 +20,7 @@ require('dotenv').config();
     GraphqlDistributedModule.forRoot({
       typePaths: [path.join(process.cwd() + '/apps/service-auth/src', '/**/*.graphql')],
       /* definitions: {
-        path: join(process.cwd() + '/apps/service-auth/', 'src/graphql.ts'),
+        path: join(process.cwd() + '/libs/contracts/', 'src/services/auth-contract.ts'),
         outputAs: 'class',
       }, */
       introspection: true,
