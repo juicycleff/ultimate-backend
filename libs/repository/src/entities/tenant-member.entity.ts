@@ -8,11 +8,9 @@ export class TenantMemberEntity extends BaseEntity<any> {
 
   email: string;
 
-  status?: InvitationStatus;
+  status!: InvitationStatus;
 
   role: AppRole;
-
-  userId?: ObjectID;
 
   tenantId: ObjectID;
 

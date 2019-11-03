@@ -1,9 +1,9 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { merge } from 'lodash';
+import { generateHashedPassword } from '@graphqlcqrs/common/utils';
 import { BaseRepository, Before, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
 import { UserEntity } from '../entities';
-import { generateHashedPassword } from '@graphqlcqrs/common/utils';
 
 @Injectable()
 @EntityRepository({
@@ -23,7 +23,6 @@ export class UserRepository extends BaseRepository<UserEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,
-    // @InjectCurrentTenant() private readonly curentTenant: TenantData,
     @Inject(CACHE_MANAGER) private readonly cacheStore: CacheStore,
   ) {
     super({ client: dbc, db }, cacheStore, null);

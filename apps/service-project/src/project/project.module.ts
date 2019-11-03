@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ProjectService } from './project.service';
 import { ProjectResolver } from './project.resolver';
 import { CqrsModule } from '@nestjs/cqrs';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
@@ -14,6 +13,6 @@ import { RepositoryModule } from '@graphqlcqrs/repository';
     }),
     RepositoryModule,
   ],
-  providers: [ProjectService, ProjectResolver],
+  providers: [ProjectResolver],
 })
 export class ProjectModule {}

@@ -23,15 +23,17 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
     }
   ];
 
-  services: {
-    password?: {
-      hashed: string;
-    };
-
-    facebook?: FacebookAuth;
-
-    google?: GoogleAuth,
-  };
+  services!: AuthServices;
 
   toDtoClass?: new(entity: BaseEntity, options?: any) => UserResponseDto;
+}
+
+interface AuthServices {
+  password?: {
+    hashed: string,
+  };
+
+  facebook?: FacebookAuth;
+
+  google?: GoogleAuth;
 }

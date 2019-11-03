@@ -1,18 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
-import { BaseRepository, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
+import { merge } from 'lodash';
+import { BaseRepository, Before, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
 import { ProjectEntity } from '../entities';
 
 @Injectable()
 @EntityRepository({ name: 'project' })
 export class ProjectRepository extends BaseRepository<ProjectEntity> {
   constructor(
-    @InjectClient() private readonly client: MongoClient,
+    @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,
+    @Inject(CACHE_MANAGER) private readonly cacheStore: CacheStore,
   ) {
-    super({
-      client,
-      db,
-    });
+    super({ client: dbc, db }, cacheStore, null);
+  }
+
+  @Before('CREATE')
+  private onSaveData(data: Partial<ProjectEntity>): Partial<ProjectEntity> {
+    return {
+      ...data,
+      ...this.onSave(),
+    };
+  }
+
+  @Before('UPDATE')
+  private onUpdateData(data: Partial<any>) {
+    return merge(data, this.onUpdate());
   }
 }

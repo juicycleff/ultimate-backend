@@ -7,5 +7,5 @@ export class TenantAccessEmbed {
 
   active: boolean;
 
-  createdAt?: Date;
+  createdAt?: Date | string;
 }
