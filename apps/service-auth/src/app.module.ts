@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
-import { join } from 'path';
+// import { join } from 'path';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
