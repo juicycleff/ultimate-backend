@@ -1,3 +1,3 @@
-// export * from './project';
+export * from './tenant';
 export * from './auth';
 export * from './user';

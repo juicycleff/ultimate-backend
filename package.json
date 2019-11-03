@@ -44,6 +44,7 @@
     "@nestjs/platform-fastify": "^6.8.4",
     "@nestjs/swagger": "^3.1.0",
     "@nestjs/typeorm": "^6.2.0",
+    "@sindresorhus/slugify": "^0.9.1",
     "@types/express-session": "^1.15.15",
     "apollo-server": "^2.9.6",
     "apollo-server-express": "^2.9.5",
@@ -99,6 +100,7 @@
     "typeorm-transactional-cls-hooked": "^0.1.8",
     "ursa-optional": "^0.10.1",
     "uuid": "^3.3.3",
+    "uuid-apikey": "^1.4.6",
     "vhost": "^3.0.2"
   },
   "devDependencies": {
@@ -149,6 +151,10 @@
     },
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
+    "modulePaths": [
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
     "roots": [
       "<rootDir>/apps/",
       "<rootDir>/libs/"

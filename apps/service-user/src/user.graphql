@@ -21,8 +21,18 @@ type User implements Node @key(fields: "id") {
     """User lastname"""
     lastname: String!
 
+
     """User email"""
-    email: String!
+    primaryEmail: String!
+
+    """User emails"""
+    emails: [EmailObject!]
+}
+
+type EmailObject {
+    address: String!
+    primary: Boolean
+    verified: Boolean
 }
 
 extend type Query {

@@ -2,7 +2,6 @@ export * from './common.module';
 export * from './common.service';
 export * from './interceptors';
 export * from './filters';
-export * from './exceptions';
 export * from './decorators';
 export * from './utils';
 export * from './errors';

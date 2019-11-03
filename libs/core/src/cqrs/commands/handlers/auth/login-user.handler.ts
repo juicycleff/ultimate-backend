@@ -3,10 +3,10 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserEntity, UserRepository } from '@graphqlcqrs/repository';
 import { ApolloError } from 'apollo-server-express';
 import { validPassword } from '@graphqlcqrs/common/utils';
-import { ValidationError } from '@graphqlcqrs/common/exceptions';
+import { ServiceTypes } from '@graphqlcqrs/core/dto';
+import { NotFoundError, ValidationError } from '@graphqlcqrs/common/errors';
 import { LoginUserCommand } from '../../impl';
 import { UserLoggedInEvent } from '../../../';
-import { ServiceTypes } from '@graphqlcqrs/core/dto';
 
 @CommandHandler(LoginUserCommand)
 export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
@@ -43,15 +43,19 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
 
       const user: UserEntity = await this.userRepository.findOne(condition);
 
+      if (!user) {
+        throw new NotFoundError('Your login credentials is incorrect');
+      }
+
       if (cmd.service === ServiceTypes.Password) {
         if (!validPassword(cmd.params.password, user.services.password.hashed)) {
-          throw new ValidationError(['Your login credentials were not correct']);
+          throw new ValidationError('Your login credentials is incorrect');
         }
 
         // Check if user is verified
         const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
         if (!userEmail.verified) {
-          throw new ValidationError(['Please verify your email address']);
+          throw new ValidationError('Please verify your email address');
         }
       }
 

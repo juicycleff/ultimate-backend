@@ -30,8 +30,8 @@ import { UserModule } from './user/user.module';
     }),
     CommonModule,
     MongoModule.forRoot({
-      uri: `${process.env.MONGO_DB_SERVER_URI}${process.env.MONGODB_DB_NAME}`,
-      dbName: process.env.MONGODB_DB_NAME,
+      uri: `${process.env.MONGO_DB_SERVER_URI}service-tenant`,
+      dbName: 'service-tenant',
     }),
     TenantModule,
     TenantMemberModule,
