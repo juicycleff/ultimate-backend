@@ -23,7 +23,7 @@
     "test:cov": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage --token a5ea7c309f7543a3b7cfc662c1c88d67 --language typescript",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
-    "kompose": "kompose convert -o deployment.yaml",
+    "kompose": "kompose convert -o kubernetes/deployment.yaml",
     "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect"

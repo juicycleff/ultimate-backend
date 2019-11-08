@@ -1,0 +1,263 @@
+version: "3.2"
+
+services:
+  services-auth:
+    build:
+      context: .
+      dockerfile: service-auth.Dockerfile
+    image: ultimatebackend/service-auth:latest
+    restart: always
+    ports:
+      - 9900:9900
+    environment:
+      - PORT=9900
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-auth
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  services-project:
+    build:
+      context: .
+      dockerfile: service-project.Dockerfile
+    image: ultimatebackend/service-project:latest
+    restart: always
+    ports:
+      - 9100:9100
+    environment:
+      - PORT=9100
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-project
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  services-user:
+    build:
+      context: .
+      dockerfile: service-user.Dockerfile
+    image: ultimatebackend/service-user:latest
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - PORT=9000
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-user
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  services-notification:
+    build:
+      context: .
+      dockerfile: service-notification.Dockerfile
+    image: ultimatebackend/service-notification:latest
+    restart: always
+    ports:
+      - 9400:9400
+    environment:
+      - PORT=9400
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-notification
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  services-tenant:
+    build:
+      context: .
+      dockerfile: service-tenant.Dockerfile
+    image: ultimatebackend/service-tenant:latest
+    restart: always
+    ports:
+      - 9200:9200
+    environment:
+      - PORT=9200
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-tenant
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  services-payment:
+    build:
+      context: .
+      dockerfile: service-payment.Dockerfile
+    image: ultimatebackend/service-payment:latest
+    restart: always
+    ports:
+      - 9300:9300
+    environment:
+      - PORT=9300
+      - ES_POOL_MAX=
+      - ES_POOL_MIN=
+      - ES_STREAM_PROTOCOL=http
+      - ES_HTTP_PORT=2113
+      - ES_HTTP_PROTOCOL=http
+      - ES_TCP_PASSWORD=changeit
+      - ES_TCP_USERNAME=admin
+      - ES_TCP_HOSTNAME=eventstore
+      - ES_TCP_PORT=1113
+      - ES_TCP_PROTOCOL=tcp
+      - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
+      - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
+      - MONGODB_DB_NAME=service-payment
+    depends_on:
+      - eventstore
+    links:
+      - eventstore
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  gateway-admin:
+    build:
+      context: .
+      dockerfile: gateway-admin.Dockerfile
+    image: ultimatebackend/gateway-admin:latest
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      - PORT=4000
+      - PROJECT_ENDPOINT=http://services-project:9100/graphql
+      - PROJECT_PATH=project
+      - AUTH_ENDPOINT=http://services-auth:9900/graphql
+      - AUTH_PATH=auth
+      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_PATH=user
+
+    depends_on:
+      - services-auth
+      - services-project
+      - services-user
+    links:
+      - services-auth
+      - services-project
+      - services-user
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  gateway-client:
+    build:
+      context: .
+      dockerfile: gateway-client.Dockerfile
+    image: ultimatebackend/gateway-client:latest
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - PORT=5000
+      - PROJECT_ENDPOINT=http://services-project:9100/graphql
+      - PROJECT_PATH=project
+      - AUTH_ENDPOINT=http://services-auth:9900/graphql
+      - AUTH_PATH=auth
+      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_PATH=user
+
+    depends_on:
+      - services-project
+    links:
+      - services-project
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
+      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-policy: "Always"
+
+  eventstore:
+    container_name: eventstore-node
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    image: eventstore/eventstore
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
+      kompose.image-pull-secret: "regcred"
