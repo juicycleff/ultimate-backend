@@ -68,6 +68,9 @@ $ yarn run start:dev gateway-admin
 
 # production mode for admin gateway
 $ yarn run start:prod
+
+# Start with different evironment
+$ NODE_ENV=staging npx nest start service-user
 ```
 
 ## Test
