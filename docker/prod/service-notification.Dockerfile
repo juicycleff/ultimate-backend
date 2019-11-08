@@ -17,7 +17,7 @@ RUN yarn
 COPY . /usr/src/app
 
 # Build production files
-RUN yarn build service-auth
+RUN yarn build service-notification
 
 EXPOSE 9400
 CMD ["node", "dist/apps/service-notification/main.js"]

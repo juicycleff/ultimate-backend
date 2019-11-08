@@ -9,9 +9,7 @@ export class NestMultiTenantService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @Inject(CONTEXT) private readonly context,
-  ) {
-    console.log('tenantFromHeader');
-  }
+  ) {}
 
   async createMongoOptions(): Promise<MongoModuleOptions> {
     let req = null;

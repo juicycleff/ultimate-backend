@@ -17,7 +17,7 @@ RUN yarn
 COPY . /usr/src/app
 
 # Build production files
-RUN yarn build service-user
+RUN yarn build gateway-client
 
 EXPOSE 5000
 CMD ["node", "dist/apps/gateway-client/main.js"]

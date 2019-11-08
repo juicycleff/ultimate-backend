@@ -1,6 +1,6 @@
 import {
-  Queue,
-  QueueProcess,
+  Processor,
+  Process,
   OnQueueActive,
   OnQueueEvent,
   BullQueueEvents,
@@ -11,7 +11,7 @@ import { EmailService } from '../email.service';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
 // import { ConfigService } from '@graphqlcqrs/common/services/config.service';
 
-@Queue({ name: 'auth_queue' })
+@Processor({ name: 'auth_queue' })
 export class AuthQueue {
   private readonly logger = new Logger(this.constructor.name);
   constructor(
@@ -19,7 +19,7 @@ export class AuthQueue {
     // private readonly configService: ConfigService,
   ) {}
 
-  @QueueProcess({ name: 'UserRegistered' })
+  @Process({ name: 'UserRegistered' })
   async processUserRegister(job: Job<UserEntity>) {
     if (job.data) { return; }
 
@@ -34,7 +34,7 @@ export class AuthQueue {
     });
   }
 
-  @QueueProcess({ name: 'UserLoggedIn' })
+  @Process({ name: 'UserLoggedIn' })
   async processUserLogged(job: Job<UserEntity>) {
     if (job.data) { return; }
 
@@ -49,7 +49,7 @@ export class AuthQueue {
     });
   }
 
-  @QueueProcess({ name: 'EmailVerified' })
+  @Process({ name: 'EmailVerified' })
   async processEmailVerified(job: Job<UserEntity>) {
     if (job.data) { return; }
 

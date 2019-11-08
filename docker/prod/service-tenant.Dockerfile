@@ -17,7 +17,7 @@ RUN yarn
 COPY . /usr/src/app
 
 # Build production files
-RUN yarn build service-user
+RUN yarn build service-tenant
 
 EXPOSE 9200
 CMD ["node", "dist/apps/service-tenant/main.js"]

@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import * as path from 'path';
 import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ProjectModule } from './project/project.module';
 import { CommonModule } from '@graphqlcqrs/common';
 import { MongoModule, NestMultiTenantModule, NestMultiTenantService } from '@juicycleff/nest-multi-tenant';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CqrsModule } from '@nestjs/cqrs';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -31,17 +32,17 @@ import { CqrsModule } from '@nestjs/cqrs';
     }),
     NestjsEventStoreModule.forRoot({
       http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10),
-        protocol: process.env.ES_HTTP_PROTOCOL,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
+        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
       },
       tcp: {
         credentials: {
-          password: process.env.ES_TCP_PASSWORD,
-          username: process.env.ES_TCP_USERNAME,
+          password: AppConfig.eventstore?.tcpPassword,
+          username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME,
-        port: parseInt(process.env.ES_TCP_PORT, 10),
-        protocol: process.env.ES_TCP_PROTOCOL,
+        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
+        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
     ProjectModule,

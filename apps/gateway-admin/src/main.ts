@@ -13,6 +13,7 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: 'http://localhost:3000',
+    preflightContinue: false,
   });
   app.use(bloodTearsMiddleware);
   app.use(enableMultiTenancy({

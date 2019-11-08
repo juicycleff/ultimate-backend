@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { EventStore, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
 import {
@@ -8,9 +8,8 @@ import {
   UserEventHandlers, UserLoggedInEvent,
   UserQueryHandlers, UserRegisteredEvent,
 } from '@graphqlcqrs/core/cqrs';
-import { UserService } from './user.service';
+import { UserRepository } from '@graphqlcqrs/repository';
 import { UserResolver } from './user.resolver';
-import { RepositoryModule } from '@graphqlcqrs/repository';
 import { UserController } from './user.controller';
 
 @Module({
@@ -20,18 +19,18 @@ import { UserController } from './user.controller';
       name: 'user',
       resolveLinkTos: false,
     }),
-    RepositoryModule,
+    CacheModule.register(),
   ],
   providers: [
-    UserService,
     UserResolver,
     ...UserQueryHandlers,
     ...UserCommandHandlers,
     ...UserEventHandlers,
     ...AuthCommandHandlers,
     ...AuthEventHandlers,
+    UserRepository,
   ],
-  exports: [UserService],
+  exports: [UserRepository],
   controllers: [UserController],
 })
 export class UserModule {

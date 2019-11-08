@@ -1,15 +1,19 @@
 import { Parent, ResolveProperty, Resolver } from '@nestjs/graphql';
-import { ObjectID } from 'bson';
 import { plainToClass } from 'class-transformer';
 import { User } from '../graphql';
-import { UserService } from '../user/user.service';
+import { GetUserQuery } from '@graphqlcqrs/core/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 @Resolver('AuthPayload')
 export class AuthPayloadResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @ResolveProperty('user')
   async user(@Parent() auth: any): Promise<User> {
-    return plainToClass(User, await this.userService.findOne({ id: auth.id }));
+    const user = await this.queryBus.execute(new GetUserQuery({ id: auth.id }));
+    return plainToClass(User, user);
   }
 }

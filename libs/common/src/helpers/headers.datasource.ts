@@ -30,7 +30,10 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
         decodeValues: false,
         map: true,
       });
-      context.res.cookie('session.app', cookies['session.app']);
+
+      if (cookies['session.app'] !== null && cookies['session.app'] !== undefined) {
+        context.res.cookie('session.app', cookies['session.app']);
+      }
     }
     return body;
   }
