@@ -15,7 +15,12 @@ lerna-debug.log*
 
 # Envss
 *.env
-/.env
+
+# Terraform
+/iac/.terraform/*
+/iac/*.tfstate
+/iac/*.yaml
+
 
 # Tests
 /coverage
