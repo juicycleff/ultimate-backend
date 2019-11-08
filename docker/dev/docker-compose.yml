@@ -4,7 +4,7 @@ services:
   services-auth:
     build:
       context: .
-      dockerfile: docker/prod/service-auth.Dockerfile
+      dockerfile: service-auth.Dockerfile
     image: ultimatebackend/service-auth:latest
     restart: always
     ports:
@@ -36,7 +36,7 @@ services:
   services-project:
     build:
       context: .
-      dockerfile: docker/prod/service-project.Dockerfile
+      dockerfile: service-project.Dockerfile
     image: ultimatebackend/service-project:latest
     restart: always
     ports:
@@ -68,7 +68,7 @@ services:
   services-user:
     build:
       context: .
-      dockerfile: docker/prod/service-user.Dockerfile
+      dockerfile: service-user.Dockerfile
     image: ultimatebackend/service-user:latest
     restart: always
     ports:
@@ -100,7 +100,7 @@ services:
   services-notification:
     build:
       context: .
-      dockerfile: docker/prod/service-notification.Dockerfile
+      dockerfile: service-notification.Dockerfile
     image: ultimatebackend/service-notification:latest
     restart: always
     ports:
@@ -132,7 +132,7 @@ services:
   services-tenant:
     build:
       context: .
-      dockerfile: docker/prod/service-tenant.Dockerfile
+      dockerfile: service-tenant.Dockerfile
     image: ultimatebackend/service-tenant:latest
     restart: always
     ports:
@@ -164,7 +164,7 @@ services:
   services-payment:
     build:
       context: .
-      dockerfile: docker/prod/service-payment.Dockerfile
+      dockerfile: service-payment.Dockerfile
     image: ultimatebackend/service-payment:latest
     restart: always
     ports:
@@ -196,7 +196,7 @@ services:
   gateway-admin:
     build:
       context: .
-      dockerfile: docker/prod/gateway-admin.Dockerfile
+      dockerfile: gateway-admin.Dockerfile
     image: ultimatebackend/gateway-admin:latest
     restart: always
     ports:
@@ -227,7 +227,7 @@ services:
   gateway-client:
     build:
       context: .
-      dockerfile: docker/prod/gateway-client.Dockerfile
+      dockerfile: gateway-client.Dockerfile
     image: ultimatebackend/gateway-client:latest
     restart: always
     ports:
