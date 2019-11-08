@@ -6,6 +6,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -16,17 +17,17 @@ require('dotenv').config();
     CommonModule,
     NestjsEventStoreModule.forRoot({
       http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10),
-        protocol: process.env.ES_HTTP_PROTOCOL,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
+        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
       },
       tcp: {
         credentials: {
-          password: process.env.ES_TCP_PASSWORD,
-          username: process.env.ES_TCP_USERNAME,
+          password: AppConfig.eventstore?.tcpPassword,
+          username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME,
-        port: parseInt(process.env.ES_TCP_PORT, 10),
-        protocol: process.env.ES_TCP_PROTOCOL,
+        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
+        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
     SendGridModule.forRoot({

@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Logger } from '@nestjs/common';
+import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 /**
@@ -8,10 +8,8 @@ import { GqlExecutionContext } from '@nestjs/graphql';
  * @implements {CanActivate}
  */
 export class GqlAuthGuard  implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context).getContext();
-
-    Logger.log(ctx.isAuthenticated(), 'GqlAuthGuard');
-    return ctx.isAuthenticated();
+    return await ctx.isAuthenticated();
   }
 }

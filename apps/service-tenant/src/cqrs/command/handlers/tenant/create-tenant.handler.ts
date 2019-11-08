@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 import { TenantEntity, TenantRepository } from '@graphqlcqrs/repository';
 import { TenantCreatedEvent } from '@graphqlcqrs/core';
-import * as slugify from '@sindresorhus/slugify';
+import slugify from '@sindresorhus/slugify';
 import { ConflictError } from '@graphqlcqrs/common';
 import * as uuidAPIKey from 'uuid-apikey';
 import { ObjectID } from 'mongodb';

@@ -17,7 +17,7 @@ RUN yarn
 COPY . /usr/src/app
 
 # Build production files
-RUN yarn build service-user
+RUN yarn build service-payment
 
 EXPOSE 9300
 CMD ["node", "dist/apps/service-payment/main.js"]

@@ -1,8 +1,11 @@
 import { CacheModule, Module } from '@nestjs/common';
+import { GraphqlDistributedGatewayModule } from 'nestjs-graphql-gateway';
+import { buildContext } from 'graphql-passport';
+import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasource';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GraphqlDistributedGatewayModule } from 'nestjs-graphql-gateway';
-import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasource';
+import { CookieSerializer } from '@graphqlcqrs/common/providers';
+import { BuilderUserStrategy } from './builder-user.strategy';
 
 @Module({
   imports: [
@@ -10,11 +13,12 @@ import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasourc
     GraphqlDistributedGatewayModule.forRoot({
       subscriptions: false,
       path: '/graphql',
-      context: context => context,
+      context: ({ req, res }) => buildContext({ req, res }),
       serviceList: [
         { name: 'auth', url: 'http://localhost:9900/graphql' },
         { name: 'user', url: 'http://localhost:9000/graphql' },
         { name: 'project', url: 'http://localhost:9100/graphql' },
+        { name: 'tenant', url: 'http://localhost:9200/graphql' },
         // more services
       ],
       buildService({ url }) {
@@ -28,11 +32,12 @@ import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasourc
         workspaceName: 'Admin Gateway',
         settings: {
           'editor.theme': 'light',
+          'request.credentials': 'same-origin',
         },
       },
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, BuilderUserStrategy, CookieSerializer],
 })
 export class AppModule {}

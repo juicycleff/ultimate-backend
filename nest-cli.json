@@ -5,7 +5,11 @@
   "root": "apps/gateway-admin",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/gateway-admin/tsconfig.app.json"
+    "tsConfigPath": "apps/gateway-admin/tsconfig.app.json",
+    "assets": [
+      { "include": "**/*.graphql" },
+      { "include": "./config/*.yml" }
+    ]
   },
   "projects": {
     "gateway-admin": {
@@ -53,15 +57,6 @@
         "tsConfigPath": "libs/core/tsconfig.lib.json"
       }
     },
-    "nestjs-event-store": {
-      "type": "library",
-      "root": "libs/nestjs-event-store",
-      "entryFile": "index",
-      "sourceRoot": "libs/nestjs-event-store/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/nestjs-event-store/tsconfig.lib.json"
-      }
-    },
     "common": {
       "type": "library",
       "root": "libs/common",
@@ -78,15 +73,6 @@
       "sourceRoot": "libs/repository/src",
       "compilerOptions": {
         "tsConfigPath": "libs/repository/tsconfig.lib.json"
-      }
-    },
-    "nest-casbin": {
-      "type": "library",
-      "root": "libs/nest-casbin",
-      "entryFile": "index",
-      "sourceRoot": "libs/nest-casbin/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/nest-casbin/tsconfig.lib.json"
       }
     },
     "nest-multi-tenant": {
@@ -132,15 +118,6 @@
       "sourceRoot": "apps/gateway-client/src",
       "compilerOptions": {
         "tsConfigPath": "apps/gateway-client/tsconfig.app.json"
-      }
-    },
-    "nestjs-graphql-gateway": {
-      "type": "library",
-      "root": "libs/nestjs-graphql-gateway",
-      "entryFile": "index",
-      "sourceRoot": "libs/nestjs-graphql-gateway/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/nestjs-graphql-gateway/tsconfig.lib.json"
       }
     },
     "contracts": {

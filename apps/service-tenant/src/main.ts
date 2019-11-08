@@ -5,6 +5,9 @@ import { AppUtils } from '@graphqlcqrs/common/utils';
 import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { SwaggerModule } from '@nestjs/swagger';
 
+// tslint:disable-next-line:no-var-requires
+// const config = require('config-yml').load(process.env.NODE_ENV);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

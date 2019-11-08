@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from '@graphqlcqrs/common';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 
 @Module({
   imports: [
@@ -22,8 +24,23 @@ import { MongoModule } from '@juicycleff/nest-multi-tenant';
     }),
     CommonModule,
     MongoModule.forRoot({
-      uri: `${process.env.MONGO_DB_SERVER_URI}${process.env.MONGODB_DB_NAME}`,
-      dbName: process.env.MONGODB_DB_NAME,
+      uri: `${AppConfig.services?.payment?.mongodb?.uri}${AppConfig.services?.payment?.mongodb?.name}`,
+      dbName: AppConfig.services?.payment?.mongodb?.name,
+    }),
+    NestjsEventStoreModule.forRoot({
+      http: {
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
+        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
+      },
+      tcp: {
+        credentials: {
+          password: AppConfig.eventstore?.tcpPassword,
+          username: AppConfig.eventstore?.tcpUsername,
+        },
+        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
+        protocol: AppConfig.eventstore?.tcpProtocol,
+      },
     }),
   ],
   controllers: [AppController],

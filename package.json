@@ -59,6 +59,7 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.10.2",
     "codacy-coverage": "^3.4.0",
+    "config-yml": "^0.10.3",
     "connect-mongodb-session": "^2.2.0",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.2.0",
@@ -86,6 +87,7 @@
     "node-eventstore-client": "^0.2.13",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
+    "passport-facebook-token": "^3.3.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "request-context": "^2.0.0",
@@ -130,8 +132,8 @@
     "ts-loader": "^6.1.1",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
-    "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "jest": {
     "globals": {

@@ -1,0 +1,69 @@
+dns: myapp.com
+
+app:
+  url: http://${dns}/home
+  cache: redis
+
+mongodb:
+  defaultUri: 'mongodb://localhost/'
+
+eventstore:
+  poolMax:
+  poolMin:
+  streamProtocol: "http"
+  httpPort: 2113
+  httpPotocol: "http"
+  tcpPassword: "changeit"
+  tcpUsername: "admin"
+  tctPort: 1113
+  tcpProtocol: tcp
+
+redis:
+  host: "localhost"
+  port: "6379"
+
+services:
+  port: 9900
+  auth:
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-auth"
+      options:
+
+  tenant:
+    port: 9200
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-tenant"
+      options:
+
+  user:
+    port: 9000
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-user"
+      options:
+
+  project:
+    port: 9100
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-project"
+      options:
+
+  notification:
+    port: 9400
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-notification"
+      options:
+    sendgrid:
+      api:
+      senderEmail:
+
+  payment:
+    port: 9300
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-payment"
+      options:

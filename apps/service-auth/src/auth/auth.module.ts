@@ -1,6 +1,5 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { CookieSerializer } from '@graphqlcqrs/common';
-import { RepositoryModule } from '@graphqlcqrs/repository/repository.module';
 import { EventStore } from '@juicycleff/nestjs-event-store';
 import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
@@ -16,11 +15,14 @@ import {
   EmailVerifiedEvent,
 } from '@graphqlcqrs/core';
 import { AuthSagas } from './sagas';
+import { UserRepository } from '@graphqlcqrs/repository/repositories';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    RepositoryModule,
+    CacheModule.register(),
     CqrsModule,
+    PassportModule,
     NestjsEventStoreModule.forFeature({
       name: 'user',
       resolveLinkTos: false,
@@ -35,6 +37,7 @@ import { AuthSagas } from './sagas';
     ...AuthCommandHandlers,
     ...AuthEventHandlers,
     FacebookStrategy,
+    UserRepository,
   ],
   controllers: [AuthController],
 })

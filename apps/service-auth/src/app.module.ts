@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 // import { join } from 'path';
 
 // tslint:disable-next-line:no-var-requires
@@ -23,11 +24,11 @@ require('dotenv').config();
         path: join(process.cwd() + '/libs/contracts/', 'src/services/auth-contract.ts'),
         outputAs: 'class',
       }, */
-      introspection: true,
       playground: {
         workspaceName: 'GRAPHQL CQRS',
         settings: {
           'editor.theme': 'light',
+          'request.credentials': 'same-origin',
         },
       },
       cors: {
@@ -38,22 +39,22 @@ require('dotenv').config();
     }),
     CommonModule,
     MongoModule.forRoot({
-      uri: `${process.env.MONGO_DB_SERVER_URI}${process.env.MONGODB_DB_NAME}`,
-      dbName: process.env.MONGODB_DB_NAME,
+      uri: `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
+      dbName: AppConfig.services?.auth?.mongodb?.name,
     }),
     NestjsEventStoreModule.forRoot({
       http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10),
-        protocol: process.env.ES_HTTP_PROTOCOL,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
+        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
       },
       tcp: {
         credentials: {
-          password: process.env.ES_TCP_PASSWORD,
-          username: process.env.ES_TCP_USERNAME,
+          password: AppConfig.eventstore?.tcpPassword,
+          username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME,
-        port: parseInt(process.env.ES_TCP_PORT, 10),
-        protocol: process.env.ES_TCP_PROTOCOL,
+        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
+        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
     AuthModule,
