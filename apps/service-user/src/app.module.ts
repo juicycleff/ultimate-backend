@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { buildContext } from 'graphql-passport';
 import { CommonModule } from '@graphqlcqrs/common';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
-import * as path from 'path';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,17 +10,16 @@ import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { AuthPayloadModule } from './auth-payload/auth-payload.module';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { AuthPayload, User } from './types';
 
 @Module({
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      typePaths: [path.join(process.cwd() + '/apps/service-user/src', '/**/*.graphql')],
-      introspection: true,
-      /* definitions: {
-        path: join(process.cwd() + '/apps/service-user/', 'src/graphql.ts'),
-        outputAs: 'class',
-      }, */
+      autoSchemaFile: 'user.gql',
+      buildSchemaOptions: {
+        orphanedTypes: [AuthPayload, User],
+      },
       playground: {
         workspaceName: 'GRAPHQL SERVICE USER',
         settings: {

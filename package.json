@@ -24,9 +24,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
     "kompose": "kompose convert -o kubernetes/deployment.yaml",
-    "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn run snyk-protect"
+    "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s"
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.1.20",
@@ -46,6 +44,7 @@
     "@nestjs/typeorm": "^6.2.0",
     "@sindresorhus/slugify": "^0.9.1",
     "@types/express-session": "^1.15.15",
+    "@types/graphql": "^14.5.0",
     "apollo-server": "^2.9.6",
     "apollo-server-express": "^2.9.5",
     "aws-sdk": "^2.546.0",
@@ -83,7 +82,7 @@
     "nest-schedule": "^0.6.3",
     "nestjs-braintree": "^0.0.2",
     "nestjs-config": "^1.4.4",
-    "nestjs-graphql-gateway": "^1.0.0",
+    "nestjs-graphql-gateway": "^1.1.5",
     "node-eventstore-client": "^0.2.13",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
@@ -96,7 +95,7 @@
     "set-cookie-parser": "^2.4.0",
     "sinon": "^7.5.0",
     "swagger-ui-express": "^4.1.2",
-    "type-graphql": "^0.17.5",
+    "type-graphql": "^0.18.0-beta.3",
     "typeorm": "^0.2.19",
     "typeorm-linq-repository": "^1.0.1",
     "typeorm-transactional-cls-hooked": "^0.1.8",

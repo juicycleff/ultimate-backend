@@ -15,10 +15,10 @@ import { ProjectModule } from './project/project.module';
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      typePaths: [path.join(process.cwd() + '/apps/service-project/src', '/**/*.graphql')],
+      autoSchemaFile: 'project.gql',
       introspection: true,
       playground: {
-        workspaceName: 'GRAPHQL SERVICE USER',
+        workspaceName: 'GRAPHQL SERVICE PROJECT',
         settings: {
           'editor.theme': 'light',
         },

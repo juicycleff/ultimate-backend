@@ -1,4 +1,4 @@
-import { Collection, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
+import { Collection, CollectionAggregationOptions, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
 import { CacheStore } from '@nestjs/common';
 import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
@@ -77,6 +77,19 @@ export class BaseRepository <DOC, DTO = DOC> {
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
       return document;
     }
+  }
+
+  /**
+   * Finds a record by a list of conditions
+   *
+   * @returns {Promise<DOC>}
+   * @memberof BaseRepository
+   * @param pipeline
+   * @param options
+   */
+  async aggregate(pipeline?: object[], options?: CollectionAggregationOptions): Promise<any> {
+    const collection = await this.collection;
+    return await collection.aggregate(pipeline, options);
   }
 
   /**

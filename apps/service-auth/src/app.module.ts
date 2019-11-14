@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import * as path from 'path';
 import { buildContext } from 'graphql-passport';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -10,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
-// import { join } from 'path';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -19,11 +17,7 @@ require('dotenv').config();
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      typePaths: [path.join(process.cwd() + '/apps/service-auth/src', '/**/*.graphql')],
-      /* definitions: {
-        path: join(process.cwd() + '/libs/contracts/', 'src/services/auth-contract.ts'),
-        outputAs: 'class',
-      }, */
+      autoSchemaFile: 'auth.gql',
       playground: {
         workspaceName: 'GRAPHQL CQRS',
         settings: {

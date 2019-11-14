@@ -1,9 +1,12 @@
 import { CacheModule, Module, OnModuleInit } from '@nestjs/common';
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
 import { EventStore, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { TenantResolver } from './tenant.resolver';
 import { TenantRepository } from '@graphqlcqrs/repository/repositories';
 import { CookieSerializer } from '@graphqlcqrs/common/providers';
+import { TenantCreatedEvent, TenantEventHandlers } from '@graphqlcqrs/core';
+import { TenantCommandHandlers } from '../cqrs/command/handlers/tenant';
+import { TenantQueryHandlers } from '../cqrs/query/handlers/tenant';
+import { TenantResolver } from './tenant.resolver';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { CookieSerializer } from '@graphqlcqrs/common/providers';
     TenantResolver,
     TenantRepository,
     CookieSerializer,
+    ...TenantCommandHandlers,
+    ...TenantEventHandlers,
+    ...TenantQueryHandlers,
   ],
 })
 export class TenantModule implements OnModuleInit {
@@ -27,7 +33,12 @@ export class TenantModule implements OnModuleInit {
   ) {}
 
   onModuleInit(): any {
+    this.eventStore.setEventHandlers(this.eventHandlers);
     this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
     this.event$.publisher = this.eventStore;
   }
+
+  eventHandlers = {
+    TenantCreatedEvent: (data) => new TenantCreatedEvent(data),
+  };
 }
