@@ -21,7 +21,7 @@ import { TenantMemberResolver } from './tenant-member/tenant-member.resolver';
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      autoSchemaFile: 'tenant.gql',
+      autoSchemaFile: 'graphs/tenant.gql',
       buildSchemaOptions: {
         orphanedTypes: [Tenant, TenantMember, User],
       },
