@@ -1,34 +1,27 @@
-import { Args, Mutation, Parent, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
-import { Paginate } from '@graphqlcqrs/repository/dtos/paginate.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Project, CreateProjectInput } from '../types';
+import { PaginationInput } from '@ultimatebackend/contracts';
 
-@Resolver('Project')
+@Resolver(() => Project)
 export class ProjectResolver {
 
-  @Mutation()
-  async createProject(@Args('input') input: any): Promise<any> {
-    // const result = await this.projectService.test();
+  @Mutation(() => Project)
+  async createProject(@Args('input') input: CreateProjectInput): Promise<any> {
     return null; // plainToClass(, result);
   }
 
-  @Mutation()
+  @Mutation(() => Project)
   async removeProject(@Args('id') id: string): Promise<any> {
-    // const result = await this.projectService.create(input, user);
     return null; // plainToClass(, result);
   }
 
-  @Query()
+  @Query(() => Project)
   async project(@Args('id') id: string): Promise<any> {
     return null; // await this.projectService.findOne({ id });
   }
 
-  @Query()
-  async projects(@Args('input') paginate: Paginate): Promise<any[]> {
+  @Query(() => [Project!])
+  async projects(@Args('paginate') paginate: PaginationInput): Promise<any[]> {
     return null; // await this.projectService.findAll(null, paginate);
-  }
-
-  @ResolveProperty('owner')
-  async owner(@Parent() project: any): Promise<any> {
-    // const result = await this.userRepository.findOne({ id: project.owner });
-    return null; // plainToClass(User, result);
   }
 }

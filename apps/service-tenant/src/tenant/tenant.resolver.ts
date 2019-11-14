@@ -1,26 +1,57 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { CommandBus } from '@nestjs/cqrs';
-import { CreateTenantInput } from '@ultimatebackend/contracts/services/tenant-contract';
-import { TenantEntity } from '@graphqlcqrs/repository/entities';
-import { CreateTenantCommand } from '../cqrs/command/impl/tenant';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { TenantEntity, UserEntity } from '@graphqlcqrs/repository/entities';
+import { CreateTenantCommand } from '../cqrs/command/impl';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
+import { CurrentUser } from '@graphqlcqrs/common';
+import { GetTenantQuery } from '../cqrs/query/impl/tenant';
+import { Tenant } from '../types';
+import { CreateTenantInput, TenantFilterArgs } from '../types';
 
 @UseGuards(GqlAuthGuard)
-@Resolver('Tenant')
+@Resolver(() => Tenant)
 export class TenantResolver {
   constructor(
     private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
-  @Mutation()
-  async createTenant(@Args('input') input: CreateTenantInput, @Context() ctx: any): Promise<TenantEntity> {
-    return null;
-    // return await this.commandBus.execute(new CreateTenantCommand(null, input));
+  @Mutation(() => Tenant)
+  async createTenant(@Args('input') input: CreateTenantInput, @Context() ctx: any, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
+    return await this.commandBus.execute(new CreateTenantCommand(user, input));
   }
 
-  @Mutation()
+  @Mutation(() => Tenant)
   async removeTenant(@Args('id') id: string): Promise<TenantEntity> {
+    return null;
+  }
+
+  @Mutation(() => Tenant)
+  async updateTenant(@Args('id') id: string): Promise<TenantEntity> {
+    return null;
+  }
+
+  @Mutation(() => Tenant)
+  async generateAccessToken(@Args('id') id: string): Promise<TenantEntity> {
+    return null;
+  }
+
+  @Mutation(() => Tenant)
+  async retireAccessToken(@Args('id') id: string): Promise<TenantEntity> {
+    return null;
+  }
+
+  @Query(() => Tenant)
+  async tenant(@Args() filter: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
+    return await this.queryBus.execute(new GetTenantQuery({
+      id: filter.name,
+    }));
+  }
+
+  @Query(() => Tenant)
+  async tenants(): Promise<TenantEntity[]> {
+    console.log('Helloo');
     return null;
   }
 }

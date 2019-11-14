@@ -20,6 +20,18 @@ export class NestMultiTenantService {
       req = this.request;
     }
 
+    console.log(req);
+    if (req === null || req === undefined) {
+      return {
+        uri: process.env.DATABASE_URI || 'mongodb://localhost/demo',
+        dbName: process.env.DATABASE_NAME || 'test',
+        clientOptions: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        },
+      };
+    }
+
     let tenantFromHeader = req.headers['x-tenant-info'];
     if (tenantFromHeader) {
       tenantFromHeader = JSON.parse(req.headers['x-tenant-info']);

@@ -23,7 +23,10 @@ const sessionMiddleware = session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     secure: false,
+    domain: 'localhost',
   },
+  proxy: true,
+  unset: 'destroy',
   store,
   name: 'session.app',
 });

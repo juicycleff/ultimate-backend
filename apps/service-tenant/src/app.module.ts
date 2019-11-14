@@ -1,27 +1,30 @@
 import { Module } from '@nestjs/common';
-import { join } from 'path';
 import { buildContext } from 'graphql-passport';
-import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
+import { GraphqlDistributedModule } from 'nestjs-graphql-gateway/build/main';
 import { CommonModule } from '@graphqlcqrs/common';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TenantModule } from './tenant/tenant.module';
-import { TenantMemberModule } from './tenant-member/tenant-member.module';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { TenantMemberModule } from './tenant-member/tenant-member.module';
+import { Tenant, User } from './types';
+import { TenantMember } from './types/tenant-member.type';
+import { TenantResolver } from './tenant/tenant.resolver';
+import { UserResolver } from './user/user.resolver';
+import { TenantMemberResolver } from './tenant-member/tenant-member.resolver';
 
 @Module({
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      typePaths: [join(process.cwd() + '/apps/service-tenant/src', '/**/*.graphql')],
-      /* definitions: {
-        path: join(process.cwd() + '/libs/contracts/', 'src/services/tenant-contract.ts'),
-        outputAs: 'class',
-      }, */
+      autoSchemaFile: 'tenant.gql',
+      buildSchemaOptions: {
+        orphanedTypes: [Tenant, TenantMember, User],
+      },
       introspection: true,
       playground: {
         workspaceName: 'GRAPHQL SERVICE USER',

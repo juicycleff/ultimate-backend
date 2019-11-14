@@ -20,6 +20,8 @@ lerna-debug.log*
 /iac/.terraform/*
 /iac/*.tfstate
 /iac/*.yaml
+/iac/!*.*
+/iac/!*/
 
 
 # Tests

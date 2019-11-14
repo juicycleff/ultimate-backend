@@ -1,11 +1,12 @@
-import {Logger} from '@nestjs/common';
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { ApolloError, UserInputError } from 'apollo-server-express';
-import { TenantEntity, TenantRepository } from '@graphqlcqrs/repository';
-import { TenantCreatedEvent } from '@graphqlcqrs/core';
+import { TenantEntity, TenantMemberEmbed, TenantRepository } from '@graphqlcqrs/repository';
+import { TenantCreatedEvent, TenantMemberCreatedEvent } from '@graphqlcqrs/core';
 import slugify from '@sindresorhus/slugify';
-import { ConflictError } from '@graphqlcqrs/common';
+import { AppRole, ConflictError, InvitationStatus } from '@graphqlcqrs/common';
 import * as uuidAPIKey from 'uuid-apikey';
+import * as uuidv1 from 'uuid/v1';
 import { ObjectID } from 'mongodb';
 import { TenantAccessEmbed } from '@graphqlcqrs/repository/entities/embeded';
 import { CreateTenantCommand } from '../../impl';
@@ -48,17 +49,29 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
         createdAt: new Date().toISOString(),
       };
 
-      const result = await this.tenantRepository.create({
+      const tenantMember: TenantMemberEmbed = {
+        id: uuidv1(),
+        userId: new ObjectID(user.id),
+        email: user.emails.reduce(previousValue => previousValue.primary === true && previousValue).address,
+        role: AppRole.OWNER,
+        status: InvitationStatus.PENDING,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const tenant = await this.tenantRepository.create({
         name: input.name,
         normalizedName,
         tokens: [token],
         ownerId: new ObjectID(user.id),
+        members: [tenantMember],
       });
 
-      this.eventBus.publish(new TenantCreatedEvent(result));
-      return result;
+      await this.eventBus.publish(new TenantCreatedEvent(tenant));
+      await this.eventBus.publish(new TenantMemberCreatedEvent(tenantMember));
+      return tenant;
     } catch (error) {
-      Logger.log(error, 'CreateAuthHandler');
+      Logger.log(error, 'CreateTenantHandler');
       throw new ApolloError(error.message, error);
     }
   }
