@@ -17,7 +17,7 @@ require('dotenv').config();
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      autoSchemaFile: 'auth.gql',
+      autoSchemaFile: 'graphs/auth.gql',
       playground: {
         workspaceName: 'GRAPHQL CQRS',
         settings: {

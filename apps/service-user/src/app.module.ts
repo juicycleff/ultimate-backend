@@ -16,7 +16,7 @@ import { AuthPayload, User } from './types';
   imports: [
     CqrsModule,
     GraphqlDistributedModule.forRoot({
-      autoSchemaFile: 'user.gql',
+      autoSchemaFile: 'graphs/user.gql',
       buildSchemaOptions: {
         orphanedTypes: [AuthPayload, User],
       },
