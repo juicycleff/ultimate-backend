@@ -7,6 +7,9 @@ import { AppService } from './app.service';
 import { CookieSerializer } from '@graphqlcqrs/common/providers';
 import { BuilderUserStrategy } from './builder-user.strategy';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 @Module({
   imports: [
     CacheModule.register(),

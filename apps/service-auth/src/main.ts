@@ -6,7 +6,7 @@ import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
 
 // tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+const config = require('config-yml').load(process.env.NODE_ENV);
 
 async function bootstrap() {
 
@@ -21,6 +21,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, setupSwagger());
   SwaggerModule.setup('api', app, document);
-  await app.listen(parseInt(process.env.PORT, 10) || 9900);
+
+  await app.listenAsync(
+    parseInt(process.env.PORT, 10) ||
+    parseInt(config.services?.auth?.port, 10) ||
+    9900,
+  );
 }
 bootstrap();

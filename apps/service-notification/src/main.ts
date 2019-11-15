@@ -7,7 +7,7 @@ import {
 import { AppModule } from './app.module';
 
 // tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+const config = require('config-yml').load(process.env.NODE_ENV);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -22,6 +22,10 @@ async function bootstrap() {
   app.enableShutdownHooks();
   app.use(bloodTearsMiddleware);
 
-  await app.listenAsync(parseInt(process.env.PORT, 10) || 9400);
+  await app.listenAsync(
+    parseInt(process.env.PORT, 10) ||
+    parseInt(config.services?.notification?.port, 10) ||
+    9400,
+  );
 }
 bootstrap();

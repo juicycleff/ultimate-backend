@@ -1,6 +1,6 @@
-import { CacheModule, Module, OnModuleInit } from '@nestjs/common';
-import { CqrsModule, EventBus } from '@nestjs/cqrs';
-import { EventStore, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
+import { CacheModule, Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { TenantRepository } from '@graphqlcqrs/repository/repositories';
 import { CookieSerializer } from '@graphqlcqrs/common/providers';
 import { TenantCreatedEvent, TenantEventHandlers } from '@graphqlcqrs/core';
@@ -13,8 +13,16 @@ import { TenantResolver } from './tenant.resolver';
     CqrsModule,
     CacheModule.register(),
     NestjsEventStoreModule.forFeature({
-      name: 'tenant',
-      resolveLinkTos: false,
+      featureStreamName: '$ce-tenant',
+      subscriptions: [
+        {
+          type: EventStoreSubscriptionType.CatchUp,
+          stream: '$ce-tenant',
+        },
+      ],
+      eventHandlers: {
+        TenantCreatedEvent: (data) => new TenantCreatedEvent(data),
+      },
     }),
   ],
   providers: [
@@ -26,19 +34,4 @@ import { TenantResolver } from './tenant.resolver';
     ...TenantQueryHandlers,
   ],
 })
-export class TenantModule implements OnModuleInit {
-  constructor(
-    private readonly event$: EventBus,
-    private readonly eventStore: EventStore,
-  ) {}
-
-  onModuleInit(): any {
-    this.eventStore.setEventHandlers(this.eventHandlers);
-    this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
-    this.event$.publisher = this.eventStore;
-  }
-
-  eventHandlers = {
-    TenantCreatedEvent: (data) => new TenantCreatedEvent(data),
-  };
-}
+export class TenantModule {}

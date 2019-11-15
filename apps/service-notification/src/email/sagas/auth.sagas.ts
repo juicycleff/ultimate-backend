@@ -18,7 +18,8 @@ export class AuthSagas {
         delay(1000),
         map( event => {
           Logger.log('Inside [AuthSagas] Saga', JSON.stringify(event.user));
-          this.queue.add('UserLoggedIn', event.user);
+
+          if (event.user) { this.queue.add('UserLoggedIn', event.user); }
           return null;
         }),
       );

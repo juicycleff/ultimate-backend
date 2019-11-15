@@ -6,7 +6,7 @@ import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { SwaggerModule } from '@nestjs/swagger';
 
 // tslint:disable-next-line:no-var-requires
-// const config = require('config-yml').load(process.env.NODE_ENV);
+const config = require('config-yml').load(process.env.NODE_ENV);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +23,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, setupSwagger());
   SwaggerModule.setup('api', app, document);
 
-  await app.listenAsync(parseInt(process.env.PORT, 10) || 9200);
+  await app.listenAsync(
+    parseInt(process.env.PORT, 10) ||
+    parseInt(config.services?.tenant?.port, 10) ||
+    9200,
+  );
 }
 bootstrap();

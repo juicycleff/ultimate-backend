@@ -11,6 +11,7 @@ eventstore:
   poolMax:
   poolMin:
   streamProtocol: "http"
+  hostname: "localhost"
   httpPort: 2113
   httpPotocol: "http"
   tcpPassword: "changeit"
@@ -22,40 +23,43 @@ redis:
   host: "localhost"
   port: "6379"
 
+sendgrid:
+  api:
+  sender: dummy@dummy.com
+
 services:
-  port: 9900
   auth:
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-auth"
+      name: "service-auth"
       options:
 
   tenant:
     port: 9200
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-tenant"
+      name: "service-tenant"
       options:
 
   user:
     port: 9000
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-user"
+      name: "service-user"
       options:
 
   project:
     port: 9100
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-project"
+      name: "service-project"
       options:
 
   notification:
     port: 9400
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-notification"
+      name: "service-notification"
       options:
     sendgrid:
       api:
@@ -65,5 +69,12 @@ services:
     port: 9300
     mongodb:
       uri: ${mongodb.defaultUri}
-      dbName: "service-payment"
+      name: "service-payment"
       options:
+
+
+gateway:
+  admin:
+    port: 4000
+  client:
+    port: 5000

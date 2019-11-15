@@ -9,11 +9,11 @@ import { TenantEntity } from '../entities';
   name: 'tenant',
   indexes: [
     {
-      fields: { 'members.email' : 1, 'members.tenantId' : 1 },
+      fields: { 'members.email' : 1, 'normalizedName' : 1 },
       options: { unique: true, sparse: true },
     },
     {
-      fields: { 'members.userId' : 1, 'members.tenantId' : 1 },
+      fields: { 'members.userId' : 1, 'normalizedName' : 1 },
       options: { unique: true, sparse: true },
     },
     {

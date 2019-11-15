@@ -12,6 +12,9 @@ import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { AuthPayload, User } from './types';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 @Module({
   imports: [
     CqrsModule,
@@ -34,18 +37,15 @@ import { AuthPayload, User } from './types';
       dbName: AppConfig.services?.auth?.mongodb?.name,
     }),
     NestjsEventStoreModule.forRoot({
-      http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
-        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
+      tcpEndpoint: {
+        host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_TCP_PORT, 10) || AppConfig.eventstore?.tcpPort,
       },
-      tcp: {
-        credentials: {
+      options: {
+        defaultUserCredentials: {
           password: AppConfig.eventstore?.tcpPassword,
           username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
-        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
     UserModule,
