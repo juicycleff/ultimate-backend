@@ -1,6 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
-import { EventStore, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
+import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
+import { CqrsModule } from '@nestjs/cqrs';
 import {
   AuthCommandHandlers, AuthEventHandlers,
   UserCommandHandlers,
@@ -16,8 +16,18 @@ import { UserController } from './user.controller';
   imports: [
     CqrsModule,
     NestjsEventStoreModule.forFeature({
-      name: 'user',
-      resolveLinkTos: false,
+      featureStreamName: '$ce-user',
+      subscriptions: [
+        {
+          type: EventStoreSubscriptionType.Volatile,
+          stream: '$ce-user',
+        },
+      ],
+      eventHandlers: {
+        UserCreatedEvent: (data) => new UserCreatedEvent(data),
+        UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
+        UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
+      },
     }),
     CacheModule.register(),
   ],
@@ -33,22 +43,4 @@ import { UserController } from './user.controller';
   exports: [UserRepository],
   controllers: [UserController],
 })
-export class UserModule {
-  constructor(
-    private readonly command$: CommandBus,
-    private readonly event$: EventBus,
-    private readonly eventStore: EventStore,
-  ) {}
-
-  onModuleInit(): any {
-    this.eventStore.setEventHandlers(this.eventHandlers);
-    this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
-    this.event$.publisher = this.eventStore;
-  }
-
-  eventHandlers = {
-    UserCreatedEvent: (data) => new UserCreatedEvent(data),
-    UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
-    UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
-  };
-}
+export class UserModule {}

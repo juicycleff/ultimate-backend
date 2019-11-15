@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { GraphqlDistributedGatewayModule } from 'nestjs-graphql-gateway';
 import { HeadersDatasource } from '@graphqlcqrs/common/helpers/headers.datasource';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 @Module({
   imports: [
     CacheModule.register(),

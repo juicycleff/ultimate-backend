@@ -7,6 +7,9 @@ import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enu
 import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
 
+// tslint:disable-next-line:no-var-requires
+const config = require('config-yml').load(process.env.NODE_ENV);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -32,7 +35,12 @@ async function bootstrap() {
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());
   app.use(useragent.express());
-  await app.listen(parseInt(process.env.PORT, 10) || 4000);
+
+  await app.listenAsync(
+    parseInt(process.env.PORT, 10) ||
+    parseInt(config.gateway?.admin?.port, 10) ||
+    4000,
+  );
 }
 
 bootstrap();

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import * as path from 'path';
 import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
 import { CommonModule } from '@graphqlcqrs/common';
@@ -10,6 +9,9 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProjectModule } from './project/project.module';
+
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
 
 @Module({
   imports: [
@@ -31,18 +33,15 @@ import { ProjectModule } from './project/project.module';
       useExisting: NestMultiTenantService,
     }),
     NestjsEventStoreModule.forRoot({
-      http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
-        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
+      tcpEndpoint: {
+        host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_TCP_PORT, 10) || AppConfig.eventstore?.tcpPort,
       },
-      tcp: {
-        credentials: {
+      options: {
+        defaultUserCredentials: {
           password: AppConfig.eventstore?.tcpPassword,
           username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
-        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
     ProjectModule,

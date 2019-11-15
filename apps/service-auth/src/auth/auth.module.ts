@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { CookieSerializer } from '@graphqlcqrs/common';
-import { EventStore } from '@juicycleff/nestjs-event-store';
-import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs';
+import { EventStoreSubscriptionType } from '@juicycleff/nestjs-event-store';
+import { CqrsModule } from '@nestjs/cqrs';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
@@ -24,8 +24,18 @@ import { PassportModule } from '@nestjs/passport';
     CqrsModule,
     PassportModule,
     NestjsEventStoreModule.forFeature({
-      name: 'user',
-      resolveLinkTos: false,
+      featureStreamName: '$ce-user',
+      subscriptions: [
+        {
+          type: EventStoreSubscriptionType.CatchUp,
+          stream: '$ce-user',
+        },
+      ],
+      eventHandlers: {
+        UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
+        UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
+        EmailVerifiedEvent: (data) => new EmailVerifiedEvent(data),
+      },
     }),
   ],
   providers: [
@@ -41,22 +51,4 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [AuthController],
 })
-export class AuthModule {
-  constructor(
-    private readonly command$: CommandBus,
-    private readonly event$: EventBus,
-    private readonly eventStore: EventStore,
-  ) {}
-
-  onModuleInit(): any {
-    this.eventStore.setEventHandlers(this.eventHandlers);
-    this.eventStore.bridgeEventsTo((this.event$ as any).subject$);
-    this.event$.publisher = this.eventStore;
-  }
-
-  eventHandlers = {
-    UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
-    UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
-    EmailVerifiedEvent: (data) => new EmailVerifiedEvent(data),
-  };
-}
+export class AuthModule {}

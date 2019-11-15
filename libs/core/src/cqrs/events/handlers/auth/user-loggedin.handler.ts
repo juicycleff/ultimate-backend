@@ -5,6 +5,6 @@ import {UserLoggedInEvent} from '../../impl/auth';
 @EventsHandler(UserLoggedInEvent)
 export class UserLoggedInHandler implements IEventHandler<UserLoggedInEvent> {
   handle(event: UserLoggedInEvent): any {
-    Logger.log(event, 'UserLoggedInEvent');
+    Logger.log(event, 'UserLoggedInHandler');
   }
 }

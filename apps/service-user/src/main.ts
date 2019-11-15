@@ -4,7 +4,7 @@ import { AppUtils, setupSwagger, bloodTearsMiddleware, authSetup } from '@graphq
 import { AppModule } from './app.module';
 
 // tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+const config = require('config-yml').load(process.env.NODE_ENV);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +21,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, setupSwagger());
   SwaggerModule.setup('api', app, document);
 
-  await app.listenAsync(parseInt(process.env.PORT, 10) || 9000);
+  await app.listenAsync(
+    parseInt(process.env.PORT, 10) ||
+    parseInt(config.services?.user?.port, 10) ||
+    9000,
+  );
   await app.startAllMicroservicesAsync();
 }
 bootstrap();

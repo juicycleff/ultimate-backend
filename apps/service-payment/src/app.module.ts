@@ -9,13 +9,16 @@ import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
 @Module({
   imports: [
     GraphqlDistributedModule.forRoot({
       typePaths: [path.join(process.cwd() + '/apps/service-payment/src', '/**/*.graphql')],
       introspection: true,
       playground: {
-        workspaceName: 'GRAPHQL SERVICE USER',
+        workspaceName: 'GRAPHQL SERVICE PAYMENT',
         settings: {
           'editor.theme': 'light',
         },
@@ -28,18 +31,15 @@ import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
       dbName: AppConfig.services?.payment?.mongodb?.name,
     }),
     NestjsEventStoreModule.forRoot({
-      http: {
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.httpPort,
-        protocol: parseInt(process.env.ES_HTTP_PROTOCOL, 10) || AppConfig.eventstore?.httpProtocol,
+      tcpEndpoint: {
+        host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
+        port: parseInt(process.env.ES_TCP_PORT, 10) || AppConfig.eventstore?.tcpPort,
       },
-      tcp: {
-        credentials: {
+      options: {
+        defaultUserCredentials: {
           password: AppConfig.eventstore?.tcpPassword,
           username: AppConfig.eventstore?.tcpUsername,
         },
-        hostname: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
-        port: parseInt(process.env.ES_HTTP_PORT, 10) || AppConfig.eventstore?.tcpPort,
-        protocol: AppConfig.eventstore?.tcpProtocol,
       },
     }),
   ],

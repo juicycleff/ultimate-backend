@@ -36,7 +36,7 @@ export class AuthQueue {
 
   @Process({ name: 'UserLoggedIn' })
   async processUserLogged(job: Job<UserEntity>) {
-    if (job.data) { return; }
+    if (!job.data) { return; }
 
     const user = job.data;
     const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
