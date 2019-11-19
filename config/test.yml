@@ -24,7 +24,7 @@ redis:
   port: "6379"
 
 sendgrid:
-  api:
+  api: "SENDGRID-API-KEY"
   sender: dummy@dumm.com
 
 services:
@@ -62,7 +62,7 @@ services:
       name: "service-notification"
       options:
     sendgrid:
-      api:
+      api: "SENDGRID-API-KEY"
       senderEmail:
 
   payment:

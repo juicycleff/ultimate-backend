@@ -162,16 +162,16 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "@dfour/core/(.*)": "<rootDir>/libs/core/src/$1",
-      "@dfour/core": "<rootDir>/libs/core/src",
-      "@dfour/common/(.*)": "<rootDir>/libs/common/src/$1",
-      "@dfour/common": "<rootDir>/libs/common/src",
-      "@dfour/repository/(.*)": "<rootDir>/libs/repository/src/$1",
-      "@dfour/repository": "<rootDir>/libs/repository/src",
+      "@graphqlcqrs/core/(.*)": "<rootDir>/libs/core/src/$1",
+      "@graphqlcqrs/core": "<rootDir>/libs/core/src",
+      "@graphqlcqrs/common/(.*)": "<rootDir>/libs/common/src/$1",
+      "@graphqlcqrs/common": "<rootDir>/libs/common/src",
+      "@graphqlcqrs/repository/(.*)": "<rootDir>/libs/repository/src/$1",
+      "@graphqlcqrs/repository": "<rootDir>/libs/repository/src",
       "@juicycleff/nest-multi-tenant/(.*)": "<rootDir>/libs/nest-multi-tenant/src/$1",
       "@juicycleff/nest-multi-tenant": "<rootDir>/libs/nest-multi-tenant/src",
-      "@dfour/contracts/(.*)": "<rootDir>/libs/contracts/src/$1",
-      "@dfour/contracts": "<rootDir>/libs/contracts/src"
+      "@ultimatebackend/contracts/(.*)": "<rootDir>/libs/contracts/src/$1",
+      "@ultimatebackend/contracts": "<rootDir>/libs/contracts/src"
     }
   },
   "remarkConfig": {

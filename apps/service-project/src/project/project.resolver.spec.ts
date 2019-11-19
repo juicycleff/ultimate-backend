@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CacheModule } from '@nestjs/common';
 import { ProjectResolver } from './project.resolver';
 
 describe('ProjectResolver', () => {
@@ -6,6 +8,10 @@ describe('ProjectResolver', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        CqrsModule,
+        CacheModule.register(),
+      ],
       providers: [ProjectResolver],
     }).compile();
 

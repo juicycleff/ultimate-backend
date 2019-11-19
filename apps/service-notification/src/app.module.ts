@@ -28,7 +28,7 @@ require('dotenv').config();
       },
     }),
     SendGridModule.forRoot({
-      apikey: AppConfig.sendgrid?.api,
+      apikey: AppConfig.sendgrid?.api || 'SENDGRID-API-KEY',
     }),
     EmailModule,
   ],

@@ -20,7 +20,6 @@ export class NestMultiTenantService {
       req = this.request;
     }
 
-    console.log(req);
     if (req === null || req === undefined) {
       return {
         uri: process.env.DATABASE_URI || 'mongodb://localhost/demo',
