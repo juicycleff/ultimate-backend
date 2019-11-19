@@ -1,7 +1,7 @@
-dns: myapp.com
+dns: localhost
 
 app:
-  url: http://${dns}/home
+  url: http://${dns}
   cache: redis
 
 mongodb:
@@ -25,7 +25,7 @@ redis:
 
 sendgrid:
   api:
-  sender: dummy@dummy.com
+  sender: dummy@dumm.com
 
 services:
   auth:

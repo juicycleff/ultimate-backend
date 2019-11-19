@@ -1,15 +1,19 @@
 /* tslint:disable:max-classes-per-file */
 import { ArgsType, Field, InputType, Int } from 'type-graphql';
 import { ClassType } from 'type-graphql';
+import { Class } from '@babel/types';
 
 export function FilterMongo<TItem>(TItemClass: ClassType<TItem>): any {
 
-  // for ()
+  type Page = keyof TItem;
 
-  // ✅ works! it even correctly infers type 'number'
-  const d = Object.getOwnPropertyNames(TItemClass);
+  const x: Record<Page, TItem> = {
+    // @ts-ignore
+    test: 'hope',
+  };
+
   // tslint:disable-next-line:no-console
-  console.log(d);
+  console.log(x);
 
   @InputType()
   abstract class FilterMongoClass {
@@ -18,11 +22,13 @@ export function FilterMongo<TItem>(TItemClass: ClassType<TItem>): any {
   }
 
   @ArgsType()
-  abstract class WhereFilterMongoClass {
+  abstract class WhereFilter {
     @Field(() => FilterMongoClass)
     where?: FilterMongoClass;
   }
-  return WhereFilterMongoClass;
+  // WhereFilter.prototype.name = `${TItemClass.name}Filter`;
+
+  return WhereFilter;
 }
 
 function getSpecialProperty<TModel, TKey extends keyof TModel>(
@@ -30,4 +36,14 @@ function getSpecialProperty<TModel, TKey extends keyof TModel>(
   key: string,
 ) {
   return model[key];
+}
+
+function getMetaDataFields<TargetClass>() {
+  // @ts-ignore
+  type keys = keyof TargetClass;
+
+  const d: keys = null;
+
+  // tslint:disable-next-line:no-console
+  console.log('keys => ', d);
 }

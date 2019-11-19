@@ -1,7 +1,7 @@
-dns: myapp.com
+dns: localhost
 
 app:
-  url: http://${dns}/home
+  url: http://${dns}
   cache: redis
 
 mongodb:

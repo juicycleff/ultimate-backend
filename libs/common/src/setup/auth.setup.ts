@@ -4,6 +4,7 @@ import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
 import * as useragent from 'express-useragent';
 import * as connectMongodbSession from 'connect-mongodb-session';
+import { AppConfig } from '../services/yaml.service';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -23,9 +24,8 @@ const sessionMiddleware = session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     secure: false,
-    domain: 'localhost',
+    domain: AppConfig.app.url,
   },
-  proxy: true,
   unset: 'destroy',
   store,
   name: 'session.app',

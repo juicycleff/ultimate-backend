@@ -8,6 +8,7 @@ import { CommonModule } from '@graphqlcqrs/common';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
+import { PlansModule } from './plans/plans.module';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -42,6 +43,7 @@ require('dotenv').config();
         },
       },
     }),
+    PlansModule,
   ],
   controllers: [AppController],
   providers: [AppService],
