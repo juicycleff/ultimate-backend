@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ProjectResolver } from './project.resolver';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { RepositoryModule } from '@graphqlcqrs/repository';
+import { ProjectRepository } from '@graphqlcqrs/repository';
 
 @Module({
   imports: [
     CqrsModule,
+    CacheModule.register(),
     NestjsEventStoreModule.forFeature({
       featureStreamName: '$ce-project',
       subscriptions: [
@@ -17,8 +18,7 @@ import { RepositoryModule } from '@graphqlcqrs/repository';
       ],
       eventHandlers: null,
     }),
-    RepositoryModule,
   ],
-  providers: [ProjectResolver],
+  providers: [ProjectResolver, ProjectRepository],
 })
 export class ProjectModule {}

@@ -12,7 +12,7 @@ require('dotenv').config();
     CacheModule.register(),
     GraphqlDistributedGatewayModule.forRoot({
       subscriptions: false,
-      path: '/graphql',
+      path: '/',
       context: context => context,
       serviceList: [
         { name: 'project', url: 'http://localhost:9100/graphql' },

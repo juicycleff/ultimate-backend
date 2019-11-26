@@ -3,15 +3,15 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-directive @key(fields: String!) on OBJECT | INTERFACE
+directive @extends on INTERFACE | OBJECT
 
-directive @extends on OBJECT | INTERFACE
+directive @external on FIELD_DEFINITION | OBJECT
 
-directive @external on OBJECT | FIELD_DEFINITION
-
-directive @requires(fields: String!) on FIELD_DEFINITION
+directive @key(fields: String!) on INTERFACE | OBJECT
 
 directive @provides(fields: String!) on FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
 
 input CreateTenantInput {
   name: String!
@@ -28,52 +28,52 @@ input FilterMongoClass {
 
 type Mutation {
   createTenant(input: CreateTenantInput!): Tenant!
-  removeTenant(id: String!): Tenant!
-  updateTenant(id: String!): Tenant!
   generateAccessToken(id: String!): Tenant!
-  retireAccessToken(id: String!): Tenant!
   inviteTenantMember(id: String!): TenantMember!
-  updateTenantMember(id: String!): TenantMember!
+  removeTenant(id: String!): Tenant!
   removeTenantMember(id: String!): TenantMember!
+  retireAccessToken(id: String!): Tenant!
+  updateTenant(id: String!): Tenant!
+  updateTenantMember(id: String!): TenantMember!
 }
 
 input PaginationInput {
-  skip: Int = 0
   limit: Int = 10
+  skip: Int = 0
 }
 
 type Query {
-  tenant(where: FilterMongoClass!): Tenant!
-  tenants: Tenant!
+  tenant(where: FilterMongoClass): Tenant!
   tenantMember(id: String!): TenantMember!
   tenantMembers(paginate: PaginationInput!): TenantMember!
+  tenants(where: FilterMongoClass): [Tenant!]!
 }
 
 type Tenant {
-  id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime!
+  id: ID!
+  members: [TenantMember!]!
   name: String!
   normalizedName: String!
   tokens: [TenantAccessToken!]!
-  members: [TenantMember!]!
+  updatedAt: DateTime!
 }
 
 type TenantAccessToken {
-  key: String!
-  secret: String!
   active: Boolean
   createdAt: DateTime
+  key: String!
+  secret: String!
 }
 
 type TenantMember {
-  id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime!
   email: String!
-  status: String!
+  id: ID!
   role: String!
+  status: String!
   tenant: Tenant!
+  updatedAt: DateTime!
 }
 
 type User {

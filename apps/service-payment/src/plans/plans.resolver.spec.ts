@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserResolver } from './user.resolver';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CacheModule } from '@nestjs/common';
+import { PlansResolver } from './plans.resolver';
 
-describe('UserResolver', () => {
-  let resolver: UserResolver;
+describe('PlansResolver', () => {
+  let resolver: PlansResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -12,10 +12,10 @@ describe('UserResolver', () => {
         CqrsModule,
         CacheModule.register(),
       ],
-      providers: [UserResolver],
+      providers: [PlansResolver],
     }).compile();
 
-    resolver = module.get<UserResolver>(UserResolver);
+    resolver = module.get<PlansResolver>(PlansResolver);
   });
 
   it('should be defined', () => {
