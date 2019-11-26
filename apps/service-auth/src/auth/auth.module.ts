@@ -27,7 +27,7 @@ import { PassportModule } from '@nestjs/passport';
       featureStreamName: '$ce-user',
       subscriptions: [
         {
-          type: EventStoreSubscriptionType.CatchUp,
+          type: EventStoreSubscriptionType.Volatile,
           stream: '$ce-user',
         },
       ],

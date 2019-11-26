@@ -3,15 +3,15 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-directive @key(fields: String!) on OBJECT | INTERFACE
+directive @extends on INTERFACE | OBJECT
 
-directive @extends on OBJECT | INTERFACE
+directive @external on FIELD_DEFINITION | OBJECT
 
-directive @external on OBJECT | FIELD_DEFINITION
-
-directive @requires(fields: String!) on FIELD_DEFINITION
+directive @key(fields: String!) on INTERFACE | OBJECT
 
 directive @provides(fields: String!) on FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
 
 type AuthPayload {
   id: ID!
@@ -24,8 +24,8 @@ type BooleanPayload {
 }
 
 input LoginInput {
-  service: ServiceTypes!
   params: LoginParamsInput!
+  service: ServiceTypes!
 }
 
 input LoginParamsInput {
@@ -35,42 +35,42 @@ input LoginParamsInput {
   """Access token for social (Service: Twitter, Github, Email)"""
   accessTokenSecret: String
 
-  """User password (Service: Password)"""
-  password: String
-
   """Primary email of the user (Service: Password)"""
   email: String
+
+  """User password (Service: Password)"""
+  password: String
 }
 
 type Mutation {
+  changePassword(newPassword: String!, newPasswordConfirm: String!, oldPassword: String!): BooleanPayload!
   login(input: LoginInput!): AuthPayload!
+  logout: BooleanPayload!
+  refreshTokens(accessToken: String!, refreshToken: String!): AuthPayload!
   register(input: RegisterInput!): BooleanPayload!
   sendResetPasswordEmail(email: String!): BooleanPayload!
   sendVerificationEmail(email: String!): BooleanPayload!
-  changePassword(newPasswordConfirm: String!, newPassword: String!, oldPassword: String!): BooleanPayload!
-  refreshTokens(refreshToken: String!, accessToken: String!): AuthPayload!
   verifyEmail(email: String!, token: Float!): BooleanPayload!
-  logout: BooleanPayload!
 }
 
 type Query
 
 input RegisterInput {
+  email: String!
   firstname: String!
   lastname: String!
-  email: String!
   password: String!
 }
 
 """Authentication service types"""
 enum ServiceTypes {
-  Password
   Facebook
   Github
   Google
+  Password
 }
 
 type Tokens {
-  refreshToken: String!
   accessToken: String!
+  refreshToken: String!
 }

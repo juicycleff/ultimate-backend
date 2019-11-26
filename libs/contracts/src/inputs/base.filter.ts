@@ -5,16 +5,6 @@ import { Class } from '@babel/types';
 
 export function FilterMongo<TItem>(TItemClass: ClassType<TItem>): any {
 
-  type Page = keyof TItem;
-
-  const x: Record<Page, TItem> = {
-    // @ts-ignore
-    test: 'hope',
-  };
-
-  // tslint:disable-next-line:no-console
-  console.log(x);
-
   @InputType()
   abstract class FilterMongoClass {
     @Field(() => Int)
@@ -23,7 +13,7 @@ export function FilterMongo<TItem>(TItemClass: ClassType<TItem>): any {
 
   @ArgsType()
   abstract class WhereFilter {
-    @Field(() => FilterMongoClass)
+    @Field(() => FilterMongoClass, { nullable: true })
     where?: FilterMongoClass;
   }
   // WhereFilter.prototype.name = `${TItemClass.name}Filter`;

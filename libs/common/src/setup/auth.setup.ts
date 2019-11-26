@@ -1,10 +1,20 @@
 import { INestApplication } from '@nestjs/common';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import * as cookieParser from 'cookie-parser';
 import * as useragent from 'express-useragent';
+// import * as redis from 'redis';
+// import * as connectRedisStore from 'connect-redis';
+import * as cookieParser from 'cookie-parser';
 import * as connectMongodbSession from 'connect-mongodb-session';
-import { AppConfig } from '../services/yaml.service';
+import { Express } from 'express';
+
+// tslint:disable-next-line:no-var-requires
+require('dotenv').config();
+
+// const RedisStore = connectRedisStore(session);
+
+// const client = redis.createClient();
+// const store = new RedisStore({ client });
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -16,29 +26,36 @@ const store = new MongoDBStore({
   collection: 'session',
 });
 
-const sessionMiddleware = session({
-  secret: '46565-GHTJ-GHGGG-665655',
-  resave: false,
-  rolling: true,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    secure: false,
-    domain: AppConfig.app.url,
-  },
-  unset: 'destroy',
-  store,
-  name: 'session.app',
-});
 const passportMiddleware = passport.initialize();
 const passportSessionMiddleware = passport.session();
 
-export function authSetup(app: INestApplication) {
-  app.use(sessionMiddleware);
-  app.use(passportMiddleware);
-  app.use(passportSessionMiddleware);
-  app.use(cookieParser());
-  app.use(useragent.express());
+export function authSetup(app: INestApplication | Express, withPassport: boolean = true) {
+
+  const sessionMiddleware = session({
+    secret: '46565-GHTJ-GHGGG-665655',
+    resave: true,
+    rolling: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: false,
+      domain: 'localhost',
+    },
+    // proxy: withPassport === true ? undefined : true,
+    store,
+    name: 'session.app',
+  });
+
+  if (withPassport) {
+    // @ts-ignore
+    // app.set('trust proxy', 1);
+    app.use(sessionMiddleware);
+    app.use(useragent.express());
+    app.use(passportMiddleware);
+    app.use(passportSessionMiddleware);
+  } else {
+    app.use(cookieParser());
+  }
 
   // @ts-ignore
   app.set('subdomain offset', 1); // Enable sub domain in app

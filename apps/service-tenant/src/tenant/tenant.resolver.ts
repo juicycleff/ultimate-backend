@@ -5,7 +5,7 @@ import { CreateTenantCommand } from '../cqrs/command/impl';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { CurrentUser, NotImplementedError } from '@graphqlcqrs/common';
-import { GetTenantQuery } from '../cqrs/query/impl/tenant';
+import { GetTenantQuery, GetTenantsQuery } from '../cqrs/query/impl/tenant';
 import { Tenant } from '../types';
 import { CreateTenantInput, TenantFilterArgs } from '../types';
 
@@ -44,13 +44,11 @@ export class TenantResolver {
 
   @Query(() => Tenant)
   async tenant(@Args() filter: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
-    return await this.queryBus.execute(new GetTenantQuery({
-      id: filter.name,
-    }));
+    return await this.queryBus.execute(new GetTenantQuery(filter, user));
   }
 
-  @Query(() => Tenant)
-  async tenants(): Promise<TenantEntity[]> {
-    throw new NotImplementedError('Not implemented');
+  @Query(() => [Tenant!])
+  async tenants(@Args() filter: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity[]> {
+    return await this.queryBus.execute(new GetTenantsQuery(filter, user)) as TenantEntity[];
   }
 }

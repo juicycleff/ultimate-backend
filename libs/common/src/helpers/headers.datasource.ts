@@ -1,5 +1,13 @@
 import { RemoteGraphQLDataSource } from '@apollo/gateway';
-import * as setCookie from 'set-cookie-parser';
+
+const unSafeHeaders = [
+  'accept-encoding',
+  'accept-language',
+  'accept',
+  'content-length',
+  'connection',
+  'host',
+];
 
 export class HeadersDatasource extends RemoteGraphQLDataSource {
   willSendRequest({ request, context }) {
@@ -9,7 +17,7 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
         const ctxHeaders = context.req.headers;
 
         for (const key in ctxHeaders) {
-          if (ctxHeaders.hasOwnProperty(key)) {
+          if (ctxHeaders.hasOwnProperty(key) && unSafeHeaders.indexOf(key) === -1) {
             request.http.headers.set(key, ctxHeaders[key]);
           }
         }
@@ -26,13 +34,8 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
     const body = await super.didReceiveResponse(response, request, context);
 
     if (context.res) {
-      const cookies = setCookie.parse(response.headers.get('Set-Cookie'), {
-        decodeValues: false,
-        map: true,
-      });
-
-      if (cookies['session.app'] !== null && cookies['session.app'] !== undefined) {
-        context.res.cookie('session.app', cookies['session.app']);
+      if (response.headers.get('set-cookie') !== null && response.headers.get('set-cookie') !== undefined) {
+        context.res.cookie(response.headers.get('set-cookie'));
       }
     }
     return body;
