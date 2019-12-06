@@ -4,10 +4,10 @@ import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 import { CommandBus } from '@nestjs/cqrs';
 import { RegisterUserCommand, VerifyEmailCommand } from '@graphqlcqrs/core/cqrs';
-import { AuthPayload, BooleanPayload, LoginInput, RegisterInput } from '../types';
 import { IdentifyMachineUtils } from '@graphqlcqrs/common/utils/identify-machine.utils';
-import { ServiceTypes } from '@ultimatebackend/contracts';
+import { BooleanPayload, ServiceTypes } from '@ultimatebackend/contracts';
 import { NotImplementedError } from '@graphqlcqrs/common';
+import { AuthPayload, LoginInput, RegisterInput } from '../types';
 import { AuthService } from './auth.service';
 
 @Resolver(() => AuthPayload)

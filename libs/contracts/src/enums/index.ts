@@ -1,6 +1,7 @@
 import { registerEnumType } from 'type-graphql';
 import { AppRole, InvitationStatus } from './tenant.enum';
 import { ServiceTypes } from './auth.enum';
+import { RoleActions } from './roles.enum';
 
 export {
   AppRole,
@@ -21,4 +22,9 @@ registerEnumType(InvitationStatus, {
 registerEnumType(ServiceTypes, {
   name: 'ServiceTypes',
   description: 'Authentication service types',
+});
+
+registerEnumType(RoleActions, {
+  name: 'RoleAction',
+  description: 'Role acgtion enum types',
 });

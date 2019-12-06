@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { InputType, ArgsType, Field } from 'type-graphql';
+import { InputType, ArgsType, Field, ID } from 'type-graphql';
 import { FilterMongo } from '@ultimatebackend/contracts';
 import { Tenant } from './tenant.type';
 
@@ -7,6 +7,66 @@ import { Tenant } from './tenant.type';
 export class CreateTenantInput {
   @Field()
   name: string;
+}
+
+@InputType()
+export class RemoveTenantInput {
+  @Field(() => ID)
+  id: string;
+}
+
+@InputType()
+export class UpdateTenantInput {
+  @Field()
+  id: string;
+}
+
+@InputType()
+export class UpdateTenantAccessTokenInput {
+  @Field({
+    description: 'Key of the access token to update',
+  })
+  key: string;
+
+  @Field({
+    description: 'Secret of the access token to update',
+  })
+  secret: string;
+
+  @Field()
+  active: boolean;
+}
+
+@InputType()
+export class RemoveTenantAccessTokenInput {
+  @Field({
+    description: 'Key of the access token to remove',
+  })
+  key: string;
+
+  @Field({
+    description: 'Secret of the access token to remove',
+  })
+  secret: string;
+}
+
+@ArgsType()
+export class TenantMutationArgs {
+
+  @Field(() => CreateTenantInput, { nullable: true })
+  create?: CreateTenantInput;
+
+  @Field(() => RemoveTenantInput, { nullable: true })
+  remove?: RemoveTenantInput;
+
+  @Field(() => UpdateTenantInput, { nullable: true })
+  update?: UpdateTenantInput;
+
+  @Field(() => UpdateTenantAccessTokenInput, { nullable: true })
+  updateAccessToken?: UpdateTenantAccessTokenInput;
+
+  @Field(() => RemoveTenantAccessTokenInput, { nullable: true })
+  removeAccessToken?: RemoveTenantAccessTokenInput;
 }
 
 @ArgsType()

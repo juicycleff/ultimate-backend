@@ -1,1 +1,1 @@
-import './simple.gateway';
+import './nest.gateway';

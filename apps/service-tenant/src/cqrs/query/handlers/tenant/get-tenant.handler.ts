@@ -2,8 +2,9 @@ import {Logger} from '@nestjs/common';
 import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { TenantRepository } from '@graphqlcqrs/repository/repositories';
 import { TenantEntity } from '@graphqlcqrs/repository/entities';
-import { GetTenantQuery } from '../../impl';
 import { ObjectId } from 'bson';
+import { GetTenantQuery } from '../../impl';
+import { mongoParser } from '@ultimatebackend/contracts';
 
 @QueryHandler(GetTenantQuery)
 export class GetTenantHandler implements IQueryHandler<GetTenantQuery> {
@@ -15,7 +16,8 @@ export class GetTenantHandler implements IQueryHandler<GetTenantQuery> {
     Logger.log(query, 'GetTenantQuery'); // write here
     const { where, user } = query;
 
-    if (!where) { throw Error('Missing get inputs'); }
-    return await this.tenantRepository.findOne({...where, ownerId: new ObjectId(user.id)});
+    if (!where) { throw Error('Missing where inputs'); }
+    const filter = mongoParser(where);
+    return await this.tenantRepository.findOne({...filter, ownerId: new ObjectId(user.id)});
   }
 }

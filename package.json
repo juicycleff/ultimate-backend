@@ -29,6 +29,7 @@
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.1.20",
     "@apollo/gateway": "^0.10.6",
+    "@grpc/proto-loader": "^0.5.3",
     "@juicycleff/nestjs-event-store": "^2.0.1",
     "@konfy/graphql-mongo-query": "^1.3.5",
     "@nestjs/common": "^6.7.2",
@@ -74,6 +75,7 @@
     "graphql-tools": "^4.0.5",
     "greenlock-express": "2.x",
     "greenlock-store-fs": "3",
+    "grpc": "^1.24.2",
     "ip-address": "^6.1.0",
     "json-stable-stringify": "^1.0.1",
     "lodash": "^4.17.15",
@@ -83,6 +85,7 @@
     "nest-queue": "^1.0.3",
     "nest-schedule": "^0.6.3",
     "nestjs-braintree": "^0.0.2",
+    "nestjs-casbin-mongodb": "^1.0.3",
     "nestjs-config": "^1.4.4",
     "nestjs-eventstore": "^1.4.14",
     "nestjs-graphql-gateway": "^1.1.5",

@@ -16,7 +16,7 @@ import { TenantResolver } from './tenant.resolver';
       featureStreamName: '$ce-tenant',
       subscriptions: [
         {
-          type: EventStoreSubscriptionType.CatchUp,
+          type: EventStoreSubscriptionType.Volatile,
           stream: '$ce-tenant',
         },
       ],

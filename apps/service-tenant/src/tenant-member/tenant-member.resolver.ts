@@ -1,33 +1,38 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { TenantMember } from '../types/tenant-member.type';
 import { TenantMemberEmbed } from '@graphqlcqrs/repository';
-import { PaginationArgs } from '@ultimatebackend/contracts';
+import { TenantMemberMutationArgs, TenantMember, TenantMemberFilterArgs } from '../types';
+import { NotImplementedError } from '@graphqlcqrs/common';
+import { Permission, Resource } from '@graphqlcqrs/core';
 
+@Resource({ name: 'tenant_member_manage', identify: 'tenantMember:manage' })
 @Resolver(() => TenantMember)
 export class TenantMemberResolver {
 
-  @Mutation(() => TenantMember)
-  async inviteTenantMember(@Args('id') id: string): Promise<TenantMemberEmbed> {
-    return null;
+  @Permission({ name: 'tenant_member_mutations', identify: 'tenantMember:tenantMemberMutations', action: 'write' })
+  @Mutation(() => TenantMember, { name: 'tenantMember' })
+  async tenantMemberMutations(@Args() input: TenantMemberMutationArgs): Promise<TenantMemberEmbed> {
+    const { create, remove, update } = input;
+
+    if (create) {
+      throw new NotImplementedError('Not implemented');
+    } else if (remove) {
+      throw new NotImplementedError('Not implemented');
+    } else if (update) {
+      throw new NotImplementedError('Not implemented');
+    } else {
+      throw new NotImplementedError('Not implemented');
+    }
   }
 
-  @Mutation(() => TenantMember)
-  async updateTenantMember(@Args('id') id: string): Promise<TenantMemberEmbed> {
-    return null;
-  }
-
-  @Mutation(() => TenantMember)
-  async removeTenantMember(@Args('id') id: string): Promise<TenantMemberEmbed> {
-    return null;
-  }
-
+  @Permission({ name: 'tenant_member', identify: 'tenantMember:tenantMember', action: 'read' })
   @Query(() => TenantMember)
   async tenantMember(@Args('id') id: string): Promise<TenantMemberEmbed> {
     return null;
   }
 
-  @Query(() => TenantMember)
-  async tenantMembers(@Args() paginate: PaginationArgs): Promise<TenantMemberEmbed> {
+  @Permission({ name: 'tenant_members', identify: 'tenantMember:tenantMembers', action: 'read' })
+  @Query(() => [TenantMember!])
+  async tenantMembers(@Args() input: TenantMemberFilterArgs): Promise<TenantMemberEmbed> {
     return null;
   }
 }

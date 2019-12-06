@@ -1,4 +1,5 @@
-import { COLLECTION_KEY, CollectionProps, ENTITY_KEY, EntityProps } from '../interfaces';
+/* tslint:disable:ban-types */
+import { COLLECTION_KEY, CollectionProps, ENTITY_KEY, EntityOptions, EntityProps } from '../interfaces';
 
 /**
  * Indicate the class represents a collection

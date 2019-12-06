@@ -13,8 +13,32 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 directive @requires(fields: String!) on FIELD_DEFINITION
 
+"""The App roles for authorization"""
+enum AppRole {
+  ADMIN
+  DEVELOPER
+  MEMBER
+  OWNER
+  SUPER
+}
+
 input CreateTenantInput {
   name: String!
+}
+
+input CreateTenantMemberInput {
+  email: String
+  role: AppRole!
+  userId: ID
+}
+
+input DateComparisonFilter {
+  _EQ: DateTime
+  _GT: DateTime
+  _GTE: DateTime
+  _LT: DateTime
+  _LTE: DateTime
+  _NE: DateTime
 }
 
 """
@@ -22,40 +46,74 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
-input FilterMongoClass {
-  total: Int!
+input FilterTenantInput {
+  _AND: [FilterTenantInput!]
+  _NOR: [FilterTenantInput!]
+  _OR: [FilterTenantInput!]
+  createdAt: DateComparisonFilter
+  id: StringComparisonFilter
+  name: StringComparisonFilter
+  normalizedName: StringComparisonFilter
+  updatedAt: DateComparisonFilter
+}
+
+input FilterTenantMemberInput {
+  _AND: [FilterTenantMemberInput!]
+  _NOR: [FilterTenantMemberInput!]
+  _OR: [FilterTenantMemberInput!]
+  createdAt: DateComparisonFilter
+  email: StringComparisonFilter
+  id: StringComparisonFilter
+  role: StringComparisonFilter
+  status: StringComparisonFilter
+  updatedAt: DateComparisonFilter
 }
 
 type Mutation {
-  createTenant(input: CreateTenantInput!): Tenant!
   generateAccessToken(id: String!): Tenant!
-  inviteTenantMember(id: String!): TenantMember!
-  removeTenant(id: String!): Tenant!
-  removeTenantMember(id: String!): TenantMember!
-  retireAccessToken(id: String!): Tenant!
-  updateTenant(id: String!): Tenant!
-  updateTenantMember(id: String!): TenantMember!
-}
-
-input PaginationInput {
-  limit: Int = 10
-  skip: Int = 0
+  tenant(create: CreateTenantInput, remove: RemoveTenantInput, removeAccessToken: RemoveTenantAccessTokenInput, update: UpdateTenantInput, updateAccessToken: UpdateTenantAccessTokenInput): Tenant!
+  tenantMember(create: CreateTenantMemberInput, remove: RemoveTenantMemberInput, update: UpdateTenantMemberInput): TenantMember!
 }
 
 type Query {
-  tenant(where: FilterMongoClass): Tenant!
+  tenant(where: FilterTenantInput): Tenant!
   tenantMember(id: String!): TenantMember!
-  tenantMembers(paginate: PaginationInput!): TenantMember!
-  tenants(where: FilterMongoClass): [Tenant!]!
+  tenantMembers(where: FilterTenantMemberInput): [TenantMember!]!
+  tenants(where: FilterTenantInput): [Tenant!]!
+}
+
+input RemoveTenantAccessTokenInput {
+  """Key of the access token to remove"""
+  key: String!
+
+  """Secret of the access token to remove"""
+  secret: String!
+}
+
+input RemoveTenantInput {
+  id: ID!
+}
+
+input RemoveTenantMemberInput {
+  id: ID!
+}
+
+input StringComparisonFilter {
+  _EQ: String
+  _GT: String
+  _GTE: String
+  _LT: String
+  _LTE: String
+  _NE: String
 }
 
 type Tenant {
   createdAt: DateTime!
   id: ID!
-  members: [TenantMember!]!
-  name: String!
-  normalizedName: String!
-  tokens: [TenantAccessToken!]!
+  members: [TenantMember!]
+  name: String
+  normalizedName: String
+  tokens: [TenantAccessToken!]
   updatedAt: DateTime!
 }
 
@@ -74,6 +132,25 @@ type TenantMember {
   status: String!
   tenant: Tenant!
   updatedAt: DateTime!
+}
+
+input UpdateTenantAccessTokenInput {
+  active: Boolean!
+
+  """Key of the access token to update"""
+  key: String!
+
+  """Secret of the access token to update"""
+  secret: String!
+}
+
+input UpdateTenantInput {
+  id: String!
+}
+
+input UpdateTenantMemberInput {
+  id: String
+  role: AppRole!
 }
 
 type User {

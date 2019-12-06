@@ -5,14 +5,16 @@ import { CommonModule } from '@graphqlcqrs/common';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { CqrsModule } from '@nestjs/cqrs';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { NestCasbinModule } from 'nestjs-casbin-mongodb';
+import { resolve } from 'path';
+import { BaseModule, BootstrapService } from '@graphqlcqrs/core';
 import { TenantModule } from './tenant/tenant.module';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { TenantMemberModule } from './tenant-member/tenant-member.module';
-import { Tenant, User } from './types';
-import { TenantMember } from './types/tenant-member.type';
+import { Tenant, User, TenantMember } from './types';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -39,6 +41,12 @@ require('dotenv').config();
       uri: `${AppConfig.services?.tenant?.mongodb?.uri}${AppConfig.services?.tenant?.mongodb?.name}`,
       dbName: AppConfig.services?.tenant?.mongodb?.name,
     }),
+    NestCasbinModule.forRootAsync(
+      AppConfig.casbin.dbUri,
+      resolve('models/roles.conf'),
+      AppConfig.casbin.dbName,
+      'roles',
+    ),
     NestjsEventStoreModule.forRoot({
       tcpEndpoint: {
         host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
@@ -56,6 +64,6 @@ require('dotenv').config();
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, BootstrapService],
 })
-export class AppModule {}
+export class AppModule extends BaseModule {}

@@ -5,6 +5,7 @@ import { TenantRepository } from '@graphqlcqrs/repository/repositories';
 import { TenantEntity } from '@graphqlcqrs/repository/entities';
 import { GetTenantsQuery } from '../../impl';
 import { ObjectId } from 'bson';
+import { mongoParser } from '@ultimatebackend/contracts/utils';
 
 @QueryHandler(GetTenantsQuery)
 export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
@@ -19,7 +20,8 @@ export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
     if (!user) { throw Error('Missing get current user'); }
 
     try {
-      return await this.tenantRepository.find({ conditions: {...where, ownerId: new ObjectId(user.id)} });
+      const filter = mongoParser(where);
+      return await this.tenantRepository.find({ conditions: {...filter, ownerId: new ObjectId(user.id)} });
     } catch (e) {
       throw new ApolloError(e);
     }

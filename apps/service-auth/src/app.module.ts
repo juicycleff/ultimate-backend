@@ -9,6 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
 import { CommonModule } from '@graphqlcqrs/common';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { RolesModule } from './roles/roles.module';
+import { NestCasbinModule } from 'nestjs-casbin-mongodb';
+import { resolve } from 'path';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -32,6 +35,12 @@ require('dotenv').config();
       context: ({ req, res }) => buildContext({ req, res }),
     }),
     CommonModule,
+    NestCasbinModule.forRootAsync(
+      AppConfig.casbin.dbUri,
+      resolve('models/roles.conf'),
+      AppConfig.casbin.dbName,
+      'roles',
+    ),
     MongoModule.forRoot({
       uri: `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
       dbName: AppConfig.services?.auth?.mongodb?.name,
@@ -49,6 +58,7 @@ require('dotenv').config();
       },
     }),
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

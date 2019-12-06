@@ -23,6 +23,18 @@ type BooleanPayload {
   success: Boolean!
 }
 
+input CreateRoleInput {
+  action: RoleAction!
+  name: String!
+  resource: String!
+  tenant: String
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 input LoginInput {
   params: LoginParamsInput!
   service: ServiceTypes!
@@ -48,18 +60,42 @@ type Mutation {
   logout: BooleanPayload!
   refreshTokens(accessToken: String!, refreshToken: String!): AuthPayload!
   register(input: RegisterInput!): BooleanPayload!
+  role(create: CreateRoleInput, remove: RemoveRoleInput): Role!
   sendResetPasswordEmail(email: String!): BooleanPayload!
   sendVerificationEmail(email: String!): BooleanPayload!
   verifyEmail(email: String!, token: Float!): BooleanPayload!
 }
 
-type Query
+type Query {
+  role(id: String!): Role!
+  roles: [Role!]!
+}
 
 input RegisterInput {
   email: String!
   firstname: String!
   lastname: String!
   password: String!
+}
+
+input RemoveRoleInput {
+  id: ID!
+}
+
+type Role {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  normalizedName: String!
+  updatedAt: DateTime!
+}
+
+"""Role acgtion enum types"""
+enum RoleAction {
+  Read
+  ReadAll
+  Write
+  WriteAll
 }
 
 """Authentication service types"""

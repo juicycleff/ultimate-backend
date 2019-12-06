@@ -8,7 +8,8 @@
     "tsConfigPath": "apps/gateway-admin/tsconfig.app.json",
     "assets": [
       { "include": "**/*.graphql" },
-      { "include": "config/*.yml" }
+      { "include": "config/*.yml" },
+      { "include": "**/*.conf" }
     ]
   },
   "projects": {

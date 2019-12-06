@@ -27,6 +27,10 @@ sendgrid:
   api: "SENDGRID-API-KEY"
   sender: dummy@dumm.com
 
+casbin:
+  dbUri: ${mongodb.defaultUri}
+  dbName: "service-auth"
+
 services:
   auth:
     mongodb:

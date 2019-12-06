@@ -1,23 +1,27 @@
 /* tslint:disable:max-classes-per-file */
 import { ObjectType, Directive, GraphQLISODateTime } from 'type-graphql';
 import { Field } from 'type-graphql/dist/decorators/Field';
-import { Node } from '@ultimatebackend/contracts';
+import {  Node } from '@ultimatebackend/contracts';
 import { TenantMember } from './tenant-member.type';
+import { Filterable } from '@graphqlcqrs/core';
 
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class Tenant extends Node {
 
-  @Field()
+  @Filterable()
+  @Field({ nullable: true })
   name: string;
 
-  @Field()
+  @Filterable()
+  @Field({ nullable: true })
   normalizedName: string;
 
-  @Field(() => [TenantAccessToken!])
+  @Field(() => [TenantAccessToken!], { nullable: true })
   tokens?: TenantAccessToken[];
 
-  @Field(() => [TenantMember!])
+  @Filterable({ type: TenantMember })
+  @Field(() => [TenantMember!], { nullable: true })
   members?: TenantMember[];
 }
 

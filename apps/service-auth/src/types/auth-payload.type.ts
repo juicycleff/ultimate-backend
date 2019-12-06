@@ -10,12 +10,6 @@ export class Tokens {
   accessToken: string;
 }
 
-@ObjectType()
-export class BooleanPayload {
-  @Field()
-  success: boolean;
-}
-
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class AuthPayload {
