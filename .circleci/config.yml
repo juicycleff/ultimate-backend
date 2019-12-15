@@ -9,8 +9,6 @@ jobs:
       # specify the version you desire here
       - image: circleci/node
 
-      # - image: circleci/mongo:3.4.4
-
     working_directory: ~/ultimate-backend
 
     steps:
@@ -29,6 +27,17 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: install-snyk
+          command: 'sudo npm install -g snyk'
+
+      - run: # run snyk help - test snyk is installed and working
+          name: snyk-help
+          command: snyk --help
+      - run: # run snyk auth - authenticate snyk use environment variables to add token
+          name: snyk auth
+          command: snyk auth $SNYK_TOKEN
 
       # run tests!
       - run: yarn test
