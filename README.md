@@ -35,9 +35,11 @@ Software features
 *   ✅ Emailing Queue
 *   ✅ Role Based Access Control (WiP)
 *   ✅ Multi Tenancy (WiP)
-*   ❌ Security
+*   ✅ Payment ([Stripe](https://stripe.com/))
+*   ✅ SaaS Plans ([Stripe](https://stripe.com/))
+*   ❌ (WiP) Security
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
-*   ❌ React Website
+*   ❌ WiP: [React Website](https://github.com/juicycleff/ultimate-backend-dashboard)
 
 ### Requirements
 
