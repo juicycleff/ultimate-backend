@@ -49,9 +49,10 @@ Software features
 | [HazelCast (cache)](https://hazelcast.com/)                | [NodeJS (System runtime)](https://nodejs.org)                                              | [Kubernetes](https://kubernetes.io/)                                           |
 | [MongoDB (Database)](https://www.mongodb.com/)             | [Typescript](https://www.typescriptlang.org)                                               | [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/) |
 |                                                            | [Apollo Server](https://www.apollographql.com/docs/apollo-server)                          |                                                                                |
-|                                                            | [Express JS](https://expressjs.com)                                          |                                                                                |
+|                                                            | [Express JS](https://expressjs.com)                                                        |                                                                                |
 |                                                            | [Apollo Gateway](https://www.apollographql.com/docs/apollo-server/federation/introduction) |                                                                                |                                                                               |
-|                                                            | [Fastify](https://www.fastify.io)                                                          |                                                                                |
+|                                                            | [Fastify](https://www.fastify.io)                                                          |                                                                                |                                                                               |
+|                                                            | [GRPC](https://grpc.io/)                                                                   |                                                                                |
 
 ## Installation
 
