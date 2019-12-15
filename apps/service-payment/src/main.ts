@@ -24,7 +24,7 @@ async function bootstrap() {
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
-    parseInt(config.services?.plan?.port, 10) ||
+    parseInt(config.services?.plan?.port,10) ||
     9500,
   );
 

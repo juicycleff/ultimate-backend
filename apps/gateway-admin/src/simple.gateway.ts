@@ -64,7 +64,7 @@ async function bootstrapSimple() {
   authSetup(app, false);
 
   server.applyMiddleware({ app });
-  await app.listen({ port: parseInt(process.env.PORT, 10) || parseInt(config.gateway?.admin?.port, 10) || 4000 });
+  await app.listen({ port: parseInt(process.env.PORT,10) || parseInt(config.gateway?.admin?.port, 10) || 4000 });
 }
 
 bootstrapSimple();
