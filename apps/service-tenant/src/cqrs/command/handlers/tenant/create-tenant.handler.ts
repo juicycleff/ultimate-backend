@@ -54,7 +54,7 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
         userId: new ObjectID(user.id),
         email: user.emails.reduce(previousValue => previousValue.primary === true && previousValue).address,
         role: AppRole.OWNER,
-        status: InvitationStatus.PENDING,
+        status: InvitationStatus.ACCEPTED,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };

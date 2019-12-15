@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package role;
+
+service RoleService {
+    rpc CheckPermission (StringMessage) returns (BooleanPayload) {}
+    rpc AddPolicy (StringMessage) returns (BooleanPayload) {}
+}
+
+message StringMessage {
+    repeated string params = 1;
+}
+
+message Role {
+    string id = 1;
+    string name = 2;
+    string normalizedName = 3;
+    string createdAt = 4;
+    string updatedAt = 5;
+}
+
+message BooleanPayload {
+    bool success = 1;
+}

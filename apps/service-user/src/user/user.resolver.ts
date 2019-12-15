@@ -1,12 +1,12 @@
 import { Args, Parent, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
+import { GqlAuthGuard } from '@graphqlcqrs/core';
 import { User } from '../types';
 import { ObjectID } from 'bson';
 import { plainToClass } from 'class-transformer';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GetUserQuery } from '@graphqlcqrs/core/cqrs';
+import { GetUserQuery } from '../cqrs';
 
 @Resolver(() => User)
 export class UserResolver {

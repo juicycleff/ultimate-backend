@@ -1,9 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
-import { AppUtils } from '@graphqlcqrs/common/utils';
-import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { SwaggerModule } from '@nestjs/swagger';
+import { AppUtils, authSetup, bloodTearsMiddleware, setupSwagger } from '@graphqlcqrs/common';
+import { setupGrpc } from '@graphqlcqrs/core';
+import { AppModule } from './app.module';
 
 // tslint:disable-next-line:no-var-requires
 const config = require('config-yml').load(process.env.NODE_ENV);
@@ -25,8 +24,10 @@ async function bootstrap() {
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
-    parseInt(config.services?.payment?.port, 10) ||
-    9300,
+    parseInt(config.services?.plan?.port, 10) ||
+    9500,
   );
+
+  await setupGrpc(app, 'plan', 'plan.proto', config.services?.plan?.grpcPort || 7500);
 }
 bootstrap();

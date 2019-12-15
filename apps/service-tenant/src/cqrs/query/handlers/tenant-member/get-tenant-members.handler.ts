@@ -1,8 +1,8 @@
 import {Logger} from '@nestjs/common';
 import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { TenantMemberEmbed } from '@graphqlcqrs/repository/entities';
-import { GetTenantMembersQuery } from '../../impl';
 import { TenantRepository } from '@graphqlcqrs/repository';
+import { GetTenantMembersQuery } from '../../impl';
 
 @QueryHandler(GetTenantMembersQuery)
 export class GetTenantMembersHandler implements IQueryHandler<GetTenantMembersQuery> {

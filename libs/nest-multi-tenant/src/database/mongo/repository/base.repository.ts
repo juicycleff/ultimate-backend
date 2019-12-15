@@ -37,6 +37,8 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @memberof BaseRepository
    */
   findById(id: string): Promise<DOC> {
+    const cacheKey = `${this.options.name}/${id}`;
+    // if()
     return this.findOne({ _id: new ObjectID(id) });
   }
 
@@ -70,10 +72,10 @@ export class BaseRepository <DOC, DTO = DOC> {
   async findOne(conditions: object): Promise<DOC> {
     const collection = await this.collection;
 
-    const prunedConditions = this.toggleId(conditions, true);
+    const prunedConditions = this.toggleId(conditions, true) as any;
     let document = await collection.findOne(prunedConditions);
     if (document) {
-      document = this.toggleId(document, false);
+      document = this.toggleId(document, false) as any;
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
       return document;
     }
@@ -102,7 +104,7 @@ export class BaseRepository <DOC, DTO = DOC> {
   async find(req: FindRequest = { conditions: {} }): Promise<DOC[]> {
     const collection = await this.collection;
 
-    const conditions = this.toggleId(req.conditions, true);
+    const conditions = this.toggleId(req.conditions as any, true) as any;
     let cursor = collection.find(conditions);
 
     if (req.projection) {
@@ -125,7 +127,7 @@ export class BaseRepository <DOC, DTO = DOC> {
     const results = [];
 
     for (let document of newDocuments) {
-      document = this.toggleId(document, false);
+      document = this.toggleId(document, false) as any;
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], document);
       results.push(document);
     }
@@ -189,6 +191,28 @@ export class BaseRepository <DOC, DTO = DOC> {
   }
 
   /**
+   * Save any changes to your document
+   *
+   * @returns {Promise<DOC>}
+   * @memberof BaseRepository
+   * @param documents
+   */
+  async createMany(documents: Partial<DTO[]> | DTO[]): Promise<DOC[]> {
+    const collection = await this.collection;
+    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], documents);
+
+    const res = await collection.insertMany(eventResult as DOC[]);
+
+    let newDocuments = res.ops[0];
+    // @ts-ignore
+    newDocuments = this.toggleId(newDocument, false);
+    newDocuments = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocuments);
+
+    // @ts-ignore
+    return newDocuments;
+  }
+
+  /**
    * Find a record by ID and update with new values
    *
    * @param {string} id
@@ -221,7 +245,7 @@ export class BaseRepository <DOC, DTO = DOC> {
       returnOriginal: false,
     });
 
-    let document = res.value;
+    let document = res.value as any;
     document = this.toggleId(document, false);
     document = await this.invokeEvents(POST_KEY, ['UPDATE', 'UPDATE_ONE'], document);
     return document;
@@ -293,7 +317,24 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {T}
    * @memberof BaseRepository
    */
-  protected toggleId(document: any, replace: boolean): DOC {
+  protected toggleId(document: any | any[], replace: boolean): DOC | DOC[] {
+    if (Array.isArray(document)) {
+      const docs: any[] = [];
+      for (const doc of document) {
+        if (doc && (doc.id || doc._id)) {
+          if (replace) {
+            doc._id = new ObjectID(doc.id);
+            delete doc.id;
+          } else {
+            doc.id = doc._id.toString();
+            delete doc._id;
+          }
+        }
+        docs.push(doc);
+      }
+      return docs;
+    }
+
     if (document && (document.id || document._id)) {
       if (replace) {
         document._id = new ObjectID(document.id);
@@ -372,8 +413,25 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseRepository
    */
-  private async invokeEvents(type: string, fns: DataEvents[], document: any): Promise<any> {
+  private async invokeEvents(type: string, fns: DataEvents[], document: any | any[]): Promise<any> {
     const test = Reflect.getMetadata('entity', this) || [];
+    if (Array.isArray(document)) {
+      const docs: any[] = [];
+      for (let doc of document) {
+        for (const fn of fns) {
+          const events = Reflect.getMetadata(`${type}_${fn}`, this) || [];
+          for (const event of events) {
+            doc = event.bind(this)(document);
+            if (doc !== undefined && typeof doc.then === 'function') {
+              doc = await doc;
+            }
+            docs.push(doc);
+          }
+        }
+      }
+      return docs;
+    }
+
     for (const fn of fns) {
       const events = Reflect.getMetadata(`${type}_${fn}`, this) || [];
       for (const event of events) {

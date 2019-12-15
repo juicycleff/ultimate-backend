@@ -56,10 +56,15 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-project
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
+      - services-project
+      - services-user
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -88,10 +93,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-user
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -120,10 +128,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-notification
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -152,10 +163,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-tenant
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -184,10 +198,15 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-payment
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-tenant
+      - services-auth
+      - services-user
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -207,13 +226,16 @@ services:
       - PROJECT_PATH=project
       - AUTH_ENDPOINT=http://services-auth:9900/graphql
       - AUTH_PATH=auth
-      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_ENDPOINT=http://services-user:9000/graphql
       - USER_PATH=user
 
     depends_on:
       - services-auth
       - services-project
       - services-user
+      - services-tenant
+      - services-notification
+      - services-payment
     links:
       - services-auth
       - services-project
@@ -238,11 +260,16 @@ services:
       - PROJECT_PATH=project
       - AUTH_ENDPOINT=http://services-auth:9900/graphql
       - AUTH_PATH=auth
-      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_ENDPOINT=http://services-user:9000/graphql
       - USER_PATH=user
 
     depends_on:
+      - services-auth
       - services-project
+      - services-user
+      - services-tenant
+      - services-notification
+      - services-payment
     links:
       - services-project
     labels:

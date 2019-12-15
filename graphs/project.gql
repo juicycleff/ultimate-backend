@@ -3,19 +3,19 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-directive @key(fields: String!) on OBJECT | INTERFACE
+directive @extends on INTERFACE | OBJECT
 
-directive @extends on OBJECT | INTERFACE
+directive @external on FIELD_DEFINITION | OBJECT
 
-directive @external on OBJECT | FIELD_DEFINITION
-
-directive @requires(fields: String!) on FIELD_DEFINITION
+directive @key(fields: String!) on INTERFACE | OBJECT
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+directive @requires(fields: String!) on FIELD_DEFINITION
+
 input CreateProjectInput {
-  name: String!
   description: String
+  name: String!
 }
 
 """
@@ -29,16 +29,16 @@ type Mutation {
 }
 
 input PaginationInput {
-  skip: Int = 0
   limit: Int = 10
+  skip: Int = 0
 }
 
 type Project {
-  id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
   description: String
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
 }
 
 type Query {

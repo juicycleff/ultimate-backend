@@ -12,6 +12,8 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
 
   username?: string;
 
+  roles?: string[];
+
   deactivated!: boolean;
 
   emails?: [
@@ -25,6 +27,8 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
 
   services!: AuthServices;
 
+  payment!: PaymentEmbed;
+
   toDtoClass?: new(entity: BaseEntity, options?: any) => UserResponseDto;
 }
 
@@ -36,4 +40,8 @@ interface AuthServices {
   facebook?: FacebookAuth;
 
   google?: GoogleAuth;
+}
+
+interface PaymentEmbed {
+  stripeId?: string;
 }

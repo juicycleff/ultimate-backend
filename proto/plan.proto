@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package plan;
+
+service PlanService {
+    rpc FindOne (FindTenantMessage) returns (Plan) {}
+    rpc PlanExist (FindTenantMessage) returns (BooleanPayload) {}
+}
+
+message FindTenantMessage {
+    string normalizedName = 1;
+    string key = 2;
+    string secret = 3;
+}
+
+message Plan {
+    string id = 1;
+    string name = 2;
+    string normalizedName = 3;
+    string createdAt = 4;
+    string updatedAt = 5;
+}
+
+message BooleanPayload {
+    bool success = 1;
+}

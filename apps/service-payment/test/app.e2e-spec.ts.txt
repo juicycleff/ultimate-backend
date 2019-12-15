@@ -1,0 +1,26 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { setupGrpc } from '@graphqlcqrs/core';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+
+describe('AppController (e2e)', () => {
+  let app;
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    await setupGrpc(app, 'plan', 'plan.proto', AppConfig.services?.plan?.grpcPort || 7500);
+    await app.init();
+  });
+
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+});

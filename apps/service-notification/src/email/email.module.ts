@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
-import { EmailService } from './email.service';
-import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { EmailVerifiedEvent, UserLoggedInEvent, UserRegisteredEvent } from '@graphqlcqrs/core/cqrs';
-import { AuthSagas } from './sagas';
+import { EmailVerifiedEvent, UserLoggedInEvent, UserRegisteredEvent } from '@graphqlcqrs/core';
 import { DoneCallback, Job } from 'bull';
 import { BullModule } from 'nest-bull';
+import { EmailService } from './email.service';
+import { AuthSagas } from './sagas';
 import { AuthQueue } from './queue';
 
 @Module({
   imports: [
-    CqrsModule,
     NestjsEventStoreModule.forFeature({
       featureStreamName: '$ce-user',
       subscriptions: [

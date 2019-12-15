@@ -1,51 +1,56 @@
 import { Module } from '@nestjs/common';
-import * as path from 'path';
 import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
+import { StripeModule } from 'nestjs-stripe';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CommonModule } from '@graphqlcqrs/common';
-import { MongoModule } from '@juicycleff/nest-multi-tenant';
+import { PlanModule } from './plan/plan.module';
+import { Plan } from './types';
+import { BaseModule, CoreModule, GqlAuthGuard, MongoHealthIndicator } from '@graphqlcqrs/core';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
-import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { PlansModule } from './plans/plans.module';
-
-// tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthOptionsService } from './health-options.service';
+import { CardModule } from './card/card.module';
+import { BillingModule } from './billing/billing.module';
 
 @Module({
   imports: [
     GraphqlDistributedModule.forRoot({
-      typePaths: [path.join(process.cwd() + '/apps/service-payment/src', '/**/*.graphql')],
+      autoSchemaFile: 'graphs/plan.gql',
       introspection: true,
+      buildSchemaOptions: {
+        orphanedTypes: [Plan],
+      },
       playground: {
-        workspaceName: 'GRAPHQL SERVICE PAYMENT',
+        workspaceName: 'GRAPHQL SERVICE PLAN',
         settings: {
           'editor.theme': 'light',
         },
       },
       context: ({ req, res }) => buildContext({ req, res }),
     }),
-    CommonModule,
-    MongoModule.forRoot({
-      uri: `${AppConfig.services?.payment?.mongodb?.uri}${AppConfig.services?.payment?.mongodb?.name}`,
-      dbName: AppConfig.services?.payment?.mongodb?.name,
+    CoreModule,
+    StripeModule.forRoot({
+      apiKey: AppConfig.payment?.stripe?.secretKey,
     }),
-    NestjsEventStoreModule.forRoot({
-      tcpEndpoint: {
-        host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
-        port: parseInt(process.env.ES_TCP_PORT, 10) || AppConfig.eventstore?.tcpPort,
-      },
-      options: {
-        defaultUserCredentials: {
-          password: AppConfig.eventstore?.tcpPassword,
-          username: AppConfig.eventstore?.tcpUsername,
-        },
-      },
+    TerminusModule.forRootAsync({
+      imports: [AppModule],
+      useClass: HealthOptionsService,
     }),
-    PlansModule,
+    BillingModule,
+    PlanModule,
+    CardModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    MongoHealthIndicator,
+    {
+      provide: APP_GUARD,
+      useClass: GqlAuthGuard,
+    },
+  ],
+  exports: [MongoHealthIndicator],
 })
-export class AppModule {}
+export class AppModule extends BaseModule {}

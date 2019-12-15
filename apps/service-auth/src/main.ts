@@ -4,6 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
+import { setupGrpc } from '@graphqlcqrs/core';
 
 // tslint:disable-next-line:no-var-requires
 const config = require('config-yml').load(process.env.NODE_ENV);
@@ -27,5 +28,7 @@ async function bootstrap() {
     parseInt(config.services?.auth?.port, 10) ||
     9900,
   );
+
+  await setupGrpc(app, 'role', 'role.proto', config.services?.auth?.grpcPort || 7900);
 }
 bootstrap();

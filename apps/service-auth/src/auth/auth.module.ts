@@ -1,7 +1,6 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CookieSerializer } from '@graphqlcqrs/common';
 import { EventStoreSubscriptionType } from '@juicycleff/nestjs-event-store';
-import { CqrsModule } from '@nestjs/cqrs';
 import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
@@ -20,8 +19,6 @@ import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    CacheModule.register(),
-    CqrsModule,
     PassportModule,
     NestjsEventStoreModule.forFeature({
       featureStreamName: '$ce-user',

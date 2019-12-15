@@ -38,6 +38,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
           verified: false,
           verificationCode: generateVerificationCode(6, { type: 'number' }),
         }],
+        roles: ['member'],
         services: {
           password: {
             hashed: cmd.password,
