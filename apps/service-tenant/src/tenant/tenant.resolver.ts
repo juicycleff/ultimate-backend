@@ -2,24 +2,21 @@ import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { TenantEntity, UserEntity } from '@graphqlcqrs/repository/entities';
 import { CreateTenantCommand, RemoveTenantCommand } from '../cqrs/command/impl';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
 import { CurrentUser } from '@graphqlcqrs/common';
-import { GetTenantQuery, GetTenantsQuery } from '../cqrs/query/impl/tenant';
-import { Tenant, TenantMutationArgs } from '../types';
-import { TenantFilterArgs } from '../types';
 import { UserInputError } from 'apollo-server-express';
-import { NestCasbinService } from 'nestjs-casbin-mongodb';
+import { Permission, Resource } from '@graphqlcqrs/core';
+import { GetTenantQuery, GetTenantsQuery } from '../cqrs/query/impl/tenant';
+import { Tenant, TenantMutationArgs, TenantFilterArgs } from '../types';
 
-@UseGuards(GqlAuthGuard)
+@Resource({ name: 'tenant_manage', identify: 'tenant:manage' })
 @Resolver(() => Tenant)
 export class TenantResolver {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-    private readonly casbinService: NestCasbinService,
   ) {}
 
+  @Permission({ name: 'tenant_mutations', identify: 'tenant:tenantMutations', action: 'create' })
   @Mutation(() => Tenant, { name: 'tenant' })
   async tenantMutations(@Args() input: TenantMutationArgs, @Context() ctx: any, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
     const { create, remove, update, updateAccessToken, removeAccessToken } = input;
@@ -28,10 +25,7 @@ export class TenantResolver {
     }
 
     if (create) {
-      const tenant = await this.commandBus.execute(new CreateTenantCommand(user, create)) as TenantEntity;
-      await this.casbinService.addPolicy(`user/${user.id.toString()}`, '*', `tenant/${tenant.normalizedName}`, 'read');
-      await this.casbinService.addPolicy(`user/${user.id.toString()}`, '*', `tenant/${tenant.normalizedName}`, 'write');
-      return tenant;
+      return  await this.commandBus.execute(new CreateTenantCommand(user, create)) as TenantEntity;
     } else if (update) {
       return await this.commandBus.execute(new RemoveTenantCommand(user, remove));
     } else if (updateAccessToken) {
@@ -45,16 +39,19 @@ export class TenantResolver {
     }
   }
 
+  @Permission({ name: 'generate_access_token', identify: 'tenant:generateAccessToken', action: 'write' })
   @Mutation(() => Tenant)
   async generateAccessToken(@Args('id') id: string): Promise<TenantEntity> {
     return null;
   }
 
+  @Permission({ name: 'tenant', identify: 'tenant:tenant', action: 'read' })
   @Query(() => Tenant)
   async tenant(@Args() {where}: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
     return await this.queryBus.execute(new GetTenantQuery(where, user));
   }
 
+  @Permission({ name: 'tenants', identify: 'tenant:tenants', action: 'read' })
   @Query(() => [Tenant!])
   async tenants(@Args() {where}: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity[]> {
     return await this.queryBus.execute(new GetTenantsQuery(where, user)) as TenantEntity[];

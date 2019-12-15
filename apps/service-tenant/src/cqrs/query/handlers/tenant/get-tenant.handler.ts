@@ -18,6 +18,12 @@ export class GetTenantHandler implements IQueryHandler<GetTenantQuery> {
 
     if (!where) { throw Error('Missing where inputs'); }
     const filter = mongoParser(where);
-    return await this.tenantRepository.findOne({...filter, ownerId: new ObjectId(user.id)});
+    const userCond = {
+      ownerId: new ObjectId(user && user.id),
+    };
+
+    const userFilter = user ? userCond : {};
+
+    return await this.tenantRepository.findOne({...filter, ...userFilter });
   }
 }

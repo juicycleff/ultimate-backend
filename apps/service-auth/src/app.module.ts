@@ -1,24 +1,22 @@
 import { Module } from '@nestjs/common';
 import { buildContext } from 'graphql-passport';
-import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { CqrsModule } from '@nestjs/cqrs';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
-import { CommonModule } from '@graphqlcqrs/common';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { RolesModule } from './roles/roles.module';
 import { NestCasbinModule } from 'nestjs-casbin-mongodb';
 import { resolve } from 'path';
+import { CoreModule } from '@graphqlcqrs/core';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
 
 @Module({
   imports: [
-    CqrsModule,
+    CoreModule,
     GraphqlDistributedModule.forRoot({
       autoSchemaFile: 'graphs/auth.gql',
       playground: {
@@ -34,7 +32,6 @@ require('dotenv').config();
       },
       context: ({ req, res }) => buildContext({ req, res }),
     }),
-    CommonModule,
     NestCasbinModule.forRootAsync(
       AppConfig.casbin.dbUri,
       resolve('models/roles.conf'),
@@ -44,18 +41,6 @@ require('dotenv').config();
     MongoModule.forRoot({
       uri: `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
       dbName: AppConfig.services?.auth?.mongodb?.name,
-    }),
-    NestjsEventStoreModule.forRoot({
-      tcpEndpoint: {
-        host: process.env.ES_TCP_HOSTNAME || AppConfig.eventstore?.hostname,
-        port: parseInt(process.env.ES_TCP_PORT, 10) || AppConfig.eventstore?.tcpPort,
-      },
-      options: {
-        defaultUserCredentials: {
-          password: AppConfig.eventstore?.tcpPassword,
-          username: AppConfig.eventstore?.tcpUsername,
-        },
-      },
     }),
     AuthModule,
     RolesModule,

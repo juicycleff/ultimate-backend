@@ -5,7 +5,7 @@ import { Role, RoleMutationArgs } from '../types';
 
 @Resolver(() => Role)
 export class RolesResolver {
-  constructor(private readonly casbin: NestCasbinService) {}
+  constructor(private readonly casbinService: NestCasbinService) {}
 
   @Query(() => [Role])
   async roles() {
@@ -19,9 +19,7 @@ export class RolesResolver {
 
   @Mutation(() => Role, { name: 'role'})
   async roleMutation(@Args() cmds: RoleMutationArgs) {
-    const actions = this.casbin.addPolicy('juicycleff', 'tenantx', 'project/001', 'read');
-    // tslint:disable-next-line:no-console
-    console.log(actions);
+   //  const actions = this.casbinService.addPolicy('juicycleff', 'tenantx', 'project/001', 'read');
     throw new NotImplementedError('Not implemented');
   }
 }

@@ -17,11 +17,16 @@ export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
     Logger.log(query, 'GetTenantsQuery'); // write here
     const { where, user } = query;
 
-    if (!user) { throw Error('Missing get current user'); }
-
     try {
+
+      if (!user) { throw new ApolloError('Missing get current user'); }
       const filter = mongoParser(where);
-      return await this.tenantRepository.find({ conditions: {...filter, ownerId: new ObjectId(user.id)} });
+      const userCond = {
+        ownerId: new ObjectId(user && user.id),
+      };
+
+      const userFilter = user ? userCond : {};
+      return await this.tenantRepository.find({ conditions: {...filter, ...userFilter} });
     } catch (e) {
       throw new ApolloError(e);
     }

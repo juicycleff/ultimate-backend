@@ -22,6 +22,7 @@ require('dotenv').config();
         { name: 'user', url: 'http://localhost:9000/graphql' },
         { name: 'project', url: 'http://localhost:9100/graphql' },
         { name: 'tenant', url: 'http://localhost:9200/graphql' },
+        { name: 'plan', url: 'http://localhost:9500/graphql' },
         // more services
       ],
       buildService({ url }) {

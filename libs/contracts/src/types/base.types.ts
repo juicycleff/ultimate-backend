@@ -1,6 +1,6 @@
 /* tslint:disable:max-classes-per-file */
 import { ObjectType, GraphQLISODateTime, Field, ID } from 'type-graphql';
-import { Filterable } from '@graphqlcqrs/core';
+import { Filterable } from '@graphqlcqrs/core/decorators/filterable';
 
 @ObjectType({ isAbstract: true })
 export abstract class Node {
@@ -15,13 +15,4 @@ export abstract class Node {
   @Filterable()
   @Field(() => GraphQLISODateTime)
   updatedAt: Date;
-}
-
-@ObjectType()
-export class KeyValuePair {
-  @Field()
-  key: string;
-
-  @Field({ nullable: true })
-  value?: string;
 }

@@ -90,7 +90,7 @@ type Role {
   updatedAt: DateTime!
 }
 
-"""Role acgtion enum types"""
+"""Role action enum types"""
 enum RoleAction {
   Read
   ReadAll

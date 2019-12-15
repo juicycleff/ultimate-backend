@@ -1,4 +1,5 @@
 dns: localhost
+name: "Ultimate Backend"
 
 app:
   url: http://${dns}
@@ -6,6 +7,11 @@ app:
 
 mongodb:
   defaultUri: 'mongodb://localhost/'
+
+payment:
+  stripe:
+    secretKey: "sk_test_HT0RcNMg3LxROE7v099gcwIs00WUH3Ljm9"
+    publishKey: "pk_test_VXYW9SvpksV2DC2bVVZYKM2w"
 
 eventstore:
   poolMax:
@@ -33,6 +39,8 @@ casbin:
 
 services:
   auth:
+    port: 9900
+    grpcPort: 7900
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-auth"
@@ -40,6 +48,7 @@ services:
 
   tenant:
     port: 9200
+    grpcPort: 7200
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-tenant"
@@ -47,6 +56,7 @@ services:
 
   user:
     port: 9000
+    grpcPort: 7000
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-user"
@@ -54,6 +64,7 @@ services:
 
   project:
     port: 9100
+    grpcPort: 7100
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-project"
@@ -61,6 +72,7 @@ services:
 
   notification:
     port: 9400
+    grpcPort: 7400
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-notification"
@@ -69,8 +81,17 @@ services:
       api: "SENDGRID-API-KEY"
       senderEmail:
 
-  payment:
+  billing:
     port: 9300
+    grpcPort: 7300
+    mongodb:
+      uri: ${mongodb.defaultUri}
+      name: "service-payment"
+      options:
+
+  plan:
+    port: 9500
+    grpcPort: 7500
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-payment"

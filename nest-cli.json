@@ -7,9 +7,18 @@
     "webpack": true,
     "tsConfigPath": "apps/gateway-admin/tsconfig.app.json",
     "assets": [
-      { "include": "**/*.graphql" },
-      { "include": "config/*.yml" },
-      { "include": "**/*.conf" }
+      {
+        "include": "**/*.graphql"
+      },
+      {
+        "include": "config/*.yml"
+      },
+      {
+        "include": "**/*.conf"
+      },
+      {
+        "include": "**/*.proto"
+      }
     ]
   },
   "projects": {
@@ -94,15 +103,6 @@
         "tsConfigPath": "apps/service-tenant/tsconfig.app.json"
       }
     },
-    "service-payment": {
-      "type": "application",
-      "root": "apps/service-payment",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-payment/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-payment/tsconfig.app.json"
-      }
-    },
     "service-notification": {
       "type": "application",
       "root": "apps/service-notification",
@@ -128,6 +128,15 @@
       "sourceRoot": "libs/contracts/src",
       "compilerOptions": {
         "tsConfigPath": "libs/contracts/tsconfig.lib.json"
+      }
+    },
+    "service-payment": {
+      "type": "application",
+      "root": "apps/service-payment",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-payment/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-payment/tsconfig.app.json"
       }
     }
   }

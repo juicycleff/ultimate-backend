@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import {  UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '@graphqlcqrs/common/guards';
+import { GqlAuthGuard } from '@graphqlcqrs/core';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 import { CommandBus } from '@nestjs/cqrs';
 import { RegisterUserCommand, VerifyEmailCommand } from '@graphqlcqrs/core/cqrs';

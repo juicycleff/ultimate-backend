@@ -8,7 +8,7 @@ import { Permission, Resource } from '@graphqlcqrs/core';
 @Resolver(() => TenantMember)
 export class TenantMemberResolver {
 
-  @Permission({ name: 'tenant_member_mutations', identify: 'tenantMember:tenantMemberMutations', action: 'write' })
+  @Permission({ name: 'tenant_member_mutations', identify: 'tenantMember:tenantMemberMutations', action: 'create' })
   @Mutation(() => TenantMember, { name: 'tenantMember' })
   async tenantMemberMutations(@Args() input: TenantMemberMutationArgs): Promise<TenantMemberEmbed> {
     const { create, remove, update } = input;

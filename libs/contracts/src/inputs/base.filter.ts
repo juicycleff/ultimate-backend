@@ -18,7 +18,7 @@ export function FilterMongo<TItem>(TItemClass: ClassType<Partial<TItem>>, option
 
   @InstanceCollector(`Filter${TItemClass.name}Input`)
   @InputType(`Filter${TItemClass.name}Input`)
-  class FilterMongoClass {
+  abstract class FilterMongoClass {
     [key: string]: any;
 
     @Field(() => [FilterMongoClass], { nullable: true })
@@ -47,6 +47,11 @@ export function FilterMongo<TItem>(TItemClass: ClassType<Partial<TItem>>, option
           Field(() => DateComparisonFilter, { nullable: true })(classTarget.prototype, value.name);
         } else {
           if (value.getType() === Array || value.getType() === Object) {
+            if (typeof value.fieldType !== 'string' && Object.getPrototypeOf(value.fieldType?.prototype).constructor.name === 'FilterMongoClass') {
+              // @ts-ignore
+              Field(() => value.fieldType, { nullable: true })(classTarget.prototype, value.name);
+            }
+            // recursiveBuilder(value.fieldType, classTarget);
             // const TypeClass = InstanceLoader.getInstance(this, `${value.fieldType.prototype.constructor.name}InputFilter`);
             // Field(() => TypeClass, { nullable: true })(classTarget.prototype, value.name);
             // recursiveBuilder(value.fieldType, classTarget);
@@ -66,14 +71,10 @@ export function FilterMongo<TItem>(TItemClass: ClassType<Partial<TItem>>, option
         Field(() => DateComparisonFilter, { nullable: true })(classTarget.prototype, value.name);
       } else {
         if (value.getType() === Array || value.getType() === Object) {
-          // @ts-ignore
-          const typeName = `Filter${value.fieldType?.prototype?.constructor?.name}Input`;
-          const inst = getMetadataStorage().instances
-            .reduce(previousValue => previousValue.name === typeName && previousValue);
-          // @ts-ignore
-          // const SuperClass = Object.getPrototypeOf(Object.getPrototypeOf(value.fieldType.prototype)).constructor;
-         // const TypeClass = InstanceLoader.getInstance(this, `${value.fieldType.prototype.constructor.name}InputFilter`);
-          // Field(() => TypeClass, { nullable: true })(classTarget.prototype, value.name);
+          if (typeof value.fieldType !== 'string' && Object.getPrototypeOf(value.fieldType?.prototype).constructor.name === 'FilterMongoClass') {
+            // @ts-ignore
+            Field(() => value.fieldType, { nullable: true })(classTarget.prototype, value.name);
+          }
           // recursiveBuilder(value.fieldType, classTarget);
         }
       }

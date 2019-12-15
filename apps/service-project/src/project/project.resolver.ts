@@ -1,6 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Project, CreateProjectInput } from '../types';
 import { PaginationInput } from '@ultimatebackend/contracts';
+import { UseGuards } from '@nestjs/common';
+import { TenantGuard } from '@graphqlcqrs/core';
 
 @Resolver(() => Project)
 export class ProjectResolver {

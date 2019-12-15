@@ -33,11 +33,6 @@ export function findType({ metadataKey, prototype, propertyKey, typeOptions = {}
     metadataDesignType = reflectedType as Function | undefined;
   }
 
-  if (metadataDesignType === Array) {
-    // tslint:disable-next-line:no-console
-    console.log('metadataDesignType', metadataDesignType);
-  }
-
   if (metadataDesignType) {
     return {
       getType: () => metadataDesignType!,

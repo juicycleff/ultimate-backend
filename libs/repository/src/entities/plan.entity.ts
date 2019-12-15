@@ -1,6 +1,6 @@
 import { Entity } from '@juicycleff/nest-multi-tenant';
 import {BaseEntity} from './base-entity';
-import { PriceEmbed, KeyValuePair } from './embeded';
+import { PriceEmbed, FeatureEmbed } from './embeded';
 
 @Entity({name: 'plan'})
 export class PlanEntity extends BaseEntity<any> {
@@ -9,8 +9,14 @@ export class PlanEntity extends BaseEntity<any> {
 
   normalizedName!: string;
 
-  pricing!: PriceEmbed;
+  currentPrice?: PriceEmbed;
 
-  features?: KeyValuePair[];
+  prices?: PriceEmbed[];
+
+  features?: FeatureEmbed[];
+
+  active: boolean = false;
+
+  free: boolean = false;
 
 }

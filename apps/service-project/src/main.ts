@@ -4,6 +4,7 @@ import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { AppUtils } from '@graphqlcqrs/common/utils';
 import { authSetup, setupSwagger } from '@graphqlcqrs/common/setup';
 import { SwaggerModule } from '@nestjs/swagger';
+import { TenantGuard } from '@graphqlcqrs/core';
 
 // tslint:disable-next-line:no-var-requires
 const config = require('config-yml').load(process.env.NODE_ENV);

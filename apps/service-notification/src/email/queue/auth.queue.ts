@@ -7,9 +7,8 @@ import {
 } from 'nest-bull';
 import { Job } from 'bull';
 import { Logger } from '@nestjs/common';
+import { UserEntity } from '@graphqlcqrs/repository';
 import { EmailService } from '../email.service';
-import { UserEntity } from '@graphqlcqrs/repository/entities';
-// import { ConfigService } from '@graphqlcqrs/common/services/config.service';
 
 @Processor({ name: 'auth_queue' })
 export class AuthQueue {
