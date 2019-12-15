@@ -35,7 +35,7 @@ async function bootstrapNest() {
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
-    parseInt(config.gateway?.admin?.port, 10) ||
+    parseInt(config.gateway?.admin?.port,10) ||
     4000,
   );
 }

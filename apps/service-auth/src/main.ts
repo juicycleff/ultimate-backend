@@ -25,10 +25,10 @@ async function bootstrap() {
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
-    parseInt(config.services?.auth?.port, 10) ||
+    parseInt(config.services?.auth?.port,10) ||
     9900,
   );
 
-  await setupGrpc(app, 'role', 'role.proto', config.services?.auth?.grpcPort || 7900);
+  await setupGrpc(app, 'role', 'role.proto',config.services?.auth?.grpcPort || 7900);
 }
 bootstrap();
