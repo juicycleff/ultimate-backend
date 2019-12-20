@@ -7,3 +7,4 @@ export * from './services';
 export * from './heath-indicators';
 export * from './grpc';
 export * from './casbin-role';
+export * from './constants';

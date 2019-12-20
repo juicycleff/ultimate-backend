@@ -1,10 +1,10 @@
 import {Logger} from '@nestjs/common';
 import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
-import { UserUpdatedEvent } from '../../impl/user';
+import { StripeUserUpdatedEvent } from '../../impl';
 
-@EventsHandler(UserUpdatedEvent)
-export class StripeUserUpdatedHandler implements IEventHandler<UserUpdatedEvent> {
-  handle(event: UserUpdatedEvent): any {
-    Logger.log(event, 'UserUpdatedEvent'); // write here
+@EventsHandler(StripeUserUpdatedEvent)
+export class StripeUserUpdatedHandler implements IEventHandler<StripeUserUpdatedEvent> {
+  handle(event: StripeUserUpdatedEvent): any {
+    Logger.log(event, 'StripeUserUpdatedEvent'); // write here
   }
 }

@@ -1,5 +1,4 @@
-import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { Body, Controller, Get } from '@nestjs/common';
 import { TenantEntity } from '@graphqlcqrs/repository';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { BooleanPayload } from '@ultimatebackend/contracts';
@@ -12,8 +11,8 @@ export class TenantController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @GrpcMethod('TenantService', 'FindOneTenant')
-  async findOneTenant(data: { normalizedName: string, key: string, secret: string }, metadata: any): Promise<TenantEntity> {
+  @Get('find')
+  async findOneTenant(@Body() data: { normalizedName: string, key: string, secret: string }): Promise<TenantEntity> {
     return await this.queryBus.execute(new GetTenantQuery({
       normalizedName: {
         _EQ: data.normalizedName,
@@ -29,10 +28,23 @@ export class TenantController {
     }, null)) as TenantEntity;
   }
 
-  @GrpcMethod('TenantService', 'TenantExist')
-  tenantExist(data: any, metadata: any): BooleanPayload {
+  @Get('exist')
+  async tenantExist(@Body() data: { normalizedName: string, key: string, secret: string }): Promise<BooleanPayload> {
+    const tenant = await this.queryBus.execute(new GetTenantQuery({
+      normalizedName: {
+        _EQ: data.normalizedName,
+      },
+      tokens: {
+        key: {
+          _EQ: data.key,
+        },
+        secret: {
+          _EQ: data.secret,
+        },
+      },
+    }, null)) as TenantEntity;
     return {
-      success: true,
+      success: !!tenant,
     };
   }
 }

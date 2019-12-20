@@ -1,10 +1,10 @@
 import {Logger} from '@nestjs/common';
 import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
-import { UserUpdatedEvent } from '../../impl/user';
+import { PlanUpdatedEvent } from '../../impl';
 
-@EventsHandler(UserUpdatedEvent)
-export class PlanUpdatedHandler implements IEventHandler<UserUpdatedEvent> {
-  handle(event: UserUpdatedEvent): any {
-    Logger.log(event, 'UserUpdatedEvent'); // write here
+@EventsHandler(PlanUpdatedEvent)
+export class PlanUpdatedHandler implements IEventHandler<PlanUpdatedEvent> {
+  handle(event: PlanUpdatedEvent): any {
+    Logger.log(event, 'PlanUpdatedEvent'); // write here
   }
 }

@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, OnModuleInit } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpService, Injectable, OnModuleInit } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
 import { IPermission, IResource, IRoleService, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
@@ -27,7 +27,10 @@ export class GqlAuthGuard  implements CanActivate, OnModuleInit {
   client: ClientGrpc;
   roleService: IRoleService;
 
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly httpService: HttpService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context).getContext();
@@ -46,7 +49,14 @@ export class GqlAuthGuard  implements CanActivate, OnModuleInit {
       for (const role of user.roles) {
         const params = [role, '*', `${resource.identify}-${permission.identify}`, permission.action];
         try {
-          const result = await this.roleService.checkPermission({ params }).toPromise();
+
+          const result = (await this.httpService.get(
+            (process.env.AUTH_API || (`http://localhost:${AppConfig.services?.auth.port || '9900'}`)) + '/roles/check-permission', {
+            data: {
+              params,
+            },
+          }).toPromise()).data;
+
           if (result && result.success) {
             roleVals.push(result.success);
           }

@@ -26,9 +26,9 @@ export class TenantRepository extends BaseRepository<TenantEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,
-    @Inject(CACHE_MANAGER) private readonly cacheStore: CacheStore,
+    @Inject(CACHE_MANAGER) private readonly cache: CacheStore,
   ) {
-    super({ client: dbc, db }, cacheStore, null);
+    super({ client: dbc, db }, cache, null);
   }
 
   @Before('CREATE')

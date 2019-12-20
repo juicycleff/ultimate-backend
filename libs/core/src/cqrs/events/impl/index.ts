@@ -5,3 +5,5 @@ export * from './plan';
 export * from './billing';
 export * from './card';
 export * from './tenant-member';
+export * from './subscription';
+export * from './project';

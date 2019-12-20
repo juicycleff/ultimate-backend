@@ -24,10 +24,10 @@ async function bootstrap() {
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
-    parseInt(config.services?.plan?.port,10) ||
+    parseInt(config.services?.payment?.port, 10) ||
     9500,
   );
 
-  await setupGrpc(app, 'plan', 'plan.proto', config.services?.plan?.grpcPort || 7500);
+  await setupGrpc(app, 'payment', 'payment.proto', config.services?.payment?.grpcPort || 7500);
 }
 bootstrap();

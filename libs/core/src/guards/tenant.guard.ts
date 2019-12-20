@@ -1,24 +1,14 @@
-import { CanActivate, ExecutionContext, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpService, Injectable, Logger } from '@nestjs/common';
 import { AuthenticationError } from 'apollo-server-express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
-import { join } from 'path';
-import { ITenantService } from '@graphqlcqrs/core';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { TenantInfo } from '@juicycleff/nest-multi-tenant';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 @Injectable()
-export class TenantGuard implements CanActivate, OnModuleInit {
-  @Client({
-    transport: Transport.GRPC,
-    options: {
-      package: 'tenant',
-      url: `localhost:${AppConfig.services?.tenant?.grpcPort || 7200}`,
-      protoPath: join('proto/tenant.proto'),
-    },
-  })
-  client: ClientGrpc;
-  tenantService: ITenantService;
+export class TenantGuard implements CanActivate {
+  constructor(
+    private readonly httpService: HttpService,
+  ) {}
 
   async canActivate(
     context: ExecutionContext,
@@ -32,11 +22,14 @@ export class TenantGuard implements CanActivate, OnModuleInit {
     if (!tenantInfo) { throw new AuthenticationError('Missing tenant credentials'); }
 
     try {
-      const tenant = await this.tenantService.findOneTenant({
-        normalizedName: tenantInfo.tenant,
-        secret: tenantInfo.accessToken.secret,
-        key: tenantInfo.accessToken.key,
-      }).subscribe();
+      const tenant = (await this.httpService.get(
+        (process.env.TENANT_API || (`http://localhost:${AppConfig.services?.tenant.port || '9200'}`)) + '/tenant/find', {
+        data: {
+          normalizedName: tenantInfo.tenant,
+          secret: tenantInfo.accessToken.secret,
+          key: tenantInfo.accessToken.key,
+        },
+      }).toPromise()).data;
 
       if (!tenant) { return false; }
       ctx.req.tenant = tenant;
@@ -46,9 +39,5 @@ export class TenantGuard implements CanActivate, OnModuleInit {
       Logger.error(e, this.constructor.name);
       throw new AuthenticationError('Invalid tenant credentials');
     }
-  }
-
-  onModuleInit(): any {
-    this.tenantService = this.client.getService<ITenantService>('TenantService');
   }
 }

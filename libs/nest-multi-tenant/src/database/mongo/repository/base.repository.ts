@@ -3,11 +3,14 @@ import { CacheStore } from '@nestjs/common';
 import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
 import { TenantData } from '@juicycleff/nest-multi-tenant/interfaces';
+import { cleanEmptyProperties } from '@graphqlcqrs/common';
 
 // that class only can be extended
 export class BaseRepository <DOC, DTO = DOC> {
   collection: Promise<Collection<DOC>>;
   readonly options: CollectionProps;
+  readonly tenant: TenantData;
+  readonly cacheStore: CacheStore;
 
   // get options(): CollectionProps {
   //   return Reflect.getMetadata(COLLECTION_KEY, this);
@@ -26,6 +29,16 @@ export class BaseRepository <DOC, DTO = DOC> {
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');
     }
+
+    // Assign tenant DI
+    if (tenantData) {
+      this.tenant = tenantData;
+    }
+
+    // Assign cache DI
+    if (cacheStore) {
+      this.cacheStore = cacheStore;
+    }
     this.collection = this.getCollection();
   }
 
@@ -36,10 +49,20 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseRepository
    */
-  findById(id: string): Promise<DOC> {
-    const cacheKey = `${this.options.name}/${id}`;
-    // if()
-    return this.findOne({ _id: new ObjectID(id) });
+  async findById(id: string): Promise<DOC> {
+    const condition = { _id: new ObjectID(id), tenantId: this.tenant?.tenantId };
+    const cleanConditions = cleanEmptyProperties(condition);
+
+    const cacheKey = JSON.stringify(cleanConditions);
+    const cachedResult = await this.retrieveFromCache(cacheKey);
+    if (cachedResult) {
+      return cachedResult as DOC;
+    }
+
+    const result = await this.findOne(cleanConditions);
+    await this.saveToCache(cacheKey, result);
+
+    return result;
   }
 
   /**
@@ -52,6 +75,13 @@ export class BaseRepository <DOC, DTO = DOC> {
   async findManyById(ids: string[]): Promise<DOC[]> {
     const collection = await this.collection;
     const query = { _id: { $in: ids.map(id => new ObjectID(id)) } };
+
+    const cacheKey = JSON.stringify(query);
+    const cachedResult = await this.retrieveFromCache(cacheKey);
+    if (cachedResult) {
+      return cachedResult as DOC[];
+    }
+
     const found = await collection.find(query as object).toArray();
 
     const results: DOC[] = [];
@@ -59,6 +89,7 @@ export class BaseRepository <DOC, DTO = DOC> {
       results.push(await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], this.toggleId(result, false)));
     }
 
+    await this.saveToCache(cacheKey, results);
     return results;
   }
 
@@ -72,11 +103,20 @@ export class BaseRepository <DOC, DTO = DOC> {
   async findOne(conditions: object): Promise<DOC> {
     const collection = await this.collection;
 
-    const prunedConditions = this.toggleId(conditions, true) as any;
+    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const prunedConditions = this.toggleId(cleanConditions, true) as any;
+
+    const cacheKey = JSON.stringify(prunedConditions);
+    const cachedResult = await this.retrieveFromCache(cacheKey);
+    if (cachedResult) {
+      return cachedResult as DOC;
+    }
+
     let document = await collection.findOne(prunedConditions);
     if (document) {
       document = this.toggleId(document, false) as any;
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
+      await this.saveToCache(cacheKey, document);
       return document;
     }
   }
@@ -91,7 +131,16 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   async aggregate(pipeline?: object[], options?: CollectionAggregationOptions): Promise<any> {
     const collection = await this.collection;
-    return await collection.aggregate(pipeline, options);
+
+    const cacheKey = JSON.stringify(pipeline);
+    const cachedResult = await this.retrieveFromCache(cacheKey);
+    if (cachedResult) {
+      return cachedResult as any;
+    }
+
+    const result = await collection.aggregate(pipeline, options);
+    await this.saveToCache(cacheKey, result);
+    return result;
   }
 
   /**
@@ -104,7 +153,15 @@ export class BaseRepository <DOC, DTO = DOC> {
   async find(req: FindRequest = { conditions: {} }): Promise<DOC[]> {
     const collection = await this.collection;
 
-    const conditions = this.toggleId(req.conditions as any, true) as any;
+    const cleanConditions = cleanEmptyProperties({ ...req.conditions, tenantId: this.tenant?.tenantId });
+    const conditions = this.toggleId(cleanConditions as any, true) as any;
+
+    const cacheKey = JSON.stringify(conditions) + JSON.stringify(req);
+    const cachedResult = await this.retrieveFromCache(cacheKey);
+    if (cachedResult) {
+      return cachedResult as DOC[];
+    }
+
     let cursor = collection.find(conditions);
 
     if (req.projection) {
@@ -132,6 +189,9 @@ export class BaseRepository <DOC, DTO = DOC> {
       results.push(document);
     }
 
+    // Save to cache
+    await this.saveToCache(cacheKey, results);
+
     return results;
   }
 
@@ -145,8 +205,10 @@ export class BaseRepository <DOC, DTO = DOC> {
   async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
     const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
+    const result = eventResult as DOC;
 
-    const res = await collection.insertOne(eventResult as DOC);
+    const cleanDoc = cleanEmptyProperties({ ...result, tenantId: this.tenant?.tenantId });
+    const res = await collection.insertOne(cleanDoc as DOC);
 
     let newDocument = res.ops[0];
     // @ts-ignore
@@ -222,8 +284,9 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   async findOneByIdAndUpdate(id: string | ObjectID, req: UpdateByIdRequest): Promise<DOC> {
     const entId = typeof id === 'string' ? new ObjectID(id) : id;
+    const conditions = cleanEmptyProperties({ _id: entId, tenantId: this.tenant?.tenantId });
     return this.findOneAndUpdate({
-      conditions: { _id: entId },
+      conditions,
       updates: req.updates,
       upsert: req.upsert,
     });
@@ -240,7 +303,8 @@ export class BaseRepository <DOC, DTO = DOC> {
     const collection = await this.collection;
     const updates = await this.invokeEvents(PRE_KEY, ['UPDATE', 'UPDATE_ONE'], req.updates);
 
-    const res = await collection.findOneAndUpdate(req.conditions, updates, {
+    const conditions = cleanEmptyProperties({ ...req.conditions, tenantId: this.tenant?.tenantId });
+    const res = await collection.findOneAndUpdate(conditions, updates, {
       upsert: req.upsert,
       returnOriginal: false,
     });
@@ -259,7 +323,9 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @memberof BaseRepository
    */
   async deleteOneById(id: string): Promise<DeleteWriteOpResultObject> {
-    return this.deleteOne({ _id: new ObjectID(id) });
+    const entId = typeof id === 'string' ? new ObjectID(id) : id;
+    const conditions = cleanEmptyProperties({ _id: entId, tenantId: this.tenant?.tenantId });
+    return this.deleteOne(conditions);
   }
 
   /**
@@ -271,9 +337,10 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   async deleteOne(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
+    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
 
     await this.invokeEvents(PRE_KEY, ['DELETE', 'DELETE_ONE'], conditions);
-    const deleteResult = await collection.deleteOne(conditions);
+    const deleteResult = await collection.deleteOne(cleanConditions);
     await this.invokeEvents(POST_KEY, ['DELETE', 'DELETE_ONE'], deleteResult);
 
     return deleteResult;
@@ -288,9 +355,10 @@ export class BaseRepository <DOC, DTO = DOC> {
    */
   async deleteMany(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
+    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
 
-    await this.invokeEvents(PRE_KEY, ['DELETE_ONE', 'DELETE_MANY'], conditions);
-    const deleteResult = await collection.deleteMany(conditions);
+    await this.invokeEvents(PRE_KEY, ['DELETE_ONE', 'DELETE_MANY'], cleanConditions);
+    const deleteResult = await collection.deleteMany(cleanConditions);
     await this.invokeEvents(POST_KEY, ['DELETE_ONE', 'DELETE_MANY'], deleteResult);
 
     return deleteResult;
@@ -304,8 +372,9 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @memberof BaseRepository
    */
   public async exist(conditions: any): Promise<boolean> {
+    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
     const collection = await this.collection;
-    return await collection.find(conditions).count() > 0;
+    return await collection.find(cleanConditions).count() > 0;
   }
 
   /**
@@ -467,5 +536,23 @@ export class BaseRepository <DOC, DTO = DOC> {
         updatedAt: new Date().toISOString(),
       },
     };
+  }
+
+  private async saveToCache(key: string, data: DOC | any): Promise<DOC|void> {
+    if (this.cacheStore) {
+      const cacheKey = `${this.options.name}/${key}`;
+      await this.cacheStore.set<DOC>(cacheKey, data);
+    }
+  }
+
+  private async retrieveFromCache(key: string): Promise<DOC | void | DOC[]> {
+    if (this.cacheStore) {
+      const cacheKey = `${this.options.name}/${key}`;
+      const cacheData = await this.cacheStore.get<DOC>(cacheKey);
+
+      if (cacheData !== undefined && typeof cacheData !== 'undefined') {
+        return cacheData;
+      }
+    }
   }
 }

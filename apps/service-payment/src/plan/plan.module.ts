@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { TenantCreatedEvent } from '@graphqlcqrs/core';
 import { PlanResolver } from './plan.resolver';
-import { PlanController } from './plan.controller';
+import { PlanService } from './plan.service';
 import { PlanSeed } from './plan.seed';
 import { PlanQueryHandlers } from '../cqrs';
 
@@ -26,6 +26,6 @@ import { PlanQueryHandlers } from '../cqrs';
     ...PlanQueryHandlers,
     PlanSeed,
   ],
-  controllers: [PlanController],
+  controllers: [PlanService],
 })
 export class PlanModule {}

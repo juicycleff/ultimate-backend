@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NestMultiTenantService } from './nest-multi-tenant.service';
+import { MultiTenantService } from './nest-multi-tenant.service';
 
 describe('NestMultiTenantService', () => {
-  let service: NestMultiTenantService;
+  let service: MultiTenantService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [NestMultiTenantService],
+      providers: [MultiTenantService],
     }).compile();
 
-    service = await module.resolve<NestMultiTenantService>(NestMultiTenantService);
+    service = await module.resolve<MultiTenantService>(MultiTenantService);
   });
 
   it('should be defined', () => {

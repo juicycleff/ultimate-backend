@@ -3,7 +3,7 @@ import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
 
 export const RESOURCE_DEFINITION = '__resource_definition__';
 
-export function Resource(options: { name: string, identify: string }) {
+export function Resource(options: { name: string, identify: string, superUser?: boolean }) {
   return (target, key?: any, descriptor?: any) => {
 
     getMetadataStorage().collectResourcesMetadata({

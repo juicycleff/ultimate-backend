@@ -1,6 +1,6 @@
 import {Logger} from '@nestjs/common';
 import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
-import { UserDeletedEvent } from '../../impl/user';
+import { UserDeletedEvent } from '../../impl';
 
 @EventsHandler(UserDeletedEvent)
 export class UserDeletedHandler implements IEventHandler<UserDeletedEvent> {

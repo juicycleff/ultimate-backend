@@ -18,14 +18,37 @@ input CreateProjectInput {
   name: String!
 }
 
+input DateComparisonFilter {
+  _EQ: DateTime
+  _GT: DateTime
+  _GTE: DateTime
+  _LT: DateTime
+  _LTE: DateTime
+  _NE: DateTime
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
 
+input DeleteProjectInput {
+  id: ID!
+}
+
+input FilterProjectInput {
+  _AND: [FilterProjectInput!]
+  _NOR: [FilterProjectInput!]
+  _OR: [FilterProjectInput!]
+  createdAt: DateComparisonFilter
+  description: StringComparisonFilter
+  id: StringComparisonFilter
+  name: StringComparisonFilter
+  updatedAt: DateComparisonFilter
+}
+
 type Mutation {
-  createProject(input: CreateProjectInput!): Project!
-  removeProject(id: String!): Project!
+  project(create: CreateProjectInput, delete: DeleteProjectInput, update: UpdateProjectInput): Project!
 }
 
 input PaginationInput {
@@ -41,7 +64,37 @@ type Project {
   updatedAt: DateTime!
 }
 
+input ProjectFilterInput {
+  _AND: [FilterProjectInput!]
+  _NOR: [FilterProjectInput!]
+  _OR: [FilterProjectInput!]
+  createdAt: DateComparisonFilter
+  description: StringComparisonFilter
+  id: StringComparisonFilter
+  name: StringComparisonFilter
+  updatedAt: DateComparisonFilter
+}
+
 type Query {
-  project(id: String!): Project!
-  projects(paginate: PaginationInput!): [Project!]!
+  project(input: ProjectFilterInput!): Project!
+  projects(paginate: PaginationInput, where: ProjectFilterInput): [Project!]!
+}
+
+input StringComparisonFilter {
+  _EQ: String
+  _GT: String
+  _GTE: String
+  _LT: String
+  _LTE: String
+  _NE: String
+}
+
+input UpdateProjectDataInput {
+  description: String
+  name: String
+}
+
+input UpdateProjectInput {
+  data: UpdateProjectDataInput!
+  id: ID!
 }

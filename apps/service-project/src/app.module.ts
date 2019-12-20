@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway';
-import { MongoModule, NestMultiTenantModule, NestMultiTenantService } from '@juicycleff/nest-multi-tenant';
+import { MongoModule, MultiTenantModule, MultiTenantService } from '@juicycleff/nest-multi-tenant';
+import { CoreModule } from '@graphqlcqrs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProjectModule } from './project/project.module';
-import { APP_GUARD } from '@nestjs/core';
-import { CoreModule, TenantGuard } from '@graphqlcqrs/core';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -25,18 +24,18 @@ require('dotenv').config();
       context: ({ req, res }) => buildContext({ req, res }),
     }),
     CoreModule,
+    /**
+     * NOTICE: Scoped Request is not yet supported by CQRS hence commands and query will fail. Working to fix it in NestJS
+     * Using forRootAsync will disable CQRS.
+     */
     MongoModule.forRootAsync({
-      imports: [NestMultiTenantModule],
-      useExisting: NestMultiTenantService,
+      imports: [MultiTenantModule],
+      useClass: MultiTenantService,
     }),
     ProjectModule,
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: TenantGuard,
-    },
     AppService,
   ],
 })

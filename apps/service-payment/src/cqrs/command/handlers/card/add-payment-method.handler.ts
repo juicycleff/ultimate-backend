@@ -9,6 +9,7 @@ import { Card } from '@ultimatebackend/contracts';
 import { convertFromToCard } from '../../../../converter.util';
 import { CardEntity } from '@graphqlcqrs/repository';
 import { PaymentMethodAddedEvent } from '@graphqlcqrs/core';
+import { BadRequestError } from '@graphqlcqrs/common';
 
 @CommandHandler(AddPaymentMethodCommand)
 export class AddPaymentMethodHandler implements ICommandHandler<AddPaymentMethodCommand> {
@@ -28,6 +29,11 @@ export class AddPaymentMethodHandler implements ICommandHandler<AddPaymentMethod
         throw new UserInputError('Card input missing'); // Throw an apollo input error
       }
 
+      if (user.payment === null ||
+        user.payment.stripeId === undefined ||
+        user.payment.stripeId === null) {
+        throw new BadRequestError('Current user not correcly signedup');
+      }
       const customerId = user.payment.stripeId;
 
       const customer = await this.stripeClient.customers.retrieve(customerId);

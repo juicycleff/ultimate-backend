@@ -1,16 +1,31 @@
-import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { TenantEntity, UserEntity } from '@graphqlcqrs/repository/entities';
-import { CreateTenantCommand, RemoveTenantCommand } from '../cqrs/command/impl';
 import { CurrentUser } from '@graphqlcqrs/common';
 import { UserInputError } from 'apollo-server-express';
-import { Permission, Resource } from '@graphqlcqrs/core';
+import { ISubscriptionService, Permission, Resource } from '@graphqlcqrs/core';
 import { GetTenantQuery, GetTenantsQuery } from '../cqrs/query/impl/tenant';
-import { Tenant, TenantMutationArgs, TenantFilterArgs } from '../types';
+import { Tenant, TenantFilterArgs, TenantMutationArgs } from '../types';
+import { OnModuleInit } from '@nestjs/common';
+import { Client, ClientGrpcProxy, Transport } from '@nestjs/microservices';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { join } from 'path';
+import { CreateTenantCommand, RemoveTenantCommand } from '../cqrs/command/impl';
 
 @Resource({ name: 'tenant_manage', identify: 'tenant:manage' })
 @Resolver(() => Tenant)
-export class TenantResolver {
+export class TenantResolver implements OnModuleInit {
+  @Client({
+    transport: Transport.GRPC,
+    options: {
+      package: 'payment',
+      url: `localhost:${AppConfig.services?.payment?.grpcPort || 7500}`,
+      protoPath: join('proto/payment.proto'),
+    },
+  })
+  client: ClientGrpcProxy;
+  private subscriptionService: ISubscriptionService;
+
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -25,7 +40,16 @@ export class TenantResolver {
     }
 
     if (create) {
-      return  await this.commandBus.execute(new CreateTenantCommand(user, create)) as TenantEntity;
+      const tenant = await this.commandBus.execute(new CreateTenantCommand(user, create)) as TenantEntity;
+      await this.subscriptionService.create({
+        tenantId: typeof tenant.id === 'string' ? tenant.id : tenant.id.toHexString(),
+        userId: typeof user.id === 'string' ? user.id : user.id.toHexString(),
+        customerId: user.payment?.stripeId,
+        planId: create.planId,
+        couponId: create.couponId,
+      }).toPromise();
+
+      return tenant;
     } else if (update) {
       return await this.commandBus.execute(new RemoveTenantCommand(user, remove));
     } else if (updateAccessToken) {
@@ -39,7 +63,7 @@ export class TenantResolver {
     }
   }
 
-  @Permission({ name: 'generate_access_token', identify: 'tenant:generateAccessToken', action: 'write' })
+  @Permission({ name: 'generate_access_token', identify: 'tenant:generateAccessToken', action: 'update' })
   @Mutation(() => Tenant)
   async generateAccessToken(@Args('id') id: string): Promise<TenantEntity> {
     return null;
@@ -48,12 +72,16 @@ export class TenantResolver {
   @Permission({ name: 'tenant', identify: 'tenant:tenant', action: 'read' })
   @Query(() => Tenant)
   async tenant(@Args() {where}: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
-    return await this.queryBus.execute(new GetTenantQuery(where, user));
+    return await this.queryBus.execute(new GetTenantQuery(where, user)) as TenantEntity;
   }
 
   @Permission({ name: 'tenants', identify: 'tenant:tenants', action: 'read' })
   @Query(() => [Tenant!])
   async tenants(@Args() {where}: TenantFilterArgs, @CurrentUser() user: UserEntity): Promise<TenantEntity[]> {
     return await this.queryBus.execute(new GetTenantsQuery(where, user)) as TenantEntity[];
+  }
+
+  onModuleInit(): any {
+    this.subscriptionService = this.client.getService<ISubscriptionService>('SubscriptionService');
   }
 }
