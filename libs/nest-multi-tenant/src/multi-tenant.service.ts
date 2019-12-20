@@ -13,7 +13,6 @@ export class MultiTenantService {
   ) {}
 
   async createMongoOptions(): Promise<MongoModuleOptions> {
-    console.log('****************');
     let req = null;
 
     if (this.context) {
@@ -22,13 +21,8 @@ export class MultiTenantService {
       req = this.request;
     }
 
-    console.log('****************');
-
     const dbUri = process.env.DATABASE_URI || AppConfig.services?.project?.mongodb?.uri;
     const dbUriWithName = (process.env.DATABASE_URI || AppConfig.services?.project?.mongodb?.uri) + AppConfig.services?.project?.mongodb?.name;
-
-    console.log('********dbUri********', dbUri);
-    console.log('********dbUriWithName********', dbUriWithName);
 
     if (req === null || req === undefined) {
       return {

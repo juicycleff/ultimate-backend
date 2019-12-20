@@ -10,8 +10,8 @@ mongodb:
 
 payment:
   stripe:
-    secretKey: "sk_test_HT0RcNMg3LxROE7v099gcwIs00WUH3Ljm9"
-    publishKey: "pk_test_VXYW9SvpksV2DC2bVVZYKM2w"
+    secretKey: "sk_test_**************************"
+    publishKey: "pk_test_****************************"
 
 eventstore:
   poolMax:
@@ -86,17 +86,16 @@ services:
     grpcPort: 7300
     mongodb:
       uri: ${mongodb.defaultUri}
-      name: "service-payment"
+      name: "service-billing"
       options:
 
-  plan:
+  payment:
     port: 9500
     grpcPort: 7500
     mongodb:
       uri: ${mongodb.defaultUri}
       name: "service-payment"
       options:
-
 
 gateway:
   admin:
