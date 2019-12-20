@@ -3,15 +3,17 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { CONTEXT } from '@nestjs/graphql';
 import { TenantInfo, TenantDatabaseStrategy, MongoModuleOptions } from './';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 @Injectable({ scope: Scope.REQUEST })
-export class NestMultiTenantService {
+export class MultiTenantService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @Inject(CONTEXT) private readonly context,
   ) {}
 
   async createMongoOptions(): Promise<MongoModuleOptions> {
+    console.log('****************');
     let req = null;
 
     if (this.context) {
@@ -20,10 +22,18 @@ export class NestMultiTenantService {
       req = this.request;
     }
 
+    console.log('****************');
+
+    const dbUri = process.env.DATABASE_URI || AppConfig.services?.project?.mongodb?.uri;
+    const dbUriWithName = (process.env.DATABASE_URI || AppConfig.services?.project?.mongodb?.uri) + AppConfig.services?.project?.mongodb?.name;
+
+    console.log('********dbUri********', dbUri);
+    console.log('********dbUriWithName********', dbUriWithName);
+
     if (req === null || req === undefined) {
       return {
-        uri: process.env.DATABASE_URI || 'mongodb://localhost/demo',
-        dbName: process.env.DATABASE_NAME || 'test',
+        uri: process.env.DATABASE_URI || dbUriWithName,
+        dbName: AppConfig.services?.project?.mongodb?.name,
         clientOptions: {
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -35,15 +45,14 @@ export class NestMultiTenantService {
     if (tenantFromHeader) {
       tenantFromHeader = JSON.parse(req.headers['x-tenant-info']);
     }
-
     // @ts-ignore
     const tenantInfo = tenantFromHeader as TenantInfo;
-    let uri = process.env.DATABASE_URI || 'mongodb://localhost/demo';
+    let uri = dbUri;
 
     if (tenantInfo === null || tenantInfo === undefined || !tenantInfo.config.enabled) {
       return {
-        uri: process.env.DATABASE_URI || 'mongodb://localhost/demo',
-        dbName: process.env.DATABASE_NAME || 'test',
+        uri: dbUriWithName,
+        dbName: process.env.DATABASE_NAME || AppConfig.services?.project?.mongodb?.name,
         clientOptions: {
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -56,25 +65,25 @@ export class NestMultiTenantService {
 
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DatabaseIsolation) {
       if (tenantInfo.connectionString) {
-        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/demo';
+        uri = tenantInfo.connectionString || appConString || dbUriWithName;
       } else {
-        uri = appConString || 'mongodb://localhost/' + tenantInfo.tenant;
+        uri = appConString || (dbUri + tenantInfo.tenant);
       }
     }
 
     let tenantName;
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.Both) {
       if (tenantInfo.connectionString) {
-        uri = tenantInfo.connectionString || appConString || 'mongodb://localhost/demo';
+        uri = tenantInfo.connectionString || appConString || dbUriWithName;
       } else {
-        uri = process.env.DATABASE_URI || 'mongodb://localhost/demo';
+        uri = process.env.DATABASE_URI || dbUriWithName;
         tenantName = tenantInfo.tenant;
       }
     }
 
     return {
       uri,
-      dbName: tenantInfo.tenant || 'ultimate-backend',
+      dbName: tenantInfo.tenant || AppConfig.services?.project?.mongodb?.name,
       clientOptions: {
         useNewUrlParser: true,
         useUnifiedTopology: true,

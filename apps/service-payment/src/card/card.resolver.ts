@@ -5,7 +5,10 @@ import { CurrentUser, NotImplementedError } from '@graphqlcqrs/common';
 import { AddPaymentMethodCommand, GetCardQuery, GetCardsQuery, RemovePaymentMethodCommand, UpdatePaymentMethodCommand } from '../cqrs';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CardMutationInput } from '../types';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '@graphqlcqrs/core';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Card)
 export class CardResolver {
   constructor(
@@ -40,6 +43,6 @@ export class CardResolver {
 
   @ResolveProperty('number')
   number(@Parent() card: Card): string {
-    return `************${card.lastFourDigit}`;
+    return `**** **** **** ${card.lastFourDigit}`;
   }
 }

@@ -138,6 +138,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/service-payment/tsconfig.app.json"
       }
+    },
+    "service-billing": {
+      "type": "application",
+      "root": "apps/service-billing",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-billing/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-billing/tsconfig.app.json"
+      }
     }
   }
 }

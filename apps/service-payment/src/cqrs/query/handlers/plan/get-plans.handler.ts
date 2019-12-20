@@ -9,13 +9,15 @@ import { convertToPlan } from '../../../../converter.util';
 
 @QueryHandler(GetPlansQuery)
 export class GetPlansHandler implements IQueryHandler<GetPlansQuery> {
+  logger = new Logger(this.constructor.name);
+
   public constructor(
     @InjectStripe() private readonly stripeClient: Stripe,
     @Inject(CACHE_MANAGER) private readonly cacheStore: CacheStore,
   ) {}
 
   async execute(query: GetPlansQuery): Promise<Plan[]> {
-    Logger.log(query, 'GetPlansQuery'); // write here
+    this.logger.log(`Async ${query.constructor.name}...`);
     const { where } = query;
 
     try {
@@ -23,7 +25,7 @@ export class GetPlansHandler implements IQueryHandler<GetPlansQuery> {
       if (!where) { throw new ApolloError('Missing get where input'); }
 
       // Check cache to see if data exist
-      const cacheData = await this.cacheStore.get<Plan[]>('service-payment/' + JSON.stringify(where));
+      const cacheData = await this.cacheStore.get<Plan[]>('service-payment/plans/' + JSON.stringify(where));
       if (cacheData !== undefined && typeof cacheData !== 'undefined') {
         return cacheData;
       }
@@ -42,7 +44,7 @@ export class GetPlansHandler implements IQueryHandler<GetPlansQuery> {
         plans.push(convertToPlan(stripePlans, product));
       }
 
-      await this.cacheStore.set('service-payment/' + JSON.stringify(where), plans, {ttl: 200});
+      await this.cacheStore.set('service-payment/plans/' + JSON.stringify(where), plans, {ttl: 200});
       return plans;
     } catch (e) {
       throw new ApolloError(e);

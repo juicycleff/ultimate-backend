@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { buildContext } from 'graphql-passport';
 import { GraphqlDistributedModule } from 'nestjs-graphql-gateway/build/main';
 import { MongoModule } from '@juicycleff/nest-multi-tenant';
-import { BaseModule, CoreModule, GqlAuthGuard } from '@graphqlcqrs/core';
+import { BaseModule, CoreModule } from '@graphqlcqrs/core';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { TenantModule } from './tenant/tenant.module';
 import { UserModule } from './user/user.module';
@@ -10,7 +10,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TenantMemberModule } from './tenant-member/tenant-member.module';
 import { Tenant, User, TenantMember } from './types';
-import { APP_GUARD } from '@nestjs/core';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -43,10 +42,6 @@ require('dotenv').config();
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: GqlAuthGuard,
-    },
   ],
 })
 export class AppModule extends BaseModule {}

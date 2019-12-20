@@ -3,8 +3,9 @@ import { Plan, PlanFilterInput, PlanMutationInput } from '../types';
 import { NotImplementedError } from '@graphqlcqrs/common';
 import { QueryBus, CommandBus } from '@nestjs/cqrs';
 import { PlanEntity } from '@graphqlcqrs/repository';
-import { Permission, Resource } from '@graphqlcqrs/core';
+import { GqlAuthGuard, Permission, Resource } from '@graphqlcqrs/core';
 import { CreatePlanCommand, DeletePlanCommand, GetPlanQuery, GetPlansQuery, UpdatePlanCommand } from '../cqrs';
+import { UseGuards } from '@nestjs/common';
 
 @Resource({ name: 'plan_manage', identify: 'plan:manage' })
 @Resolver(() => Plan)
@@ -26,6 +27,7 @@ export class PlanResolver {
     return await this.queryBus.execute(new GetPlansQuery(input));
   }
 
+  @UseGuards(GqlAuthGuard)
   @Permission({ name: 'plan_mutations', identify: 'plan:planMutations', action: 'create' })
   @Mutation(() => Plan, { name: 'plan'})
   async planMutations(@Args() input: PlanMutationInput): Promise<PlanEntity> {

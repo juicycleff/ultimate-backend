@@ -1,6 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { ArgsType, Field, InputType } from 'type-graphql';
-import { ClassType } from 'type-graphql';
+import { ArgsType, Field, InputType, ClassType } from 'type-graphql';
 import {
   BooleanComparisonFilter,
   NumberComparisonFilter,
@@ -9,6 +8,7 @@ import {
 } from '@ultimatebackend/contracts/types';
 import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
 import { InstanceCollector } from '@graphqlcqrs/core/decorators/instance-collector.decorator';
+import { PaginationInput } from '@ultimatebackend/contracts';
 
 interface FilterMongoOption {
   simple?: boolean;
@@ -91,6 +91,9 @@ export function FilterMongo<TItem>(TItemClass: ClassType<Partial<TItem>>, option
   abstract class WhereFilter {
     @Field(() => FilterMongoClass, { nullable: true })
     where?: FilterMongoClass;
+
+    @Field(() => PaginationInput, { nullable: true })
+    paginate?: PaginationInput;
   }
 
   return WhereFilter;

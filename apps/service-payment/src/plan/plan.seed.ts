@@ -33,7 +33,7 @@ export class PlanSeed implements OnModuleInit {
           metadata,
         });
 
-        if (p.currentPrice.price !== 0) {
+        if (p.currentPrice.price > 0) {
           await this.stripeClient.plans.create({
             product: product.id,
             id: `plan-monthly-${p.normalizedName}`,
@@ -65,6 +65,16 @@ export class PlanSeed implements OnModuleInit {
             amount: reduceByPercent(p.currentPrice.price * 12, 0.6),
             trial_period_days: 30,
             interval: 'year',
+            usage_type: 'licensed',
+          });
+        } else {
+          await this.stripeClient.plans.create({
+            product: product.id,
+            id: `plan-free-${p.normalizedName}`,
+            currency: p.currentPrice.currency,
+            nickname: 'Free Plan',
+            amount: p.currentPrice.price,
+            interval: 'month',
             usage_type: 'licensed',
           });
         }

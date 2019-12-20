@@ -6,8 +6,8 @@ import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
 export function Filterable(option?: FilterableOption): Function {
 
   // tslint:disable-next-line:only-arrow-functions
-  return function(prototype, propertyKey: string, descriptor) {
-// 09112312457
+  return function(prototype, propertyKey: string) {
+
     const { getType } = findType({
       metadataKey: 'design:type',
       prototype,

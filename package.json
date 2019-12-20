@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.0.2-alpha2",
+  "version": "1.0.0-beta.1",
   "description": "This is an enterprise scale advanced microservice pattern with GraphQL",
   "author": {
     "name": "Rex Isaac Raphael",

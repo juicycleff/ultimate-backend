@@ -6,6 +6,7 @@ import { InjectStripe } from 'nestjs-stripe';
 import * as Stripe from 'stripe';
 import { GetCardsQuery } from '../../impl';
 import { convertFromToCard } from '../../../../converter.util';
+import { BadRequestError } from '@graphqlcqrs/common';
 
 @QueryHandler(GetCardsQuery)
 export class GetCardsHandler implements IQueryHandler<GetCardsQuery> {
@@ -17,10 +18,17 @@ export class GetCardsHandler implements IQueryHandler<GetCardsQuery> {
   ) {}
 
   async execute(query: GetCardsQuery): Promise<Card[]> {
-    this.logger.log(`Async ${this.constructor.name}...`);
+    this.logger.log(`Async ${query.constructor.name}...`);
     const { user } = query;
 
     try {
+
+      if (user.payment === null ||
+        user.payment.stripeId === undefined ||
+        user.payment.stripeId === null) {
+        throw new BadRequestError('Current user not correcly signedup');
+      }
+
       const customerId = user.payment.stripeId;
       const cacheKey = `service-card/card-list-user${user.id}`;
       // Check cache to see if data exist

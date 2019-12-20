@@ -1,4 +1,4 @@
-import { DEFAULT_MONGO_CONTAINER_NAME } from './mongo.constants';
+import { DEFAULT_MONGO_CONTAINER_NAME, CURRENT_TENANT_CONTAINER } from './mongo.constants';
 
 /**
  * Get a token for the Map object for the given container name

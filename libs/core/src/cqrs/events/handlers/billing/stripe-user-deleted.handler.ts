@@ -1,10 +1,10 @@
 import {Logger} from '@nestjs/common';
 import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
-import { UserDeletedEvent } from '../../impl/user';
+import { StripeUserDeletedEvent } from '../../impl';
 
-@EventsHandler(UserDeletedEvent)
-export class StripeUserDeletedHandler implements IEventHandler<UserDeletedEvent> {
-  handle(event: UserDeletedEvent): any {
-    Logger.log(event, 'UserCreatedEvent'); // write here
+@EventsHandler(StripeUserDeletedEvent)
+export class StripeUserDeletedHandler implements IEventHandler<StripeUserDeletedEvent> {
+  handle(event: StripeUserDeletedEvent): any {
+    Logger.log(event, 'StripeUserDeletedEvent'); // write here
   }
 }

@@ -2,13 +2,15 @@ import { registerEnumType } from 'type-graphql';
 import { AppRole, InvitationStatus } from './tenant.enum';
 import { ServiceTypes } from './auth.enum';
 import { RoleActions } from './roles.enum';
-import { PlanPriceInterval } from './billing.enum';
+import { InvoiceStatus, PlanPriceInterval, SubscriptionStatus } from './billing.enum';
 
 export {
   AppRole,
   InvitationStatus,
+  InvoiceStatus,
   ServiceTypes,
   PlanPriceInterval,
+  SubscriptionStatus,
 };
 
 registerEnumType(AppRole, {
@@ -34,4 +36,14 @@ registerEnumType(RoleActions, {
 registerEnumType(PlanPriceInterval, {
   name: 'PlanPriceInterval',
   description: 'Pricing interval enum',
+});
+
+registerEnumType(SubscriptionStatus, {
+  name: 'SubscriptionStatus',
+  description: 'Subscription status enum',
+});
+
+registerEnumType(InvoiceStatus, {
+  name: 'InvoiceStatus',
+  description: 'Invoice status enum',
 });

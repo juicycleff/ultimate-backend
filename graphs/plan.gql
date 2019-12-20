@@ -52,6 +52,11 @@ type Card {
   number: String
 }
 
+input ChangeSubscriptionInput {
+  couponId: String
+  planId: String!
+}
+
 input CreateUpdateCardInput {
   address: AddressInput!
   currency: String
@@ -104,8 +109,49 @@ input FeatureInput {
   normalizedName: String!
 }
 
+type Invoice {
+  accountCountry: String
+  accountName: String
+  amountDue: Float
+  amountPaid: Float
+  amountRemaining: Float
+  billingReason: String
+  createdAt: DateTime!
+  currency: String
+  customerEmail: String
+  customerName: String
+  description: String
+  dueDate: DateTime
+  endingBalance: Float
+  hostedInvoiceUrl: String
+  id: ID!
+  invoicePdf: String
+  number: String
+  paid: Boolean
+  receiptNumber: String
+  startingBalance: Float
+  statementDescriptor: String
+  status: InvoiceStatus
+  subtotal: Int
+  tax: Float
+  taxPercent: Float
+  total: Float!
+  updatedAt: DateTime!
+}
+
+"""Invoice status enum"""
+enum InvoiceStatus {
+  DRAFT
+  OPEN
+  PAID
+  UNCOLLECTIBLE
+  VOID
+}
+
 type Mutation {
+  cancelSubscription: TenantSubscription!
   card(create: CreateUpdateCardInput, delete: DeleteCardInput, update: UpdateCardInput): Card!
+  changeSubscription(input: ChangeSubscriptionInput!): TenantSubscription!
   plan(create: CreateUpdatePlanInput, delete: DeletePlanInput, update: UpdatePlanInput): Plan!
 }
 
@@ -161,8 +207,33 @@ type Query {
   billing: Billing!
   card(id: String!): Card!
   cards: [Card!]!
+  invoice(id: String!): Invoice!
+  invoices: [Invoice!]!
   plan(id: String!): Plan!
   plans(where: PlanFilterInput!): [Plan!]!
+  subscription(id: String!): TenantSubscription!
+  subscriptions: [TenantSubscription!]!
+}
+
+"""Subscription status enum"""
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  PAST_DUE
+  TRIALING
+  UNPAID
+}
+
+type TenantSubscription {
+  cancelAt: DateTime!
+  canceledAt: DateTime!
+  createdAt: DateTime!
+  id: ID!
+  status: SubscriptionStatus!
+  tenantId: String!
+  updatedAt: DateTime!
 }
 
 input UpdateCardInput {

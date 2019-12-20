@@ -1,4 +1,4 @@
-import { TenantDatabaseStrategy, TenantResolverType } from '../tenant.enum';
+import { TenantDatabaseStrategy } from '../tenant.enum';
 
 export interface MultiTenancyConfig {
   enabled?: boolean;
@@ -17,7 +17,7 @@ export interface TenantInfo {
 }
 
 export interface TenantData {
-  tenantName?: string;
+  tenantId?: string;
 }
 
 export type TenantResolver =
@@ -63,3 +63,7 @@ export type TenantResolver =
     },
     requiresToken?: boolean;
   };
+
+export interface ITenantServiceConfig {
+  serviceName: string;
+}

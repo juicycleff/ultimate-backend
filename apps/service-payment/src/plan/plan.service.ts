@@ -2,8 +2,8 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { BooleanPayload } from '@ultimatebackend/contracts';
 
-@Controller('plan')
-export class PlanController {
+@Controller()
+export class PlanService {
 
   @GrpcMethod('PlanService', 'PlanExist')
   async planExist(data: { params: string[] }): Promise<BooleanPayload> {

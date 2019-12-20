@@ -23,7 +23,9 @@ enum AppRole {
 }
 
 input CreateTenantInput {
+  couponId: String
   name: String!
+  planId: String
 }
 
 input CreateTenantMemberInput {
@@ -75,11 +77,16 @@ type Mutation {
   tenantMember(create: CreateTenantMemberInput, remove: RemoveTenantMemberInput, update: UpdateTenantMemberInput): TenantMember!
 }
 
+input PaginationInput {
+  limit: Int = 10
+  skip: Int = 0
+}
+
 type Query {
-  tenant(where: FilterTenantInput): Tenant!
+  tenant(paginate: PaginationInput, where: FilterTenantInput): Tenant!
   tenantMember(id: String!): TenantMember!
-  tenantMembers(where: FilterTenantMemberInput): [TenantMember!]!
-  tenants(where: FilterTenantInput): [Tenant!]!
+  tenantMembers(paginate: PaginationInput, where: FilterTenantMemberInput): [TenantMember!]!
+  tenants(paginate: PaginationInput, where: FilterTenantInput): [Tenant!]!
 }
 
 input RemoveTenantAccessTokenInput {

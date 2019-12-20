@@ -7,6 +7,12 @@ import { Tenant } from './tenant.type';
 export class CreateTenantInput {
   @Field()
   name: string;
+
+  @Field({ nullable: true })
+  planId?: string;
+
+  @Field({ nullable: true })
+  couponId?: string;
 }
 
 @InputType()

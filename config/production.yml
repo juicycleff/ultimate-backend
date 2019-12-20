@@ -10,8 +10,8 @@ mongodb:
 
 payment:
   stripe:
-    secretKey: "sk_test_*************************"
-    publishKey: "pk_test_***********************"
+    secretKey: "sk_test_HT0RcNMg3LxROE7v099gcwIs00WUH3Ljm9"
+    publishKey: "pk_test_VXYW9SvpksV2DC2bVVZYKM2w"
 
 eventstore:
   poolMax:

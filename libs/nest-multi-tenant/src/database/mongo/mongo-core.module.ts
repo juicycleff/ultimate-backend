@@ -3,14 +3,14 @@ import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Provider } from
 import { MongoClient, MongoClientOptions } from 'mongodb';
 import * as hash from 'object-hash';
 
-import { getClientToken, getContainerToken, getDbToken } from './mongo.util';
+import { getClientToken, getContainerToken, getCurrentTenantToken, getDbToken } from './mongo.util';
 import { DEFAULT_MONGO_CLIENT_OPTIONS, DEFAULT_MONGO_CONTAINER_NAME, MONGO_CONTAINER_NAME, MONGO_MODULE_OPTIONS } from './mongo.constants';
 import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces/mongo-options.interface';
-import { NestMultiTenantModule } from '@juicycleff/nest-multi-tenant/nest-multi-tenant.module';
+import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.module';
 
 @Global()
 @Module({
-  imports: [NestMultiTenantModule],
+  imports: [MultiTenantModule],
 })
 export class MongoCoreModule implements OnModuleDestroy {
   constructor(
@@ -58,6 +58,14 @@ export class MongoCoreModule implements OnModuleDestroy {
       inject: [getClientToken(containerName)],
     };
 
+    const currentTenantProvider = {
+      provide: getCurrentTenantToken(containerName),
+      useValue: {
+        tenantId: null,
+      },
+      inject: [getClientToken(containerName)],
+    };
+
     return {
       module: MongoCoreModule,
       providers: [
@@ -65,8 +73,9 @@ export class MongoCoreModule implements OnModuleDestroy {
         connectionContainerProvider,
         clientProvider,
         dbProvider,
+        currentTenantProvider,
       ],
-      exports: [clientProvider, dbProvider],
+      exports: [clientProvider, dbProvider, currentTenantProvider],
     };
   }
 
@@ -129,7 +138,7 @@ export class MongoCoreModule implements OnModuleDestroy {
         containerNameProvider,
         connectionContainerProvider,
       ],
-      exports: [clientProvider, dbProvider],
+      exports: [...asyncProviders, clientProvider, dbProvider],
     };
   }
 
@@ -149,9 +158,31 @@ export class MongoCoreModule implements OnModuleDestroy {
     options: MongoModuleAsyncOptions,
   ): Provider[] {
     if (options.useExisting || options.useFactory) {
-      return [this.createAsyncOptionsProvider(options)];
+      return [
+        {
+          provide: getCurrentTenantToken(options.containerName),
+          useFactory: async (optionsFactory: MongoOptionsFactory) => {
+            const opts = await optionsFactory.createMongoOptions();
+            return {
+              tenantId: opts.tenantName,
+            };
+          },
+          inject: [options.useExisting],
+        },
+        this.createAsyncOptionsProvider(options),
+      ];
     } else if (options.useClass) {
       return [
+        {
+          provide: getCurrentTenantToken(options.containerName),
+          useFactory: async (optionsFactory: MongoOptionsFactory) => {
+            const opts = await optionsFactory.createMongoOptions();
+            return {
+              tenantId: opts.tenantName,
+            };
+          },
+          inject: [options.useClass],
+        },
         this.createAsyncOptionsProvider(options),
         {
           provide: options.useClass,
@@ -159,7 +190,14 @@ export class MongoCoreModule implements OnModuleDestroy {
         },
       ];
     } else {
-      return [];
+      return [
+        {
+          provide: getCurrentTenantToken(options.containerName),
+          useValue: {
+            tenantId: 'test',
+          },
+        },
+      ];
     }
   }
 

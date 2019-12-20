@@ -7,6 +7,7 @@ import { TenantCommandHandlers } from '../cqrs/command/handlers/tenant';
 import { TenantQueryHandlers } from '../cqrs/query/handlers/tenant';
 import { TenantResolver } from './tenant.resolver';
 import { TenantController } from './tenant.controller';
+import { TenantService } from './tenant.service';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { TenantController } from './tenant.controller';
     ...TenantEventHandlers,
     ...TenantQueryHandlers,
   ],
-  controllers: [TenantController],
+  controllers: [TenantController, TenantService],
 })
 export class TenantModule {}
