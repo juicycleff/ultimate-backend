@@ -4,11 +4,16 @@ services:
   services-auth:
     build:
       context: .
-      dockerfile: service-auth.Dockerfile
-    image: ultimatebackend/service-auth:latest
+      dockerfile: docker/testing/service-auth.Dockerfile
+    image: ultimatebackend/service-auth:testing
     restart: always
     ports:
       - 9900:9900
+    healthcheck:
+      test: curl --fail -s http://localhost:9900/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9900
       - ES_POOL_MAX=
@@ -36,11 +41,16 @@ services:
   services-project:
     build:
       context: .
-      dockerfile: service-project.Dockerfile
-    image: ultimatebackend/service-project:latest
+      dockerfile: docker/testing/service-project.Dockerfile
+    image: ultimatebackend/service-project:testing
     restart: always
     ports:
       - 9100:9100
+    healthcheck:
+      test: curl --fail -s http://localhost:9100/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9100
       - ES_POOL_MAX=
@@ -60,7 +70,6 @@ services:
     depends_on:
       - eventstore
       - services-auth
-      - services-project
       - services-user
     links:
       - eventstore
@@ -73,11 +82,16 @@ services:
   services-user:
     build:
       context: .
-      dockerfile: service-user.Dockerfile
-    image: ultimatebackend/service-user:latest
+      dockerfile: docker/testing/service-user.Dockerfile
+    image: ultimatebackend/service-user:testing
     restart: always
     ports:
       - 9000:9000
+    healthcheck:
+      test: curl --fail -s http://localhost:9000/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9000
       - ES_POOL_MAX=
@@ -108,11 +122,16 @@ services:
   services-notification:
     build:
       context: .
-      dockerfile: service-notification.Dockerfile
-    image: ultimatebackend/service-notification:latest
+      dockerfile: docker/testing/service-notification.Dockerfile
+    image: ultimatebackend/service-notification:testing
     restart: always
     ports:
       - 9400:9400
+    healthcheck:
+      test: curl --fail -s http://localhost:9400/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9400
       - ES_POOL_MAX=
@@ -143,11 +162,16 @@ services:
   services-tenant:
     build:
       context: .
-      dockerfile: service-tenant.Dockerfile
-    image: ultimatebackend/service-tenant:latest
+      dockerfile: docker/testing/service-tenant.Dockerfile
+    image: ultimatebackend/service-tenant:testing
     restart: always
     ports:
       - 9200:9200
+    healthcheck:
+      test: curl --fail -s http://localhost:9200/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9200
       - ES_POOL_MAX=
@@ -178,11 +202,16 @@ services:
   services-payment:
     build:
       context: .
-      dockerfile: service-payment.Dockerfile
-    image: ultimatebackend/service-payment:latest
+      dockerfile: docker/testing/service-payment.Dockerfile
+    image: ultimatebackend/service-payment:testing
     restart: always
     ports:
       - 9300:9300
+    healthcheck:
+      test: curl --fail -s http://localhost:9300/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9300
       - ES_POOL_MAX=
@@ -215,8 +244,8 @@ services:
   gateway-admin:
     build:
       context: .
-      dockerfile: gateway-admin.Dockerfile
-    image: ultimatebackend/gateway-admin:latest
+      dockerfile: docker/testing/gateway-admin.Dockerfile
+    image: ultimatebackend/gateway-admin:testing
     restart: always
     ports:
       - 4000:4000
@@ -249,8 +278,8 @@ services:
   gateway-client:
     build:
       context: .
-      dockerfile: gateway-client.Dockerfile
-    image: ultimatebackend/gateway-client:latest
+      dockerfile: docker/testing/gateway-client.Dockerfile
+    image: ultimatebackend/gateway-client:testing
     restart: always
     ports:
       - 5000:5000

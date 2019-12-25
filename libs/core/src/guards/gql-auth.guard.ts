@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, HttpService, Injectable, OnModuleInit } 
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
 import { IPermission, IResource, IRoleService, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
-import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
+import { Client, ClientGrpcProxy, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { UserEntity } from '@graphqlcqrs/repository';
 import { ForbiddenError } from '@graphqlcqrs/common';
@@ -24,7 +24,7 @@ export class GqlAuthGuard  implements CanActivate, OnModuleInit {
       protoPath: join('proto/role.proto'),
     },
   })
-  client: ClientGrpc;
+  client: ClientGrpcProxy;
   roleService: IRoleService;
 
   constructor(

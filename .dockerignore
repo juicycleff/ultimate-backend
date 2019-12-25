@@ -1,0 +1,16 @@
+# compiled output
+.git
+*Dockerfile*
+*docker-compose*
+node_modules
+
+kubernetes
+iac
+graphs
+coverage
+.circleci
+
+# comment
+*/temp*
+*/*/temp*
+temp?

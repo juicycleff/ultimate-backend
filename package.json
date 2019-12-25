@@ -25,7 +25,7 @@
     "test:e2e": "jest --config ./apps/gateway-admin/test/jest-e2e.json",
     "kompose": "kompose convert -o kubernetes/deployment.yaml",
     "docs": "npx compodoc --theme material --output docs -p tsconfig.json -s",
-    "postinstall": "snyk protect"
+    "precommit": "snyk protect"
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.1.20",

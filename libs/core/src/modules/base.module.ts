@@ -2,7 +2,7 @@
 import { Logger, OnModuleInit } from '@nestjs/common';
 import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
 import { IPermission, IResource } from '@graphqlcqrs/core';
-import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
+import { Client, ClientGrpcProxy, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { IRoleService } from '@graphqlcqrs/core/grpc/interfaces';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
@@ -16,7 +16,7 @@ export class BaseModule implements OnModuleInit {
       protoPath: join('proto/role.proto'),
     },
   })
-  client: ClientGrpc;
+  client: ClientGrpcProxy;
   roleService: IRoleService;
 
   private static scanResourcesAndPermissions() {

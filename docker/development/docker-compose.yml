@@ -1,14 +1,19 @@
-version: "3.2"
+version: "3.4"
 
 services:
   services-auth:
     build:
       context: .
-      dockerfile: service-auth.Dockerfile
-    image: ultimatebackend/service-auth:latest
+      dockerfile: docker/development/service-auth.Dockerfile
+    image: ultimatebackend/service-auth:development
     restart: always
     ports:
       - 9900:9900
+    healthcheck:
+      test: curl --fail -s http://localhost:9900/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9900
       - ES_POOL_MAX=
@@ -36,11 +41,16 @@ services:
   services-project:
     build:
       context: .
-      dockerfile: service-project.Dockerfile
-    image: ultimatebackend/service-project:latest
+      dockerfile: docker/development/service-project.Dockerfile
+    image: ultimatebackend/service-project:development
     restart: always
     ports:
       - 9100:9100
+    healthcheck:
+      test: curl --fail -s http://localhost:9100/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9100
       - ES_POOL_MAX=
@@ -56,10 +66,14 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-project
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
+      - services-user
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -68,11 +82,16 @@ services:
   services-user:
     build:
       context: .
-      dockerfile: service-user.Dockerfile
-    image: ultimatebackend/service-user:latest
+      dockerfile: docker/development/service-user.Dockerfile
+    image: ultimatebackend/service-user:development
     restart: always
     ports:
       - 9000:9000
+    healthcheck:
+      test: curl --fail -s http://localhost:9000/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9000
       - ES_POOL_MAX=
@@ -88,10 +107,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-user
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -100,11 +122,16 @@ services:
   services-notification:
     build:
       context: .
-      dockerfile: service-notification.Dockerfile
-    image: ultimatebackend/service-notification:latest
+      dockerfile: docker/development/service-notification.Dockerfile
+    image: ultimatebackend/service-notification:development
     restart: always
     ports:
       - 9400:9400
+    healthcheck:
+      test: curl --fail -s http://localhost:9400/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9400
       - ES_POOL_MAX=
@@ -120,10 +147,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-notification
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -132,11 +162,16 @@ services:
   services-tenant:
     build:
       context: .
-      dockerfile: service-tenant.Dockerfile
-    image: ultimatebackend/service-tenant:latest
+      dockerfile: docker/development/service-tenant.Dockerfile
+    image: ultimatebackend/service-tenant:development
     restart: always
     ports:
       - 9200:9200
+    healthcheck:
+      test: curl --fail -s http://localhost:9200/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9200
       - ES_POOL_MAX=
@@ -152,10 +187,13 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-tenant
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-auth
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -164,11 +202,16 @@ services:
   services-payment:
     build:
       context: .
-      dockerfile: service-payment.Dockerfile
-    image: ultimatebackend/service-payment:latest
+      dockerfile: docker/development/service-payment.Dockerfile
+    image: ultimatebackend/service-payment:development
     restart: always
     ports:
       - 9300:9300
+    healthcheck:
+      test: curl --fail -s http://localhost:9300/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     environment:
       - PORT=9300
       - ES_POOL_MAX=
@@ -184,10 +227,15 @@ services:
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-payment
+      - AUTH_SERVICE=http://services-auth:9900/graphql
     depends_on:
       - eventstore
+      - services-tenant
+      - services-auth
+      - services-user
     links:
       - eventstore
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -196,8 +244,8 @@ services:
   gateway-admin:
     build:
       context: .
-      dockerfile: gateway-admin.Dockerfile
-    image: ultimatebackend/gateway-admin:latest
+      dockerfile: docker/development/gateway-admin.Dockerfile
+    image: ultimatebackend/gateway-admin:development
     restart: always
     ports:
       - 4000:4000
@@ -207,13 +255,16 @@ services:
       - PROJECT_PATH=project
       - AUTH_ENDPOINT=http://services-auth:9900/graphql
       - AUTH_PATH=auth
-      - USER_ENDPOINT=http://services-auth:9000/graphql
+      - USER_ENDPOINT=http://services-user:9000/graphql
       - USER_PATH=user
 
     depends_on:
       - services-auth
       - services-project
       - services-user
+      - services-tenant
+      - services-notification
+      - services-payment
     links:
       - services-auth
       - services-project
@@ -227,22 +278,25 @@ services:
   gateway-client:
     build:
       context: .
-      dockerfile: gateway-client.Dockerfile
-    image: ultimatebackend/gateway-client:latest
+      dockerfile: docker/development/gateway-client.Dockerfile
+    image: ultimatebackend/gateway-client:development
     restart: always
     ports:
       - 5000:5000
     environment:
       - PORT=5000
       - PROJECT_ENDPOINT=http://services-project:9100/graphql
-      - PROJECT_PATH=project
       - AUTH_ENDPOINT=http://services-auth:9900/graphql
-      - AUTH_PATH=auth
-      - USER_ENDPOINT=http://services-auth:9000/graphql
-      - USER_PATH=user
-
+      - USER_ENDPOINT=http://services-user:9000/graphql
+      - PAYMENT_ENDPOINT=http://services-project:9300/graphql
+      - TENANT_ENDPOINT=http://services-auth:9200/graphql
     depends_on:
+      - services-auth
       - services-project
+      - services-user
+      - services-tenant
+      - services-notification
+      - services-payment
     links:
       - services-project
     labels:
