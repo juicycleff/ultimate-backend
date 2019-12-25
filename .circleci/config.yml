@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10.0
+      - image: circleci/node:10.12
 
     working_directory: ~/ultimate-backend
 

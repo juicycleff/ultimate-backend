@@ -4,7 +4,8 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -29,7 +30,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -51,7 +54,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -73,7 +78,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -94,7 +101,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -115,7 +124,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -136,7 +147,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -157,7 +170,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -178,7 +193,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -199,7 +216,8 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -245,7 +263,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -275,10 +295,10 @@ items:
           - name: PROJECT_PATH
             value: project
           - name: USER_ENDPOINT
-            value: http://services-auth:9000/graphql
+            value: http://services-user:9000/graphql
           - name: USER_PATH
             value: user
-          image: ultimatebackend/gateway-admin
+          image: ultimatebackend/gateway-admin:development
           name: gateway-admin
           ports:
           - containerPort: 4000
@@ -305,7 +325,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.expose: "true"
       kompose.service.type: loadbalancer
       kompose.version: 1.17.0 (a74acad)
@@ -326,19 +348,17 @@ items:
         - env:
           - name: AUTH_ENDPOINT
             value: http://services-auth:9900/graphql
-          - name: AUTH_PATH
-            value: auth
+          - name: PAYMENT_ENDPOINT
+            value: http://services-project:9300/graphql
           - name: PORT
             value: "5000"
           - name: PROJECT_ENDPOINT
             value: http://services-project:9100/graphql
-          - name: PROJECT_PATH
-            value: project
+          - name: TENANT_ENDPOINT
+            value: http://services-auth:9200/graphql
           - name: USER_ENDPOINT
-            value: http://services-auth:9000/graphql
-          - name: USER_PATH
-            value: user
-          image: ultimatebackend/gateway-client
+            value: http://services-user:9000/graphql
+          image: ultimatebackend/gateway-client:development
           name: gateway-client
           ports:
           - containerPort: 5000
@@ -365,7 +385,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -383,9 +405,40 @@ items:
       spec:
         containers:
         - env:
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-auth
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9900"
-          image: ultimatebackend/service-auth
+          image: ultimatebackend/service-auth:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9900/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-auth
           ports:
           - containerPort: 9900
@@ -396,7 +449,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -414,9 +469,42 @@ items:
       spec:
         containers:
         - env:
+          - name: AUTH_SERVICE
+            value: http://services-auth:9900/graphql
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-notification
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9400"
-          image: ultimatebackend/service-notification
+          image: ultimatebackend/service-notification:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9400/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-notification
           ports:
           - containerPort: 9400
@@ -427,7 +515,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -445,9 +535,42 @@ items:
       spec:
         containers:
         - env:
+          - name: AUTH_SERVICE
+            value: http://services-auth:9900/graphql
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-payment
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9300"
-          image: ultimatebackend/service-payment
+          image: ultimatebackend/service-payment:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9300/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-payment
           ports:
           - containerPort: 9300
@@ -458,7 +581,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -476,9 +601,42 @@ items:
       spec:
         containers:
         - env:
+          - name: AUTH_SERVICE
+            value: http://services-auth:9900/graphql
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-project
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9100"
-          image: ultimatebackend/service-project
+          image: ultimatebackend/service-project:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9100/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-project
           ports:
           - containerPort: 9100
@@ -489,7 +647,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -507,9 +667,42 @@ items:
       spec:
         containers:
         - env:
+          - name: AUTH_SERVICE
+            value: http://services-auth:9900/graphql
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-tenant
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9200"
-          image: ultimatebackend/service-tenant
+          image: ultimatebackend/service-tenant:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9200/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-tenant
           ports:
           - containerPort: 9200
@@ -520,7 +713,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o deployment.yaml
+      kompose.cmd: kompose -f docker/development/docker-compose.yml convert -o kubernetes/deployment.yaml
+      kompose.image-pull-policy: Always
+      kompose.image-pull-secret: regcred
       kompose.service.type: clusterip
       kompose.version: 1.17.0 (a74acad)
     creationTimestamp: null
@@ -538,9 +733,42 @@ items:
       spec:
         containers:
         - env:
+          - name: AUTH_SERVICE
+            value: http://services-auth:9900/graphql
+          - name: ES_HTTP_PORT
+            value: "2113"
+          - name: ES_HTTP_PROTOCOL
+            value: http
+          - name: ES_POOL_MAX
+          - name: ES_POOL_MIN
+          - name: ES_STREAM_PROTOCOL
+            value: http
+          - name: ES_TCP_HOSTNAME
+            value: eventstore
+          - name: ES_TCP_PASSWORD
+            value: changeit
+          - name: ES_TCP_PORT
+            value: "1113"
+          - name: ES_TCP_PROTOCOL
+            value: tcp
+          - name: ES_TCP_USERNAME
+            value: admin
+          - name: MONGODB_DB_NAME
+            value: service-user
+          - name: MONGODB_DB_OPTIONS
+            value: ?retryWrites=true&w=majority
+          - name: MONGO_DB_SERVER_URI
+            value: mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
           - name: PORT
             value: "9000"
-          image: ultimatebackend/service-user
+          image: ultimatebackend/service-user:development
+          livenessProbe:
+            exec:
+              command:
+              - curl --fail -s http://localhost:9000/ || exit 1
+            failureThreshold: 3
+            periodSeconds: 90
+            timeoutSeconds: 10
           name: services-user
           ports:
           - containerPort: 9000

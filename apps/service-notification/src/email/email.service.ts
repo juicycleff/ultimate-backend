@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SendGridService } from '@anchan828/nest-sendgrid';
-import { UserEntity } from '@graphqlcqrs/repository/entities';
-import { ConfigService } from '@graphqlcqrs/common/services/config.service';
 import { MailData } from '@sendgrid/helpers/classes/mail';
 
 @Injectable()

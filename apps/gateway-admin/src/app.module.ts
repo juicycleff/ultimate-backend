@@ -18,11 +18,11 @@ require('dotenv').config();
       path: '/graphql',
       context: ({ req, res }) => buildContext({ req, res }),
       serviceList: [
-        { name: 'auth', url: 'http://localhost:9900/graphql' },
-        { name: 'user', url: 'http://localhost:9000/graphql' },
-        { name: 'project', url: 'http://localhost:9100/graphql' },
-        { name: 'tenant', url: 'http://localhost:9200/graphql' },
-        { name: 'payment', url: 'http://localhost:9500/graphql' },
+        { name: 'auth', url: process.env.AUTH_ENDPOINT || 'http://localhost:9900/graphql' },
+        { name: 'user', url: process.env.USER_ENDPOINT || 'http://localhost:9000/graphql' },
+        { name: 'project', url: process.env.PROJECT_ENDPOINT || 'http://localhost:9100/graphql' },
+        { name: 'tenant', url: process.env.TENANT_ENDPOINT || 'http://localhost:9200/graphql' },
+        { name: 'payment', url: process.env.PAYMENT_ENDPOINT || 'http://localhost:9500/graphql' },
         // more services
       ],
       buildService({ url }) {

@@ -1,7 +1,7 @@
 FROM node:stretch
 # set our node environment, either development or production
 # defaults to production, compose overrides this to development on build and run
-ARG NODE_ENV=production
+ARG NODE_ENV=staging
 ENV NODE_ENV $NODE_ENV
 
 RUN mkdir -p /usr/src/app
@@ -16,5 +16,8 @@ RUN yarn
 
 COPY . /usr/src/app
 
-EXPOSE 4000
-CMD ["yarn", "start", "gateway-admin"]
+# Build production files
+RUN yarn build service-payment
+
+EXPOSE 9300
+CMD ["node", "dist/apps/service-payment/main.js"]

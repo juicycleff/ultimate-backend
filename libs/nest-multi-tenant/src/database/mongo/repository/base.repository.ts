@@ -12,10 +12,6 @@ export class BaseRepository <DOC, DTO = DOC> {
   readonly tenant: TenantData;
   readonly cacheStore: CacheStore;
 
-  // get options(): CollectionProps {
-  //   return Reflect.getMetadata(COLLECTION_KEY, this);
-  // }
-
   /**
    * Creates an instance of BaseRepository.
    * @param {DBSource} dbSource Your MongoDB connection
@@ -55,8 +51,8 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     const cacheKey = JSON.stringify(cleanConditions);
     const cachedResult = await this.retrieveFromCache(cacheKey);
-    if (cachedResult) {
-      return cachedResult as DOC;
+    if (!Array.isArray(cachedResult)) {
+      return cachedResult;
     }
 
     const result = await this.findOne(cleanConditions);
@@ -78,8 +74,8 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     const cacheKey = JSON.stringify(query);
     const cachedResult = await this.retrieveFromCache(cacheKey);
-    if (cachedResult) {
-      return cachedResult as DOC[];
+    if (Array.isArray(cachedResult)) {
+      return cachedResult;
     }
 
     const found = await collection.find(query as object).toArray();
@@ -108,8 +104,8 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     const cacheKey = JSON.stringify(prunedConditions);
     const cachedResult = await this.retrieveFromCache(cacheKey);
-    if (cachedResult) {
-      return cachedResult as DOC;
+    if (!Array.isArray(cachedResult)) {
+      return cachedResult;
     }
 
     let document = await collection.findOne(prunedConditions);
@@ -158,8 +154,8 @@ export class BaseRepository <DOC, DTO = DOC> {
 
     const cacheKey = JSON.stringify(conditions) + JSON.stringify(req);
     const cachedResult = await this.retrieveFromCache(cacheKey);
-    if (cachedResult) {
-      return cachedResult as DOC[];
+    if (Array.isArray(cachedResult)) {
+      return cachedResult;
     }
 
     let cursor = collection.find(conditions);
@@ -205,10 +201,9 @@ export class BaseRepository <DOC, DTO = DOC> {
   async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
     const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
-    const result = eventResult as DOC;
-
-    const cleanDoc = cleanEmptyProperties({ ...result, tenantId: this.tenant?.tenantId });
-    const res = await collection.insertOne(cleanDoc as DOC);
+    // @ts-ignore
+    const cleanDoc = cleanEmptyProperties({ ...eventResult, tenantId: this.tenant?.tenantId });
+    const res = await collection.insertOne(cleanDoc);
 
     let newDocument = res.ops[0];
     // @ts-ignore
@@ -263,7 +258,8 @@ export class BaseRepository <DOC, DTO = DOC> {
     const collection = await this.collection;
     const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], documents);
 
-    const res = await collection.insertMany(eventResult as DOC[]);
+    // @ts-ignore
+    const res = await collection.insertMany(eventResult);
 
     let newDocuments = res.ops[0];
     // @ts-ignore
@@ -538,14 +534,14 @@ export class BaseRepository <DOC, DTO = DOC> {
     };
   }
 
-  private async saveToCache(key: string, data: DOC | any): Promise<DOC|void> {
+  private async saveToCache(key: string, data: DOC | any): Promise<DOC|any> {
     if (this.cacheStore) {
       const cacheKey = `${this.options.name}/${key}`;
       await this.cacheStore.set<DOC>(cacheKey, data);
     }
   }
 
-  private async retrieveFromCache(key: string): Promise<DOC | void | DOC[]> {
+  private async retrieveFromCache(key: string): Promise<DOC | any | DOC[]> {
     if (this.cacheStore) {
       const cacheKey = `${this.options.name}/${key}`;
       const cacheData = await this.cacheStore.get<DOC>(cacheKey);
