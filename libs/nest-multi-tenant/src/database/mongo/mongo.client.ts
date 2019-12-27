@@ -4,7 +4,7 @@ import * as retry from 'retry';
 
 import { Deferred } from '../../utils';
 
-export class DatabaseClient extends EventEmitter {
+export class MongoDatabaseClient extends EventEmitter {
   client: Promise<MongoClient>;
   db: Promise<Db>;
 

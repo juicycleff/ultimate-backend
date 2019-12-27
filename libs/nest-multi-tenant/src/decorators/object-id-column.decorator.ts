@@ -1,10 +1,10 @@
 /* tslint:disable */
+import { COLUMN_KEY, ColumnOptions } from '@juicycleff/nest-multi-tenant/interfaces';
+
 /**
  * Special type of column that is available only for MongoDB database.
  * Marks your entity's column to be an object id.
  */
-import { ColumnOptions } from '../interfaces/column-options';
-import { COLUMN_KEY } from '../interfaces';
 
 export function ObjectIdColumn(options?: ColumnOptions): Function {
   return function(object: Object, propertyName: string) {

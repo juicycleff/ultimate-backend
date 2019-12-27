@@ -1,28 +1,33 @@
 import { ModuleRef } from '@nestjs/core';
 import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Provider } from '@nestjs/common';
-import { MongoClient, MongoClientOptions } from 'mongodb';
 import * as hash from 'object-hash';
-import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.module';
-import { DEFAULT_MONGO_CLIENT_OPTIONS, MONGO_MODULE_OPTIONS } from '@juicycleff/nest-multi-tenant/database';
 
 import { getClientToken, getContainerToken, getCurrentTenantToken, getDbToken } from '../../utils';
 import { DEFAULT_DATABASE_CONTAINER_NAME, DATABASE_CONTAINER_NAME } from '../../constants';
-import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces';
+import { ArangoModuleAsyncOptions, ArangoModuleOptions, ArangoOptionsFactory } from './interfaces/arango-options.interface';
+import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.module';
+import { ARANGO_MODULE_OPTIONS, DEFAULT_ARANGO_DATABASE_OPTIONS } from '@juicycleff/nest-multi-tenant/database/arango/arango.constants';
+import { ArangoClientOption } from '@juicycleff/nest-multi-tenant/database/arango/interfaces';
+import { Database } from 'arangojs';
+import { ArangoDatabaseClient } from '@juicycleff/nest-multi-tenant/database/arango/arango.client';
 
 @Global()
 @Module({
   imports: [MultiTenantModule],
 })
-export class MongoCoreModule implements OnModuleDestroy {
+export class ArangoCoreModule implements OnModuleDestroy {
+  private databaseClient: ArangoDatabaseClient;
   constructor(
     @Inject(DATABASE_CONTAINER_NAME) private readonly containerName: string,
     private readonly moduleRef: ModuleRef,
-  ) {}
+  ) {
+    this.databaseClient = new ArangoDatabaseClient();
+  }
 
   static forRoot(
-    uri: string,
+    uri: string | string[],
     dbName: string,
-    clientOptions: MongoClientOptions = DEFAULT_MONGO_CLIENT_OPTIONS,
+    clientOptions: ArangoClientOption = DEFAULT_ARANGO_DATABASE_OPTIONS,
     containerName: string = DEFAULT_DATABASE_CONTAINER_NAME,
   ): DynamicModule {
 
@@ -33,12 +38,12 @@ export class MongoCoreModule implements OnModuleDestroy {
 
     const connectionContainerProvider = {
       provide: getContainerToken(containerName),
-      useFactory: () => new Map<any, MongoClient>(),
+      useFactory: () => new Map<any, Database>(),
     };
 
-    const clientProvider = {
-      provide: getClientToken(containerName),
-      useFactory: async (connections: Map<any, MongoClient>) => {
+    const dbProvider = {
+      provide: getDbToken(containerName),
+      useFactory: async (connections: Map<any, Database>) => {
         const key = hash.sha1({
           uri,
           clientOptions,
@@ -46,17 +51,13 @@ export class MongoCoreModule implements OnModuleDestroy {
         if (connections.has(key)) {
           return connections.get(key);
         }
-        const client = new MongoClient(uri, clientOptions);
+
+        const connection = new ArangoDatabaseClient();
+        const client = await connection.connect(dbName, clientOptions);
         connections.set(key, client);
-        return await client.connect();
+        return client;
       },
       inject: [getContainerToken(containerName)],
-    };
-
-    const dbProvider = {
-      provide: getDbToken(containerName),
-      useFactory: (client: MongoClient) => client.db(dbName),
-      inject: [getClientToken(containerName)],
     };
 
     const currentTenantProvider = {
@@ -68,19 +69,18 @@ export class MongoCoreModule implements OnModuleDestroy {
     };
 
     return {
-      module: MongoCoreModule,
+      module: ArangoCoreModule,
       providers: [
         containerNameProvider,
         connectionContainerProvider,
-        clientProvider,
         dbProvider,
         currentTenantProvider,
       ],
-      exports: [clientProvider, dbProvider, currentTenantProvider],
+      exports: [dbProvider, currentTenantProvider],
     };
   }
 
-  static forRootAsync(options: MongoModuleAsyncOptions): DynamicModule {
+  static forRootAsync(options: ArangoModuleAsyncOptions): DynamicModule {
     const mongoContainerName =
       options.containerName || DEFAULT_DATABASE_CONTAINER_NAME;
 
@@ -91,14 +91,14 @@ export class MongoCoreModule implements OnModuleDestroy {
 
     const connectionContainerProvider = {
       provide: getContainerToken(mongoContainerName),
-      useFactory: () => new Map<any, MongoClient>(),
+      useFactory: () => new Map<any, Database>(),
     };
 
-    const clientProvider = {
-      provide: getClientToken(mongoContainerName),
+    const dbProvider = {
+      provide: getDbToken(mongoContainerName),
       useFactory: async (
-        connections: Map<any, MongoClient>,
-        mongoModuleOptions: MongoModuleOptions,
+        connections: Map<any, Database>,
+        mongoModuleOptions: ArangoModuleOptions,
       ) => {
         const { uri, clientOptions } = mongoModuleOptions;
         const key = hash.sha1({
@@ -108,44 +108,33 @@ export class MongoCoreModule implements OnModuleDestroy {
         if (connections.has(key)) {
           return connections.get(key);
         }
-        const client = new MongoClient(
-          uri,
-          clientOptions || DEFAULT_MONGO_CLIENT_OPTIONS,
-        );
-        connections.set(key, client);
-        return await client.connect();
-      },
-      inject: [getContainerToken(mongoContainerName), MONGO_MODULE_OPTIONS],
-    };
 
-    const dbProvider = {
-      provide: getDbToken(mongoContainerName),
-      useFactory: (
-        mongoModuleOptions: MongoModuleOptions,
-        client: MongoClient,
-      ) => client.db(mongoModuleOptions.dbName),
-      inject: [MONGO_MODULE_OPTIONS, getClientToken(mongoContainerName)],
+        const connection = new ArangoDatabaseClient();
+        const client = await connection.connect(mongoModuleOptions.dbName, clientOptions);
+        connections.set(key, client);
+        return client;
+      },
+      inject: [getContainerToken(mongoContainerName), ARANGO_MODULE_OPTIONS],
     };
 
     const asyncProviders = this.createAsyncProviders(options);
 
     return {
-      module: MongoCoreModule,
+      module: ArangoCoreModule,
       imports: options.imports,
       providers: [
         ...asyncProviders,
-        clientProvider,
         dbProvider,
         containerNameProvider,
         connectionContainerProvider,
       ],
-      exports: [...asyncProviders, clientProvider, dbProvider],
+      exports: [...asyncProviders, dbProvider],
     };
   }
 
   async onModuleDestroy() {
-    const clientsMap: Map<any, MongoClient> = this.moduleRef.get<
-      Map<any, MongoClient>
+    const clientsMap: Map<any, Database> = this.moduleRef.get<
+      Map<any, Database>
       >(getContainerToken(this.containerName));
 
     if (clientsMap) {
@@ -156,14 +145,14 @@ export class MongoCoreModule implements OnModuleDestroy {
   }
 
   private static createAsyncProviders(
-    options: MongoModuleAsyncOptions,
+    options: ArangoModuleAsyncOptions,
   ): Provider[] {
     if (options.useExisting || options.useFactory) {
       return [
         {
           provide: getCurrentTenantToken(options.containerName),
-          useFactory: async (optionsFactory: MongoOptionsFactory) => {
-            const opts = await optionsFactory.createMongoOptions();
+          useFactory: async (optionsFactory: ArangoOptionsFactory) => {
+            const opts = await optionsFactory.createArangoOptions();
             return {
               tenantId: opts.tenantName,
             };
@@ -176,8 +165,8 @@ export class MongoCoreModule implements OnModuleDestroy {
       return [
         {
           provide: getCurrentTenantToken(options.containerName),
-          useFactory: async (optionsFactory: MongoOptionsFactory) => {
-            const opts = await optionsFactory.createMongoOptions();
+          useFactory: async (optionsFactory: ArangoOptionsFactory) => {
+            const opts = await optionsFactory.createArangoOptions();
             return {
               tenantId: opts.tenantName,
             };
@@ -203,30 +192,30 @@ export class MongoCoreModule implements OnModuleDestroy {
   }
 
   private static createAsyncOptionsProvider(
-    options: MongoModuleAsyncOptions,
+    options: ArangoModuleAsyncOptions,
   ): Provider {
     if (options.useFactory) {
       return {
-        provide: MONGO_MODULE_OPTIONS,
+        provide: ARANGO_MODULE_OPTIONS,
         useFactory: options.useFactory,
         inject: options.inject || [],
       };
     } else if (options.useExisting) {
       return {
-        provide: MONGO_MODULE_OPTIONS,
-        useFactory: async (optionsFactory: MongoOptionsFactory) =>
-          await optionsFactory.createMongoOptions(),
+        provide: ARANGO_MODULE_OPTIONS,
+        useFactory: async (optionsFactory: ArangoOptionsFactory) =>
+          await optionsFactory.createArangoOptions(),
         inject: [options.useExisting],
       };
     } else if (options.useClass) {
       return {
-        provide: MONGO_MODULE_OPTIONS,
-        useFactory: async (optionsFactory: MongoOptionsFactory) =>
-          await optionsFactory.createMongoOptions(),
+        provide: ARANGO_MODULE_OPTIONS,
+        useFactory: async (optionsFactory: ArangoOptionsFactory) =>
+          await optionsFactory.createArangoOptions(),
         inject: [options.useClass],
       };
     } else {
-      throw new Error('Invalid MongoModule options');
+      throw new Error('Invalid ArangoModule options');
     }
   }
 }

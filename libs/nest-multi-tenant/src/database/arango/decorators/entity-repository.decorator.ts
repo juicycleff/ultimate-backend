@@ -1,5 +1,5 @@
 /* tslint:disable:ban-types */
-import { MongoCollectionProps, MongoEntityProps } from '../interfaces';
+import { ArangoCollectionProps, ArangoEntityProps } from '../interfaces';
 import { COLLECTION_KEY, ENTITY_KEY } from '@juicycleff/nest-multi-tenant/interfaces';
 
 /**
@@ -9,7 +9,7 @@ import { COLLECTION_KEY, ENTITY_KEY } from '@juicycleff/nest-multi-tenant/interf
  * @param {CollectionProps} props
  * @returns
  */
-export const MongoEntityRepository = (props: MongoCollectionProps) =>  (target: any) => {
+export const ArangoEntityRepository = (props: ArangoCollectionProps) =>  (target: any) => {
   Reflect.defineMetadata(COLLECTION_KEY, props, target.prototype);
 };
 
@@ -20,6 +20,6 @@ export const MongoEntityRepository = (props: MongoCollectionProps) =>  (target: 
  * @param {CollectionProps} props
  * @returns
  */
-export const MongoEntity = (props?: MongoEntityProps) =>  (target: any) => {
+export const ArangoEntity = (props?: ArangoEntityProps) =>  (target: any) => {
   Reflect.defineMetadata(ENTITY_KEY, props, target.prototype);
 };

@@ -1,9 +1,9 @@
 import { Entity } from '@juicycleff/nest-multi-tenant';
-import {BaseEntity} from './base-entity';
+import {MongoBaseEntity} from './base-entity';
 import { PriceEmbed, FeatureEmbed } from './embeded';
 
 @Entity({name: 'plan'})
-export class PlanEntity extends BaseEntity<any> {
+export class PlanEntity extends MongoBaseEntity<any> {
 
   name: string;
 

@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { getCollectionToken, getDbToken } from './mongo.util';
+import { getCollectionToken, getDbToken } from '../../utils';
 
 export function createMongoProviders(connectionName?: string, collections: string[] = []) {
   return (collections || []).map(collectionName => ({

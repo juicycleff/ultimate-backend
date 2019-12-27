@@ -1,11 +1,11 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { merge } from 'lodash';
-import { BaseRepository, Before, EntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
+import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
 import { OfferEntity } from '../entities';
 
 @Injectable()
-@EntityRepository({
+@MongoEntityRepository({
   name: 'offer',
   indexes: [
     {
@@ -14,7 +14,7 @@ import { OfferEntity } from '../entities';
     },
   ],
 })
-export class OfferRepository extends BaseRepository<OfferEntity> {
+export class OfferRepository extends BaseMongoRepository<OfferEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,

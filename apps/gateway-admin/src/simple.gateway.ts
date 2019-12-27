@@ -15,10 +15,11 @@ async function bootstrapSimple() {
 
   const gateway = new ApolloGateway({
     serviceList: [
-      { name: 'auth', url: 'http://localhost:9900/graphql' },
-      { name: 'user', url: 'http://localhost:9000/graphql' },
-      { name: 'project', url: 'http://localhost:9100/graphql' },
-      { name: 'tenant', url: 'http://localhost:9200/graphql' },
+      { name: 'auth', url: process.env.AUTH_ENDPOINT || 'http://localhost:9900/graphql' },
+      { name: 'user', url: process.env.USER_ENDPOINT || 'http://localhost:9000/graphql' },
+      { name: 'project', url: process.env.PROJECT_ENDPOINT || 'http://localhost:9100/graphql' },
+      { name: 'tenant', url: process.env.TENANT_ENDPOINT || 'http://localhost:9200/graphql' },
+      { name: 'payment', url: process.env.PAYMENT_ENDPOINT || 'http://localhost:9500/graphql' },
       // more services
     ],
     buildService({ url }) {
@@ -64,7 +65,7 @@ async function bootstrapSimple() {
   authSetup(app, false);
 
   server.applyMiddleware({ app });
-  await app.listen({ port: parseInt(process.env.PORT,10) || parseInt(config.gateway?.admin?.port, 10) || 4000 });
+  await app.listen({ port: parseInt(process.env.PORT, 10) || parseInt(config.gateway?.admin?.port, 10) || 4000 });
 }
 
 bootstrapSimple();

@@ -1,10 +1,10 @@
-import { Entity } from '@juicycleff/nest-multi-tenant/database/mongo/decorators/entity.decorator';
+import { Entity } from '@juicycleff/nest-multi-tenant';
 import {UserResponseDto} from '../dtos/response';
-import {BaseEntity} from './base-entity';
+import {MongoBaseEntity} from './base-entity';
 import { FacebookAuth, GoogleAuth } from '@graphqlcqrs/repository/entities/embeded';
 
 @Entity({ name: 'user' })
-export class UserEntity extends BaseEntity<UserResponseDto> {
+export class UserEntity extends MongoBaseEntity<UserResponseDto> {
 
   firstname: string;
 
@@ -29,7 +29,7 @@ export class UserEntity extends BaseEntity<UserResponseDto> {
 
   payment!: PaymentEmbed;
 
-  toDtoClass?: new(entity: BaseEntity, options?: any) => UserResponseDto;
+  toDtoClass?: new(entity: MongoBaseEntity, options?: any) => UserResponseDto;
 }
 
 interface AuthServices {
