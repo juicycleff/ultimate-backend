@@ -32,6 +32,7 @@ export class PageInfo {
   endCursor?: string;
 }
 
+// @ts-ignore
 export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>) {
   @ObjectType(`${TItemClass.name}Edge`)
   class EdgeTypeClass {
@@ -43,12 +44,12 @@ export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>) {
   }
 
   @ObjectType(`${TItemClass.name}Connection`, { isAbstract: true })
-  abstract class ConnectionTypeClass {
+  public abstract class ConnectTypeClass {
     @Field(() => EdgeTypeClass)
     edge: EdgeTypeClass;
 
     @Field(() => PageInfo)
     pageInfo: PageInfo;
   }
-  return ConnectionTypeClass;
+  return ConnectTypeClass;
 }

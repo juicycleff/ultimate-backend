@@ -79,7 +79,7 @@ export function arangoQueryBuilder(query: object, docName?: string, grouped?: bo
             aql.push(prop + ' ' + op + ' "' + val + '"');
             break;
           case 'object':
-            aql.push(prop + queryBuilder(val, null, false));
+            aql.push(prop + arangoQueryBuilder(val, null, false));
             break;
         }
       }
