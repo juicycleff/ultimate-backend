@@ -4,6 +4,8 @@ import { LoadBalancingStrategy } from 'arangojs/lib/async/connection';
 
 export interface ArangoCollectionProps extends CollectionProps {
   indexes?: ArangoIndexDefinition[];
+  edgeType?: boolean;
+  overwrite?: boolean;
 }
 
 export interface ArangoEntityProps extends EntityProps {
@@ -21,32 +23,51 @@ export interface ArangoDBSource {
 
 export type ArangoIndexDefinition = {
   type: 'hash',
-  unique: boolean,
-  sparse?: boolean,
-  deduplicate?: boolean,
   fields: string[],
+  opts: {
+    name?: string,
+    unique: boolean,
+    sparse?: boolean,
+    deduplicate?: boolean,
+  },
 } | {
   type: 'geo',
   fields: string[],
+  opts: {
+    name?: string,
+    geoJson?: boolean,
+  },
 } | {
   type: 'skiplist',
-  unique: boolean,
-  sparse?: boolean,
-  deduplicate?: boolean,
   fields: string[],
+  opts: {
+    unique: boolean,
+    name?: string,
+    sparse?: boolean,
+    deduplicate?: boolean,
+  },
 } | {
   type: 'persistent',
-  unique: boolean,
-  sparse?: boolean,
+  opts: {
+    name?: string,
+    unique: boolean,
+    sparse?: boolean,
+  },
   fields: string[],
 } | {
   type: 'ttl',
   expireAfter: number,
   fields: string[],
+  opts: {
+    name?: string,
+  },
 } | {
   type: 'fulltext',
   minLength?: number,
   fields: string[],
+  opts: {
+    name?: string,
+  },
 };
 
 export interface ArangoClientOption {
