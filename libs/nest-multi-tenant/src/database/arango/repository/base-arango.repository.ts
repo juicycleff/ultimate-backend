@@ -16,7 +16,6 @@ import { InsertOptions, UpdateOptions } from 'arangojs/lib/cjs/util/types';
 import { aql, AqlQuery } from 'arangojs/lib/cjs/aql-query';
 import { ArrayCursor } from 'arangojs/lib/cjs/cursor';
 import { QueryOptions } from 'arangojs/lib/cjs/database';
-import { GeneratedAqlQuery } from 'arangojs/lib/async/aql-query';
 import { arangoQueryBuilder } from '@ultimatebackend/contracts/utils';
 
 // that class only can be extended
