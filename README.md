@@ -119,7 +119,6 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-
 ## License
 
   This project is [MIT licensed](LICENSE).
