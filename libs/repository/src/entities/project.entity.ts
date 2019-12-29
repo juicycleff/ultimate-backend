@@ -1,14 +1,13 @@
 // import { IsNotEmpty } from 'class-validator';
 import {ProjectResponseDto} from '../dtos/response';
-import {BaseEntity} from './base-entity';
+import {MongoBaseEntity} from './base-entity';
 import { UserEntity } from './user.entity';
-import { Entity } from '@juicycleff/nest-multi-tenant/database/mongo/decorators/entity.decorator';
+import { Entity } from '@juicycleff/nest-multi-tenant';
 import { Column } from 'typeorm';
 
 @Entity({ name: 'project' })
-export class ProjectEntity extends BaseEntity<ProjectResponseDto> {
+export class ProjectEntity extends MongoBaseEntity<ProjectResponseDto> {
 
-  // @IsNotEmpty()
   @Column()
   name: string;
 
@@ -18,5 +17,5 @@ export class ProjectEntity extends BaseEntity<ProjectResponseDto> {
   @Column(type => UserEntity)
   owner: UserEntity;
 
-  toDtoClass?: new(entity: BaseEntity, options?: any) => ProjectResponseDto;
+  toDtoClass?: new(entity: MongoBaseEntity, options?: any) => ProjectResponseDto;
 }

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MultiTenantService } from './nest-multi-tenant.service';
+import { MultiTenantService } from './multi-tenant.service';
 
 describe('NestMultiTenantService', () => {
   let service: MultiTenantService;

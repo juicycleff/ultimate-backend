@@ -1,5 +1,5 @@
-import { POST_KEY, PRE_KEY } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
+import { POST_KEY, PRE_KEY } from '@juicycleff/nest-multi-tenant/interfaces';
 
 /**
  * Run this function before an event occurs

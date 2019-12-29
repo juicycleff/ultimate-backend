@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { ENTITY_KEY, EntityOptions } from '../interfaces';
+import { ENTITY_KEY, EntityOptions } from '@juicycleff/nest-multi-tenant/interfaces';
 
 /**
  * This decorator is used to mark classes that will be an entity (table or document depend on database type).

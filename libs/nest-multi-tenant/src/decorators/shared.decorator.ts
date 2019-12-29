@@ -1,5 +1,12 @@
 import { Inject } from '@nestjs/common';
-import { getClientToken, getDbToken, getCollectionToken, getReactiveClientToken, getCurrentTenantToken } from '../mongo.util';
+import {
+  getClientToken,
+  getDbToken,
+  getCollectionToken,
+  getReactiveClientToken,
+  getCurrentTenantToken,
+  getEdgeCollectionToken,
+} from '../utils';
 
 /**
  * Inject the MongoClient object associated with a connection
@@ -20,14 +27,21 @@ export const InjectReactiveClient = (connectionName?: string) => Inject(getReact
 export const InjectCurrentTenant = (connectionName?: string) => Inject(getCurrentTenantToken(connectionName));
 
 /**
- * Inject the Mongo Db object associated with a connection
+ * Inject the Db object associated with a connection
  * @param connectionName The unique name associated with the connection
  */
 export const InjectDb = (connectionName?: string) => Inject(getDbToken(connectionName));
 
 /**
- * Inject the Mongo Collection object associated with a Db
+ * Inject the DB Collection object associated with a Db
  * @param collectionName The unique name associated with the collection
  */
 export const InjectCollection = (collectionName: string) =>
   Inject(getCollectionToken(collectionName));
+
+/**
+ * Inject the Arango Edge Collection object associated with a Db
+ * @param collectionName The unique name associated with the collection
+ */
+export const InjectEdgeCollection = (collectionName: string) =>
+  Inject(getEdgeCollectionToken(collectionName));

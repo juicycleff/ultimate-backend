@@ -1,26 +1,26 @@
 import { Collection, CollectionAggregationOptions, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
 import { CacheStore } from '@nestjs/common';
-import { COLLECTION_KEY, CollectionProps, DBSource, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '../interfaces';
+import { MongoCollectionProps, MongoDBSource } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
-import { TenantData } from '@juicycleff/nest-multi-tenant/interfaces';
+import { COLLECTION_KEY, TenantData, FindRequest, POST_KEY, PRE_KEY, UpdateByIdRequest, UpdateRequest } from '@juicycleff/nest-multi-tenant/interfaces';
 import { cleanEmptyProperties } from '@graphqlcqrs/common';
 
 // that class only can be extended
-export class BaseRepository <DOC, DTO = DOC> {
+export class BaseMongoRepository <DOC, DTO = DOC> {
   collection: Promise<Collection<DOC>>;
-  readonly options: CollectionProps;
+  readonly options: MongoCollectionProps;
   readonly tenant: TenantData;
   readonly cacheStore: CacheStore;
 
   /**
-   * Creates an instance of BaseRepository.
+   * Creates an instance of BaseMongoRepository.
    * @param {DBSource} dbSource Your MongoDB connection
    * @param cacheStore
    * @param opts
    * @param tenantData
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
-  constructor(public dbSource: DBSource, cacheStore?: CacheStore, opts?: CollectionProps, tenantData?: TenantData) {
+  constructor(public dbSource: MongoDBSource, cacheStore?: CacheStore, opts?: MongoCollectionProps, tenantData?: TenantData) {
     this.options = Object.assign({}, opts, Reflect.getMetadata(COLLECTION_KEY, this));
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');
@@ -43,7 +43,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {string} id
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async findById(id: string): Promise<DOC> {
     const condition = { _id: new ObjectID(id), tenantId: this.tenant?.tenantId };
@@ -66,7 +66,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {string[]} ids
    * @returns {Promise<T[]>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async findManyById(ids: string[]): Promise<DOC[]> {
     const collection = await this.collection;
@@ -94,7 +94,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {object} conditions
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async findOne(conditions: object): Promise<DOC> {
     const collection = await this.collection;
@@ -121,7 +121,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * Finds a record by a list of conditions
    *
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    * @param pipeline
    * @param options
    */
@@ -144,7 +144,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {FindRequest} [req={ conditions: {} }]
    * @returns {Promise<T[]>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async find(req: FindRequest = { conditions: {} }): Promise<DOC[]> {
     const collection = await this.collection;
@@ -196,7 +196,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {DTO} document
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
@@ -218,7 +218,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {Document} document
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async save(document: Document): Promise<DOC> {
     const collection = await this.collection;
@@ -251,7 +251,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * Save any changes to your document
    *
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    * @param documents
    */
   async createMany(documents: Partial<DTO[]> | DTO[]): Promise<DOC[]> {
@@ -276,7 +276,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @param {string} id
    * @param {UpdateByIdRequest} req
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async findOneByIdAndUpdate(id: string | ObjectID, req: UpdateByIdRequest): Promise<DOC> {
     const entId = typeof id === 'string' ? new ObjectID(id) : id;
@@ -293,7 +293,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {UpdateRequest} req
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async findOneAndUpdate(req: UpdateRequest): Promise<DOC> {
     const collection = await this.collection;
@@ -316,7 +316,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {string} id
    * @returns {Promise<DeleteWriteOpResultObject>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async deleteOneById(id: string): Promise<DeleteWriteOpResultObject> {
     const entId = typeof id === 'string' ? new ObjectID(id) : id;
@@ -329,7 +329,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {*} conditions
    * @returns {Promise<DeleteWriteOpResultObject>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async deleteOne(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
@@ -347,7 +347,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {*} conditions
    * @returns {Promise<any>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   async deleteMany(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
@@ -365,7 +365,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @param {*} conditions
    * @returns {Promise<any>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   public async exist(conditions: any): Promise<boolean> {
     const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
@@ -380,7 +380,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @param {*} document
    * @param {boolean} replace
    * @returns {T}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   protected toggleId(document: any | any[], replace: boolean): DOC | DOC[] {
     if (Array.isArray(document)) {
@@ -418,7 +418,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    *
    * @private
    * @returns {Promise<Collection<DOC>>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   private getCollection(): Promise<Collection<DOC>> {
     return new Promise<Collection<DOC>>(async (resolve, reject) => {
@@ -476,7 +476,7 @@ export class BaseRepository <DOC, DTO = DOC> {
    * @param {string[]} fns any of the valid functions: update, updateOne, save, create, find, findOne, findMany
    * @param {*} document The document to apply functions to
    * @returns {Promise<DOC>}
-   * @memberof BaseRepository
+   * @memberof BaseMongoRepository
    */
   private async invokeEvents(type: string, fns: DataEvents[], document: any | any[]): Promise<any> {
     const test = Reflect.getMetadata('entity', this) || [];

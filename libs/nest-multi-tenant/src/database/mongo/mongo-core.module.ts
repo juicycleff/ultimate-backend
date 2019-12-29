@@ -2,11 +2,12 @@ import { ModuleRef } from '@nestjs/core';
 import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Provider } from '@nestjs/common';
 import { MongoClient, MongoClientOptions } from 'mongodb';
 import * as hash from 'object-hash';
-
-import { getClientToken, getContainerToken, getCurrentTenantToken, getDbToken } from './mongo.util';
-import { DEFAULT_MONGO_CLIENT_OPTIONS, DEFAULT_MONGO_CONTAINER_NAME, MONGO_CONTAINER_NAME, MONGO_MODULE_OPTIONS } from './mongo.constants';
-import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces/mongo-options.interface';
 import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.module';
+import { DEFAULT_MONGO_CLIENT_OPTIONS, MONGO_MODULE_OPTIONS } from '@juicycleff/nest-multi-tenant/database';
+
+import { getClientToken, getContainerToken, getCurrentTenantToken, getDbToken } from '../../utils';
+import { DEFAULT_DATABASE_CONTAINER_NAME, DATABASE_CONTAINER_NAME } from '../../constants';
+import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces';
 
 @Global()
 @Module({
@@ -14,7 +15,7 @@ import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.mo
 })
 export class MongoCoreModule implements OnModuleDestroy {
   constructor(
-    @Inject(MONGO_CONTAINER_NAME) private readonly containerName: string,
+    @Inject(DATABASE_CONTAINER_NAME) private readonly containerName: string,
     private readonly moduleRef: ModuleRef,
   ) {}
 
@@ -22,11 +23,11 @@ export class MongoCoreModule implements OnModuleDestroy {
     uri: string,
     dbName: string,
     clientOptions: MongoClientOptions = DEFAULT_MONGO_CLIENT_OPTIONS,
-    containerName: string = DEFAULT_MONGO_CONTAINER_NAME,
+    containerName: string = DEFAULT_DATABASE_CONTAINER_NAME,
   ): DynamicModule {
 
     const containerNameProvider = {
-      provide: MONGO_CONTAINER_NAME,
+      provide: DATABASE_CONTAINER_NAME,
       useValue: containerName,
     };
 
@@ -81,10 +82,10 @@ export class MongoCoreModule implements OnModuleDestroy {
 
   static forRootAsync(options: MongoModuleAsyncOptions): DynamicModule {
     const mongoContainerName =
-      options.containerName || DEFAULT_MONGO_CONTAINER_NAME;
+      options.containerName || DEFAULT_DATABASE_CONTAINER_NAME;
 
     const containerNameProvider = {
-      provide: MONGO_CONTAINER_NAME,
+      provide: DATABASE_CONTAINER_NAME,
       useValue: mongoContainerName,
     };
 

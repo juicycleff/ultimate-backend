@@ -1,5 +1,6 @@
 /* tslint:disable:ban-types */
-import { COLLECTION_KEY, CollectionProps, ENTITY_KEY, EntityOptions, EntityProps } from '../interfaces';
+import { MongoCollectionProps, MongoEntityProps } from '../interfaces';
+import { COLLECTION_KEY, ENTITY_KEY } from '@juicycleff/nest-multi-tenant/interfaces';
 
 /**
  * Indicate the class represents a collection
@@ -8,7 +9,7 @@ import { COLLECTION_KEY, CollectionProps, ENTITY_KEY, EntityOptions, EntityProps
  * @param {CollectionProps} props
  * @returns
  */
-export const EntityRepository = (props: CollectionProps) =>  (target: any) => {
+export const MongoEntityRepository = (props: MongoCollectionProps) =>  (target: any) => {
   Reflect.defineMetadata(COLLECTION_KEY, props, target.prototype);
 };
 
@@ -19,6 +20,6 @@ export const EntityRepository = (props: CollectionProps) =>  (target: any) => {
  * @param {CollectionProps} props
  * @returns
  */
-export const Entity = (props?: EntityProps) =>  (target: any) => {
+export const MongoEntity = (props?: MongoEntityProps) =>  (target: any) => {
   Reflect.defineMetadata(ENTITY_KEY, props, target.prototype);
 };
