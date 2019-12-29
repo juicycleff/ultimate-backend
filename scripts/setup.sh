@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ARRAYS_STRING=$(jq -r '.projects[].root' ./nest-cli.json)
 read -r -a PROJECTS <<< "${ARRAYS_STRING}"
