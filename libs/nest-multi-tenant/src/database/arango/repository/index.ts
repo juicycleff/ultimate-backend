@@ -1,1 +1,1 @@
-export * from './base.repository';
+export * from './base-arango.repository';
