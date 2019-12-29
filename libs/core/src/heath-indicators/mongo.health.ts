@@ -3,11 +3,11 @@ import {
   ConnectionNotFoundError, TimeoutError as PromiseTimeoutError,
   HealthIndicatorResult, TimeoutError, HealthIndicator,
 } from '@nestjs/terminus';
-import { Db, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import { ModuleRef } from '@nestjs/core';
 import { checkPackages, promiseTimeout } from '@nestjs/terminus/dist/utils';
-import { getClientToken } from '@juicycleff/nest-multi-tenant/database/mongo/mongo.util';
 import { HealthCheckError } from '@godaddy/terminus';
+import { getClientToken } from '@juicycleff/nest-multi-tenant';
 
 export interface MongoPingCheckSettings {
   /**

@@ -44,7 +44,7 @@ export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>) {
   }
 
   @ObjectType(`${TItemClass.name}Connection`, { isAbstract: true })
-  public abstract class ConnectTypeClass {
+  abstract class ConnectTypeClass {
     @Field(() => EdgeTypeClass)
     edge: EdgeTypeClass;
 
