@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROJECTS=( $(cat ./nest-cli.json | jq -r '.projects[].root'))
+PROJECTS=( "$(cat ./nest-cli.json | jq -r '.projects[].root')")
 
 echo "Service and Library build system started"
 
