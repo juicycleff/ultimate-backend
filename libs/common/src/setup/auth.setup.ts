@@ -23,7 +23,7 @@ require('dotenv').config();
 const MongoDBStore = connectMongodbSession(session);
 
 const store = new MongoDBStore({
-  uri: `${AppConfig.mongodb.defaultUri}service-auth/${AppConfig.mongodb.options}`,
+  uri: `${AppConfig.mongodb.defaultUri}service-auth${AppConfig.mongodb.options}`,
   collection: 'session',
 });
 
