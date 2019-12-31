@@ -6,6 +6,7 @@ import { BullModule } from 'nest-bull';
 import { EmailService } from './email.service';
 import { AuthSagas } from './sagas';
 import { AuthQueue } from './queue';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 @Module({
   imports: [
@@ -27,8 +28,8 @@ import { AuthQueue } from './queue';
       name: 'auth_queue',
       options: {
         redis: {
-          host: 'localhost',
-          port: 6379,
+          host: process.env.REDIS_HOST || AppConfig.redis.host,
+          port: parseInt(process.env.REDIS_PORT || AppConfig.redis.port, 10),
         },
       },
       processors: [
