@@ -7,6 +7,7 @@ import * as useragent from 'express-useragent';
 import * as cookieParser from 'cookie-parser';
 import * as connectMongodbSession from 'connect-mongodb-session';
 import { Express } from 'express';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -22,7 +23,7 @@ require('dotenv').config();
 const MongoDBStore = connectMongodbSession(session);
 
 const store = new MongoDBStore({
-  uri: `${process.env.MONGO_DB_SERVER_URI + 'service-auth'}` || 'mongodb://localhost:27017/test',
+  uri: `${AppConfig.mongodb.defaultUri}service-auth/${AppConfig.mongodb.options}`,
   collection: 'session',
 });
 

@@ -307,6 +307,12 @@ services:
       kompose.image-pull-secret: "regcred"
       kompose.image-pull-policy: "Always"
 
+  redis:
+    image: redis
+    container_name: redis
+    expose:
+      - 6379
+
   eventstore:
     container_name: eventstore-node
     ports:
