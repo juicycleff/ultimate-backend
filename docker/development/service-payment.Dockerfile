@@ -20,4 +20,5 @@ COPY . /usr/src/app
 RUN yarn build service-payment
 
 EXPOSE 9300
+EXPOSE 7300
 CMD ["node", "dist/apps/service-payment/main.js"]

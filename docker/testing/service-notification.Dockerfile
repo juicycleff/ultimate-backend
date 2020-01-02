@@ -18,4 +18,5 @@ COPY . /usr/src/app
 RUN yarn build service-notification
 
 EXPOSE 9400
+EXPOSE 7400
 CMD ["node", "dist/apps/service-notification/main.js"]

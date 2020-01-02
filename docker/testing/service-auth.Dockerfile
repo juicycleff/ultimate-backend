@@ -18,4 +18,5 @@ COPY . /usr/src/app
 RUN yarn build service-auth
 
 EXPOSE 9900
+EXPOSE 7900
 CMD ["node", "dist/apps/service-auth/main.js"]

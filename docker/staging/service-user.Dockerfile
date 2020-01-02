@@ -18,4 +18,5 @@ COPY . /usr/src/app
 RUN yarn build service-user
 
 EXPOSE 9000
+EXPOSE 7000
 CMD ["node", "dist/apps/service-user/main.js"]
