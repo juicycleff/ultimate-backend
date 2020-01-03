@@ -93,19 +93,23 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * Finds a record by a list of conditions
    *
    * @param {object} conditions
+   * @param noCache
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  async findOne(conditions: object): Promise<DOC> {
+  async findOne(conditions: object, noCache = false): Promise<DOC> {
     const collection = await this.collection;
 
     const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
     const prunedConditions = this.toggleId(cleanConditions, true) as any;
 
     const cacheKey = JSON.stringify(prunedConditions);
-    const cachedResult = await this.retrieveFromCache(cacheKey);
-    if (!Array.isArray(cachedResult)) {
-      return cachedResult;
+
+    if (noCache === false) {
+      const cachedResult = await this.retrieveFromCache(cacheKey);
+      if (!Array.isArray(cachedResult)) {
+        return cachedResult;
+      }
     }
 
     let document = await collection.findOne(prunedConditions);

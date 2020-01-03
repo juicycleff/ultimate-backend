@@ -28,6 +28,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
@@ -73,6 +74,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
@@ -121,6 +123,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
@@ -168,6 +171,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
@@ -215,6 +219,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
@@ -262,6 +267,7 @@ services:
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
       - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
       - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
