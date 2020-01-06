@@ -18,4 +18,5 @@ COPY . /usr/src/app
 RUN yarn build service-tenant
 
 EXPOSE 9200
+EXPOSE 7200
 CMD ["node", "dist/apps/service-tenant/main.js"]

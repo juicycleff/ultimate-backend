@@ -20,7 +20,8 @@ export class GqlAuthGuard  implements CanActivate, OnModuleInit {
     transport: Transport.GRPC,
     options: {
       package: 'role',
-      url: `localhost:${AppConfig.services?.auth?.grpcPort || 7900}`,
+      url: (process.env.AUTH_GRPC_ENDPOINT && process.env.AUTH_GRPC_ENDPOINT.replace('http://', ''))
+        || `localhost:${AppConfig.services?.auth?.grpcPort || 7900}`,
       protoPath: join('proto/role.proto'),
     },
   })

@@ -20,7 +20,7 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
     try {
       const user: UserEntity = await this.userRepository.findOne({
         emails: { $elemMatch: { address: email, primary: true, verificationCode: code } },
-      });
+      }, true);
 
       if (!user) { throw new ApolloError('Invalid verification code'); }
 

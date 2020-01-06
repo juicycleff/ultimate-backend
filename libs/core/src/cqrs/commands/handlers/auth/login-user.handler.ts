@@ -41,7 +41,7 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
         };
       }
 
-      const user: UserEntity = await this.userRepository.findOne(condition);
+      const user: UserEntity = await this.userRepository.findOne(condition, true);
 
       if (!user) {
         throw new NotFoundError('Your login credentials is incorrect');

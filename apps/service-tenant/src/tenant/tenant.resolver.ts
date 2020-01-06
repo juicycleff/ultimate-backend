@@ -19,7 +19,8 @@ export class TenantResolver implements OnModuleInit {
     transport: Transport.GRPC,
     options: {
       package: 'payment',
-      url: `localhost:${AppConfig.services?.payment?.grpcPort || 7500}`,
+      url: (process.env.PAYMENT_GRPC_ENDPOINT && process.env.PAYMENT_GRPC_ENDPOINT.replace('http://', ''))
+        || `localhost:${AppConfig.services?.payment?.grpcPort || 7500}`,
       protoPath: join('proto/payment.proto'),
     },
   })

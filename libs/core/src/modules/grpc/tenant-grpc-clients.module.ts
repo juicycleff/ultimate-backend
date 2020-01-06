@@ -9,7 +9,8 @@ import { join } from 'path';
   imports: [
     ClientsModule.register([{ name: TENANT_SERVICE, transport: Transport.GRPC, options: {
         package: 'tenant',
-        url: `localhost:${AppConfig.services?.tenant?.grpcPort || 7200}`,
+        url: (process.env.TENANT_GRPC_ENDPOINT && process.env.TENANT_GRPC_ENDPOINT.replace('http://', ''))
+          || `localhost:${AppConfig.services?.tenant?.grpcPort || 7200}`,
         protoPath: join('proto/tenant.proto'),
       },
     }]),
