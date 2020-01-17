@@ -7,7 +7,7 @@ import { RegisterUserCommand, VerifyEmailCommand } from '@graphqlcqrs/core/cqrs'
 import { IdentifyMachineUtils } from '@graphqlcqrs/common/utils/identify-machine.utils';
 import { BooleanPayload, ServiceTypes } from '@ultimatebackend/contracts';
 import { NotImplementedError } from '@graphqlcqrs/common';
-import { AuthPayload, LoginInput, RegisterInput } from '../types';
+import { AuthPayload, LoginInput, RegisterInput, VerifyEmailInput } from '../types';
 import { AuthService } from './auth.service';
 
 @Resolver(() => AuthPayload)
@@ -97,7 +97,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => BooleanPayload)
-  async verifyEmail(@Args('token') token: number, @Args('email') email: string, @Context() context: any): Promise<BooleanPayload> {
+  async verifyEmail(@Args() {email, token}: VerifyEmailInput, @Context() context: any): Promise<BooleanPayload> {
     return await this.commandBus.execute(new VerifyEmailCommand(token, email));
   }
 
