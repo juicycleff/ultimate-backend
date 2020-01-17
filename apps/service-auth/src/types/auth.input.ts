@@ -17,6 +17,15 @@ export class LoginParamsInput {
   email?: string;
 }
 
+@ArgsType()
+export class VerifyEmailInput {
+  @Field(() => Int)
+  token: number;
+
+  @Field()
+  email: string;
+}
+
 @InputType()
 export class LoginInput {
   @Field(() => ServiceTypes)
