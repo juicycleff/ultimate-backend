@@ -1,7 +1,7 @@
 import { Parent, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { plainToClass } from 'class-transformer';
 import { User } from '../types';
-import { GetUserQuery } from '@graphqlcqrs/core/cqrs';
+import { GetUserQuery } from '../cqrs';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthPayload } from '../types';
 

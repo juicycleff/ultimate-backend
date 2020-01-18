@@ -7,12 +7,14 @@ import { AuthResolver } from './auth.resolver';
 import { FacebookStrategy, LocalStrategy } from './strategy';
 import { AuthController } from './auth.controller';
 import {
-  AuthCommandHandlers,
   UserLoggedInEvent,
   UserRegisteredEvent,
   AuthEventHandlers,
   EmailVerifiedEvent,
 } from '@graphqlcqrs/core';
+import {
+  AuthCommandHandlers,
+} from '../cqrs';
 import { AuthSagas } from './sagas';
 import { UserRepository } from '@graphqlcqrs/repository/repositories';
 import { PassportModule } from '@nestjs/passport';

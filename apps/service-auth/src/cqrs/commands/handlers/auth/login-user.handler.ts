@@ -3,20 +3,21 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserEntity, UserRepository } from '@graphqlcqrs/repository';
 import { ApolloError } from 'apollo-server-express';
 import { validPassword } from '@graphqlcqrs/common/utils';
+import { UserLoggedInEvent } from '@graphqlcqrs/core/cqrs';
 import { ServiceTypes } from '@graphqlcqrs/core/dto';
 import { NotFoundError, ValidationError } from '@graphqlcqrs/common/errors';
 import { LoginUserCommand } from '../../impl';
-import { UserLoggedInEvent } from '../../../';
 
 @CommandHandler(LoginUserCommand)
 export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
+  logger = new Logger(this.constructor.name);
   constructor(
     private readonly userRepository: UserRepository,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: LoginUserCommand): Promise<UserEntity> {
-    Logger.log('Async LoginUserHandler...', 'LoginUserCommand');
+    this.logger.log(`Async ${command.constructor.name}...`);
     const { cmd } = command;
 
     try {
@@ -62,7 +63,7 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
       this.eventBus.publish(new UserLoggedInEvent(user));
       return user;
     } catch (error) {
-      Logger.log(error, 'LoginUserHandler');
+      this.logger.log(error);
       throw new ApolloError(error.message);
     }
   }

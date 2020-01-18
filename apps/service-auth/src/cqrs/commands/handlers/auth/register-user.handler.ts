@@ -4,18 +4,20 @@ import { UserRepository, UserEntity } from '@graphqlcqrs/repository';
 import { generateVerificationCode } from '@graphqlcqrs/common/utils/verification-code-generator';
 import { AuthenticationError } from 'apollo-server-express';
 import { RegisterUserCommand } from '../../impl';
-import { UserRegisteredEvent } from '../../../';
+import { UserRegisteredEvent } from '@graphqlcqrs/core/cqrs';
 import { BooleanPayload } from '@graphqlcqrs/core/dto';
 
 @CommandHandler(RegisterUserCommand)
 export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand> {
+  logger = new Logger(this.constructor.name);
+
   constructor(
     private readonly userRepository: UserRepository,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<BooleanPayload> {
-    Logger.log('Async RegisterUserHandler...', 'RegisterUserCommand');
+    this.logger.log(`Async ${command.constructor.name}...`);
     const { cmd } = command;
 
     try {
@@ -52,7 +54,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
         success: true,
       };
     } catch (error) {
-      Logger.log(error, 'RegisterUserHandler');
+      this.logger.log(error);
       throw new AuthenticationError(error.message);
     }
   }

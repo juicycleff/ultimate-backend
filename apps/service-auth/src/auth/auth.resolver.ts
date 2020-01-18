@@ -3,7 +3,7 @@ import {  UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@graphqlcqrs/core';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 import { CommandBus } from '@nestjs/cqrs';
-import { RegisterUserCommand, VerifyEmailCommand } from '@graphqlcqrs/core/cqrs';
+import { RegisterUserCommand, VerifyEmailCommand, ResendVerificationEmailCommand } from '../cqrs';
 import { IdentifyMachineUtils } from '@graphqlcqrs/common/utils/identify-machine.utils';
 import { BooleanPayload, ServiceTypes } from '@ultimatebackend/contracts';
 import { NotImplementedError } from '@graphqlcqrs/common';
@@ -73,8 +73,7 @@ export class AuthResolver {
 
   @Mutation(() => BooleanPayload)
   async sendVerificationEmail(@Args('email') email: string, @Context() context: any): Promise<BooleanPayload> {
-    throw new NotImplementedError('Not implemented');
-    return null;
+    return await this.commandBus.execute(new ResendVerificationEmailCommand(email));
   }
 
   @Mutation(() => BooleanPayload)

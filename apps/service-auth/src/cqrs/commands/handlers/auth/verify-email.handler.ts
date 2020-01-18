@@ -3,18 +3,19 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserEntity, UserRepository } from '@graphqlcqrs/repository';
 import { ApolloError } from 'apollo-server-express';
 import { VerifyEmailCommand } from '../../impl';
-import { EmailVerifiedEvent } from '../../../';
+import { EmailVerifiedEvent } from '@graphqlcqrs/core/cqrs';
 import { BooleanPayload } from '@graphqlcqrs/core/dto';
 
 @CommandHandler(VerifyEmailCommand)
 export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
+  logger = new Logger(this.constructor.name);
   constructor(
     private readonly userRepository: UserRepository,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: VerifyEmailCommand): Promise<BooleanPayload> {
-    Logger.log('Async VerifyEmailHandler...', 'VerifyEmailCommand');
+    this.logger.log(`Async ${command.constructor.name}...`);
     const { code, email } = command;
 
     try {
@@ -47,7 +48,7 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
         success: false,
       };
     } catch (error) {
-      Logger.log(error, 'VerifyEmailHandler');
+      this.logger.log(error);
       throw new ApolloError(error.message);
     }
   }

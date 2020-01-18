@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AuthenticationError } from 'apollo-server-express';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
-import { LoginUserCommand } from '@graphqlcqrs/core/cqrs';
+import { LoginUserCommand } from '../cqrs';
 
 import { CommandBus } from '@nestjs/cqrs';
 import { LoginInput } from '@graphqlcqrs/core/dto';
