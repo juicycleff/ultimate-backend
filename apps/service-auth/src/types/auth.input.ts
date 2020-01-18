@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, ArgsType, Int } from 'type-graphql';
 import { ServiceTypes } from '@ultimatebackend/contracts';
 
 @InputType()
