@@ -6,6 +6,7 @@ import { ResendVerificationEmailCommand } from '../../impl';
 import { VerificationEmailSentEvent } from '@graphqlcqrs/core/cqrs';
 import { BooleanPayload } from '@graphqlcqrs/core/dto';
 import { NotFoundError } from '@graphqlcqrs/common/errors';
+import { generateVerificationCode } from '@graphqlcqrs/common/utils/verification-code-generator';
 
 @CommandHandler(ResendVerificationEmailCommand)
 export class ResendVerificationEmailHandler implements ICommandHandler<ResendVerificationEmailCommand> {
@@ -26,7 +27,23 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
 
       if (!user) { throw new NotFoundError('No user with email address found'); }
 
-      this.eventBus.publish(new VerificationEmailSentEvent(user));
+      const updatedUser = await this.userRepository.findOneAndUpdate({
+        conditions: {
+          'emails.address': email,
+        },
+        updates: {
+          $set: {
+            'emails.$.verificationCode': generateVerificationCode(6, { type: 'number' }),
+          },
+        },
+      });
+
+      if (updatedUser) {
+        this.eventBus.publish(new VerificationEmailSentEvent(updatedUser));
+        return {
+          success: true,
+        };
+      }
 
       return {
         success: false,
