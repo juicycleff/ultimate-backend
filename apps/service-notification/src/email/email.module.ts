@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { EmailVerifiedEvent, UserLoggedInEvent, UserRegisteredEvent } from '@graphqlcqrs/core';
+import { EmailVerifiedEvent, UserLoggedInEvent, UserRegisteredEvent, VerificationEmailSentEvent } from '@graphqlcqrs/core';
 import { DoneCallback, Job } from 'bull';
 import { BullModule } from 'nest-bull';
 import { EmailService } from './email.service';
@@ -22,6 +22,7 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
         UserLoggedInEvent: (data) => new UserLoggedInEvent(data),
         UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
         EmailVerifiedEvent: (data) => new EmailVerifiedEvent(data),
+        VerificationEmailSentEvent: (data) => new VerificationEmailSentEvent(data),
       },
     }),
     BullModule.register({
