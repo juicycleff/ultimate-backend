@@ -21,7 +21,7 @@ export class AuthQueue {
 
   @Process({ name: 'UserRegistered' })
   async processUserRegister(job: Job<UserEntity>) {
-    if (job.data) { return; }
+    if (!job.data) { return; }
 
     const user = job.data;
     const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
@@ -36,7 +36,7 @@ export class AuthQueue {
 
   @Process({ name: 'SendVerificationCode' })
   async sendVerificationCode(job: Job<UserEntity>) {
-    if (job.data) { return; }
+    if (!job.data) { return; }
 
     const user = job.data;
     const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
@@ -66,7 +66,7 @@ export class AuthQueue {
 
   @Process({ name: 'EmailVerified' })
   async processEmailVerified(job: Job<UserEntity>) {
-    if (job.data) { return; }
+    if (!job.data) { return; }
 
     const user = job.data;
     const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
