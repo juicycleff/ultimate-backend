@@ -14,7 +14,11 @@ export class AuthPayloadResolver {
 
   @ResolveProperty(() => User)
   async user(@Parent() auth: any): Promise<User> {
-    const user = await this.queryBus.execute(new GetUserQuery({ id: auth.id }));
-    return plainToClass(User, user);
+    const authUser = await this.queryBus.execute(new GetUserQuery({
+      id: {
+        _EQ: auth.id,
+      },
+    }));
+    return plainToClass(User, authUser);
   }
 }

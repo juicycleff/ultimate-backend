@@ -3,6 +3,7 @@ import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { UserRepository } from '@graphqlcqrs/repository/repositories';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
 import { GetUserQuery } from '../../impl';
+import { mongoParser } from '@ultimatebackend/contracts/utils';
 
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {
@@ -15,6 +16,7 @@ export class GetUserHandler implements IQueryHandler<GetUserQuery> {
     const { where } = query;
 
     if (!where) { throw Error('Missing get inputs'); }
-    return await this.userRepository.findOne({ ...where });
+    const filter = mongoParser(where);
+    return await this.userRepository.findOne({ ...filter }, true);
   }
 }
