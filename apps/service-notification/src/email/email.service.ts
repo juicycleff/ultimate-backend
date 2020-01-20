@@ -9,7 +9,7 @@ export class EmailService {
   ) {}
 
   public async sendEmail(data: Partial<MailData> | Array<Partial<MailData>>, isMultiple?: boolean) {
-    if (data) { return null; }
+    if (!data) { return null; }
 
     try {
       await this.sendGrid.send({ ...data, from: 'noreply@demo.com' }, isMultiple);

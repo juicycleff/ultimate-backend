@@ -5,7 +5,7 @@ import { ApolloError } from 'apollo-server-express';
 import { ResendVerificationEmailCommand } from '../../impl';
 import { VerificationEmailSentEvent } from '@graphqlcqrs/core/cqrs';
 import { BooleanPayload } from '@graphqlcqrs/core/dto';
-import { NotFoundError } from '@graphqlcqrs/common/errors';
+import { NotFoundError, ValidationError } from '@graphqlcqrs/common/errors';
 import { generateVerificationCode } from '@graphqlcqrs/common/utils/verification-code-generator';
 
 @CommandHandler(ResendVerificationEmailCommand)
@@ -26,6 +26,12 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
       }, true);
 
       if (!user) { throw new NotFoundError('No user with email address found'); }
+
+      // Check if user is verified
+      const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+      if (userEmail.verified) {
+        throw new ValidationError('Email already verified');
+      }
 
       const updatedUser = await this.userRepository.findOneAndUpdate({
         conditions: {

@@ -5,6 +5,7 @@ export * from './hash.utils';
 export * from './key.shared.utils';
 export * from './dto-mapper.utils';
 export * from './app.utils';
+export * from './mime-type.util';
 
 export function reduceByPercent(numb: number, value: number): number {
   const per = 100 - value;

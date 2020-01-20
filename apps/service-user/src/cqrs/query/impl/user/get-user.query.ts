@@ -1,9 +1,8 @@
 import {IQuery} from '@nestjs/cqrs';
-import { FindConditions } from '@graphqlcqrs/common/helpers/find-condtion.type';
-import { UserEntity } from '@graphqlcqrs/repository';
+import { UserFilterInput } from '../../../../types';
 
 export class GetUserQuery implements IQuery {
   constructor(
-    public readonly where: FindConditions<UserEntity>,
+    public readonly where: UserFilterInput,
   ) {}
 }

@@ -17,9 +17,13 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => User)
-  async user(@Args('id') id: string): Promise<User> {
-    const user = await this.queryBus.execute(new GetUserQuery({ id: new ObjectID(id) }));
-    return plainToClass(User, user);
+  async me(@CurrentUser() curUser: UserEntity): Promise<User> {
+    const authUser = await this.queryBus.execute(new GetUserQuery({
+      id: {
+        _EQ: curUser.id,
+      },
+    }));
+    return plainToClass(User, authUser);
   }
 
   @UseGuards(GqlAuthGuard)

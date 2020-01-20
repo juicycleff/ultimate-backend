@@ -107,7 +107,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
 
     if (noCache === false) {
       const cachedResult = await this.retrieveFromCache(cacheKey);
-      if (!Array.isArray(cachedResult)) {
+      if (cachedResult !== null && cachedResult !== undefined && !Array.isArray(cachedResult)) {
         return cachedResult;
       }
     }
@@ -116,7 +116,9 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     if (document) {
       document = this.toggleId(document, false) as any;
       document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
-      await this.saveToCache(cacheKey, document);
+      if (noCache === false) {
+        await this.saveToCache(cacheKey, document);
+      }
       return document;
     }
   }
@@ -392,7 +394,13 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
       for (const doc of document) {
         if (doc && (doc.id || doc._id)) {
           if (replace) {
-            doc._id = new ObjectID(doc.id);
+            if (typeof doc.id === 'string') {
+              doc._id = new ObjectID(doc.id);
+            } else if (typeof doc.id === 'object') {
+              doc._id = new ObjectID(doc.id.$eq);
+            } else {
+              doc._id =  doc.id;
+            }
             delete doc.id;
           } else {
             doc.id = doc._id.toString();
@@ -406,7 +414,13 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
 
     if (document && (document.id || document._id)) {
       if (replace) {
-        document._id = new ObjectID(document.id);
+        if (typeof document.id === 'string') {
+          document._id = new ObjectID(document.id);
+        } else if (typeof document.id === 'object') {
+          document._id = new ObjectID(document.id.$eq);
+        } else {
+          document._id =  document.id;
+        }
         delete document.id;
       } else {
         document.id = document._id.toString();
