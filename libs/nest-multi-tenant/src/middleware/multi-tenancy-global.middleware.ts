@@ -1,6 +1,6 @@
 import * as vhost from 'vhost';
 import { MultiTenancyConfig, TenantInfo } from '../interfaces';
-import { IRequest } from '@graphqlcqrs/core';
+import { IRequest } from '@graphqlcqrs/common';
 
 export function enableMultiTenancy(option: MultiTenancyConfig) {
 

@@ -1,6 +1,6 @@
 import { Address6 } from 'ip-address';
 import { AuthenticationError } from 'apollo-server-express';
-import { IRequest } from '@graphqlcqrs/core/interfaces';
+import { IRequest } from '../interfaces';
 import * as useragent from 'express-useragent';
 
 export class IdentifyMachineUtils {

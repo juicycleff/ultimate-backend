@@ -6,7 +6,7 @@ import { NotFoundError } from '@graphqlcqrs/common/errors';
 import { cleanEmptyProperties } from '@graphqlcqrs/common/utils';
 import { ProjectDeletedEvent, ProjectUpdatedEvent } from '@graphqlcqrs/core/cqrs';
 import { EventBus } from '@nestjs/cqrs';
-import { mongoParser } from '@ultimatebackend/contracts/utils';
+import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @Injectable()
 export class ProjectService {

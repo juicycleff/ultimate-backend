@@ -4,7 +4,7 @@ import { TenantRepository } from '@graphqlcqrs/repository/repositories';
 import { TenantEntity } from '@graphqlcqrs/repository/entities';
 import { ObjectId } from 'bson';
 import { GetTenantQuery } from '../../impl';
-import { mongoParser } from '@ultimatebackend/contracts';
+import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @QueryHandler(GetTenantQuery)
 export class GetTenantHandler implements IQueryHandler<GetTenantQuery> {
