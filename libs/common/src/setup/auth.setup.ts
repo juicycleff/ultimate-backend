@@ -40,7 +40,7 @@ export function authSetup(app: INestApplication | Express, withPassport: boolean
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: false,
-      domain: 'localhost',
+      // domain: 'localhost',
     },
     // proxy: withPassport === true ? undefined : true,
     store,

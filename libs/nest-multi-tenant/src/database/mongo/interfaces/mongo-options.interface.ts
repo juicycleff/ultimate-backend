@@ -1,4 +1,5 @@
 import { ModuleMetadata, Type } from '@nestjs/common/interfaces';
+import { ITenantServiceConfig } from '@juicycleff/nest-multi-tenant/interfaces';
 
 /**
  * Options that ultimately need to be provided to create a MongoDB connection
@@ -22,6 +23,9 @@ export interface MongoOptionsFactory {
 export interface MongoModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   /** A unique name for the container.  If not specified, a default one will be used. */
   containerName?: string;
+
+  /** A unique name for the container.  If not specified, a default one will be used. */
+  config: ITenantServiceConfig;
 
   /** Reuse an injectable factory class created in another module. */
   useExisting?: Type<MongoOptionsFactory>;

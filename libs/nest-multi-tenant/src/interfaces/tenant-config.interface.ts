@@ -65,5 +65,28 @@ export type TenantResolver =
   };
 
 export interface ITenantServiceConfig {
+  /**
+   * @description the name of the microservice
+   * @example comments
+   */
   serviceName: string;
+
+  /**
+   * @description the dbName must be a non uri and just the database name like
+   * @example comments
+   */
+  dbName: string;
+
+  /**
+   * @description the dbUri must have an end slash like this /
+   * @example mongodb://localhost:27017/
+   */
+  dbUri: string;
+
+  /**
+   * @description If you are using a replica cluster, there is an extra string at the
+   * @description end of the uri that looks like this "?retryWrites=true&w=majority"
+   * @example "?retryWrites=true&w=majority"
+   */
+  dbReplicaOptions?: string;
 }
