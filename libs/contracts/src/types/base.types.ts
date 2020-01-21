@@ -33,7 +33,7 @@ export class PageInfo {
 }
 
 // @ts-ignore
-export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>) {
+export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>): any {
   @ObjectType(`${TItemClass.name}Edge`)
   class EdgeTypeClass {
     @Field(() => [TItemClass])

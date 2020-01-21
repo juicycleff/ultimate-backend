@@ -3,7 +3,7 @@ import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { UserRepository } from '@graphqlcqrs/repository/repositories';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
 import { GetUserQuery } from '../../impl';
-import { mongoParser } from '@ultimatebackend/contracts/utils';
+import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {

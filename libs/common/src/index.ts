@@ -8,3 +8,4 @@ export * from './middlewares';
 export * from './guards';
 export * from './providers';
 export * from './enums';
+export * from './interfaces';

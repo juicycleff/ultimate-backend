@@ -3,7 +3,7 @@ import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { UserInputError, ApolloError } from 'apollo-server-express';
 import { GetProjectQuery } from '../../impl';
 import { ProjectEntity, ProjectRepository } from '@graphqlcqrs/repository';
-import { mongoParser } from '@ultimatebackend/contracts';
+import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @QueryHandler(GetProjectQuery)
 export class GetProjectHandler implements IQueryHandler<GetProjectQuery> {

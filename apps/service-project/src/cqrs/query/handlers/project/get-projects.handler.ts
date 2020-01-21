@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import {ApolloError} from 'apollo-server-express';
-import { mongoParser } from '@ultimatebackend/contracts';
+import { mongoParser } from '@juicycleff/nest-multi-tenant';
 import { ProjectEntity, ProjectRepository } from '@graphqlcqrs/repository';
 import { GetProjectsQuery } from '../../impl';
 
