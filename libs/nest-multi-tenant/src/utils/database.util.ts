@@ -9,6 +9,14 @@ export function getContainerToken(containerName: string = DEFAULT_DATABASE_CONNE
 }
 
 /**
+ * Get a token for the Map object for the given container name
+ * @param containerName The unique name for the container
+ */
+export function getContainerTenantConfig(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+  return `${containerName}TenantConfig`;
+}
+
+/**
  * Get a token for the database object for the given connection name
  * @param containerName The unique name for the container
  */

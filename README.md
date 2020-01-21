@@ -34,7 +34,7 @@ Software features
 *   ✅ Federated GraphQL Microservice
 *   ✅ Emailing Queue
 *   ✅ Role Based Access Control (WiP)
-*   ✅ Multi Tenancy (WiP)
+*   ✅ Multi Tenancy
 *   ✅ Payment ([Stripe](https://stripe.com/))
 *   ✅ SaaS Plans ([Stripe](https://stripe.com/))
 *   ❌ (WiP) Security

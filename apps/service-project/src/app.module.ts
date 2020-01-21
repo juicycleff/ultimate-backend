@@ -6,6 +6,7 @@ import { CoreModule } from '@graphqlcqrs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProjectModule } from './project/project.module';
+import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -29,6 +30,12 @@ require('dotenv').config();
      * Using forRootAsync will disable CQRS.
      */
     MongoModule.forRootAsync({
+      config: {
+        serviceName: 'service-project',
+        dbUri: AppConfig.services?.project?.mongodb?.uri,
+        dbName: AppConfig.services?.project?.mongodb?.name,
+        dbReplicaOptions: AppConfig.services?.project?.mongodb?.options,
+      },
       imports: [MultiTenantModule],
       useClass: MultiTenantService,
     }),

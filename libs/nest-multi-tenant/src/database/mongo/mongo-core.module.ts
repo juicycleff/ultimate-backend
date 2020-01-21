@@ -5,7 +5,7 @@ import * as hash from 'object-hash';
 import { MultiTenantModule } from '@juicycleff/nest-multi-tenant/multi-tenant.module';
 import { DEFAULT_MONGO_CLIENT_OPTIONS, MONGO_MODULE_OPTIONS } from '@juicycleff/nest-multi-tenant/database';
 
-import { getClientToken, getContainerToken, getCurrentTenantToken, getDbToken } from '../../utils';
+import { getClientToken, getContainerTenantConfig, getContainerToken, getCurrentTenantToken, getDbToken } from '../../utils';
 import { DEFAULT_DATABASE_CONTAINER_NAME, DATABASE_CONTAINER_NAME } from '../../constants';
 import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces';
 
@@ -94,6 +94,11 @@ export class MongoCoreModule implements OnModuleDestroy {
       useFactory: () => new Map<any, MongoClient>(),
     };
 
+    const tenantConfigProvider = {
+      provide: getContainerTenantConfig(mongoContainerName),
+      useFactory: () => options.config,
+    };
+
     const clientProvider = {
       provide: getClientToken(mongoContainerName),
       useFactory: async (
@@ -134,6 +139,7 @@ export class MongoCoreModule implements OnModuleDestroy {
       imports: options.imports,
       providers: [
         ...asyncProviders,
+        tenantConfigProvider,
         clientProvider,
         dbProvider,
         containerNameProvider,
