@@ -111,7 +111,7 @@ export class MultiTenantService {
      */
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DataIsolation) {
       uri = this.generateMongoConnectionString(
-        this.tenantServiceConfig.dbUri, this.tenantServiceConfig.dbUri, this.tenantServiceConfig.dbReplicaOptions);
+        this.tenantServiceConfig.dbUri, this.tenantServiceConfig.dbName, this.tenantServiceConfig.dbReplicaOptions);
     }
 
     /**
