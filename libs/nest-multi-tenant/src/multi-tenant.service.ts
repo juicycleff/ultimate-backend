@@ -33,9 +33,9 @@ export class MultiTenantService {
     }
 
     const dbUri = this.tenantServiceConfig.dbUri; // Set database Url
-    const dbUriWithName = this.tenantServiceConfig.dbUri.endsWith('/') ?
-      `${this.tenantServiceConfig.dbUri}${this.tenantServiceConfig.dbUri}` :
-      `${this.tenantServiceConfig.dbUri}/${this.tenantServiceConfig.dbUri}`;
+    const dbUriWithName = dbUri.endsWith('/') ?
+      `${dbUri}${this.tenantServiceConfig.dbName}${this.tenantServiceConfig.dbReplicaOptions}` :
+      `${dbUri}/${this.tenantServiceConfig.dbName}${this.tenantServiceConfig.dbReplicaOptions}`;
 
     /**
      * This piece block of code is the default config if for some reason, the req object is empty

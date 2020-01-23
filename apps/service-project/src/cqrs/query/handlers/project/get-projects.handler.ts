@@ -19,7 +19,7 @@ export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
 
     try {
 
-      if (!input.where) {
+      if (input.where) {
         const filter = mongoParser(input.where);
         return await this.projectRepository.find({
           conditions: { ...filter },
