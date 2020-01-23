@@ -2,8 +2,12 @@ import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { CONTEXT } from '@nestjs/graphql';
-import { TenantInfo, TenantDatabaseStrategy, MongoModuleOptions, ITenantServiceConfig } from './';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import {
+  TenantInfo,
+  TenantDatabaseStrategy,
+  MongoModuleOptions,
+  ITenantServiceConfig,
+} from './';
 
 /**
  * @class MultiTenantService
@@ -82,10 +86,13 @@ export class MultiTenantService {
     const appConString = this.generateMongoConnectionString(
       this.tenantServiceConfig.dbUri, tenantInfo.tenant, this.tenantServiceConfig.dbReplicaOptions);
 
+    const tenantName = tenantInfo.tenant;
+    let databseName;
     /**
      * Applying the right connection string for DatabaseIsolation database strategy
      */
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DatabaseIsolation) {
+      databseName = 'tenant-' + tenantName;
       if (tenantInfo.connectionString) {
         uri = tenantInfo.connectionString;
       } else {
@@ -96,13 +103,13 @@ export class MultiTenantService {
     /**
      * Applying the right connection string for both DatabaseIsolation and DataIsolation database strategy
      */
-    let tenantName;
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.Both) {
       if (tenantInfo.connectionString) {
-        uri = tenantInfo.connectionString || appConString || dbUriWithName;
+        databseName = 'tenant-' + tenantName;
+        uri = tenantInfo.connectionString || appConString;
       } else {
+        databseName =  this.tenantServiceConfig.dbName;
         uri = dbUriWithName;
-        tenantName = tenantInfo.tenant;
       }
     }
 
@@ -110,6 +117,7 @@ export class MultiTenantService {
      * Applying the right connection string for DataIsolation database strategy
      */
     if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DataIsolation) {
+      databseName =  this.tenantServiceConfig.dbName;
       uri = this.generateMongoConnectionString(
         this.tenantServiceConfig.dbUri, this.tenantServiceConfig.dbName, this.tenantServiceConfig.dbReplicaOptions);
     }
@@ -119,7 +127,7 @@ export class MultiTenantService {
      */
     return {
       uri,
-      dbName: tenantInfo.tenant || AppConfig.services?.project?.mongodb?.name,
+      dbName: databseName,
       clientOptions: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
