@@ -32,8 +32,8 @@ require('dotenv').config();
     MongoModule.forRootAsync({
       config: {
         serviceName: 'service-project',
-        dbUri: AppConfig.services?.project?.mongodb?.uri,
-        dbName: AppConfig.services?.project?.mongodb?.name,
+        dbUri: global.__MONGO_URI__ || AppConfig.services?.project?.mongodb?.uri,
+        dbName: global.__MONGO_DB_NAME__ || AppConfig.services?.project?.mongodb?.name,
         dbReplicaOptions: AppConfig.services?.project?.mongodb?.options,
       },
       imports: [MultiTenantModule],

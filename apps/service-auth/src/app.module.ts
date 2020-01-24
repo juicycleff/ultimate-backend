@@ -14,6 +14,8 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
 
+const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
+
 @Module({
   imports: [
     CoreModule,
@@ -33,14 +35,15 @@ require('dotenv').config();
       context: ({ req, res }) => buildContext({ req, res }),
     }),
     NestCasbinModule.forRootAsync(
-      AppConfig.casbin.dbUri,
+      jestMongoDb || `${AppConfig.casbin?.dbUri}${AppConfig.casbin?.dbName}${AppConfig.mongodb?.options}`,
       resolve('models/roles.conf'),
       AppConfig.casbin.dbName,
       'roles',
+      null,
     ),
     MongoModule.forRoot({
-      uri: `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
-      dbName: AppConfig.services?.auth?.mongodb?.name,
+      uri: jestMongoDb || `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
+      dbName: global.__MONGO_DB_NAME__ || AppConfig.services?.auth?.mongodb?.name,
     }),
     AuthModule,
     RolesModule,

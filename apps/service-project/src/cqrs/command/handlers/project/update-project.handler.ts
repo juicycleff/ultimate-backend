@@ -9,15 +9,17 @@ import { UpdateProjectCommand } from '../../impl';
 @CommandHandler(UpdateProjectCommand)
 export class UpdateProjectHandler implements ICommandHandler<UpdateProjectCommand> {
   logger = new Logger(this.constructor.name);
+  projectRepository: ProjectRepository;
 
   public constructor(
-    private readonly projectRepository: ProjectRepository,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateProjectCommand): Promise<ProjectEntity> {
-    this.logger.log(`Async ${this.constructor.name}...`);
-    const { input } = command;
+    this.logger = new Logger(this.constructor.name);
+    this.logger.log(`Async ${command.constructor.name}...`);
+    const { input, projectRepository } = command;
+    this.projectRepository = projectRepository;
 
     try {
       if (input === null ) { // Check to make sure input is not null

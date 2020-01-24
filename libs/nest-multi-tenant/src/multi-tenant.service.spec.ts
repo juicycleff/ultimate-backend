@@ -6,7 +6,17 @@ describe('NestMultiTenantService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MultiTenantService],
+      providers: [
+        {
+          provide: 'DefaultDatabaseTenantConfig',
+          useValue: {
+            dbName: 'testdb',
+            dbUri: 'mongodb"//localhost:27017/',
+            serviceName: 'test-suit',
+          },
+        },
+        MultiTenantService,
+      ],
     }).compile();
 
     service = await module.resolve<MultiTenantService>(MultiTenantService);

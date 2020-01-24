@@ -13,6 +13,8 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
 
+const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
+
 @Module({
   imports: [
     GraphqlDistributedModule.forRoot({
@@ -30,8 +32,8 @@ require('dotenv').config();
     }),
     CoreModule,
     MongoModule.forRoot({
-      uri: `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
-      dbName: AppConfig.services?.auth?.mongodb?.name,
+      uri: jestMongoDb || `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
+      dbName: global.__MONGO_DB_NAME__ || AppConfig.services?.auth?.mongodb?.name,
     }),
     UserModule,
     AuthPayloadModule,

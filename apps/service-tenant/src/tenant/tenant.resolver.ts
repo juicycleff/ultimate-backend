@@ -3,15 +3,16 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { TenantEntity, UserEntity } from '@graphqlcqrs/repository/entities';
 import { CurrentUser } from '@graphqlcqrs/common';
 import { UserInputError } from 'apollo-server-express';
-import { ISubscriptionService, Permission, Resource } from '@graphqlcqrs/core';
+import { GqlAuthGuard, ISubscriptionService, Permission, Resource } from '@graphqlcqrs/core';
 import { GetTenantQuery, GetTenantsQuery } from '../cqrs/query/impl/tenant';
 import { Tenant, TenantFilterArgs, TenantMutationArgs } from '../types';
-import { OnModuleInit } from '@nestjs/common';
+import { OnModuleInit, UseGuards } from '@nestjs/common';
 import { Client, ClientGrpcProxy, Transport } from '@nestjs/microservices';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 import { join } from 'path';
 import { CreateTenantCommand, RemoveTenantCommand } from '../cqrs/command/impl';
 
+@UseGuards(GqlAuthGuard)
 @Resource({ name: 'tenant_manage', identify: 'tenant:manage' })
 @Resolver(() => Tenant)
 export class TenantResolver implements OnModuleInit {

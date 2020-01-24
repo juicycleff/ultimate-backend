@@ -5,7 +5,6 @@ import { NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { FacebookStrategy, LocalStrategy } from './strategy';
-import { AuthController } from './auth.controller';
 import {
   UserLoggedInEvent,
   UserRegisteredEvent,
@@ -48,6 +47,5 @@ import { PassportModule } from '@nestjs/passport';
     FacebookStrategy,
     UserRepository,
   ],
-  controllers: [AuthController],
 })
 export class AuthModule {}

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TenantMemberResolver } from './tenant-member.resolver';
-import { CqrsModule } from '@nestjs/cqrs';
 import { CacheModule } from '@nestjs/common';
+import { CoreModule } from '@graphqlcqrs/core';
 
 describe('TenantMemberResolver', () => {
   let resolver: TenantMemberResolver;
@@ -9,7 +9,7 @@ describe('TenantMemberResolver', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        CqrsModule,
+        CoreModule,
         CacheModule.register(),
       ],
       providers: [TenantMemberResolver],

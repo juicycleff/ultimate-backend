@@ -14,6 +14,8 @@ import { Tenant, User, TenantMember } from './types';
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
 
+const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
+
 @Module({
   imports: [
     GraphqlDistributedModule.forRoot({
@@ -32,8 +34,8 @@ require('dotenv').config();
     }),
     CoreModule,
     MongoModule.forRoot({
-      uri: `${AppConfig.services?.tenant?.mongodb?.uri}${AppConfig.services?.tenant?.mongodb?.name}`,
-      dbName: AppConfig.services?.tenant?.mongodb?.name,
+      uri: jestMongoDb || `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
+      dbName: global.__MONGO_DB_NAME__ || AppConfig.services?.auth?.mongodb?.name,
     }),
     TenantModule,
     TenantMemberModule,

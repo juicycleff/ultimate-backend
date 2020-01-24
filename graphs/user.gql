@@ -30,7 +30,7 @@ type EmailObject {
 }
 
 type Query {
-  user(id: String!): User!
+  me: User!
 }
 
 type User {

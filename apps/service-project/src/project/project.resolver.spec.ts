@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CqrsModule } from '@nestjs/cqrs';
-import { CacheModule } from '@nestjs/common';
+import { CoreModule } from '@graphqlcqrs/core';
 import { ProjectResolver } from './project.resolver';
+import { ProjectRepository } from '@graphqlcqrs/repository';
+import { MongoModule, MultiTenantModule, MultiTenantService } from '@juicycleff/nest-multi-tenant';
 
 describe('ProjectResolver', () => {
   let resolver: ProjectResolver;
@@ -9,10 +10,18 @@ describe('ProjectResolver', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        CqrsModule,
-        CacheModule.register(),
+        CoreModule,
+        MongoModule.forRootAsync({
+          config: {
+            serviceName: 'service-point',
+            dbUri: global.__MONGO_URI__,
+            dbName: global.__MONGO_DB_NAME__,
+          },
+          imports: [MultiTenantModule],
+          useClass: MultiTenantService,
+        }),
       ],
-      providers: [ProjectResolver],
+      providers: [ProjectResolver, ProjectRepository],
     }).compile();
 
     resolver = module.get<ProjectResolver>(ProjectResolver);
