@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
-import { authSetup, AppUtils } from '@graphqlcqrs/common';
+import { authSetup, AppUtils, securitySetup } from '@graphqlcqrs/common';
 import { AppModule } from './app.module';
 
 // tslint:disable-next-line:no-var-requires
@@ -32,6 +32,7 @@ async function bootstrapNest() {
   }));
   AppUtils.killAppWithGrace(app);
   authSetup(app, false);
+  securitySetup(app);
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||

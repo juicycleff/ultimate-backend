@@ -1,7 +1,7 @@
 import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
-import { authSetup } from '@graphqlcqrs/common/setup';
+import { authSetup, securitySetup } from '@graphqlcqrs/common';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloGateway } from '@apollo/gateway';
 import * as express from 'express';
@@ -63,6 +63,7 @@ async function bootstrapSimple() {
     databaseStrategy: TenantDatabaseStrategy.Both,
   }));
   authSetup(app, false);
+  securitySetup(app);
 
   server.applyMiddleware({ app });
   await app.listen({ port: parseInt(process.env.PORT, 10) || parseInt(config.gateway?.admin?.port, 10) || 4000 });

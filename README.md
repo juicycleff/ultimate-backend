@@ -33,11 +33,11 @@ Software features
 *   ✅ Event Sourcing
 *   ✅ Federated GraphQL Microservice
 *   ✅ Emailing Queue
-*   ✅ Role Based Access Control (WiP)
+*   ✅ (WiP) Role Based Access Control
 *   ✅ Multi Tenancy
 *   ✅ Payment ([Stripe](https://stripe.com/))
 *   ✅ SaaS Plans ([Stripe](https://stripe.com/))
-*   ❌ (WiP) Security
+*   ✅ (WiP) Security
 *   ❌ (WiP) Documentation
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
 *   ❌ WiP: [React Website](https://github.com/juicycleff/ultimate-backend-dashboard)
