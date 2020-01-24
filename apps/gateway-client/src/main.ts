@@ -6,6 +6,7 @@ import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
 import { AppUtils } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
+import { securitySetup } from '@graphqlcqrs/common/setup';
 
 // tslint:disable-next-line:no-var-requires
 const config = require('config-yml').load(process.env.NODE_ENV);
@@ -34,6 +35,7 @@ async function bootstrap() {
   AppUtils.killAppWithGrace(app);
   app.use(cookieParser());
   app.use(useragent.express());
+  securitySetup(app);
 
   await app.listenAsync(
     parseInt(process.env.PORT, 10) ||
