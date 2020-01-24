@@ -8,14 +8,13 @@ import { GetProjectsQuery } from '../../impl';
 @QueryHandler(GetProjectsQuery)
 export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
   logger = new Logger(this.constructor.name);
-
-  public constructor(
-    private readonly projectRepository: ProjectRepository,
-  ) {}
+  projectRepository: ProjectRepository;
 
   async execute(query: GetProjectsQuery): Promise<ProjectEntity[]> {
+    this.logger = new Logger(this.constructor.name);
     this.logger.log(`Async ${query.constructor.name}...`);
-    const { input } = query;
+    const { input, projectRepository } = query;
+    this.projectRepository = projectRepository;
 
     try {
 

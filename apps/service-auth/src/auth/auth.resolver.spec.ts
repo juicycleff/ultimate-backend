@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CqrsModule } from '@nestjs/cqrs';
-import { CacheModule } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
+import { CoreModule } from '@graphqlcqrs/core';
 
 describe('AuthResolver', () => {
   let resolver: AuthResolver;
@@ -11,8 +10,7 @@ describe('AuthResolver', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        CqrsModule,
-        CacheModule.register(),
+        CoreModule,
         PassportModule,
       ],
       providers: [AuthResolver, AuthService],

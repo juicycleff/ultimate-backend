@@ -8,14 +8,13 @@ import { mongoParser } from '@juicycleff/nest-multi-tenant';
 @QueryHandler(GetProjectQuery)
 export class GetProjectHandler implements IQueryHandler<GetProjectQuery> {
   logger = new Logger(this.constructor.name);
-
-  public constructor(
-    private readonly projectRepository: ProjectRepository,
-  ) {}
+  projectRepository: ProjectRepository;
 
   async execute(query: GetProjectQuery): Promise<ProjectEntity> {
+    this.logger = new Logger(this.constructor.name);
     this.logger.log(`Async ${query.constructor.name}...`);
-    const { where } = query;
+    const { where, projectRepository } = query;
+    this.projectRepository = projectRepository;
 
     if (!where) { throw new UserInputError('Missing project where input'); }
 

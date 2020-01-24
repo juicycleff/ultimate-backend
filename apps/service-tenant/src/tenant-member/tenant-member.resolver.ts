@@ -2,8 +2,10 @@ import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { TenantMemberEmbed } from '@graphqlcqrs/repository';
 import { TenantMemberMutationArgs, TenantMember, TenantMemberFilterArgs } from '../types';
 import { NotImplementedError } from '@graphqlcqrs/common';
-import { Permission, Resource } from '@graphqlcqrs/core';
+import { GqlAuthGuard, Permission, Resource } from '@graphqlcqrs/core';
+import { UseGuards } from '@nestjs/common';
 
+@UseGuards(GqlAuthGuard)
 @Resource({ name: 'tenant_member_manage', identify: 'tenantMember:manage' })
 @Resolver(() => TenantMember)
 export class TenantMemberResolver {

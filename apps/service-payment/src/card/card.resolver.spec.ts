@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CardResolver } from './card.resolver';
-import { CqrsModule } from '@nestjs/cqrs';
+import { CoreModule } from '@graphqlcqrs/core';
 
 describe('CardResolver', () => {
   let resolver: CardResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CqrsModule],
+      imports: [CoreModule],
       providers: [CardResolver],
     }).compile();
 

@@ -63,7 +63,7 @@ type Mutation {
   role(create: CreateRoleInput, remove: RemoveRoleInput): Role!
   sendResetPasswordEmail(email: String!): BooleanPayload!
   sendVerificationEmail(email: String!): BooleanPayload!
-  verifyEmail(email: String!, token: Float!): BooleanPayload!
+  verifyEmail(email: String!, token: Int!): BooleanPayload!
 }
 
 type Query {

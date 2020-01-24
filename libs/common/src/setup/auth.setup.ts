@@ -20,10 +20,12 @@ require('dotenv').config();
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
 
+const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
+
 const MongoDBStore = connectMongodbSession(session);
 
 const store = new MongoDBStore({
-  uri: `${AppConfig.mongodb.defaultUri}service-auth${AppConfig.mongodb.options}`,
+  uri: jestMongoDb || `${AppConfig.mongodb.defaultUri}service-auth${AppConfig.mongodb.options}`,
   collection: 'session',
 });
 

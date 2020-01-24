@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PlanService } from './plan.controller';
+import { PlanService } from './plan.service';
 import { CqrsModule } from '@nestjs/cqrs';
 
-describe('Plan Controller', () => {
+describe('Plan GRPC Service', () => {
   let controller: PlanService;
 
   beforeEach(async () => {
