@@ -83,15 +83,16 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - TENANT_ENDPOINT_REST=http://services-tenant:9200
     depends_on:
       - eventstore
+      - redis-cache
       - services-auth
       - services-user
-      - redis-cache
     links:
       - eventstore
-      - services-auth
       - redis-cache
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -135,12 +136,12 @@ services:
       - REDIS_PASSWORD=""
     depends_on:
       - eventstore
-      - services-auth
       - redis-cache
+      - services-auth
     links:
       - eventstore
-      - services-auth
       - redis-cache
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -184,12 +185,12 @@ services:
       - REDIS_PASSWORD=""
     depends_on:
       - eventstore
-      - services-auth
       - redis-cache
+      - services-auth
     links:
       - eventstore
-      - services-auth
       - redis-cache
+      - services-auth
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "regcred"
@@ -265,14 +266,14 @@ services:
       - ES_STREAM_PROTOCOL=http
       - ES_HTTP_PORT=2113
       - ES_HTTP_PROTOCOL=http
+      - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
+      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
+      - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - ES_TCP_PASSWORD=changeit
       - ES_TCP_USERNAME=admin
       - ES_TCP_HOSTNAME=eventstore
       - ES_TCP_PORT=1113
       - ES_TCP_PROTOCOL=tcp
-      - PAYMENT_GRPC_ENDPOINT=http://services-payment:7500
-      - TENANT_GRPC_ENDPOINT=http://services-tenant:7200
-      - AUTH_GRPC_ENDPOINT=http://services-auth:7900
       - MONGO_DB_SERVER_URI=mongodb+srv://admin:adminadmin@dfour-prod-cluster-gzfix.mongodb.net/
       - MONGODB_DB_OPTIONS=?retryWrites=true&w=majority
       - MONGODB_DB_NAME=service-payment
@@ -331,12 +332,6 @@ services:
       kompose.image-pull-secret: "regcred"
       kompose.image-pull-policy: "Always"
 
-  redis-cache:
-    image: redis
-    container_name: redis-cache
-    expose:
-      - 6379
-
   gateway-client:
     build:
       context: ""
@@ -348,12 +343,10 @@ services:
     environment:
       - PORT=5000
       - PROJECT_ENDPOINT=http://services-project:9100/graphql
-      - PROJECT_PATH=project
       - AUTH_ENDPOINT=http://services-auth:9900/graphql
-      - AUTH_PATH=auth
       - USER_ENDPOINT=http://services-user:9000/graphql
-      - USER_PATH=user
-
+      - PAYMENT_ENDPOINT=http://services-payment:9300/graphql
+      - TENANT_ENDPOINT=http://services-tenant:9200/graphql
     depends_on:
       - services-auth
       - services-project
@@ -368,6 +361,12 @@ services:
       kompose.service.expose: "true"
       kompose.image-pull-secret: "regcred"
       kompose.image-pull-policy: "Always"
+
+  redis-cache:
+    image: redis
+    container_name: redis-cache
+    expose:
+      - 6379
 
   eventstore:
     container_name: eventstore-node
