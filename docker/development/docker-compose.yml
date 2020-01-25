@@ -83,6 +83,7 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - TENANT_ENDPOINT_REST=http://services-tenant:9200
     depends_on:
       - eventstore
       - redis-cache

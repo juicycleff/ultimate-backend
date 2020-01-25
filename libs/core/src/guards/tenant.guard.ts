@@ -23,7 +23,7 @@ export class TenantGuard implements CanActivate {
 
     try {
       const tenant = (await this.httpService.get(
-        (process.env.TENANT_API || (`http://localhost:${AppConfig.services?.tenant.port || '9200'}`)) + '/tenant/find', {
+        (process.env.TENANT_ENDPOINT_REST || (`http://localhost:${AppConfig.services?.tenant.port || '9200'}`)) + '/tenant/find', {
         data: {
           normalizedName: tenantInfo.tenant,
           secret: tenantInfo.accessToken.secret,
