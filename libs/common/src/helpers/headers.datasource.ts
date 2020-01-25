@@ -7,6 +7,7 @@ const unSafeHeaders = [
   'content-length',
   'connection',
   'host',
+  'origin',
 ];
 
 export class HeadersDatasource extends RemoteGraphQLDataSource {
