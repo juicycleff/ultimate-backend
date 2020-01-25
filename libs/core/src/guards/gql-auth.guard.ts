@@ -1,9 +1,7 @@
-import { CanActivate, ExecutionContext, HttpService, Injectable, OnModuleInit } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpService, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
-import { IPermission, IResource, IRoleService, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
-import { Client, ClientGrpcProxy, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import { IPermission, IResource, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
 import { UserEntity } from '@graphqlcqrs/repository';
 import { ForbiddenError } from '@graphqlcqrs/common';
 import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
@@ -15,18 +13,7 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
  * @implements {CanActivate}
  */
 @Injectable()
-export class GqlAuthGuard  implements CanActivate, OnModuleInit {
-  @Client({
-    transport: Transport.GRPC,
-    options: {
-      package: 'role',
-      url: (process.env.AUTH_GRPC_ENDPOINT && process.env.AUTH_GRPC_ENDPOINT.replace('http://', ''))
-        || `localhost:${AppConfig.services?.auth?.grpcPort || 7900}`,
-      protoPath: join('proto/role.proto'),
-    },
-  })
-  client: ClientGrpcProxy;
-  roleService: IRoleService;
+export class GqlAuthGuard  implements CanActivate {
 
   constructor(
     private readonly reflector: Reflector,
@@ -74,9 +61,5 @@ export class GqlAuthGuard  implements CanActivate, OnModuleInit {
     }
 
     return await ctx.isAuthenticated();
-  }
-
-  onModuleInit(): any {
-    this.roleService = this.client.getService<IRoleService>('RoleService');
   }
 }
