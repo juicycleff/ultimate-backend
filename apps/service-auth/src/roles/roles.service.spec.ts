@@ -11,9 +11,9 @@ describe('Roles Service', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         NestCasbinModule.forRootAsync(
-          AppConfig.casbin.dbUri,
+          global.__MONGO_URI__ || AppConfig.casbin.dbUri,
           resolve('models/roles.conf'),
-          AppConfig.casbin.dbName,
+          global.__MONGO_DB_NAME__ || AppConfig.casbin.dbName,
           'roles',
         ),
       ],
