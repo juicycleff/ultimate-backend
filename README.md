@@ -39,6 +39,7 @@ Software features
 *   ✅ SaaS Plans ([Stripe](https://stripe.com/))
 *   ✅ (WiP) Security
 *   ❌ (WiP) Documentation
+*   ❌ (WiP) Support for language translation
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
 *   ❌ WiP: [React Website](https://github.com/juicycleff/ultimate-backend-dashboard)
 
