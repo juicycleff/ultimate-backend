@@ -59,7 +59,7 @@ export class UpdatePaymentMethodHandler implements ICommandHandler<UpdatePayment
       this.eventBus.publish(new PaymentMethodUpdatedEvent(pub));
       return convCard;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

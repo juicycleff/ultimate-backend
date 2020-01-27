@@ -8,13 +8,15 @@ import { RemoveTenantCommand } from '../../impl';
 
 @CommandHandler(RemoveTenantCommand)
 export class RemoveTenantHandler implements ICommandHandler<RemoveTenantCommand> {
+  logger = new Logger(this.constructor.name);
+
   constructor(
     private readonly tenantRepository: TenantRepository,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: RemoveTenantCommand): Promise<TenantEntity> {
-    Logger.log('Async RemoveTenantHandler...', 'RemoveTenantCommand');
+    this.logger.log(`'Async '${command.constructor.name}...`);
     const { input } = command;
 
     try {
@@ -38,9 +40,8 @@ export class RemoveTenantHandler implements ICommandHandler<RemoveTenantCommand>
       await this.eventBus.publish(new TenantRemovedEvent(tenant));
       return tenant;
     } catch (error) {
-      Logger.log(error, 'CreateTenantHandler');
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }
-
 }

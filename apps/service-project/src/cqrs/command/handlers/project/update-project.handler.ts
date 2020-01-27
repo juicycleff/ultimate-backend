@@ -45,7 +45,7 @@ export class UpdateProjectHandler implements ICommandHandler<UpdateProjectComman
       await this.eventBus.publish(new ProjectUpdatedEvent(project));
       return project;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error);
     }
   }

@@ -40,7 +40,7 @@ export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripe
       await this.eventBus.publish(new StripeUserDeletedEvent(customerMod));
       return customerMod;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

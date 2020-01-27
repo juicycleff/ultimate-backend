@@ -28,6 +28,7 @@ export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
       }
       return await this.projectRepository.find();
     } catch (e) {
+      this.logger.error(e);
       throw new ApolloError(e);
     }
   }

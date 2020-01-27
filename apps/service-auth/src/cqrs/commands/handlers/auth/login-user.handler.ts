@@ -63,7 +63,7 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
       this.eventBus.publish(new UserLoggedInEvent(user));
       return user;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message);
     }
   }

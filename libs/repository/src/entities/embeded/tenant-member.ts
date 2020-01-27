@@ -1,6 +1,6 @@
 import { Entity } from '@juicycleff/nest-multi-tenant';
 import { ObjectID } from 'mongodb';
-import { AppRole, InvitationStatus } from '@graphqlcqrs/common';
+import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
 
 @Entity({name: 'tenant-member'})
 export class TenantMemberEmbed {
@@ -14,6 +14,8 @@ export class TenantMemberEmbed {
   status!: InvitationStatus;
 
   role: AppRole;
+
+  invitedBy!: string | ObjectID | any;
 
   createdAt!: Date | string;
 

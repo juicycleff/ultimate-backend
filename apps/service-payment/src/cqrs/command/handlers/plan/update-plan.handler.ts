@@ -85,7 +85,7 @@ export class UpdatePlanHandler implements ICommandHandler<UpdatePlanCommand> {
       await this.eventBus.publish(new PlanUpdatedEvent(eventData));
       return plan;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

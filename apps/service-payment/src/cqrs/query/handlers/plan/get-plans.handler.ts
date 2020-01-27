@@ -47,6 +47,7 @@ export class GetPlansHandler implements IQueryHandler<GetPlansQuery> {
       await this.cacheStore.set('service-payment/plans/' + JSON.stringify(where), plans, {ttl: 200});
       return plans;
     } catch (e) {
+      this.logger.error(e);
       throw new ApolloError(e);
     }
   }

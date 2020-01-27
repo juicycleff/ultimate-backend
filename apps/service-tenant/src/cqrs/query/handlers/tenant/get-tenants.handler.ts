@@ -9,12 +9,14 @@ import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @QueryHandler(GetTenantsQuery)
 export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
+  logger = new Logger(this.constructor.name); // write here
   constructor(
     private readonly tenantRepository: TenantRepository,
   ) {}
 
   async execute(query: GetTenantsQuery): Promise<TenantEntity[]> {
-    Logger.log(query, 'GetTenantsQuery'); // write here
+    this.logger.log(`Async ${query.constructor.name}...`);
+
     const { where, user } = query;
 
     try {
@@ -28,6 +30,7 @@ export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
       const userFilter = user ? userCond : {};
       return await this.tenantRepository.find({ conditions: {...filter, ...userFilter} });
     } catch (e) {
+      this.logger.error(e);
       throw new ApolloError(e);
     }
   }

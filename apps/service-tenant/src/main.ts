@@ -32,4 +32,5 @@ async function bootstrap() {
 
   await setupGrpc(app, 'tenant', 'tenant.proto', config.services?.tenant?.grpcPort || 7200);
 }
+
 bootstrap();

@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, HttpService, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpService, Injectable, Logger } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
 import { IPermission, IResource, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
@@ -49,6 +49,7 @@ export class GqlAuthGuard  implements CanActivate {
             roleVals.push(result.success);
           }
         } catch (e) {
+          Logger.error(e, this.constructor.name);
           throw new ForbiddenError(e);
         }
       }

@@ -61,7 +61,7 @@ export class ChangeSubscriptionHandler implements ICommandHandler<ChangeSubscrip
         throw new NotFoundError('No subscription for this tenant');
       }
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

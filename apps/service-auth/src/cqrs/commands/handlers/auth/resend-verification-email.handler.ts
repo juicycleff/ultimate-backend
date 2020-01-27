@@ -55,7 +55,7 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
         success: false,
       };
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message);
     }
   }

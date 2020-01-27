@@ -35,7 +35,7 @@ export class AuthService {
     try {
       return await this.loginCmd(input);
     } catch (e) {
-      Logger.log(e, 'ValidateUser');
+      Logger.error(e, 'ValidateUser');
       throw new AuthenticationError(e.message);
     }
   }

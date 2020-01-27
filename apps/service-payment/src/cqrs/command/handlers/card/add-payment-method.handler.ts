@@ -67,7 +67,7 @@ export class AddPaymentMethodHandler implements ICommandHandler<AddPaymentMethod
       this.eventBus.publish(new PaymentMethodAddedEvent(pub));
       return card;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

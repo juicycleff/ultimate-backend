@@ -43,7 +43,7 @@ export class RemovePaymentMethodHandler implements ICommandHandler<RemovePayment
       this.eventBus.publish(new PaymentMethodDeletedEvent(pub));
       return convCard;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

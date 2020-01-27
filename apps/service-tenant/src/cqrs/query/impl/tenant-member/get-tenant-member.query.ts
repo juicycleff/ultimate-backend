@@ -1,9 +1,10 @@
 import {IQuery} from '@nestjs/cqrs';
-import { FindConditions } from '@graphqlcqrs/common/helpers/find-condtion.type';
-import { TenantMemberEmbed } from '@graphqlcqrs/repository';
+import { TenantMemberFilterInput } from '../../../../types';
+import { ObjectID } from 'mongodb';
 
 export class GetTenantMemberQuery implements IQuery {
   constructor(
-    public readonly where: FindConditions<TenantMemberEmbed>,
+    public readonly where: TenantMemberFilterInput,
+    public readonly tenantId: ObjectID | string,
   ) {}
 }
