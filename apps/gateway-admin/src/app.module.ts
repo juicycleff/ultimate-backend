@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CookieSerializer } from '@graphqlcqrs/common/providers';
 import { BuilderUserStrategy } from './builder-user.strategy';
+import { corsApollOptions } from '@graphqlcqrs/common/utils';
 
 // tslint:disable-next-line:no-var-requires
 require('dotenv').config();
@@ -28,10 +29,7 @@ require('dotenv').config();
       buildService({ url }) {
         return new HeadersDatasource({ url });
       },
-      cors: {
-        preflightContinue: true,
-        credentials: true,
-      },
+      cors: corsApollOptions,
       playground: {
         workspaceName: 'Admin Gateway',
         settings: {

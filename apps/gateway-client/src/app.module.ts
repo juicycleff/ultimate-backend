@@ -15,7 +15,7 @@ require('dotenv').config();
       path: '/',
       context: context => context,
       serviceList: [
-        { name: 'project', url: 'http://localhost:9100/graphql' },
+        { name: 'project', url: process.env.PROJECT_ENDPOINT || 'http://localhost:9100/graphql' },
         // more services
       ],
       buildService({ url }) {
