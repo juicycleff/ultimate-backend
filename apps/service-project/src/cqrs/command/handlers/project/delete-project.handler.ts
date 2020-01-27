@@ -35,7 +35,7 @@ export class DeleteProjectHandler implements ICommandHandler<DeleteProjectComman
 
       return product;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error);
     }
   }

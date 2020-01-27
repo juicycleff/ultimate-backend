@@ -1,6 +1,6 @@
 /* tslint:disable:max-classes-per-file */
 import { InputType, ArgsType, Field, ID } from 'type-graphql';
-import { FilterMongo } from '@ultimatebackend/contracts';
+import { FilterMongo, PaginationInput } from '@ultimatebackend/contracts';
 import { Tenant } from './tenant.type';
 
 @InputType()
@@ -75,5 +75,14 @@ export class TenantMutationArgs {
   removeAccessToken?: RemoveTenantAccessTokenInput;
 }
 
+@InputType()
+export class TenantFilter extends FilterMongo(Tenant, { simple: true }) {}
+
 @ArgsType()
-export class TenantFilterArgs extends FilterMongo(Tenant) {}
+export class TenantFilterArgs {
+  @Field(() => TenantFilter, { nullable: true })
+  where?: TenantFilter;
+
+  @Field(() => PaginationInput, { nullable: true })
+  paginate?: PaginationInput;
+}

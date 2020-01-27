@@ -1,15 +1,18 @@
 /* tslint:disable:max-classes-per-file */
 import { ArgsType, Field, ID, InputType } from 'type-graphql';
-import { AppRole, FilterMongo } from '@ultimatebackend/contracts';
+import { AppRole, FilterMongo, PaginationInput } from '@ultimatebackend/contracts';
 import { TenantMember } from './tenant-member.type';
 
 @InputType()
-export class CreateTenantMemberInput {
+export class InviteTenantMemberInput {
+  @Field()
+  tenantId: string;
+
   @Field({ nullable: true })
-  email: string;
+  email?: string;
 
   @Field(() => ID, { nullable: true })
-  userId: string;
+  userId?: string;
 
   @Field(() => AppRole)
   role: AppRole;
@@ -17,6 +20,9 @@ export class CreateTenantMemberInput {
 
 @InputType()
 export class UpdateTenantMemberInput {
+  @Field()
+  tenantId: string;
+
   @Field({ nullable: true })
   id: string;
 
@@ -28,13 +34,16 @@ export class UpdateTenantMemberInput {
 export class RemoveTenantMemberInput {
   @Field(() => ID)
   id: string;
+
+  @Field()
+  tenantId: string;
 }
 
 @ArgsType()
 export class TenantMemberMutationArgs {
 
-  @Field(() => CreateTenantMemberInput, { nullable: true })
-  create?: CreateTenantMemberInput;
+  @Field(() => InviteTenantMemberInput, { nullable: true })
+  invite?: InviteTenantMemberInput;
 
   @Field(() => RemoveTenantMemberInput, { nullable: true })
   remove?: RemoveTenantMemberInput;
@@ -43,5 +52,14 @@ export class TenantMemberMutationArgs {
   update?: UpdateTenantMemberInput;
 }
 
+@InputType()
+export class TenantMemberFilterInput extends FilterMongo(TenantMember, { simple: true }) {}
+
 @ArgsType()
-export class TenantMemberFilterArgs extends FilterMongo(TenantMember) {}
+export class TenantMemberFilterInputArgs {
+  @Field(() => TenantMemberFilterInput, { nullable: true })
+  where?: TenantMemberFilterInput;
+
+  @Field(() => PaginationInput, { nullable: true })
+  paginate?: PaginationInput;
+}

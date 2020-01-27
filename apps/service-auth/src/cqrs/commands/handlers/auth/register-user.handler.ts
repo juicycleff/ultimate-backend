@@ -54,7 +54,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
         success: true,
       };
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new AuthenticationError(error.message);
     }
   }

@@ -81,7 +81,7 @@ export class CreatePlanHandler implements ICommandHandler<CreatePlanCommand> {
       await this.eventBus.publish(new PlanCreatedEvent(eventData));
       return plan;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

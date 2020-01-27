@@ -51,7 +51,7 @@ export class DeletePlanHandler implements ICommandHandler<DeletePlanCommand> {
 
       return plan;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

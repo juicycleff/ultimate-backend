@@ -24,7 +24,7 @@ export class PermissionGuard implements CanActivate {
       const hasRole = () => user.roles.some((role) => roles.includes(role));
       return user && user.roles && hasRole();
     } catch (e) {
-      Logger.log(e, PermissionGuard.constructor.name);
+      Logger.error(e, PermissionGuard.constructor.name);
     }
 
     return true;

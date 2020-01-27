@@ -1,46 +1,87 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { ApolloError, UserInputError } from 'apollo-server-express';
-import { TenantEntity, TenantRepository } from '@graphqlcqrs/repository';
-import { TenantRemovedEvent } from '@graphqlcqrs/core';
-import { ConflictError } from '@graphqlcqrs/common';
-import { RemoveTenantCommand } from '../../impl';
+import { TenantMemberEmbed, TenantRepository } from '@graphqlcqrs/repository';
+import { ConflictError, UnauthorizedError } from '@graphqlcqrs/common';
+import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
+import { RemoveTenantMemberCommand } from '../../impl';
+import { TenantMemberRemovedEvent } from '@graphqlcqrs/core/cqrs';
 
-@CommandHandler(RemoveTenantCommand)
-export class RemoveTenantMemberHandler implements ICommandHandler<RemoveTenantCommand> {
+@CommandHandler(RemoveTenantMemberCommand)
+export class RemoveTenantMemberHandler implements ICommandHandler<RemoveTenantMemberCommand> {
+  logger = new Logger(this.constructor.name);
+
   constructor(
     private readonly tenantRepository: TenantRepository,
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: RemoveTenantCommand): Promise<TenantEntity> {
-    Logger.log('Async RemoveTenantHandler...', 'RemoveTenantCommand');
-    const { input } = command;
+  async execute(command: RemoveTenantMemberCommand): Promise<TenantMemberEmbed> {
+    this.logger.log(`'Async '${command.constructor.name}...`);
+    const { input, user } = command;
 
     try {
       if (input.id === null) { // Check to make sure input is not null
-        throw new UserInputError('Tenant id is missing'); // Throw an apollo input error
+        throw new UserInputError('Tenant member id is missing'); // Throw an apollo input error
       }
 
-      const tenantExist = await this.tenantRepository.exist({ _id: input.id }); // Check if tenant exist with normalized name
-      if (!tenantExist) {
-        throw new ConflictError('Tenant by id does not exist');  // Throw a conflict exception id tenant exist
+      if (user === null) { // Check to make sure input is not null
+        throw new UserInputError('Tenant member owner is missing'); // Throw an apollo input error
       }
 
-      const tenant = await this.tenantRepository.findOne({
-        _id: input.id,
+      // Check if tenant exist with normalized name
+      const memberExist = await this.tenantRepository.exist({
+        normalizedName: input.tenantId,
+        member: {
+          $elemMatch: {
+            id: input.id,
+          },
+        },
       });
 
-      await this.tenantRepository.deleteOne({
-        _id: input.id,
+      if (!memberExist) {
+        throw new ConflictError('Tenant member does not exist in this tenant');  // Throw a conflict exception id tenant exist
+      }
+
+      let tenant = await this.tenantRepository.findOne({
+        normalizedName: input.tenantId,
+        member: {
+          $elemMatch: {
+            id: input.id,
+          },
+        },
+      }, false);
+
+      const currentUserRights = tenant.members.reduce(previousValue => previousValue.userId === user.id && previousValue);
+
+      if (
+        currentUserRights.role === AppRole.DEVELOPER ||
+        currentUserRights.role === AppRole.MEMBER ||
+        currentUserRights.status !== InvitationStatus.ACCEPTED
+      ) {
+        throw new UnauthorizedError('You are not authorized to remove this member');
+      }
+
+      tenant = await this.tenantRepository.findOneAndUpdate({
+        conditions: {
+          normalizedName: input.tenantId,
+        },
+        updates: {
+          $pull: {
+            members: {
+              id: input.id,
+            },
+          },
+        },
       });
 
-      await this.eventBus.publish(new TenantRemovedEvent(tenant));
-      return tenant;
+      const tenantMember = tenant.members.reduce(previousValue => previousValue.id === input.id && previousValue);
+
+      await this.eventBus.publish(new TenantMemberRemovedEvent(tenantMember));
+      return tenantMember;
     } catch (error) {
-      Logger.log(error, 'CreateTenantHandler');
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }
-
 }

@@ -39,7 +39,7 @@ export class CreateStripeCustomerHandler implements ICommandHandler<CreateStripe
       await this.eventBus.publish(new StripeUserCreatedEvent(customerMod));
       return customerMod;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

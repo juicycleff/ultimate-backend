@@ -30,7 +30,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       this.eventBus.publish(new UserCreatedEvent(user));
       return user;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error);
     }
   }

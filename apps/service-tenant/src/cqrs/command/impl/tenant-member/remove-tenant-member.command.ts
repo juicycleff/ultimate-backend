@@ -1,8 +1,10 @@
 import { ICommand } from '@nestjs/cqrs';
-import { RemoveTenantInput } from '../../../../types';
+import { RemoveTenantMemberInput } from '../../../../types';
+import { UserEntity } from '@graphqlcqrs/repository';
 
 export class RemoveTenantMemberCommand implements ICommand {
   constructor(
-    public readonly input: RemoveTenantInput,
+    public readonly input: RemoveTenantMemberInput,
+    public readonly user: UserEntity,
   ) {}
 }

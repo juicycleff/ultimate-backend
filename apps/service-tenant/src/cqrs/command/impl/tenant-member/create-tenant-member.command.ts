@@ -1,10 +1,10 @@
 import { ICommand } from '@nestjs/cqrs';
-import { TenantMemberEmbed } from '@graphqlcqrs/repository';
-import { ObjectID } from 'bson';
+import { InviteTenantMemberInput } from '../../../../types';
+import { UserEntity } from '@graphqlcqrs/repository';
 
 export class CreateTenantMemberCommand implements ICommand {
   constructor(
-    public readonly input: TenantMemberEmbed,
-    public readonly tenantId: ObjectID,
+    public readonly input: InviteTenantMemberInput,
+    public readonly user: UserEntity,
   ) {}
 }

@@ -23,7 +23,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       this.eventBus.publish(new UserCreatedEvent(result));
       return result;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error);
     }
   }

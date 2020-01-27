@@ -1,7 +1,7 @@
 import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
-import { authSetup, securitySetup } from '@graphqlcqrs/common';
+import { authSetup, corsOptions, securitySetup } from '@graphqlcqrs/common';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloGateway } from '@apollo/gateway';
 import * as express from 'express';
@@ -42,11 +42,7 @@ async function bootstrapSimple() {
   });
   const app = express();
 
-  app.use(cors({
-    credentials: true,
-    origin: 'http://localhost:3000',
-    preflightContinue: false,
-  }));
+  app.use(cors(corsOptions));
 
   app.use(bloodTearsMiddleware);
   app.use(enableMultiTenancy({

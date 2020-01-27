@@ -47,5 +47,8 @@
   "exclude": [
     "node_modules",
     "dist"
+  ],
+  "files": [
+    "definitions/type.d.ts"
   ]
 }

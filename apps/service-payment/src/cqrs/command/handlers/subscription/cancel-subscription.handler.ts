@@ -53,7 +53,7 @@ export class CancelSubscriptionHandler implements ICommandHandler<CancelSubscrip
       }
 
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

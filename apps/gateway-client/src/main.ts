@@ -4,9 +4,10 @@ import * as useragent from 'express-useragent';
 import { bloodTearsMiddleware } from '@graphqlcqrs/common/middlewares';
 import { enableMultiTenancy } from '@juicycleff/nest-multi-tenant/middleware';
 import { TenantDatabaseStrategy } from '@juicycleff/nest-multi-tenant/tenant.enum';
-import { AppUtils } from '@graphqlcqrs/common/utils';
+import { AppUtils, corsOptions } from '@graphqlcqrs/common/utils';
 import { AppModule } from './app.module';
 import { securitySetup } from '@graphqlcqrs/common/setup';
+import * as cors from 'cors';
 
 // tslint:disable-next-line:no-var-requires
 const config = require('config-yml').load(process.env.NODE_ENV);
@@ -14,10 +15,7 @@ const config = require('config-yml').load(process.env.NODE_ENV);
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    credentials: true,
-    origin: 'http://localhost:3000',
-  });
+  app.use(cors(corsOptions));
   app.use(bloodTearsMiddleware);
   app.use(enableMultiTenancy({
     enabled: true,

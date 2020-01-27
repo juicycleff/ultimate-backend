@@ -39,7 +39,7 @@ export class UpdateStripeCustomerHandler implements ICommandHandler<UpdateStripe
       this.eventBus.publish(new StripeUserUpdatedEvent(customerMod));
       return customerMod;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message, error);
     }
   }

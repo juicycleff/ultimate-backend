@@ -48,7 +48,7 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
         success: false,
       };
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new ApolloError(error.message);
     }
   }
