@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { BooleanPayload } from '@ultimatebackend/contracts';
 import { NestCasbinService } from 'nestjs-casbin-mongodb';
 
@@ -6,7 +6,7 @@ import { NestCasbinService } from 'nestjs-casbin-mongodb';
 export class RolesController {
   constructor(private readonly casbinService: NestCasbinService) {}
 
-  @Post('check-permission')
+  @Get('check-permission')
   async checkPermission(@Body() data: { params: string[] }): Promise<BooleanPayload> {
     const success = await this.casbinService.checkPermission(...data.params);
     return {
