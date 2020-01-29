@@ -98,6 +98,7 @@
     "passport-facebook": "^3.0.0",
     "passport-facebook-token": "^3.3.0",
     "passport-local": "^1.0.0",
+    "query": "protobi/query",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.13",
     "request-context": "^2.0.0",
