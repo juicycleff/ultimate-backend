@@ -2,7 +2,7 @@ import {Logger} from '@nestjs/common';
 import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import { UserRepository } from '@graphqlcqrs/repository/repositories';
 import { UserEntity } from '@graphqlcqrs/repository/entities';
-import { GetUserQuery } from '../../impl';
+import { GetUserQuery } from '../../';
 import { mongoParser } from '@juicycleff/nest-multi-tenant';
 
 @QueryHandler(GetUserQuery)

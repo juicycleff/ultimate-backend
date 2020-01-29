@@ -1,4 +1,4 @@
-import { Collection, CollectionAggregationOptions, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
+import { Collection, CollectionAggregationOptions, DeleteWriteOpResultObject, ObjectID, AggregationCursor } from 'mongodb';
 import { CacheStore } from '@nestjs/common';
 import { MongoCollectionProps, MongoDBSource } from '../interfaces';
 import { DataEvents } from '@juicycleff/nest-multi-tenant/enums';
@@ -131,7 +131,8 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @param pipeline
    * @param options
    */
-  async aggregate(pipeline?: object[], options?: CollectionAggregationOptions): Promise<any> {
+  async aggregate(pipeline?: object[], options?: CollectionAggregationOptions)
+    : Promise<AggregationCursor<DOC> | AggregationCursor<DOC[]> | AggregationCursor<any>> {
     const collection = await this.collection;
 
     const cacheKey = JSON.stringify(pipeline);

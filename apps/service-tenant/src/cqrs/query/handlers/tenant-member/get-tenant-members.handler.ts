@@ -26,12 +26,10 @@ export class GetTenantMembersHandler implements IQueryHandler<GetTenantMembersQu
               $and: [
                 {normalizedName: tenantId},
                 {
-                  $or: [
-                    {'members.id': input.where.id },
-                    {'members.email': input.where.email },
-                  ],
+                  members: {
+                    $elemMatch: filter,
+                  },
                 },
-                filter,
               ],
             },
           }, {
@@ -41,29 +39,16 @@ export class GetTenantMembersHandler implements IQueryHandler<GetTenantMembersQu
             },
           },
         ]);
-        return tenant.members;
+
+        if (!tenant) { return []; }
+
+        tenant = await tenant.next();
+        return (tenant?.members ?? []);
       }
 
-      tenant = await this.tenantRepository.aggregate([
-        {
-          $match: {
-            $and: [
-              {normalizedName: tenantId},
-              {
-                $or: [
-                  {'members.id': input.where.id },
-                  {'members.email': input.where.email },
-                ],
-              },
-            ],
-          },
-        }, {
-          $project: {
-            members: 1,
-            _id: 0,
-          },
-        },
-      ]);
+      tenant = await this.tenantRepository.findOne({
+        normalizedName: tenantId,
+      });
       return tenant.members;
     } catch (e) {
       this.logger.error(e);
