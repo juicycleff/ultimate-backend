@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ARRAYS_STRING=$(jq -r '.projects[].root' ./nest-cli.json)
-read -r -a PROJECTS <<< "${ARRAYS_STRING}"
+IFS=$'\n' read -r -a PROJECTS <<< "${ARRAYS_STRING}"
 
 echo "Service and Library build system started"
 
