@@ -1,7 +1,6 @@
 #!/bin/bash
-
-ARRAYS_STRING=$(jq -r '.projects[].root' ./nest-cli.json)
-IFS=$'\n' read -r -a PROJECTS <<< "${ARRAYS_STRING}"
+# shellcheck disable=SC2207
+PROJECTS=( $(jq -r '.projects[].root' ./nest-cli.json) )
 
 echo "Service and Library build system started"
 
