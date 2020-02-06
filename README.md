@@ -41,7 +41,7 @@ Software features
 *   ❌ (WiP) Documentation
 *   ❌ (WiP) Support for language translation
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
-*   ❌ WiP: [React Website](https://github.com/juicycleff/ultimate-backend-dashboard)
+*   ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 
 ### Requirements
 
