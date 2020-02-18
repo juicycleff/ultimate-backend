@@ -43,7 +43,7 @@ Software features
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
 *   ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 
-### Requirements
+## Requirements
 
 | Store and Cache                                            | Stack and frameworks                                                                       | Deployment                                                                     |
 |------------------------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
@@ -56,13 +56,36 @@ Software features
 |                                                            | [Fastify](https://www.fastify.io)                                                          |                                                                                |                                                                               |
 |                                                            | [GRPC](https://grpc.io/)                                                                   |                                                                                |
 
-### Installation
+## Installation
 
 ```bash
 $ yarn
 ```
 
-### Running the microservice
+## Configuration
+
+In the config directory there are yaml files with defaults set for many things such as mongodb url and ports for services. However you will need to set your sendgrid api key so the backend can send emails on signup etc. If using stripe for payments you'll also need to put your public and private keys there too.
+
+## Usage
+
+### Running the databases
+
+Mongodb, redis, and eventstore all need to be started first as our microservices need to connect to them.
+
+Start mongodb locally
+```bash
+mongod
+```
+
+If you have docker installed
+```bash
+docker run -d -p 1113:1113 -p 2113:2113 eventstore/eventstore
+docker run -d -p 6379:6379 redis
+```
+
+Otherwise you can install and run redis and eventstore locally if you choose.
+
+### Running the microservices
 
 You should start the microservices of type service before the gateways. Example
 
@@ -96,10 +119,10 @@ $ yarn run start gateway-admin
 # watch mode for admin gateway
 $ yarn run start:dev gateway-admin
 
-# development for admin gateway
+# development for client gateway
 $ yarn run start gateway-client
 
-# watch mode for admin gateway
+# watch mode for client gateway
 $ yarn run start:dev gateway-client
 
 # production mode for admin gateway
@@ -107,7 +130,69 @@ $ yarn run start:prod
 
 ```
 
-### Test
+### Alternative method of running services
+
+If you find the nest cli using too much memory running each service, you can build them first and then run them:
+
+Build each service:
+```bash
+npx nest build service-auth
+npx nest build service-notification
+npx nest build service-payment
+npx nest build service-project
+npx nest build service-tenant
+npx nest build service-user
+```
+
+Each service is built and written into dist/apps directory from where you can directly run each service with nodejs. Running each service with ```npx nest start``` uses three orders of magnitude more memory than this method so you will use a lot less memory!
+
+Run each service in a separate terminal:
+```bash
+node dist/apps/service-auth/main.js
+node dist/apps/service-notification/main.js
+node dist/apps/service-payment/main.js
+node dist/apps/service-project/main.js
+node dist/apps/service-tenant/main.js
+node dist/apps/service-user/main.js
+```
+
+With the databases and the services running you can now start the gateways as mentioned above.
+
+```bash
+yarn start:dev gateway-admin
+yarn start:dev gateway-client
+```
+
+## Get started by registering a user on the admin gateway
+
+In the graphql playground running at http://localhost:4000/graphql you can register a user:
+
+```graphql
+mutation register {
+  register(input:{
+    firstname: "Alice"
+    lastname: "Bob"
+    email: "AliceBobsEmail@protonmail.com"
+    password: "supersecretpassword"
+  }) {
+    success
+  }
+}
+```
+
+All going well you should have received the following reply as well as an email with a verification code
+
+```
+{
+    "data": {
+        "register": {
+            "success": true
+        }
+    }
+}
+```
+
+## Test
 
 ```bash
 # unit tests
@@ -119,6 +204,8 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+
 
 ## License
 
