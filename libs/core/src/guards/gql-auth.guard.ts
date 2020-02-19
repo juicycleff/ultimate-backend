@@ -39,7 +39,7 @@ export class GqlAuthGuard  implements CanActivate {
         try {
 
           const result = (await this.httpService.get(
-            (process.env.AUTH_API || (`http://localhost:${AppConfig.services?.auth.port || '9900'}`)) + '/roles/check-permission', {
+            (process.env.AUTH_ENDPOINT_REST || (`http://localhost:${AppConfig.services?.auth.port || '9900'}`)) + '/roles/check-permission', {
             data: {
               params,
             },
