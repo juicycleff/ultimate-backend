@@ -84,6 +84,7 @@ services:
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
       - TENANT_ENDPOINT_REST=http://services-tenant:9200
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
     depends_on:
       - eventstore
       - redis-cache
@@ -134,6 +135,7 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
     depends_on:
       - eventstore
       - redis-cache
@@ -183,6 +185,7 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
     depends_on:
       - eventstore
       - redis-cache
@@ -232,6 +235,7 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
     depends_on:
       - eventstore
       - redis-cache
@@ -281,6 +285,7 @@ services:
       - REDIS_HOST=redis://redis-cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=""
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
     depends_on:
       - eventstore
       - redis-cache
@@ -314,6 +319,7 @@ services:
       - USER_PATH=user
       - PAYMENT_ENDPOINT=http://services-payment:9200/graphql
       - TENANT_ENDPOINT=http://services-tenant:9500/graphql
+      - AUTH_ENDPOINT_REST=http://services-auth:9900
 
     depends_on:
       - services-auth
