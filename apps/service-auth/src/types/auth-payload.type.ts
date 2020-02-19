@@ -17,9 +17,9 @@ export class AuthPayload {
   @Field(() => ID)
   id: string;
 
-  @Field()
+  @Field({ nullable: true })
   sessionId?: string;
 
-  @Field()
+  @Field({ nullable: true })
   tokens?: Tokens;
 }
