@@ -20,7 +20,7 @@ ULTIMATE BACKEND
 ## Description
 
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns
-to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the [Documentation](https://ultimate-backend.developerhub.io/)
+to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below
 
 ## Features
 
