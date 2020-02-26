@@ -41,6 +41,7 @@ Software features
 *   ❌ (WiP) Documentation
 *   ❌ (WiP) Support for language translation
 *   ❌ Reactive health check for federated service and rebuilding gateway schema
+*   ❌ Service Discovery (Based on Consul)
 *   ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 
 ## Requirements
