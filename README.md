@@ -76,7 +76,7 @@ You can opt in for `etcd` or `kubernetes` as `service registry`.
 
 ### Running the databases
 
-Consul, Mongodb, redis, and eventstore all need to be started first as our microservices need to connect to them.
+Consul, Mongodb, redis, memcached, and eventstore all need to be started first as our microservices need to connect to them.
 
 Start consul locally
 ```bash
