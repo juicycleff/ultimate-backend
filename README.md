@@ -123,7 +123,7 @@ $ npx nest start api-admin
 
 ```
 
-Note you don't need sll services running plus you can start them in any other
+Note you don't need all services running plus you can start them in any order
 
 ### Alternative method of running services
 
