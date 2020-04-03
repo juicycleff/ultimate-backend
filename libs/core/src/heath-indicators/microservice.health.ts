@@ -1,6 +1,6 @@
 import { Transport } from '@nestjs/microservices';
 import { MicroserviceHealthIndicator, TerminusModuleOptions } from '@nestjs/terminus';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { AppConfig } from '@ultimatebackend/common/services/yaml.service';
 
 const getMicroserviceTerminusOptions = (
   microservice: MicroserviceHealthIndicator,
@@ -18,7 +18,7 @@ const getMicroserviceTerminusOptions = (
           microservice.pingCheck('redis', {
             transport: Transport.REDIS,
             options: {
-              url: `redis://${process.env.REDIS_HOST || AppConfig.redis.host}:${process.env.REDIS_PORT || AppConfig.redis.port}`,
+              url: `${process.env.REDIS_HOST || AppConfig.redis.host}:${process.env.REDIS_PORT || AppConfig.redis.port}`,
             },
           }),
       ],

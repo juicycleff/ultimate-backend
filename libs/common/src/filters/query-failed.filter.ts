@@ -2,10 +2,11 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus } from '@nestjs/commo
 import { Reflector } from '@nestjs/core';
 import { Response } from 'express';
 import { STATUS_CODES } from 'http';
+import { QueryFailedError } from 'typeorm';
 
 import { ConstraintErrors } from './constraint-errors';
 
-@Catch()
+@Catch(QueryFailedError)
 export class QueryFailedFilter implements ExceptionFilter {
 
   constructor(public reflector: Reflector) {}

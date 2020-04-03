@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { CoreModule, ServiceRegistryModule } from '@ultimatebackend/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
-import { CoreModule } from '@graphqlcqrs/core';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
-
-// tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+import { SendgridConfigService } from './configs/sendgrid-config.service';
 
 @Module({
   imports: [
+    ServiceRegistryModule,
     CoreModule,
-    SendGridModule.forRoot({
-      apikey: AppConfig.sendgrid?.api || 'SENDGRID-API-KEY',
+    SendGridModule.forRootAsync({
+      useClass: SendgridConfigService,
     }),
     EmailModule,
   ],

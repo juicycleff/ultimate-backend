@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+package io.ultimatebackend.srv.tenant;
+
+import "google/protobuf/timestamp.proto";
+
+service TenantService {
+    // Tenants
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse) {}
+    rpc ReadTenant(ReadTenantRequest) returns (ReadTenantResponse) {}
+    rpc FindTenant(FindTenantRequest) returns (FindTenantResponse) {}
+    rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantResponse) {}
+    rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantResponse) {}
+
+    // Members
+    rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
+    rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
+    rpc UpdateMember(UpdateMemberRequest) returns (UpdateMemberResponse) {}
+    rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {}
+    rpc ReadMember(ReadMemberRequest) returns (ReadMemberResponse) {}
+    rpc FindMembers(FindMemberRequest) returns (FindMemberResponse) {}
+}
+
+message Tenant {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"normalizedName,omitempty"
+    string normalizedName = 2;
+    // @inject_tag: bson:"name,omitempty"
+    string name = 3;
+    // @inject_tag: bson:"tokens,omitempty"
+    repeated TenantAccess tokens = 4;
+    // @inject_tag: bson:"createdBy,omitempty"
+    string createdBy = 5;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 6;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 7;
+    // @inject_tag: bson:"members,omitempty"
+    repeated Member members = 8;
+    // @inject_tag: bson:"settings,omitempty"
+    Settings settings = 9;
+    // @inject_tag: bson:"payment,omitempty"
+    BillingSettings billing = 10;
+}
+
+message UpdateTenantPayload {
+    // @inject_tag: bson:"name,omitempty"
+    string name = 3;
+    // @inject_tag: bson:"settings,omitempty"
+    Settings settings = 9;
+}
+
+message TenantAccess {
+    // @inject_tag: bson:"key,omitempty"
+    string key = 1;
+    // @inject_tag: bson:"secret,omitempty"
+    string secret = 2;
+    // @inject_tag: bson:"active,omitempty"
+    bool active = 3;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 4;
+}
+
+message BillingSettings {
+    // @inject_tag: bson:"currentPlan,omitempty"
+    string currentPlan = 1;
+    // @inject_tag: bson:"subscriptionPlan,omitempty"
+    string currentSubscription = 2;
+}
+
+message ConnectionSettings {
+    // @inject_tag: bson:"host,omitempty"
+    string host = 1;
+}
+
+message Settings {
+    // @inject_tag: bson:"connection,omitempty"
+    bool enableTheme = 1;
+    // @inject_tag: bson:"connection,omitempty"
+    ConnectionSettings connection = 2;
+}
+
+enum InvitationStatus {
+    // option allow_alias = true;
+    PENDING = 0;
+    ACCEPTED = 1;
+    REJECTED = 2;
+}
+
+message Member {
+    // @inject_tag: bson:"id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"email,omitempty"
+    string email = 2;
+    // @inject_tag: bson:"userId,omitempty"
+    string userId = 3;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 4;
+    // @inject_tag: bson:"status,omitempty"
+    string status = 5;
+    // @inject_tag: bson:"role,omitempty"
+    string role = 6;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 7;
+}
+
+// Tenant
+message CreateTenantRequest {
+    string name = 1;
+    string planId = 2;
+    string couponId = 3;
+}
+
+message CreateTenantResponse {
+    Tenant tenant = 1;
+}
+
+message FindTenantRequest {
+    string filter = 1;
+}
+
+message FindTenantResponse {
+    repeated Tenant tenants = 1;
+}
+
+message DeleteTenantRequest {
+    string id = 1;
+}
+
+message DeleteTenantResponse {
+    Tenant tenant = 1;
+}
+
+message ReadTenantRequest {
+    string filter = 1;
+}
+
+message ReadTenantResponse {
+    Tenant tenant = 1;
+}
+
+message UpdateTenantRequest {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    UpdateTenantPayload data = 2;
+}
+
+message UpdateTenantResponse {
+    Tenant tenant = 1;
+}
+
+// Tenant Members
+message InviteMemberRequest {
+    // @inject_tag: bson:"email,omitempty"
+    string email = 2;
+    // @inject_tag: bson:"userId,omitempty"
+    string userId = 3;
+    // @inject_tag: bson:"role,omitempty"
+    string role = 6;
+}
+
+message InviteMemberResponse {
+    Member member = 1;
+}
+
+message FindMemberRequest {
+    string filter = 1;
+}
+
+message FindMemberResponse {
+    repeated Member members = 1;
+}
+
+message DeleteMemberRequest {
+    string id = 1;
+}
+
+message DeleteMemberResponse {
+    Member member = 1;
+}
+
+message ReadMemberRequest {
+    // @inject_tag: bson:"id,omitempty"
+    string id = 1;
+}
+
+message ReadMemberResponse {
+    Member member = 1;
+}
+
+message UpdateMemberRequest {
+    // @inject_tag: bson:"id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"status,omitempty"
+    string status = 2;
+    // @inject_tag: bson:"role,omitempty"
+    string role = 3;
+}
+
+message UpdateMemberResponse {
+    Member member = 1;
+}
+
+message AcceptMemberInvitationRequest {
+    // @inject_tag: bson:"token,omitempty"
+    string token = 1;
+}
+
+message AcceptMemberInvitationResponse {
+    Member member = 1;
+}

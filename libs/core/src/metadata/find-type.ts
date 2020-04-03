@@ -1,8 +1,10 @@
 /* tslint:disable:ban-types */
 import { TypeOptions } from 'class-transformer';
-import { TypeValueThunk } from '@graphqlcqrs/core/metadata/storage';
+import { TypeValueThunk } from '../metadata/storage';
+import { NoExplicitTypeError } from 'type-graphql';
+import { ReturnTypeFunc } from '@ultimatebackend/contracts/helpers';
 
-export type MetadataKey = 'design:type' | 'design:paramtypes';
+export type MetadataKey = 'design:type' | 'design:paramtypes' | 'design:returntype';
 export const allowedTypes: Function[] = [String, Number, Date, Boolean];
 export const bannedTypes: Function[] = [Promise, Array, Object, Function];
 
@@ -16,9 +18,17 @@ export interface GetTypeParams {
   prototype: Object;
   propertyKey: string;
   typeOptions?: TypeOptions;
+  returnTypeFunc?: ReturnTypeFunc;
   parameterIndex?: number;
 }
-export function findType({ metadataKey, prototype, propertyKey, typeOptions = {}, parameterIndex }: GetTypeParams): TypeInfo {
+export function findType({
+  metadataKey,
+  prototype,
+  propertyKey,
+  typeOptions = {},
+  parameterIndex,
+  returnTypeFunc,
+}: GetTypeParams): TypeInfo {
   const options: TypeOptions = { ...typeOptions };
   let metadataDesignType: Function | undefined;
   // @ts-ignore
@@ -31,6 +41,13 @@ export function findType({ metadataKey, prototype, propertyKey, typeOptions = {}
     metadataDesignType = (reflectedType as Function[])[parameterIndex!];
   } else {
     metadataDesignType = reflectedType as Function | undefined;
+  }
+
+  if (
+    !returnTypeFunc &&
+    (!metadataDesignType || (metadataDesignType && bannedTypes.includes(metadataDesignType)))
+  ) {
+    // throw new NoExplicitTypeError(prototype.constructor.name, propertyKey, parameterIndex);
   }
 
   if (metadataDesignType) {

@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { ObjectType, Field, ID, Int } from 'type-graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class Address {
@@ -23,38 +23,4 @@ export class Address {
 
   @Field({ nullable: true })
   line2?: string;
-}
-
-@ObjectType()
-export class Card {
-  @Field(() => ID, { nullable: true })
-  id: string;
-
-  @Field()
-  name: string;
-
-  @Field()
-  cvc: string;
-
-  @Field({ nullable: true })
-  number: string;
-
-  @Field({ nullable: true })
-  brand?: string;
-
-  @Field({ nullable: true })
-  lastFourDigit?: string;
-
-  @Field({ nullable: true })
-  currency?: string;
-
-  @Field(() => Address, { nullable: true })
-  address?: Address;
-
-  @Field(() => Int)
-  @Field()
-  expMonth: number;
-
-  @Field(() => Int)
-  expYear: number;
 }

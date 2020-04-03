@@ -1,11 +1,11 @@
 import 'reflect-metadata';
-import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
-import { findType } from '@graphqlcqrs/core/metadata/find-type';
+import { getMetadataStorage } from '../metadata';
+import { findType } from '../metadata/find-type';
 
 export const PERMISSION_DEFINITION = '__permission_definition__';
 
 export function Permission(options: {
-  name: string, identify: string, action: 'create' | 'read' | 'update' | 'delete' | 'write', tenant?: string,
+  name: string, identify: string, action: 'create' | 'read' | 'update' | 'delete',
   superUser?: boolean,
 }) {
   // tslint:disable-next-line:only-arrow-functions

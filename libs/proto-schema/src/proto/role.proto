@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package io.ultimatebackend.srv.role;
+
+service RoleService {
+    rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {}
+    rpc ReadRole(ReadRoleRequest) returns (ReadRoleResponse) {}
+
+    rpc HasRights(HasRightsRequest) returns (HasRightsResponse) {}
+
+    rpc AddPolicy(AddPolicyRequest) returns (AddPolicyResponse) {}
+
+    rpc AddTenantRoles(AddTenantRolesRequest) returns (AddTenantRolesResponse) {}
+    rpc AddUserToRole(AddUserToRoleRequest) returns (AddUserToRoleResponse) {}
+    rpc RemoveUserFromRole(RemoveUserFromRoleRequest) returns (RemoveUserFromRoleResponse) {}
+    rpc ReadUserRoles(ReadUserRolesRequest) returns (ReadUserRolesResponse) {}
+}
+
+message StringMessage {
+    repeated string params = 1;
+}
+
+message BooleanPayload {
+    bool success = 1;
+}
+
+message Role {
+    string id = 1;
+    string role = 2;
+    string domain = 3;
+    string resource = 4;
+    string action = 5;
+
+    string name = 6;
+    string normalizedName = 7;
+    google.protobuf.Timestamp createdAt = 8;
+    google.protobuf.Timestamp updatedAt = 9;
+}
+
+message UserRole {
+    string userId = 1;
+    string role = 2;
+    string domain = 3;
+}
+
+message CreateRoleRequest {
+    string role = 2;
+    string domain = 3;
+    string resource = 4;
+    string action = 5;
+}
+
+message CreateRoleResponse {
+    Role role = 1;
+}
+
+message ReadRoleRequest {
+    string roleId = 1;
+    string domain = 2;
+}
+
+message ReadRoleResponse {
+    Role role = 1;
+}
+
+message ReadUserRolesResponse {
+    repeated string roles = 1;
+}
+
+message HasRightsRequest {
+    string sub = 1;
+    string dom = 2;
+    string res = 3;
+    string act = 4;
+    string auth = 5;
+}
+
+message HasRightsResponse {
+    bool access = 1;
+}
+
+message ReadUserRolesRequest {
+    string userId = 1;
+    string tenant = 2;
+}
+
+message FindRolesRequest {
+    string subId = 1;
+}
+
+message FindRolesResponse {
+    repeated Role roles = 1;
+}
+
+message AddUserToRoleRequest {
+    string role = 1;
+    string userId = 2;
+    string actor = 3;
+    string domain = 4;
+}
+
+message AddUserToRoleResponse {
+    repeated string roles = 1;
+}
+
+message AddTenantRolesRequest {
+    string domain = 1;
+}
+
+message AddTenantRolesResponse {
+    bool success = 1;
+}
+
+message RemoveUserFromRoleRequest {
+    string tenantId = 1;
+    string userId = 2;
+}
+
+message RemoveUserFromRoleResponse {
+    bool success = 1;
+}
+
+message AddPolicyRequest {
+    repeated string params = 1;
+}
+
+message AddPolicyResponse {
+    bool success = 1;
+}

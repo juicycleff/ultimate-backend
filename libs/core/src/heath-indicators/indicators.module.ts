@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MongoHealthIndicator } from '@graphqlcqrs/core';
+import { MongoHealthIndicator } from '../';
 
 @Module({
   providers: [MongoHealthIndicator],

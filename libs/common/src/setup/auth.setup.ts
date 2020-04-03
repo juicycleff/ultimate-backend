@@ -2,31 +2,14 @@ import { INestApplication } from '@nestjs/common';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as useragent from 'express-useragent';
-// import * as redis from 'redis';
-// import * as connectRedisStore from 'connect-redis';
 import * as cookieParser from 'cookie-parser';
-import * as connectMongodbSession from 'connect-mongodb-session';
+import * as connectMemcached from 'connect-memcached';
 import { Express } from 'express';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
 
-// tslint:disable-next-line:no-var-requires
-require('dotenv').config();
+const MemcachedStore = connectMemcached(session);
 
-// const RedisStore = connectRedisStore(session);
-
-// const client = redis.createClient();
-// const store = new RedisStore({ client });
-
-// tslint:disable-next-line:no-var-requires
-require('dotenv').config();
-
-const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
-
-const MongoDBStore = connectMongodbSession(session);
-
-const store = new MongoDBStore({
-  uri: jestMongoDb || `${AppConfig.mongodb.defaultUri}service-auth${AppConfig.mongodb.options}`,
-  collection: 'session',
+const store = new MemcachedStore({
+  hosts: ['127.0.0.1:11211'],
 });
 
 const passportMiddleware = passport.initialize();

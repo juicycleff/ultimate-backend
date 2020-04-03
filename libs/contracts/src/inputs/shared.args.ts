@@ -1,5 +1,4 @@
-/* tslint:disable:max-classes-per-file */
-import { Int, ArgsType, Field, InputType } from 'type-graphql';
+import { Int, ArgsType, Field, InputType } from '@nestjs/graphql';
 import { PlanPriceInterval } from '@ultimatebackend/contracts';
 
 @InputType()
@@ -9,6 +8,21 @@ export class PaginationInput {
 
   @Field(() => Int)
   limit: number = 10;
+}
+
+@InputType()
+export class ConnectionPaginationInput {
+  @Field(() => Int, { nullable: true })
+  first?: number = 0;
+
+  @Field(() => Int, { nullable: true })
+  last?: number = 10;
+
+  @Field({ nullable: true })
+  after?: string;
+
+  @Field({ nullable: true })
+  before?: string;
 }
 
 @ArgsType()

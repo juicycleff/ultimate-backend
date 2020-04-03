@@ -1,7 +1,9 @@
-import { registerEnumType } from 'type-graphql';
+import { registerEnumType } from '@nestjs/graphql';
 import { AppRole, InvitationStatus } from './tenant.enum';
 import { ServiceTypes } from './auth.enum';
 import { RoleActions } from './roles.enum';
+import { PointType } from './point.enum';
+import { SignalType } from './signal.enum';
 import { InvoiceStatus, PlanPriceInterval, SubscriptionStatus } from './billing.enum';
 
 export {
@@ -11,6 +13,8 @@ export {
   ServiceTypes,
   PlanPriceInterval,
   SubscriptionStatus,
+  PointType,
+  SignalType,
 };
 
 registerEnumType(AppRole, {
@@ -46,4 +50,14 @@ registerEnumType(SubscriptionStatus, {
 registerEnumType(InvoiceStatus, {
   name: 'InvoiceStatus',
   description: 'Invoice status enum',
+});
+
+registerEnumType(PointType, {
+  name: 'PointType',
+  description: 'Point type enum',
+});
+
+registerEnumType(SignalType, {
+  name: 'SignalType',
+  description: 'Signal type enum',
 });

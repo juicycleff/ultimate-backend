@@ -1,19 +1,24 @@
-import {Entity} from '@juicycleff/nest-multi-tenant';
-import { ObjectID } from 'mongodb';
+import {Entity} from '@juicycleff/repo-orm';
 import {AuthResponseDto} from '../dtos/response';
-import {MongoBaseEntity} from './base-entity';
-import { TenantAccessEmbed, TenantMemberEmbed } from './embeded';
+import {BaseEntity} from './base-entity';
+import {
+  BillingSettingEmbed,
+  TenantMemberEmbed,
+  TenantSettingsEmbed,
+} from './embeded';
 
 @Entity({name: 'tenant'})
-export class TenantEntity extends MongoBaseEntity<AuthResponseDto> {
+export class TenantEntity extends BaseEntity<AuthResponseDto> {
 
   name: string;
 
   normalizedName!: string;
 
-  tokens!: TenantAccessEmbed[];
+  settings?: TenantSettingsEmbed;
 
-  ownerId!: ObjectID;
+  billing?: BillingSettingEmbed;
 
   members: TenantMemberEmbed[];
+
+  currentPlan!: string;
 }

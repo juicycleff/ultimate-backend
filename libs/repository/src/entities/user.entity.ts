@@ -1,21 +1,30 @@
-import { Entity } from '@juicycleff/nest-multi-tenant';
+import {Entity} from '@juicycleff/repo-orm';
+import { IsArray, IsString, MinLength } from 'class-validator';
 import {UserResponseDto} from '../dtos/response';
-import {MongoBaseEntity} from './base-entity';
-import { FacebookAuth, GoogleAuth } from '@graphqlcqrs/repository/entities/embeded';
+import {BaseEntity} from './base-entity';
+import { SocialAuth, LocalAuth } from './embeded';
 
 @Entity({ name: 'user' })
-export class UserEntity extends MongoBaseEntity<UserResponseDto> {
+export class UserEntity extends BaseEntity<UserResponseDto> {
 
+  @MinLength(2)
+  @MinLength(20)
+  @IsString()
   firstname: string;
 
+  @MinLength(2)
+  @MinLength(20)
+  @IsString()
   lastname: string;
 
+  @MinLength(2)
+  @MinLength(20)
+  @IsString()
   username?: string;
 
-  roles?: string[];
+  deactivated?: boolean = false;
 
-  deactivated!: boolean;
-
+  @IsArray()
   emails?: [
     {
       address: string,
@@ -25,23 +34,23 @@ export class UserEntity extends MongoBaseEntity<UserResponseDto> {
     }
   ];
 
-  services!: AuthServices;
+  services!: AuthServicesTypes;
 
-  payment!: PaymentEmbed;
+  settings!: SettingsEmbed;
 
-  toDtoClass?: new(entity: MongoBaseEntity, options?: any) => UserResponseDto;
+  toDtoClass?: new(entity: BaseEntity, options?: any) => UserResponseDto;
 }
 
-interface AuthServices {
-  password?: {
-    hashed: string,
-  };
+export class AuthServicesTypes {
+  password?: LocalAuth;
 
-  facebook?: FacebookAuth;
+  facebook?: SocialAuth;
 
-  google?: GoogleAuth;
+  github?: SocialAuth;
+
+  google?: SocialAuth;
 }
 
-interface PaymentEmbed {
-  stripeId?: string;
+class SettingsEmbed {
+  stripeId?: string = null;
 }

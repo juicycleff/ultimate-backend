@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package io.ultimatebackend.srv.account;
+
+service AccountService {
+    rpc Create(CreateRequest) returns (CreateResponse) {}
+    rpc Read(ReadRequest) returns (ReadResponse) {}
+    rpc VerifyAccount(VerifyAccountRequest) returns (VerifyAccountResponse) {}
+    rpc VerifyActivationLink(VerifyActivationLinkRequest) returns (VerifyActivationLinkResponse) {}
+
+    rpc ResendVerificationCode(ResendVerificationCodeRequest) returns (ResendVerificationCodeResponse) {}
+    rpc Update(UpdateRequest) returns (UpdateResponse) {}
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+    rpc Search(SearchRequest) returns (SearchResponse) {}
+    rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {}
+    rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+    rpc ReadSession(ReadSessionRequest) returns(ReadSessionResponse) {}
+}
+
+message PasswordStruct
+{
+    // @inject_tag: bson:"hashed,omitempty"
+    string hashed = 1;
+}
+
+message AuthServices {
+    // @inject_tag: bson:"password,omitempty"
+    PasswordStruct password = 1;
+}
+
+message EmailObject {
+    // @inject_tag: bson:"address,omitempty"
+    string address = 1;
+    // @inject_tag: bson:"verified,omitempty"
+    bool verified = 2;
+    // @inject_tag: bson:"primary,omitempty"
+    bool primary = 3;
+    // @inject_tag: bson:"verificationCode"
+    string verificationCode = 4;
+}
+
+message User {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"username,omitempty"
+    string username = 2;
+    // @inject_tag: bson:"primaryEmail,omitempty"
+    string primaryEmail = 3;
+    // @inject_tag: bson:"firstname,omitempty"
+    string firstname = 4;
+    // @inject_tag: bson:"lastname,omitempty"
+    string lastname = 5;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 6;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 7;
+    // @inject_tag: bson:"emails,omitempty"
+    repeated EmailObject emails = 8;
+    // @inject_tag: bson:"services,omitempty"
+    AuthServices services = 9;
+    // @inject_tag: bson:"settings,omitempty"
+    Settings settings = 10;
+}
+
+message Settings {
+    string stripeId = 1;
+}
+
+message Session {
+    string id = 1;
+    string email = 2;
+    int64 created = 3;      // unix
+    int64 expires = 4;      // unix
+}
+
+message CreateRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string firstname = 4;
+    string lastname = 5;
+    LoginServiceTypes service = 6;
+    map<string, string> tokens = 7;
+}
+
+message CreateResponse {
+    string activationLink = 1;
+}
+
+message DeleteRequest {
+    string id = 1;
+}
+
+message DeleteResponse {
+    bool success = 1;
+}
+
+message ReadRequest {
+    string query = 5;
+}
+
+message ReadResponse {
+    User user = 1;
+}
+
+message UpdateRequest {
+    User user = 1;
+}
+
+message UpdateResponse {
+    User user = 1;
+}
+
+message UpdatePasswordRequest {
+    string userId = 1;
+    string oldPassword = 2;
+    string newPassword = 3;
+    string confirmPassword = 4;
+}
+
+message UpdatePasswordResponse {
+    bool success = 1;
+}
+
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+message ForgotPasswordResponse {
+    bool success = 1;
+}
+
+message SearchRequest {
+    string username = 1;
+    string email = 2;
+    int64 limit = 3;
+    int64 offset = 4;
+}
+
+message SearchResponse {
+    repeated User users = 1;
+}
+
+message ReadSessionRequest {
+    string sessionId = 1;
+}
+
+message ReadSessionResponse {
+    Session session = 1;
+}
+
+enum LoginServiceTypes {
+   Password = 0;
+   Facebook = 1;
+   Github = 2;
+   Google = 3;
+}
+
+message LoginTypeParams {
+    string accessToken = 1;
+    string userId = 2;
+    string password = 3;
+    string email = 4;
+}
+
+message LoginRequest {
+    LoginServiceTypes service = 1;
+    LoginTypeParams params = 2;
+}
+
+message LoginResponse {
+    Session session = 1;
+    User user = 2;
+}
+
+message LogoutRequest {
+    string sessionId = 1;
+}
+
+message LogoutResponse {
+    bool success = 1;
+}
+
+message VerifyAccountRequest {
+    string email = 1;
+    string pincode = 2;
+}
+
+message VerifyAccountResponse {
+    bool success = 1;
+}
+
+message VerifyActivationLinkRequest {
+    string token = 1;
+}
+
+message VerifyActivationLinkResponse {
+    string email = 1;
+    string pincode = 2;
+}
+
+message ResendVerificationCodeRequest {
+    string email = 1;
+}
+
+message ResendVerificationCodeResponse {
+    bool success = 1;
+}

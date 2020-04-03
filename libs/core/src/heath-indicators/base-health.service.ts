@@ -1,6 +1,6 @@
 import { DNSHealthIndicator, MicroserviceHealthIndicator, TerminusEndpoint, TerminusModuleOptions, TerminusOptionsFactory } from '@nestjs/terminus';
 import { Injectable, Logger } from '@nestjs/common';
-import { MongoHealthIndicator } from '@graphqlcqrs/core';
+import { MongoHealthIndicator } from '../';
 import { Transport } from '@nestjs/microservices';
 
 @Injectable()

@@ -1,21 +1,26 @@
 import { Module } from '@nestjs/common';
-import { EventStoreSubscriptionType, NestjsEventStoreModule } from '@juicycleff/nestjs-event-store';
-import { EmailVerifiedEvent, UserLoggedInEvent, UserRegisteredEvent, VerificationEmailSentEvent } from '@graphqlcqrs/core';
-import { DoneCallback, Job } from 'bull';
-import { BullModule } from 'nest-bull';
+import { EventStoreSubscriptionType, EventStoreModule } from '@juicycleff/nestjs-event-store';
+import {
+  EmailVerifiedEvent,
+  ForgotPasswordSentEvent,
+  UserLoggedInEvent,
+  UserRegisteredEvent,
+  VerificationEmailSentEvent,
+} from '@ultimatebackend/core';
+import { BullModule } from '@nestjs/bull';
 import { EmailService } from './email.service';
 import { AuthSagas } from './sagas';
-import { AuthQueue } from './queue';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { AuthProcess } from './queue';
+import { BullConfigService } from '../configs/bull-config.service';
 
 @Module({
   imports: [
-    NestjsEventStoreModule.forFeature({
-      featureStreamName: '$ce-user',
+    EventStoreModule.registerFeature({
+      featureStreamName: '$ce-account',
       subscriptions: [
         {
-          type: EventStoreSubscriptionType.CatchUp,
-          stream: '$ce-user',
+          type: EventStoreSubscriptionType.Volatile,
+          stream: '$ce-account',
         },
       ],
       eventHandlers: {
@@ -23,24 +28,17 @@ import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
         UserRegisteredEvent: (data) => new UserRegisteredEvent(data),
         EmailVerifiedEvent: (data) => new EmailVerifiedEvent(data),
         VerificationEmailSentEvent: (data) => new VerificationEmailSentEvent(data),
+        ForgotPasswordSentEvent: (data) => new ForgotPasswordSentEvent(data),
       },
     }),
-    BullModule.register({
-      name: 'auth_queue',
-      options: {
-        redis: {
-          host: process.env.REDIS_HOST || AppConfig.redis.host,
-          port: parseInt(process.env.REDIS_PORT || AppConfig.redis.port, 10),
-        },
-      },
-      processors: [
-        (job: Job, done: DoneCallback) => { done(null, job.data); },
-      ],
+    BullModule.registerQueueAsync({
+      name: 'notification_queue',
+      useClass: BullConfigService,
     }),
   ],
   providers: [
     EmailService,
-    AuthQueue,
+    AuthProcess,
     AuthSagas,
   ],
 })

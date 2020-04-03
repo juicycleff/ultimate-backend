@@ -1,0 +1,24 @@
+version: "3.2"
+
+services:
+  services-account:
+    build:
+      context: ""
+      dockerfile: apps/service-account/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-auth:${IMAGE_TAG:?err}"
+    restart: always
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  eventstore:
+    container_name: eventstore-node
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    image: eventstore/eventstore
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"

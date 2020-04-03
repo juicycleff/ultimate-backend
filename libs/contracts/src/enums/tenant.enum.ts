@@ -1,13 +1,14 @@
 export enum AppRole {
-  SUPER = 'SUPER',
-  OWNER = 'OWNER',
-  ADMIN = 'ADMIN',
-  DEVELOPER = 'DEVELOPER',
-  MEMBER = 'MEMBER',
+  OWNER = 'owner',
+  ADMIN = 'admin',
+  DEVELOPER = 'developer',
+  MEMBER = 'member',
+  GUEST = 'guest',
+  CUSTOMER = 'customer',
 }
 
 export enum InvitationStatus {
-  PENDING = 'PENDING',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
 }

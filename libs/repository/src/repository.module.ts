@@ -1,5 +1,5 @@
 import { CacheModule, Module } from '@nestjs/common';
-import { UserRepository } from '@graphqlcqrs/repository/repositories';
+import { UserRepository } from './';
 
 @Module({
   imports: [CacheModule.register()],

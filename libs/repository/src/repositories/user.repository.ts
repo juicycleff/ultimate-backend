@@ -1,8 +1,8 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { merge } from 'lodash';
-import { generateHashedPassword } from '@graphqlcqrs/common/utils';
-import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/nest-multi-tenant';
+import { generateHashedPassword } from '@ultimatebackend/common/utils';
+import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/repo-orm';
 import { UserEntity } from '../entities';
 
 @Injectable()
@@ -33,8 +33,9 @@ export class UserRepository extends BaseMongoRepository<UserEntity> {
     return {
       ...data,
       services: {
+        ...data.services,
         password: {
-          hashed: generateHashedPassword(data.services.password.hashed),
+          hashed: data.services?.password?.hashed && generateHashedPassword(data.services.password.hashed),
         },
       },
       ...this.onSave(),

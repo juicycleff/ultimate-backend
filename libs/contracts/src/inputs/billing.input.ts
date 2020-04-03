@@ -1,5 +1,4 @@
-/* tslint:disable:max-classes-per-file */
-import { Field, InputType, Int } from 'type-graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class AddressInput {
@@ -24,29 +23,4 @@ export class AddressInput {
 
   @Field({ nullable: true })
   line2?: string;
-}
-
-@InputType()
-export class CardInput {
-
-  @Field()
-  name: string;
-
-  @Field()
-  cvc: string;
-
-  @Field()
-  number: string;
-
-  @Field({ nullable: true })
-  currency?: string;
-
-  @Field(() => AddressInput)
-  address?: AddressInput;
-
-  @Field(() => Int)
-  expMonth: number;
-
-  @Field(() => Int)
-  expYear: number;
 }

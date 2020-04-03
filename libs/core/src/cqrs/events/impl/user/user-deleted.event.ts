@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import { UserEntity } from '@graphqlcqrs/repository';
+import { UserEntity } from '@ultimatebackend/repository';
 
 export class UserDeletedEvent implements IEvent {
   constructor(

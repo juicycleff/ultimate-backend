@@ -1,40 +1,24 @@
-/* tslint:disable:max-classes-per-file */
 import {AggregateRoot} from '@nestjs/cqrs';
 import {ObjectID} from 'mongodb';
-// import {DtoMapperUtils} from '@graphqlcqrs/common';
-import {ObjectIdColumn} from '@juicycleff/nest-multi-tenant';
 import {BaseDto} from '../dtos';
 
 export abstract class BaseEntity<T extends BaseDto = BaseDto> extends AggregateRoot {
 
-  @ObjectIdColumn()
-  id!: ObjectID | string;
+  id?: ObjectID | string;
 
-  createdAt!: Date | string;
+  createdBy?: ObjectID | string;
 
-  updatedAt!: Date | string;
+  createdAt?: Date;
 
-  deletedAt?: Date | string;
+  updatedAt?: Date;
 
-  deleted?: boolean;
+  deletedAt?: Date = null;
 
-  version?: number;
+  deleted?: boolean = false;
+
+  version?: number = null;
 
   toDtoClass?: new (entity: BaseEntity, options?: any) => T;
 
   // toDto = (options?: any) => DtoMapperUtils.toDto(this.toDtoClass, this, options);
-}
-
-export abstract class MongoBaseEntity<T extends BaseDto = BaseDto> extends BaseEntity {
-  @ObjectIdColumn()
-  id!: ObjectID | string;
-}
-
-export abstract class ArangoBaseEntity<T extends BaseDto = BaseDto> extends BaseEntity {
-  id!: string;
-}
-
-export abstract class ArangoBaseEdgeEntity<T extends BaseDto = BaseDto> extends BaseEntity {
-  @ObjectIdColumn()
-  id!: ObjectID | string;
 }

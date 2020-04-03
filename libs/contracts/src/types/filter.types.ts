@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { Field, InputType, GraphQLISODateTime } from 'type-graphql';
+import { Field, InputType, GraphQLISODateTime } from '@nestjs/graphql';
 
 @InputType()
 export class OtherComparisonFilter {
@@ -43,6 +43,16 @@ export class StringComparisonFilter {
 
   @Field({ nullable: true })
   _GTE?: string;
+}
+
+@InputType()
+export class EnumComparisonFilter<T> {
+
+  @Field( { nullable: true })
+  _EQ?: string;
+
+  @Field( { nullable: true })
+  _NE?: string ;
 }
 
 @InputType()

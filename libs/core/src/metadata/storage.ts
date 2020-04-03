@@ -1,7 +1,7 @@
 import { ensureReflectMetadataExists } from 'type-graphql/dist/metadata/utils';
 import { ClassType } from 'type-graphql';
 import { DecoratorTypeOptions } from 'type-graphql/dist/decorators/types';
-import { IPermission, IResource } from '@graphqlcqrs/core';
+import { InAppRole, IPermission, IResource } from '../';
 
 export class MetadataStorage {
   fields: FilterableMetadata[] = [];
@@ -57,6 +57,7 @@ export type ClassTypeResolver = (of?: void) => ClassType;
 
 export interface TypeOptions extends DecoratorTypeOptions {
   array?: boolean;
+  isEnum?: boolean;
   arrayDepth?: number;
 }
 

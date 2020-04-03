@@ -1,66 +1,47 @@
-import { CanActivate, ExecutionContext, HttpService, Injectable, Logger } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
-import { IPermission, IResource, PERMISSION_DEFINITION, RESOURCE_DEFINITION } from '..';
-import { UserEntity } from '@graphqlcqrs/repository';
-import { ForbiddenError } from '@graphqlcqrs/common';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
+import { AccessTokenRpcClientService, RolesRpcClientService } from '../services';
+import { IResource } from '../interfaces';
+import { RESOURCE_DEFINITION } from '../decorators';
 
 /**
- * Create a new GqlAuthGuard
+ * Create new GqlAuthGuard
  * @class
  * @description Auth guard for only logged in user based on session authentication
  * @implements {CanActivate}
  */
 @Injectable()
 export class GqlAuthGuard  implements CanActivate {
-
   constructor(
     private readonly reflector: Reflector,
-    private readonly httpService: HttpService,
+    public readonly access: AccessTokenRpcClientService,
+    public readonly role: RolesRpcClientService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context).getContext();
+    const resource = this.reflector.get<IResource>(RESOURCE_DEFINITION, context.getHandler());
 
-    if (ctx.isAuthenticated && ctx.getUser()) {
-      const resource = this.reflector.get<IResource>(RESOURCE_DEFINITION, context.getClass());
-      const permission = this.reflector.get<IPermission>(PERMISSION_DEFINITION, context.getHandler());
+    if (ctx.isAuthenticated() && ctx.getUser() && resource !== null) {
+      const user = ctx.getUser();
+      const tenantInfo = ctx.req.tenantInfo;
 
-      if (!permission || !resource) {
-        return await ctx.isAuthenticated();
-      }
+      const curTenant = tenantInfo?.tenantId || '*';
+      const resp = await this.role.roleService.hasRights({
+        act: resource.action, auth: 'user', dom: curTenant, res: resource.identify, sub: user.id,
+      }).toPromise();
 
-      const user = ctx.getUser() as UserEntity;
-      const roleVals = [];
+      return resp.access;
+    } else if (ctx.req.tenantInfo && resource !== null && resource.supportsToken) {
+      const tenantInfo = ctx.req.tenantInfo;
+      const resp = await this.access.accessToken.hasRights({
+        tenantId: tenantInfo?.tenantId, scope: `${resource.action}_${resource.identify}`, token: tenantInfo?.accessToken?.key,
+      }).toPromise();
 
-      for (const role of user.roles) {
-        const params = [role, '*', `${resource.identify}-${permission.identify}`, permission.action];
-        try {
-
-          const result = (await this.httpService.get(
-            (process.env.AUTH_ENDPOINT_REST || (`http://localhost:${AppConfig.services?.auth.port || '9900'}`)) + '/roles/check-permission', {
-            data: {
-              params,
-            },
-          }).toPromise()).data;
-
-          if (result && result.success) {
-            roleVals.push(result.success);
-          }
-        } catch (e) {
-          Logger.error(e, this.constructor.name);
-          throw new ForbiddenError(e);
-        }
-      }
-
-      if (roleVals.includes(true)) {
-        return await ctx.isAuthenticated();
-      } else {
-        throw new ForbiddenError('Not permitted to write/read this resource');
-      }
+      return resp.access;
     }
 
-    return await ctx.isAuthenticated();
+    return ctx.isAuthenticated();
   }
 }

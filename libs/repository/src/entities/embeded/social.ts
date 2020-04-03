@@ -1,31 +1,13 @@
-/* tslint:disable:max-classes-per-file */
-// import {IsLowercase} from 'class-validator';
+export class SocialAuth {
 
-export class FacebookAuth {
+  userId: string = null;
 
-  userid: string;
+  accessToken?: string = null;
 
-  accessToken: string;
-
-  name: string;
-
-  email: string;
-}
-
-export class GoogleAuth {
-
-  userid: string;
-
-  accessToken: string;
-
-  name: string;
-
-  email: string;
+  email: string = null;
 }
 
 export class LocalAuth {
-  // @IsLowercase()
-  email: string;
 
-  hashedPassword: string;
+  hashed: string = null;
 }

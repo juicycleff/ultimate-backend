@@ -3,11 +3,11 @@ variable "region" {
 }
 
 variable "profile" {
-  default = "ultimatebackend-prod"
+  default = "dfour-prod"
 }
 
 variable "cluster-name" {
-  default = "ultimatebackend-cluster"
+  default = "dfour-cluster"
   type = "string"
 }
 

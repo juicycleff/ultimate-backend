@@ -3,6 +3,7 @@ export * from './filters';
 export * from './decorators';
 export * from './utils';
 export * from './errors';
+export * from './helpers';
 export * from './setup';
 export * from './middlewares';
 export * from './guards';

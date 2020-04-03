@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file */
-
 export class FeatureEmbed {
 
   name: string;
@@ -7,6 +5,8 @@ export class FeatureEmbed {
   normalizedName?: string;
 
   description?: string;
+
+  unit?: string;
 
   min?: number;
 
@@ -17,3 +17,9 @@ export class FeatureEmbed {
   full?: boolean;
 
 }
+
+export enum ActionStatusType {
+  SUCCESS,
+  FAILED,
+}
+

@@ -1,6 +1,5 @@
-/* tslint:disable:max-classes-per-file */
-import { Field, ObjectType, Int } from 'type-graphql';
-import { Filterable } from '@graphqlcqrs/core/decorators/filterable';
+import { Field, ObjectType, Int } from '@nestjs/graphql';
+import { Filterable } from '@ultimatebackend/core/decorators/filterable';
 
 @ObjectType()
 export class BooleanPayload {
@@ -14,7 +13,7 @@ export class Price {
 
   @Filterable()
   @Field({ nullable: true })
-  price: number;
+  amount: number;
 
   @Filterable()
   @Field({ nullable: true })
@@ -48,31 +47,27 @@ export class KeyValuePair {
 @ObjectType()
 export class Feature {
 
-  @Filterable()
   @Field()
   name: string;
 
-  @Filterable()
   @Field({ nullable: true })
   normalizedName?: string;
 
-  @Filterable()
   @Field({ nullable: true })
   description?: string;
 
-  @Filterable()
+  @Field({ nullable: true })
+  unit?: string;
+
   @Field(() => Int, { nullable: true })
   min?: number;
 
-  @Filterable()
   @Field(() => Int, { nullable: true })
   max?: number;
 
-  @Filterable()
   @Field({ nullable: true })
   active?: boolean;
 
-  @Filterable()
   @Field({ nullable: true })
   full?: boolean;
 }

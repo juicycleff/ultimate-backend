@@ -8,39 +8,47 @@
     "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
+    "allowJs": true,
     "baseUrl": "./",
     "incremental": true,
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "paths": {
-      "@graphqlcqrs/core": [
+      "@ultimatebackend/core": [
         "libs/core/src"
       ],
-      "@graphqlcqrs/core/*": [
+      "@ultimatebackend/core/*": [
         "libs/core/src/*"
       ],
-      "@graphqlcqrs/common": [
+      "@ultimatebackend/common": [
         "libs/common/src"
       ],
-      "@graphqlcqrs/common/*": [
+      "@ultimatebackend/common/*": [
         "libs/common/src/*"
       ],
-      "@graphqlcqrs/repository": [
+      "@ultimatebackend/repository": [
         "libs/repository/src"
       ],
-      "@graphqlcqrs/repository/*": [
+      "@ultimatebackend/repository/*": [
         "libs/repository/src/*"
       ],
-      "@juicycleff/nest-multi-tenant": [
-        "libs/nest-multi-tenant/src"
+      "@juicycleff/repo-orm": [
+        "libs/repo-orm/src"
       ],
-      "@juicycleff/nest-multi-tenant/*": [
-        "libs/nest-multi-tenant/src/*"
+      "@juicycleff/repo-orm/*": [
+        "libs/repo-orm/src/*"
       ],
       "@ultimatebackend/contracts": [
         "libs/contracts/src"
       ],
       "@ultimatebackend/contracts/*": [
         "libs/contracts/src/*"
+      ],
+      "@ultimatebackend/proto-schema": [
+        "libs/proto-schema/src"
+      ],
+      "@ultimatebackend/proto-schema/*": [
+        "libs/proto-schema/src/*"
       ]
     }
   },

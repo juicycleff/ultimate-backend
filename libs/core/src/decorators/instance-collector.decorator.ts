@@ -1,5 +1,5 @@
 /* tslint:disable:ban-types */
-import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
+import { getMetadataStorage } from '../metadata';
 
 export function InstanceCollector(name): Function {
   return (prototype) => {

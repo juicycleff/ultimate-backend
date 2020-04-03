@@ -1,11 +1,11 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/gateway-admin/src",
+  "sourceRoot": "apps/api-admin/src",
   "monorepo": true,
-  "root": "apps/gateway-admin",
+  "root": "apps/api-admin",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/gateway-admin/tsconfig.app.json",
+    "tsConfigPath": "apps/api-admin/tsconfig.app.json",
     "assets": [
       {
         "include": "**/*.graphql"
@@ -14,48 +14,31 @@
         "include": "config/*.yml"
       },
       {
+        "include": "**/*.yaml"
+      },
+      {
         "include": "**/*.conf"
       },
       {
         "include": "**/*.proto"
+      },
+      {
+        "include": "*.proto"
+      },
+      {
+        "include": "*.conf"
       }
-    ]
+    ],
+    "watchAssets": true
   },
   "projects": {
-    "gateway-admin": {
+    "service-account": {
       "type": "application",
-      "root": "apps/gateway-admin",
+      "root": "apps/service-account",
       "entryFile": "main",
-      "sourceRoot": "apps/gateway-admin/src",
+      "sourceRoot": "apps/service-account/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/gateway-admin/tsconfig.app.json"
-      }
-    },
-    "service-user": {
-      "type": "application",
-      "root": "apps/service-user",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-user/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-user/tsconfig.app.json"
-      }
-    },
-    "service-auth": {
-      "type": "application",
-      "root": "apps/service-auth",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-auth/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-auth/tsconfig.app.json"
-      }
-    },
-    "service-project": {
-      "type": "application",
-      "root": "apps/service-project",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-project/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-project/tsconfig.app.json"
+        "tsConfigPath": "apps/service-account/tsconfig.app.json"
       }
     },
     "core": {
@@ -85,13 +68,13 @@
         "tsConfigPath": "libs/repository/tsconfig.lib.json"
       }
     },
-    "nest-multi-tenant": {
+    "repo-orm": {
       "type": "library",
-      "root": "libs/nest-multi-tenant",
+      "root": "libs/repo-orm",
       "entryFile": "index",
-      "sourceRoot": "libs/nest-multi-tenant/src",
+      "sourceRoot": "libs/repo-orm/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/nest-multi-tenant/tsconfig.lib.json"
+        "tsConfigPath": "libs/repo-orm/tsconfig.lib.json"
       }
     },
     "service-tenant": {
@@ -112,15 +95,6 @@
         "tsConfigPath": "apps/service-notification/tsconfig.app.json"
       }
     },
-    "gateway-client": {
-      "type": "application",
-      "root": "apps/gateway-client",
-      "entryFile": "main",
-      "sourceRoot": "apps/gateway-client/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/gateway-client/tsconfig.app.json"
-      }
-    },
     "contracts": {
       "type": "library",
       "root": "libs/contracts",
@@ -130,13 +104,49 @@
         "tsConfigPath": "libs/contracts/tsconfig.lib.json"
       }
     },
-    "service-payment": {
+    "service-role": {
       "type": "application",
-      "root": "apps/service-payment",
+      "root": "apps/service-role",
       "entryFile": "main",
-      "sourceRoot": "apps/service-payment/src",
+      "sourceRoot": "apps/service-role/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/service-payment/tsconfig.app.json"
+        "tsConfigPath": "apps/service-role/tsconfig.app.json"
+      }
+    },
+    "api-admin": {
+      "type": "application",
+      "root": "apps/api-admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-admin/tsconfig.app.json"
+      }
+    },
+    "proto-schema": {
+      "type": "library",
+      "root": "libs/proto-schema",
+      "entryFile": "index",
+      "sourceRoot": "libs/proto-schema/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/proto-schema/tsconfig.lib.json"
+      }
+    },
+    "service-billing": {
+      "type": "application",
+      "root": "apps/service-billing",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-billing/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-billing/tsconfig.app.json"
+      }
+    },
+    "service-access": {
+      "type": "application",
+      "root": "apps/service-access",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-access/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-access/tsconfig.app.json"
       }
     }
   }

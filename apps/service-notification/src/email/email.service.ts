@@ -12,7 +12,7 @@ export class EmailService {
     if (!data) { return null; }
 
     try {
-      await this.sendGrid.send({ ...data, from: 'noreply@demo.com' }, isMultiple);
+      await this.sendGrid.send({ ...data }, isMultiple);
     } catch (e) {
       Logger.error(e.message, e);
     }

@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import { CardEntity } from '@graphqlcqrs/repository';
+import { CardEntity } from '@ultimatebackend/repository';
 
 export class PaymentMethodUpdatedEvent implements IEvent {
   constructor(

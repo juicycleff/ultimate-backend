@@ -1,0 +1,396 @@
+syntax = "proto3";
+
+package io.ultimatebackend.srv.billing;
+
+import "google/protobuf/timestamp.proto";
+
+service BillingService {
+    rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse) {}
+    rpc DeleteCustomer(DeleteCustomerRequest) returns (DeleteCustomerResponse) {}
+    rpc ReadCustomer(ReadCustomerRequest) returns (ReadCustomerResponse) {}
+
+    rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse) {}
+    rpc ReadPlan(ReadPlanRequest) returns (ReadPlanResponse) {}
+    rpc FindPlans(FindPlansRequest) returns (FindPlansResponse) {}
+    rpc ReadStripePlan(ReadStripePlanRequest) returns (ReadStripePlanResponse) {}
+    rpc FindStripePlans(FindStripePlansRequest) returns (FindStripePlansResponse) {}
+
+    rpc CreateCard(CreateCardRequest) returns (CreateCardResponse) {}
+    rpc DeleteCard(DeleteCardRequest) returns (DeleteCardResponse) {}
+    rpc ReadCard(ReadCardRequest) returns (ReadCardResponse) {}
+    rpc FindCards(FindCardsRequest) returns (FindCardsResponse) {}
+
+    rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse) {}
+    rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {}
+    rpc ChangeSubscription(ChangeSubscriptionRequest) returns (ChangeSubscriptionResponse) {}
+    rpc ReadSubscription(ReadSubscriptionRequest) returns (ReadSubscriptionResponse) {}
+    rpc FindSubscriptions(FindSubscriptionsRequest) returns (FindSubscriptionsResponse) {}
+
+    rpc ReadInvoice(ReadInvoiceRequest) returns (ReadInvoiceResponse) {}
+    rpc FindInvoices(FindInvoicesRequest) returns (FindInvoicesResponse) {}
+}
+
+enum PlanPriceInterval {
+    MONTH  = 0;
+    YEAR   = 1;
+    WEEK   = 2;
+    DAY    = 3;
+}
+
+enum InvoiceStatus {
+    DRAFT  = 0;
+    OPEN  = 1;
+    PAID  = 2;
+    UNCOLLECTIBLE  = 3;
+    VOID  = 4;
+}
+
+enum SubscriptionStatus {
+    ACTIVE = 0;
+    ALL = 1;
+    CANCELED = 2;
+    INCOMPLETE = 3;
+    INCOMPLETE_EXPIRED = 4;
+    PAST_DUE = 5;
+    TRIALING = 6;
+    UNPAID = 7;
+}
+
+message TenantSubscription {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"tenantId,omitempty"
+    string tenantId = 2;
+    // @inject_tag: bson:"status,omitempty"
+    string status = 3;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 6;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 7;
+}
+
+message Customer {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"email,omitempty"
+    string email = 4;
+    // @inject_tag: bson:"name,omitempty"
+    string name = 5;
+}
+
+message Address {
+    string id = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string postalCode = 5;
+    string line = 6;
+    string line2 = 7;
+}
+
+message Card {
+    string id = 1;
+    string name = 2;
+    string cvc = 3;
+    string number = 4;
+    string brand = 5;
+    string currency = 6;
+    Address address = 7;
+    uint32 expMonth = 8;
+    uint32 expYear = 9;
+}
+
+message Price {
+    // @inject_tag: bson:"name,omitempty"
+    string name = 1;
+    // @inject_tag: bson:"currency,omitempty"
+    string currency = 2;
+    // @inject_tag: bson:"id,omitempty"
+    string id = 3;
+    // @inject_tag: bson:"trialDays,omitempty"
+    int64 trialDays = 4;
+    // @inject_tag: bson:"amount,omitempty"
+    float amount = 5;
+}
+
+message StripePlan {
+    // @inject_tag: bson:"name,omitempty"
+    string name = 1;
+    // @inject_tag: bson:"currency,omitempty"
+    string currency = 2;
+    // @inject_tag: bson:"id,omitempty"
+    string id = 3;
+    // @inject_tag: bson:"trialDays,omitempty"
+    int64 trialDays = 4;
+    // @inject_tag: bson:"amount,omitempty"
+    float amount = 5;
+}
+
+message Feature {
+    // @inject_tag: bson:"name,omitempty"
+    string name = 1;
+    // @inject_tag: bson:"normalizedName,omitempty"
+    string normalizedName = 2;
+    // @inject_tag: bson:"description,omitempty"
+    string description = 3;
+    // @inject_tag: bson:"min,omitempty"
+    int64 min = 4;
+    // @inject_tag: bson:"max,omitempty"
+    int64 max = 5;
+    // @inject_tag: bson:"active,omitempty"
+    bool active = 6;
+    // @inject_tag: bson:"full,omitempty"
+    bool full = 7;
+    // @inject_tag: bson:"full,omitempty"
+    string unit = 8;
+}
+
+message Plan {
+    // @inject_tag: bson:"_id,omitempty"
+    string id = 1;
+    // @inject_tag: bson:"normalizedName,omitempty"
+    string normalizedName = 2;
+    // @inject_tag: bson:"prices,omitempty"
+    Price price = 3;
+    // @inject_tag: bson:"features,omitempty"
+    repeated Feature features = 4;
+    // @inject_tag: bson:"active,omitempty"
+    bool active = 5;
+    // @inject_tag: bson:"free,omitempty"
+    bool free = 6;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 7;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 8;
+    // @inject_tag: bson:"name,omitempty"
+    string name = 9;
+    // @inject_tag: bson:"stripeId,omitempty"
+    string stripeId = 10;
+}
+
+message Invoice {
+    // @inject_tag: bson:"id,omitempty"
+    string id = 1;
+    string accountCountry = 2;
+    string accountName = 3;
+    float amountDue = 4;
+    float amountPaid = 5;
+    float amountRemaining = 6;
+    string billingReason = 7;
+    string currency = 8;
+    string customerEmail = 9;
+    string customerName = 10;
+    string description = 11;
+    google.protobuf.Timestamp dueDate = 12;
+    float endingBalance = 13;
+    string hostedInvoiceUrl = 14;
+    string invoicePdf = 15;
+    string number = 16;
+    bool paid = 17;
+    string receiptNumber = 18;
+    float startingBalance = 19;
+    string statementDescriptor = 20;
+    string status = 21;
+    int64 subtotal = 22;
+    float tax = 23;
+    float taxPercent = 24;
+    float total = 25;
+    // @inject_tag: bson:"createdAt,omitempty"
+    google.protobuf.Timestamp createdAt = 26;
+    // @inject_tag: bson:"updatedAt,omitempty"
+    google.protobuf.Timestamp updatedAt = 27;
+}
+
+message CreatePriceRequest {
+    float price = 1;
+    string currency = 2;
+    string id = 3;
+    string nickname = 4;
+    int64 trialDays = 5;
+    int64 intervalCount = 6;
+    string interval = 7;
+}
+
+message CreatePlanRequest {
+    string name = 1;
+    string description = 2;
+    repeated CreatePriceRequest prices = 3;
+    repeated Feature features = 4;
+    bool active = 8;
+    bool free = 9;
+}
+
+message CreatePlanResponse {
+    Plan plan = 1;
+}
+
+message ReadPlanRequest {
+    string id = 1;
+}
+
+message ReadPlanResponse {
+    Plan plan = 1;
+}
+
+message FindPlansRequest {}
+
+message FindPlansResponse {
+    repeated Plan plans = 1;
+}
+
+message ReadStripePlanRequest {
+    string id = 1;
+}
+
+message ReadStripePlanResponse {
+    StripePlan plan = 1;
+}
+
+message FindStripePlansRequest {
+    string productId = 1;
+}
+
+message FindStripePlansResponse {
+    repeated StripePlan plans = 1;
+}
+
+message ReadInvoiceRequest {
+    string id = 1;
+}
+
+message ReadInvoiceResponse {
+    Invoice invoice = 1;
+}
+
+message FindInvoicesRequest {}
+
+message FindInvoicesResponse {
+    repeated Invoice invoices = 1;
+}
+
+// Subscription
+message CreateSubscriptionRequest {
+    string customerId = 1;
+    string tenantId = 2;
+    string planId = 3;
+    string couponId = 4;
+}
+
+message CreateSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message ChangeSubscriptionRequest {
+    string customerId = 1;
+    string tenantId = 2;
+    string planId = 3;
+    string couponId = 4;
+}
+
+message ChangeSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message CancelSubscriptionRequest {
+    string customerId = 1;
+    string tenantId = 2;
+}
+
+message CancelSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message ReadSubscriptionRequest {
+    string id = 1;
+}
+
+message ReadSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message FindSubscriptionsRequest {}
+
+message FindSubscriptionsResponse {
+    repeated TenantSubscription subscriptions = 1;
+}
+
+// Cards
+message CreateCardRequest {
+    string name = 1;
+    string cvc = 2;
+    string number = 3;
+    string currency = 4;
+    string expMonth = 8;
+    string expYear = 9;
+    Address address = 10;
+}
+
+message CreateCardResponse {
+    Card card = 1;
+}
+
+message DeleteCardRequest {
+    string id = 1;
+}
+
+message DeleteCardResponse {
+    Card card = 1;
+}
+
+message ReadCardRequest {
+    string id = 1;
+}
+
+message ReadCardResponse {
+    Card card = 1;
+}
+
+message FindCardsRequest {}
+
+message FindCardsResponse {
+    repeated Card cards = 1;
+}
+
+// Customer
+
+message CreateCustomerRequest {
+    string name = 1;
+    string email = 2;
+    string number = 3;
+    string currency = 4;
+}
+
+message CreateCustomerResponse {
+    Customer customer = 1;
+}
+
+message DeleteCustomerRequest {
+    string id = 1;
+}
+
+message DeleteCustomerResponse {
+    Customer customer = 1;
+}
+
+message ReadCustomerRequest {
+    string id = 1;
+}
+
+message ReadCustomerResponse {
+    Customer customer = 1;
+}
+
+message Message {
+    string say = 1;
+}
+
+message Event {
+    // unique id
+    string id = 1;
+    // unix timestamp
+    int64 timestamp = 2;
+    // message
+    string message = 3;
+    // message
+    string topic = 4;
+}

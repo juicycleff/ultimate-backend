@@ -2,12 +2,9 @@ import { RemoteGraphQLDataSource } from '@apollo/gateway';
 
 const unSafeHeaders = [
   'accept-encoding',
-  'accept-language',
   'accept',
   'content-length',
   'connection',
-  'host',
-  'origin',
 ];
 
 export class HeadersDatasource extends RemoteGraphQLDataSource {

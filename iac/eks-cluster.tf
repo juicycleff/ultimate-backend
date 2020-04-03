@@ -6,12 +6,12 @@ data "aws_availability_zones" "available" {
 }
 
 resource "random_string" "suffix" {
-  length  = 8
+  length  = 4
   special = false
 }
 
 locals {
-  cluster_name = "eks-${var.cluster-name}${random_string.suffix.result}"
+  cluster_name = "eks-${var.cluster-name}-${var.region}-${random_string.suffix.result}"
   worker_groups = [
     {
       # Other parameters omitted for brevity

@@ -1,9 +1,9 @@
-import { Entity } from '@juicycleff/nest-multi-tenant';
+import { Entity } from '@juicycleff/repo-orm';
 import { ObjectID } from 'bson';
-import { MongoBaseEntity } from './base-entity';
+import {BaseEntity} from './base-entity';
 
 @Entity({name: 'offer'})
-export class OfferEntity extends MongoBaseEntity<any> {
+export class OfferEntity extends BaseEntity<any> {
 
   name: string;
 

@@ -1,0 +1,1 @@
+This folder was extracted from TypeGraphQL

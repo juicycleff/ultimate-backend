@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import { Customer } from '@graphqlcqrs/core';
+import { Customer } from '../../../../interfaces';
 
 export class StripeUserCreatedEvent implements IEvent {
   constructor(

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package io.ultimatebackend.srv.access;
+
+service AccessService {
+    rpc CreateAccess(CreateAccessRequest) returns (CreateAccessResponse) {}
+    rpc DeleteAccess(DeleteAccessRequest) returns (DeleteAccessResponse) {}
+    rpc ReadAccess(ReadAccessRequest) returns (ReadAccessResponse) {}
+    rpc FindAccess(FindAccessRequest) returns (FindAccessResponse) {}
+
+    rpc HasRights(HasRightsRequest) returns (HasRightsResponse) {}
+}
+
+message Access {
+    string id = 1;
+    string token = 2;
+    string tenantId = 3;
+    repeated string scopes = 4;
+    string name = 5;
+    google.protobuf.Timestamp createdAt = 8;
+    google.protobuf.Timestamp updatedAt = 9;
+    bool active = 10;
+    string createdBy = 11;
+}
+
+message CreateAccessRequest {
+    string tenantId = 1;
+    repeated string scopes = 2;
+    string name = 3;
+}
+
+message CreateAccessResponse {
+    Access accessToken = 1;
+}
+
+message DeleteAccessRequest {
+    string id = 1;
+}
+
+message DeleteAccessResponse {
+    Access accessToken = 1;
+}
+
+message ReadAccessRequest {
+    string id = 1;
+    string tenantId = 2;
+}
+
+message ReadAccessResponse {
+    Access accessToken = 1;
+}
+
+message FindAccessRequest {
+    string id = 1;
+    string tenantId = 2;
+}
+
+message FindAccessResponse {
+    repeated Access accessToken = 1;
+}
+
+message HasRightsRequest {
+    string token = 1;
+    string scope = 2;
+    string tenantId = 3;
+}
+
+message HasRightsResponse {
+    bool access = 1;
+}

@@ -1,9 +1,10 @@
-/* tslint:disable:ban-types */
 import { ClassType } from 'type-graphql';
-import { findType } from '@graphqlcqrs/core/metadata/find-type';
-import { getMetadataStorage } from '@graphqlcqrs/core/metadata';
+import { findType } from '../metadata/find-type';
+import { getMetadataStorage } from '../metadata';
+import { ReturnTypeFunc } from '@nestjs/graphql';
 
-export function Filterable(option?: FilterableOption): Function {
+// tslint:disable-next-line:ban-types
+export function Filterable(returnTypeFunc?: ReturnTypeFunc, option?: FilterableOption): Function {
 
   // tslint:disable-next-line:only-arrow-functions
   return function(prototype, propertyKey: string) {
@@ -12,12 +13,14 @@ export function Filterable(option?: FilterableOption): Function {
       metadataKey: 'design:type',
       prototype,
       propertyKey,
-      typeOptions: null,
+      returnTypeFunc,
+      // @ts-ignore
+      typeOptions: option,
     });
 
     getMetadataStorage().collectClassFieldMetadata({
       name: propertyKey,
-      fieldType: option ? option.type : propertyKey,
+      fieldType: option?.type ?? propertyKey,
       getType,
       typeOptions: null,
       target: prototype.constructor,
@@ -28,5 +31,6 @@ export function Filterable(option?: FilterableOption): Function {
 }
 
 interface FilterableOption {
-  type: ClassType;
+  type: ClassType | any;
+  isEnum: boolean;
 }

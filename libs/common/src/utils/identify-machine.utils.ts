@@ -1,7 +1,8 @@
-import { Address6 } from 'ip-address';
-import { AuthenticationError } from 'apollo-server-express';
+// import { Address6 } from 'ip-address';
+// import { AuthenticationError } from 'apollo-server-express';
 import { IRequest } from '../interfaces';
-import * as useragent from 'express-useragent';
+import { Logger } from '@nestjs/common';
+// import * as useragent from 'express-useragent';
 
 export class IdentifyMachineUtils {
   // tslint:disable-next-line:no-empty
@@ -9,8 +10,15 @@ export class IdentifyMachineUtils {
 
   sender() {
     const ip = this.req.headers['x-forwarded-for'] || this.req.connection.remoteAddress;
-    const address = new Address6(ip);
+    Logger.log(ip, this.constructor.name);
+    // const address = new Address6(ip);
 
+    return {
+      ip: 'free',
+      userAgent: 'free',
+    };
+
+    /*
     if (!address.isValid()) { throw new AuthenticationError('Your are not a valid machine'); }
 
     const teredo = address.inspectTeredo();
@@ -20,6 +28,6 @@ export class IdentifyMachineUtils {
     return {
       ip: teredo.client4,
       userAgent,
-    };
+    }; */
   }
 }

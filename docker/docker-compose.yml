@@ -1,0 +1,97 @@
+version: "3.2"
+
+services:
+  services-account:
+    build:
+      context: ""
+      dockerfile: docker/service-account.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-account:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 9900:9900
+      - 7900:7900
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-user:
+    build:
+      context: ""
+      dockerfile: docker/service-user.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-user:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 9000:9000
+      - 7000:7000
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-notification:
+    build:
+      context: ""
+      dockerfile: docker/service-notification.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-notification:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 9400:9400
+      - 7400:7400
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-tenant:
+    build:
+      context: ""
+      dockerfile: docker/service-tenant.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-tenant:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 9200:9200
+      - 7200:7200
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-billing:
+    build:
+      context: ""
+      dockerfile: docker/service-billing.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-billing:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 9500:9500
+      - 7500:7500
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  api-admin:
+    build:
+      context: ""
+      dockerfile: docker/api-admin.Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/gateway-admin:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+      - 80:4000
+    labels:
+      kompose.service.type: loadbalancer
+      kompose.service.expose: "true"
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  eventstore:
+    container_name: eventstore-node
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    image: eventstore/eventstore
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"

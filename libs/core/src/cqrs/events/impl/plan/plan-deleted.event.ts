@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import { PlanEntity } from '@graphqlcqrs/repository';
+import { PlanEntity } from '@ultimatebackend/repository';
 
 export class PlanDeletedEvent implements IEvent {
   constructor(

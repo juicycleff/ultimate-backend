@@ -2,7 +2,7 @@
 
 export class PriceEmbed {
 
-  price: number;
+  amount: number;
 
   name?: string;
 
@@ -12,7 +12,7 @@ export class PriceEmbed {
 
   trialDays?: number;
 
-  currency: string;
+  currency?: string;
 
 }
 

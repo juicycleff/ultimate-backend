@@ -1,6 +1,7 @@
-/* tslint:disable:max-classes-per-file */
-import { ObjectType, GraphQLISODateTime, Field, ID, ClassType } from 'type-graphql';
-import { Filterable } from '@graphqlcqrs/core/decorators/filterable';
+import { ClassType } from 'type-graphql';
+import { ObjectType, GraphQLISODateTime, Field, ID } from '@nestjs/graphql';
+import { Filterable } from '@ultimatebackend/core/decorators/filterable';
+import { CursorScaler } from '@ultimatebackend/core/scalers';
 
 @ObjectType({ isAbstract: true })
 export abstract class Node {
@@ -18,38 +19,47 @@ export abstract class Node {
 }
 
 @ObjectType()
-export class PageInfo {
-  @Field()
+class PageInfo {
+  @Field(() => CursorScaler, { nullable: true })
   startCursor?: string;
 
-  @Field()
+  @Field({ nullable: true })
   hasNextPage: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   hasPreviousPage: boolean;
 
-  @Field()
+  @Field(() => CursorScaler, { nullable: true })
   endCursor?: string;
 }
 
-// @ts-ignore
-export default function ConnectionType<TItem>(TItemClass: ClassType<TItem>): any {
+export function ExtendConnectionType<TItem>(TItemClass: ClassType<TItem>): any {
   @ObjectType(`${TItemClass.name}Edge`)
   class EdgeTypeClass {
-    @Field(() => [TItemClass])
-    node: TItem[];
+    @Field(() => TItemClass)
+    node: TItem;
 
-    @Field()
+    @Field(() => CursorScaler)
     cursor: string;
   }
 
   @ObjectType(`${TItemClass.name}Connection`, { isAbstract: true })
-  abstract class ConnectTypeClass {
-    @Field(() => EdgeTypeClass)
-    edge: EdgeTypeClass;
+  abstract class ConnectionTypeClass {
+    @Field(() => [EdgeTypeClass], { nullable: true })
+    edges?: [EdgeTypeClass];
 
     @Field(() => PageInfo)
     pageInfo: PageInfo;
   }
-  return ConnectTypeClass;
+
+  return ConnectionTypeClass;
+}
+
+@ObjectType()
+export class GeoLocation {
+  @Field()
+  longitude?: string;
+
+  @Field()
+  latitude?: string;
 }

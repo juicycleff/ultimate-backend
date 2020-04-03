@@ -7,7 +7,7 @@ import { MongoClient } from 'mongodb';
 import { ModuleRef } from '@nestjs/core';
 import { checkPackages, promiseTimeout } from '@nestjs/terminus/dist/utils';
 import { HealthCheckError } from '@godaddy/terminus';
-import { getClientToken } from '@juicycleff/nest-multi-tenant';
+import { getClientToken } from '@juicycleff/repo-orm';
 
 export interface MongoPingCheckSettings {
   /**

@@ -1,49 +1,24 @@
 import { Module } from '@nestjs/common';
-import { buildContext } from 'graphql-passport';
-import { GraphqlDistributedModule } from 'nestjs-graphql-gateway/build/main';
-import { MongoModule } from '@juicycleff/nest-multi-tenant';
-import { BaseModule, CoreModule } from '@graphqlcqrs/core';
-import { AppConfig } from '@graphqlcqrs/common/services/yaml.service';
-import { TenantModule } from './tenant/tenant.module';
-import { UserModule } from './user/user.module';
+import { MongoModule } from '@juicycleff/repo-orm';
+import { CoreModule, MongoConfigService, ServiceRegistryModule } from '@ultimatebackend/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TenantMemberModule } from './tenant-member/tenant-member.module';
-import { Tenant, User, TenantMember } from './types';
-
-// tslint:disable-next-line:no-var-requires
-require('dotenv').config();
-
-const jestMongoDb = global.__MONGO_URI__ ? `${global.__MONGO_URI__}/${global.__MONGO_DB_NAME__}` : undefined;
+import { TenantsModule } from './tenants/tenants.module';
+import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
-    GraphqlDistributedModule.forRoot({
-      autoSchemaFile: 'graphs/tenant.gql',
-      buildSchemaOptions: {
-        orphanedTypes: [Tenant, TenantMember, User],
-      },
-      introspection: true,
-      playground: {
-        workspaceName: 'GRAPHQL SERVICE TENANT',
-        settings: {
-          'editor.theme': 'light',
-        },
-      },
-      context: ({ req, res }) => buildContext({ req, res }),
-    }),
+    ServiceRegistryModule,
     CoreModule,
-    MongoModule.forRoot({
-      uri: jestMongoDb || `${AppConfig.services?.auth?.mongodb?.uri}${AppConfig.services?.auth?.mongodb?.name}`,
-      dbName: global.__MONGO_DB_NAME__ || AppConfig.services?.auth?.mongodb?.name,
+    MongoModule.registerAsync({
+      useClass: MongoConfigService,
     }),
-    TenantModule,
-    TenantMemberModule,
-    UserModule,
+    TenantsModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
   ],
 })
-export class AppModule extends BaseModule {}
+export class AppModule {}
