@@ -3,7 +3,7 @@ ULTIMATE BACKEND
 </h1>
   
 <p align="center">
-  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern. If you want to see v2 which is very different from this architecture design (Click Here)[https://github.com/juicycleff/ultimate-backend/tree/next].
+  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern. If you want to see v2 which is very different from this architecture design <a href="https://github.com/juicycleff/ultimate-backend/tree/next">Click Here</a>.
 </p>
     <p align="center">
 </p>
