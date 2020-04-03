@@ -100,11 +100,13 @@ in the folders of each service called `config.example`. The consul config key of
 You should start the microservices of type service before the gateways. Example
 
 ```bash
-# Install npm modules
-$ yarn install
 
-# Generate protobuf typescript definitions
+# Generate protobuf typescript definitions and please fix the path for timestamps import (You should do this only when you update the protobuf files)
+# in `lib/proto-schem`
 $ sh ./gen-ts.sh
+
+# Now build the proto-scheme lib (You should do this only when you update the protobuf files)
+$ nest build proto-schema
 
 # Start the account service
 $ npx nest start service-account
