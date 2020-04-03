@@ -66,7 +66,11 @@ $ yarn
 
 ## Configuration
 
-In the config directory there are yaml files with defaults set for many things such as mongodb url and ports for services. However you will need to set your sendgrid api key so the backend can send emails on signup etc. If using stripe for payments you'll also need to put your public and private keys there too.
+Before starting the services, please create the appropriate consul (Default service registry Consul) kv store config for all the services. You can find the example config
+in the folders of each service called `config.example`. The consul config key of say the `account service` should be
+`ultimatebackend/config/io.ultimatebackend.srv.account` and just paste the config.yaml content in the consul store for that key in `yaml and save.
+You will need to set your sendgrid api key so the backend can send emails on signup etc. If using stripe for payments you'll also need to put your public and private keys there too.
+You can opt in for `etcd` or `kubernetes` as `service registry`.
 
 ## Usage
 
@@ -94,10 +98,7 @@ docker run -d -p 6379:6379 redis
 Otherwise you can install and run redis and eventstore locally if you choose.
 
 ### Running the microservices
-Before starting the services, please create the appropriate consul kv store config for all the services. You can find the example config
-in the folders of each service called `config.example`. The consul config key of say the `account service` should be
-`ultimatebackend/config/io.ultimatebackend.srv.account` and just paste the config.yaml content in the consul store for that key in `yaml and save.
-You should start the microservices of type service before the gateways. Example
+You should start the microservices in any other. Example
 
 ```bash
 
