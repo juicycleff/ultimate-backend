@@ -184,7 +184,7 @@ All going well you should have received the following reply as well as an email 
 ```
 {
     "data": {
-        "data": {
+        "account": {
             "register": {
                 "token": "gtdjghdrtd65edjhc-chxgfxjtgzrkzxyzxtrs45wi6kydch"
             }
