@@ -1,7 +1,6 @@
 /* tslint:disable:ban-types */
 import { TypeOptions } from 'class-transformer';
 import { TypeValueThunk } from '../metadata/storage';
-import { NoExplicitTypeError } from 'type-graphql';
 import { ReturnTypeFunc } from '@ultimatebackend/contracts/helpers';
 
 export type MetadataKey = 'design:type' | 'design:paramtypes' | 'design:returntype';

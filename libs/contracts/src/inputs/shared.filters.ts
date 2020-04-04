@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file */
-import { InputType } from 'type-graphql';
+import { InputType } from '@nestjs/graphql';
 import { FilterMongo } from './base.filter';
 import { BooleanPayload, Price, KeyValuePair, Feature } from '../';
 

@@ -1,7 +1,7 @@
 import { ensureReflectMetadataExists } from 'type-graphql/dist/metadata/utils';
 import { ClassType } from 'type-graphql';
 import { DecoratorTypeOptions } from 'type-graphql/dist/decorators/types';
-import { InAppRole, IPermission, IResource } from '../';
+import { IPermission, IResource } from '../';
 
 export class MetadataStorage {
   fields: FilterableMetadata[] = [];
