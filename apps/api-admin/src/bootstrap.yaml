@@ -21,7 +21,7 @@ service:
   retryInterval: 5000
   tags: ['v1.0.0', 'api']
   name: io.ultimatebackend.api.admin
-  port: 50020
+  port: 4000
 loadbalance:
   ruleCls: RandomRule
 logger:

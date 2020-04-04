@@ -12,16 +12,13 @@ import { AppService } from './app.service';
 import { RolesModule } from './roles/roles.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { TenantsModule } from './tenants/tenants.module';
-import { PointsModule } from './points/points.module';
-import { SpacesModule } from './spaces/spaces.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
-import { SignalsModule } from './signals/signals.module';
 import { BillingsModule } from './billings/billings.module';
 import { CardsModule } from './cards/cards.module';
 import { PlansModule } from './plans/plans.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { UsersModule } from './users/users.module';
-import { BaseModule, CoreModule, CursorScaler, RolesRpcClientService } from '@ultimatebackend/core';
+import { CoreModule, CursorScaler, RolesRpcClientService } from '@ultimatebackend/core';
 import { TenantMembersModule } from './tenant-members/tenant-members.module';
 import { GqlConfigService } from './gql-config.service';
 import { AccessTokenModule } from './access-token/access-token.module';
@@ -42,10 +39,7 @@ import { GlobalClientModule } from './common/global-client.module';
     RolesModule,
     AccountsModule,
     TenantsModule,
-    PointsModule,
-    SpacesModule,
     WebhooksModule,
-    SignalsModule,
     BillingsModule,
     CardsModule,
     PlansModule,

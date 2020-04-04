@@ -172,19 +172,21 @@ mutation register {
         email: "AliceBobsEmail@protonmail.com"
         password: "supersecretpassword"
     }) {
-      success
+      token
     }
   }
 }
 ```
 
-All going well you should have received the following reply as well as an email with a verification code
+All going well you should have received the following reply as well as an email with a verification code as well as a jwt token that contains both email and verification code for your frontend
 
 ```
 {
     "data": {
-        "register": {
-            "success": true
+        "data": {
+            "register": {
+                "token": "gtdjghdrtd65edjhc-chxgfxjtgzrkzxyzxtrs45wi6kydch"
+            }
         }
     }
 }
