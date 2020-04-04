@@ -41,6 +41,7 @@ Software features
 *   ✅ SaaS Plans ([Stripe](https://stripe.com/))
 *   ✅ Security
 *   ❌ (WiP) Documentation
+*   ❌ (WiP) Webhooks
 *   ❌ (WiP) Support for language translation
 *   ✅ Service Discovery (Default on Consul), supports ECTD, Kubernetes
 *   ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
