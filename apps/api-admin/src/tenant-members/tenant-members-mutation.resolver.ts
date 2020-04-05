@@ -15,6 +15,7 @@ export class TenantMembersMutationResolver {
   constructor(private readonly service: TenantsRpcClientService) {}
 
   @Resource({ name: 'member', identify: 'member', roles: ['owner', 'admin'], action: 'delete' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => Member)
   async invite(@Args('input') input: InviteMemberInput, @Context() ctx: GqlContext): Promise<TenantMemberEmbed> {
     const result = await this.service.tenantService.inviteMember({
@@ -27,6 +28,7 @@ export class TenantMembersMutationResolver {
   }
 
   @Resource({ name: 'member', identify: 'member', roles: ['owner', 'admin'], action: 'delete' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => Member)
   async update(@Args('input') input: UpdateMemberInput, @Context() ctx: GqlContext): Promise<TenantMemberEmbed> {
     const result = await this.service.tenantService.updateMember({
@@ -39,6 +41,7 @@ export class TenantMembersMutationResolver {
   }
 
   @Resource({ name: 'member', identify: 'member', roles: ['owner', 'admin'], action: 'delete' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => Member)
   async delete(@Args('input') input: DeleteMemberInput, @Context() ctx: GqlContext): Promise<TenantMemberEmbed> {
     const result = await this.service.tenantService.deleteMember({
