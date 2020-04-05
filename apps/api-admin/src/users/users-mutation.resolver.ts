@@ -9,6 +9,7 @@ export class UsersMutationResolver {
   constructor(private readonly services: RolesRpcClientService, private readonly rolesService: RolesRpcClientService) {}
 
   @ResolveField(() => User)
+  @UseGuards(GqlAuthGuard)
   update(@Args('input') input: UpdateUserInput): string {
     throw new UserInputError('Mutation inputs missing');
   }

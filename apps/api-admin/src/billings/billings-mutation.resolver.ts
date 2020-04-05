@@ -8,6 +8,7 @@ export class BillingsMutationResolver {
   constructor(private readonly service: BillingsRpcClientService) {}
 
   @Resource({ name: 'billing', identify: 'billing:subscription:change', roles: ['owner'], action: 'update' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => TenantSubscription)
   async changeSubscription(@Args('input') input: ChangeSubscriptionInput, @CurrentIdentity() identity, @Context() ctx): Promise<TenantSubscription> {
     const {user, tenant} = identity;
@@ -22,6 +23,7 @@ export class BillingsMutationResolver {
   }
 
   @Resource({ name: 'billing', identify: 'billing:subscription:change', roles: ['owner'], action: 'delete' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => TenantSubscription)
   async cancelSubscription(@CurrentIdentity() identity, @Context() ctx): Promise<TenantSubscription> {
     const {user, tenant} = identity;

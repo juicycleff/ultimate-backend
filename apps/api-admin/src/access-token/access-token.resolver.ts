@@ -1,12 +1,14 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AccessToken, AccessTokenMutations, DeleteAccessTokenInput } from './types';
-import { AccessTokenRpcClientService, GqlContext, Resource, setRpcContext } from '@ultimatebackend/core';
+import { AccessTokenRpcClientService, GqlAuthGuard, GqlContext, Resource, setRpcContext } from '@ultimatebackend/core';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => AccessToken)
 export class AccessTokenResolver {
   constructor(private readonly service: AccessTokenRpcClientService) {}
 
   @Resource({ name: 'access_token', identify: 'access_token', roles: ['owner', 'admin', 'developer'], action: 'read' })
+  @UseGuards(GqlAuthGuard)
   @Query(() => [AccessToken])
   async accessTokens(
     @Args('input') input: DeleteAccessTokenInput,
@@ -16,6 +18,7 @@ export class AccessTokenResolver {
   }
 
   @Resource({ name: 'access_token', identify: 'access_token', roles: ['owner', 'admin', 'developer'], action: 'read' })
+  @UseGuards(GqlAuthGuard)
   @Query(() => AccessToken)
   async accessToken(@Args('id') id: string, @Context() ctx: GqlContext): Promise<AccessToken> {
     const res = await this.service.accessToken.readAccess(

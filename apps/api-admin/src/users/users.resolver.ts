@@ -11,6 +11,7 @@ export class UsersResolver {
   constructor(private readonly services: AccountsRpcClientService, private readonly rolesService: RolesRpcClientService) {}
 
   @Query(() => User)
+  @UseGuards(GqlAuthGuard)
   async profile(@CurrentUser() curUser: UserEntity, @Context() context: GqlContext): Promise<Account.User> {
     // @ts-ignore
     return context.getUser();

@@ -8,6 +8,7 @@ export class CardsResolver {
   constructor(private readonly service: BillingsRpcClientService) {}
 
   @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @UseGuards(GqlAuthGuard)
   @Query(() => Card, {nullable: true})
   async card(@Args('id') id: string, @Context() ctx: GqlContext): Promise<Card> {
     const result = await this.service.billing.readCard({id}, setRpcContext(ctx)).toPromise();
@@ -15,6 +16,7 @@ export class CardsResolver {
   }
 
   @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Card], {nullable: true})
   async cards(@Context() ctx: GqlContext): Promise<Card[]> {
     const result = await this.service.billing.findCards({}, setRpcContext(ctx)).toPromise();
@@ -42,6 +44,7 @@ export class CardsMutationResolver {
    * @param ctx
    */
   @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => Card)
   async create(@Args('input') input: CreateCardInput, @Context() ctx: GqlContext): Promise<Card> {
     // @ts-ignore
@@ -55,6 +58,7 @@ export class CardsMutationResolver {
    * @param ctx
    */
   @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @UseGuards(GqlAuthGuard)
   @ResolveField(() => Card)
   async delete(@Args('id') id: string, @Context() ctx: GqlContext): Promise<Card> {
     const result = await this.service.billing.deleteCard({id}, setRpcContext(ctx)).toPromise();

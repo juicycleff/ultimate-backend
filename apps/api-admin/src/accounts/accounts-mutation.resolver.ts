@@ -87,6 +87,7 @@ export class AccountsMutationResolver {
   }
 
   @ResolveField(() => BooleanPayload)
+  @UseGuards(GqlAuthGuard)
   changePassword(
     @Args('oldPassword') oldPassword: string,
     @Args('newPassword') newPassword: string,
@@ -119,6 +120,7 @@ export class AccountsMutationResolver {
   }
 
   @ResolveField(() => BooleanPayload)
+  @UseGuards(GqlAuthGuard)
   async logout(@Context() context: any) {
     try {
       await context.logout();
