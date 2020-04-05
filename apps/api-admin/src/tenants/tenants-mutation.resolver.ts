@@ -11,11 +11,11 @@ import { TenantEntity, UserEntity } from '@ultimatebackend/repository';
 import { GqlAuthGuard, GqlContext, Resource, setRpcContext, TenantsRpcClientService } from '@ultimatebackend/core';
 import { UseGuards } from '@nestjs/common';
 
-@UseGuards(GqlAuthGuard)
 @Resolver(() => TenantMutations)
 export class TenantsMutationResolver {
   constructor(private readonly service: TenantsRpcClientService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Resource({ name: 'tenant', identify: 'tenant', roles: ['owner', 'admin'], action: 'create' })
   @ResolveField(() => Tenant)
   async create(@Args('input') input: CreateTenantInput, @Context() ctx: GqlContext, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
@@ -24,6 +24,7 @@ export class TenantsMutationResolver {
     return result.tenant;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Resource({ name: 'tenant', identify: 'tenant', roles: ['owner', 'admin'], action: 'update' })
   @ResolveField(() => Tenant)
   async update(@Args('input') input: UpdateTenantInput, @Context() ctx: GqlContext, @CurrentUser() user: UserEntity): Promise<TenantEntity> {
@@ -36,6 +37,7 @@ export class TenantsMutationResolver {
     return result.tenant;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Resource({ name: 'tenant', identify: 'tenant', roles: ['owner', 'admin'], action: 'delete' })
   @ResolveField(() => Tenant)
   async delete(@Args('input') input: DeleteTenantInput, @Context() ctx: GqlContext, @CurrentUser() user: UserEntity): Promise<TenantEntity> {

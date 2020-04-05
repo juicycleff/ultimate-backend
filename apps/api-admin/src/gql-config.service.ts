@@ -27,6 +27,14 @@ export class GqlConfigService implements GqlOptionsFactory {
       cors: corsApollOptions,
       context: ({ req, res }) => buildContext({ req, res }),
       cache,
+
+      /**
+       * Enable this at your own detriment. Without this, namespaced mutation won't work,
+       * I have taken time to make sure resolvers guards are place in the right places.
+       * While extending the application, be careful
+       * Here is the reason https://github.com/nestjs/graphql/issues/295
+       */
+      fieldResolverEnhancers: ['guards', 'interceptors'],
       persistedQueries: {
         cache,
       },
