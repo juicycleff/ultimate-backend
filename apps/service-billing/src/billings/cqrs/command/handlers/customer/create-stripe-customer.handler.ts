@@ -30,7 +30,7 @@ export class CreateStripeCustomerHandler implements ICommandHandler<CreateStripe
 
     try {
       if (input === null) { // Check to make sure input is not null
-        throw new RpcException('Current user input missing'); // Throw an apollo input error
+        throw new RpcException('Current user input missing'); // Throw an input error
       }
 
       // Check if tenant exist with normalized name

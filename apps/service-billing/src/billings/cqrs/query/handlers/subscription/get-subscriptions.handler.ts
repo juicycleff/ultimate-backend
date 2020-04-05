@@ -23,11 +23,11 @@ export class GetSubscriptionsHandler implements IQueryHandler<GetSubscriptionsQu
     try {
 
       if (identity.customerId === null ) { // Check to make sure input is not null
-        throw new RpcException('Current customer id missing'); // Throw an apollo input error
+        throw new RpcException('Current customer id missing'); // Throw an input error
       }
 
       if (identity.tenantId === null) { // Check to make sure input is not null
-        throw new RpcException('Current tenant id missing'); // Throw an apollo input error
+        throw new RpcException('Current tenant id missing'); // Throw an input error
       }
 
       const { tenantId, customerId } = identity;

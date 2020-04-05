@@ -23,11 +23,11 @@ export class CancelSubscriptionHandler implements ICommandHandler<CancelSubscrip
 
     try {
       if (input.customerId === null) { // Check to make sure input is not null
-        throw new RpcException('Current user missing'); // Throw an apollo input error
+        throw new RpcException('Current user missing'); // Throw an input error
       }
 
       if (input.tenantId === null) { // Check to make sure input is not null
-        throw new RpcException('Current tenant missing'); // Throw an apollo input error
+        throw new RpcException('Current tenant missing'); // Throw an input error
       }
 
       const [customer, subscriptions] = await Promise.all([
@@ -36,7 +36,7 @@ export class CancelSubscriptionHandler implements ICommandHandler<CancelSubscrip
       ]);
 
       if (customer === null || subscriptions === null) { // Check to make sure input is not null
-        throw new RpcException('No subscription found for this customer'); // Throw an apollo input error
+        throw new RpcException('No subscription found for this customer'); // Throw an input error
       }
 
       if (subscriptions.data && subscriptions.data.length > 0) {

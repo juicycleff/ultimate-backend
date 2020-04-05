@@ -1,11 +1,10 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { ApolloError, UserInputError } from 'apollo-server-express';
 import { Customer, StripeUserDeletedEvent } from '@ultimatebackend/core';
-import { NotFoundError } from '@ultimatebackend/common';
 import { DeleteStripeCustomerCommand } from '../../impl';
 import { InjectStripe } from 'nestjs-stripe';
 import * as Stripe from 'stripe';
+import { RpcException } from '@nestjs/microservices';
 
 @CommandHandler(DeleteStripeCustomerCommand)
 export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripeCustomerCommand> {
@@ -22,12 +21,12 @@ export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripe
 
     try {
       if (id === null) { // Check to make sure input is not null
-        throw new UserInputError('Customer id is missing'); // Throw an apollo input error
+        throw new RpcException('Customer id is missing'); // Throw an input error
       }
 
       const customer = await this.stripeClient.customers.retrieve(id);
       if (!customer) { // Check to make sure input is not null
-        throw new NotFoundError('Customer is not found'); // Throw an apollo input error
+        throw new RpcException('Customer is not found'); // Throw an input error
       }
 
       await this.stripeClient.customers.del(id);
@@ -41,7 +40,7 @@ export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripe
       return customerMod;
     } catch (error) {
       this.logger.log(error);
-      throw new ApolloError(error.message, error);
+      throw new RpcException(error);
     }
   }
 

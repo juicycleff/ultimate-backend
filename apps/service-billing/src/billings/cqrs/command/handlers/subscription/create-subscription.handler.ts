@@ -1,6 +1,5 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { ApolloError } from 'apollo-server-express';
 import { InjectStripe } from 'nestjs-stripe';
 import * as Stripe from 'stripe';
 import { cards } from 'stripe';
@@ -25,15 +24,15 @@ export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscrip
 
     try {
       if (input.customerId === null ) { // Check to make sure input is not null
-        throw new RpcException('Current customer id missing'); // Throw an apollo input error
+        throw new RpcException('Current customer id missing'); // Throw an input error
       }
 
       if (input.tenantId === null) { // Check to make sure input is not null
-        throw new RpcException('Current tenant id missing'); // Throw an apollo input error
+        throw new RpcException('Current tenant id missing'); // Throw an input error
       }
 
       if (input.planId === null) { // Check to make sure input is not null
-        throw new RpcException('Current plan id missing'); // Throw an apollo input error
+        throw new RpcException('Current plan id missing'); // Throw an input error
       }
 
       const [customer, plan] = await Promise.all([
@@ -43,7 +42,7 @@ export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscrip
 
       const defaultCard = customer.default_source as cards.ICard;
       if (plan === null || defaultCard === null) { // Check to make sure input is not null
-        throw new RpcException('Please add a payment card'); // Throw an apollo input error
+        throw new RpcException('Please add a payment card'); // Throw an  input error
       }
 
       const sub = await this.stripeClient.subscriptions.create({
@@ -64,7 +63,7 @@ export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscrip
       };
     } catch (error) {
       this.logger.log(error);
-      throw new ApolloError(error.message, error);
+      throw new RpcException(error);
     }
   }
 }

@@ -3,7 +3,6 @@ import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import * as Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
 import { GetInvoicesQuery } from '../../impl';
-import { BadRequestError } from '@ultimatebackend/common';
 import { FindInvoicesResponse, Invoice } from '@ultimatebackend/proto-schema/billing';
 import { invoiceSliceToProtoInvoiceSlice } from '../../../../../common';
 import { RpcException } from '@nestjs/microservices';
@@ -23,7 +22,7 @@ export class GetInvoicesHandler implements IQueryHandler<GetInvoicesQuery> {
     try {
 
       if (customerId === null) { // Check to make sure input is not null
-        throw new BadRequestError('Current user missing'); // Throw an apollo input error
+        throw new RpcException('Current user missing'); // Throw an input error
       }
 
       const cacheKey = 'service-billing/invoices/' + customerId;
