@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package io.ultimatebackend.srv.project;
+
+service ProjectService {
+    rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse) {}
+    rpc DeleteProject(DeleteProjectRequest) returns (DeleteProjectResponse) {}
+    rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {}
+
+    rpc ReadProject(ReadProjectRequest) returns (ReadProjectResponse) {}
+    rpc FindProjects(FindProjectsRequest) returns (FindProjectsResponse) {}
+}
+
+message Paginate {
+    int32 skip = 1;
+    int32 limit = 2;
+}
+
+message Project {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    google.protobuf.Timestamp createdAt = 4;
+    google.protobuf.Timestamp updatedAt = 5;
+}
+
+message CreateProjectRequest {
+    string name = 1;
+    string description = 2;
+}
+
+message CreateProjectResponse {
+    Project project = 1;
+}
+
+message UpdateProjectRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message UpdateProjectResponse {
+    Project project = 1;
+}
+
+message DeleteProjectRequest {
+    string id = 1;
+}
+
+message DeleteProjectResponse {
+    Project project = 1;
+}
+
+message ReadProjectRequest {
+    string filter = 1;
+}
+
+message ReadProjectResponse {
+    Project project = 1;
+}
+
+message FindProjectsRequest {
+    string filter = 1;
+    Paginate paginate = 2;
+}
+
+message FindProjectsResponse {
+    repeated Project projects = 1;
+}

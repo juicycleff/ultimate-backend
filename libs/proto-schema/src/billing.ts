@@ -4,6 +4,7 @@ import { Timestamp } from './google/protobuf/timestamp';
 import * as Long from 'long';
 import { Writer, Reader } from 'protobufjs/minimal';
 
+
 export interface TenantSubscription {
   /**
    *  @inject_tag: bson:"_id,omitempty"
@@ -845,7 +846,7 @@ function fromJsonTimestamp(o: any): Date {
 
 function longToNumber(long: Long) {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new global.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+    throw new global.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
 }
@@ -857,6 +858,7 @@ export enum PlanPriceInterval {
   DAY = 3,
 }
 
+
 export enum InvoiceStatus {
   DRAFT = 0,
   OPEN = 1,
@@ -864,6 +866,7 @@ export enum InvoiceStatus {
   UNCOLLECTIBLE = 3,
   VOID = 4,
 }
+
 
 export enum SubscriptionStatus {
   ACTIVE = 0,
@@ -875,6 +878,7 @@ export enum SubscriptionStatus {
   TRIALING = 6,
   UNPAID = 7,
 }
+
 
 export const TenantSubscription = {
   encode(message: TenantSubscription, writer: Writer = Writer.create()): Writer {
@@ -890,7 +894,7 @@ export const TenantSubscription = {
     return writer;
   },
   decode(reader: Reader, length?: number): TenantSubscription {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseTenantSubscription) as TenantSubscription;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -994,7 +998,7 @@ export const Customer = {
     return writer;
   },
   decode(reader: Reader, length?: number): Customer {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCustomer) as Customer;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1074,7 +1078,7 @@ export const Address = {
     return writer;
   },
   decode(reader: Reader, length?: number): Address {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseAddress) as Address;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1214,7 +1218,7 @@ export const Card = {
     return writer;
   },
   decode(reader: Reader, length?: number): Card {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCard) as Card;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1376,7 +1380,7 @@ export const Price = {
     return writer;
   },
   decode(reader: Reader, length?: number): Price {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(basePrice) as Price;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1482,7 +1486,7 @@ export const StripePlan = {
     return writer;
   },
   decode(reader: Reader, length?: number): StripePlan {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseStripePlan) as StripePlan;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1591,7 +1595,7 @@ export const Feature = {
     return writer;
   },
   decode(reader: Reader, length?: number): Feature {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFeature) as Feature;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1752,7 +1756,7 @@ export const Plan = {
     return writer;
   },
   decode(reader: Reader, length?: number): Plan {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(basePlan) as Plan;
     message.features = [];
     while (reader.pos < end) {
@@ -1963,7 +1967,7 @@ export const Invoice = {
     return writer;
   },
   decode(reader: Reader, length?: number): Invoice {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseInvoice) as Invoice;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2379,7 +2383,7 @@ export const CreatePriceRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreatePriceRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreatePriceRequest) as CreatePriceRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2518,7 +2522,7 @@ export const CreatePlanRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreatePlanRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreatePlanRequest) as CreatePlanRequest;
     message.prices = [];
     message.features = [];
@@ -2650,7 +2654,7 @@ export const CreatePlanResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreatePlanResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreatePlanResponse) as CreatePlanResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2696,7 +2700,7 @@ export const ReadPlanRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadPlanRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadPlanRequest) as ReadPlanRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2744,7 +2748,7 @@ export const ReadPlanResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadPlanResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadPlanResponse) as ReadPlanResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2789,7 +2793,7 @@ export const FindPlansRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindPlansRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindPlansRequest) as FindPlansRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2823,7 +2827,7 @@ export const FindPlansResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindPlansResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindPlansResponse) as FindPlansResponse;
     message.plans = [];
     while (reader.pos < end) {
@@ -2876,7 +2880,7 @@ export const ReadStripePlanRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadStripePlanRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadStripePlanRequest) as ReadStripePlanRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2924,7 +2928,7 @@ export const ReadStripePlanResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadStripePlanResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadStripePlanResponse) as ReadStripePlanResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2970,7 +2974,7 @@ export const FindStripePlansRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindStripePlansRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindStripePlansRequest) as FindStripePlansRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3018,7 +3022,7 @@ export const FindStripePlansResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindStripePlansResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindStripePlansResponse) as FindStripePlansResponse;
     message.plans = [];
     while (reader.pos < end) {
@@ -3071,7 +3075,7 @@ export const ReadInvoiceRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadInvoiceRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadInvoiceRequest) as ReadInvoiceRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3119,7 +3123,7 @@ export const ReadInvoiceResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadInvoiceResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadInvoiceResponse) as ReadInvoiceResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3164,7 +3168,7 @@ export const FindInvoicesRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindInvoicesRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindInvoicesRequest) as FindInvoicesRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3198,7 +3202,7 @@ export const FindInvoicesResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindInvoicesResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindInvoicesResponse) as FindInvoicesResponse;
     message.invoices = [];
     while (reader.pos < end) {
@@ -3254,7 +3258,7 @@ export const CreateSubscriptionRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateSubscriptionRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateSubscriptionRequest) as CreateSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3344,7 +3348,7 @@ export const CreateSubscriptionResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateSubscriptionResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateSubscriptionResponse) as CreateSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3393,7 +3397,7 @@ export const ChangeSubscriptionRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ChangeSubscriptionRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseChangeSubscriptionRequest) as ChangeSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3483,7 +3487,7 @@ export const ChangeSubscriptionResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ChangeSubscriptionResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseChangeSubscriptionResponse) as ChangeSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3530,7 +3534,7 @@ export const CancelSubscriptionRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CancelSubscriptionRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCancelSubscriptionRequest) as CancelSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3592,7 +3596,7 @@ export const CancelSubscriptionResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CancelSubscriptionResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCancelSubscriptionResponse) as CancelSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3638,7 +3642,7 @@ export const ReadSubscriptionRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadSubscriptionRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadSubscriptionRequest) as ReadSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3686,7 +3690,7 @@ export const ReadSubscriptionResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadSubscriptionResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadSubscriptionResponse) as ReadSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3731,7 +3735,7 @@ export const FindSubscriptionsRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindSubscriptionsRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3765,7 +3769,7 @@ export const FindSubscriptionsResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindSubscriptionsResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindSubscriptionsResponse) as FindSubscriptionsResponse;
     message.subscriptions = [];
     while (reader.pos < end) {
@@ -3826,7 +3830,7 @@ export const CreateCardRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateCardRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateCardRequest) as CreateCardRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3958,7 +3962,7 @@ export const CreateCardResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateCardResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateCardResponse) as CreateCardResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4004,7 +4008,7 @@ export const DeleteCardRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteCardRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteCardRequest) as DeleteCardRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4052,7 +4056,7 @@ export const DeleteCardResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteCardResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteCardResponse) as DeleteCardResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4098,7 +4102,7 @@ export const ReadCardRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadCardRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadCardRequest) as ReadCardRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4146,7 +4150,7 @@ export const ReadCardResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadCardResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadCardResponse) as ReadCardResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4191,7 +4195,7 @@ export const FindCardsRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindCardsRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindCardsRequest) as FindCardsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4225,7 +4229,7 @@ export const FindCardsResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindCardsResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindCardsResponse) as FindCardsResponse;
     message.cards = [];
     while (reader.pos < end) {
@@ -4281,7 +4285,7 @@ export const CreateCustomerRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateCustomerRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateCustomerRequest) as CreateCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4371,7 +4375,7 @@ export const CreateCustomerResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateCustomerResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateCustomerResponse) as CreateCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4417,7 +4421,7 @@ export const DeleteCustomerRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteCustomerRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteCustomerRequest) as DeleteCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4465,7 +4469,7 @@ export const DeleteCustomerResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteCustomerResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteCustomerResponse) as DeleteCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4511,7 +4515,7 @@ export const ReadCustomerRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadCustomerRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadCustomerRequest) as ReadCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4559,7 +4563,7 @@ export const ReadCustomerResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadCustomerResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadCustomerResponse) as ReadCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4605,7 +4609,7 @@ export const Message = {
     return writer;
   },
   decode(reader: Reader, length?: number): Message {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseMessage) as Message;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -4654,7 +4658,7 @@ export const Event = {
     return writer;
   },
   decode(reader: Reader, length?: number): Event {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseEvent) as Event;
     while (reader.pos < end) {
       const tag = reader.uint32();

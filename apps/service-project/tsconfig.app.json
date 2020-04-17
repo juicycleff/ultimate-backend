@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "outDir": "../../dist/apps/service-project"
+  },
+  "include": ["src/**/*", "definitions/type.d.ts"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}

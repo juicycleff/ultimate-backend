@@ -13,6 +13,12 @@ export const SERVICE_LIST = {
     service: 'AccessService',
     protoPath: baseUrl + 'proto/access.proto',
   },
+  project: {
+    package: 'io.ultimatebackend.srv.project',
+    consulName: 'io.ultimatebackend.srv.project',
+    service: 'ProjectService',
+    protoPath: baseUrl + 'proto/project.proto',
+  },
   billing: {
     package: 'io.ultimatebackend.srv.billing',
     consulName: 'io.ultimatebackend.srv.billing',

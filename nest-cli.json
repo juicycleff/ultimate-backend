@@ -148,6 +148,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/service-access/tsconfig.app.json"
       }
+    },
+    "service-project": {
+      "type": "application",
+      "root": "apps/service-project",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-project/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-project/tsconfig.app.json"
+      }
     }
   }
 }
