@@ -95,38 +95,15 @@ export interface ConnectionSettings {
   host: string;
 }
 
-export interface IotSubSettings {
-  /**
-   *  @inject_tag: bson:"uri,omitempty"
-   */
-  uri: string;
-  /**
-   *  @inject_tag: bson:"port,omitempty"
-   */
-  port: string;
-  /**
-   *  @inject_tag: bson:"password,omitempty"
-   */
-  password: string;
-  /**
-   *  @inject_tag: bson:"username,omitempty"
-   */
-  username: string;
-}
-
 export interface Settings {
   /**
    *  @inject_tag: bson:"connection,omitempty"
    */
-  showStatusIcon: boolean;
+  enableTheme: boolean;
   /**
    *  @inject_tag: bson:"connection,omitempty"
    */
   connection: ConnectionSettings | undefined;
-  /**
-   *  @inject_tag: bson:"mqtt,omitempty"
-   */
-  mqtt: IotSubSettings | undefined;
 }
 
 export interface Member {
@@ -322,17 +299,9 @@ const baseConnectionSettings: object = {
   host: '',
 };
 
-const baseIotSubSettings: object = {
-  uri: '',
-  port: '',
-  password: '',
-  username: '',
-};
-
 const baseSettings: object = {
-  showStatusIcon: false,
+  enableTheme: false,
   connection: undefined,
-  mqtt: undefined,
 };
 
 const baseMember: object = {
@@ -1011,105 +980,11 @@ export const ConnectionSettings = {
   },
 };
 
-export const IotSubSettings = {
-  encode(message: IotSubSettings, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.uri);
-    writer.uint32(18).string(message.port);
-    writer.uint32(26).string(message.password);
-    writer.uint32(34).string(message.username);
-    return writer;
-  },
-  decode(reader: Reader, length?: number): IotSubSettings {
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseIotSubSettings) as IotSubSettings;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.uri = reader.string();
-          break;
-        case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.password = reader.string();
-          break;
-        case 4:
-          message.username = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): IotSubSettings {
-    const message = Object.create(baseIotSubSettings) as IotSubSettings;
-    if (object.uri !== undefined && object.uri !== null) {
-      message.uri = String(object.uri);
-    } else {
-      message.uri = '';
-    }
-    if (object.port !== undefined && object.port !== null) {
-      message.port = String(object.port);
-    } else {
-      message.port = '';
-    }
-    if (object.password !== undefined && object.password !== null) {
-      message.password = String(object.password);
-    } else {
-      message.password = '';
-    }
-    if (object.username !== undefined && object.username !== null) {
-      message.username = String(object.username);
-    } else {
-      message.username = '';
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<IotSubSettings>): IotSubSettings {
-    const message = Object.create(baseIotSubSettings) as IotSubSettings;
-    if (object.uri !== undefined && object.uri !== null) {
-      message.uri = object.uri;
-    } else {
-      message.uri = '';
-    }
-    if (object.port !== undefined && object.port !== null) {
-      message.port = object.port;
-    } else {
-      message.port = '';
-    }
-    if (object.password !== undefined && object.password !== null) {
-      message.password = object.password;
-    } else {
-      message.password = '';
-    }
-    if (object.username !== undefined && object.username !== null) {
-      message.username = object.username;
-    } else {
-      message.username = '';
-    }
-    return message;
-  },
-  toJSON(message: IotSubSettings): unknown {
-    const obj: any = {};
-    obj.uri = message.uri || '';
-    obj.port = message.port || '';
-    obj.password = message.password || '';
-    obj.username = message.username || '';
-    return obj;
-  },
-};
-
 export const Settings = {
   encode(message: Settings, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.showStatusIcon);
+    writer.uint32(8).bool(message.enableTheme);
     if (message.connection !== undefined && message.connection !== undefined) {
       ConnectionSettings.encode(message.connection, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.mqtt !== undefined && message.mqtt !== undefined) {
-      IotSubSettings.encode(message.mqtt, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1120,13 +995,10 @@ export const Settings = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.showStatusIcon = reader.bool();
+          message.enableTheme = reader.bool();
           break;
         case 2:
           message.connection = ConnectionSettings.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.mqtt = IotSubSettings.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1137,47 +1009,36 @@ export const Settings = {
   },
   fromJSON(object: any): Settings {
     const message = Object.create(baseSettings) as Settings;
-    if (object.showStatusIcon !== undefined && object.showStatusIcon !== null) {
-      message.showStatusIcon = Boolean(object.showStatusIcon);
+    if (object.enableTheme !== undefined && object.enableTheme !== null) {
+      message.enableTheme = Boolean(object.enableTheme);
     } else {
-      message.showStatusIcon = false;
+      message.enableTheme = false;
     }
     if (object.connection !== undefined && object.connection !== null) {
       message.connection = ConnectionSettings.fromJSON(object.connection);
     } else {
       message.connection = undefined;
     }
-    if (object.mqtt !== undefined && object.mqtt !== null) {
-      message.mqtt = IotSubSettings.fromJSON(object.mqtt);
-    } else {
-      message.mqtt = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<Settings>): Settings {
     const message = Object.create(baseSettings) as Settings;
-    if (object.showStatusIcon !== undefined && object.showStatusIcon !== null) {
-      message.showStatusIcon = object.showStatusIcon;
+    if (object.enableTheme !== undefined && object.enableTheme !== null) {
+      message.enableTheme = object.enableTheme;
     } else {
-      message.showStatusIcon = false;
+      message.enableTheme = false;
     }
     if (object.connection !== undefined && object.connection !== null) {
       message.connection = ConnectionSettings.fromPartial(object.connection);
     } else {
       message.connection = undefined;
     }
-    if (object.mqtt !== undefined && object.mqtt !== null) {
-      message.mqtt = IotSubSettings.fromPartial(object.mqtt);
-    } else {
-      message.mqtt = undefined;
-    }
     return message;
   },
   toJSON(message: Settings): unknown {
     const obj: any = {};
-    obj.showStatusIcon = message.showStatusIcon || false;
+    obj.enableTheme = message.enableTheme || false;
     obj.connection = message.connection ? ConnectionSettings.toJSON(message.connection) : undefined;
-    obj.mqtt = message.mqtt ? IotSubSettings.toJSON(message.mqtt) : undefined;
     return obj;
   },
 };

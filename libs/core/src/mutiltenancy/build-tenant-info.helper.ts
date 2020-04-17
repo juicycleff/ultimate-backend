@@ -51,7 +51,7 @@ export class BuildTenantInfoHelper {
 
     } else if (this.options.tenantResolver.resolverType === 'Query') {
       const queryKeys = this.options.tenantResolver.queryKeys;
-      tenantId = this.req.query[queryKeys.tenant];
+      tenantId = this.req.query[queryKeys.tenant].toString();
 
       if (this.options.tenantResolver.requiresToken) {
         accessToken = {

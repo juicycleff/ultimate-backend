@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Timestamp } from './google/protobuf/timestamp';
 import { Writer, Reader } from 'protobufjs/minimal';
 
+
 export interface Access {
   id: string;
   token: string;
@@ -195,7 +196,7 @@ export const Access = {
     return writer;
   },
   decode(reader: Reader, length?: number): Access {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseAccess) as Access;
     message.scopes = [];
     while (reader.pos < end) {
@@ -364,7 +365,7 @@ export const CreateAccessRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateAccessRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateAccessRequest) as CreateAccessRequest;
     message.scopes = [];
     while (reader.pos < end) {
@@ -447,7 +448,7 @@ export const CreateAccessResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): CreateAccessResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseCreateAccessResponse) as CreateAccessResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -493,7 +494,7 @@ export const DeleteAccessRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteAccessRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteAccessRequest) as DeleteAccessRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -541,7 +542,7 @@ export const DeleteAccessResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteAccessResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseDeleteAccessResponse) as DeleteAccessResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -588,7 +589,7 @@ export const ReadAccessRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadAccessRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadAccessRequest) as ReadAccessRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -650,7 +651,7 @@ export const ReadAccessResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): ReadAccessResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseReadAccessResponse) as ReadAccessResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -697,7 +698,7 @@ export const FindAccessRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindAccessRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindAccessRequest) as FindAccessRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -759,7 +760,7 @@ export const FindAccessResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): FindAccessResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseFindAccessResponse) as FindAccessResponse;
     message.accessToken = [];
     while (reader.pos < end) {
@@ -814,7 +815,7 @@ export const HasRightsRequest = {
     return writer;
   },
   decode(reader: Reader, length?: number): HasRightsRequest {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseHasRightsRequest) as HasRightsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -888,7 +889,7 @@ export const HasRightsResponse = {
     return writer;
   },
   decode(reader: Reader, length?: number): HasRightsResponse {
-    const end = length === undefined ? reader.len : reader.pos + length;
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = Object.create(baseHasRightsResponse) as HasRightsResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();

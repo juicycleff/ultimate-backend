@@ -5,4 +5,5 @@ export * from './tenant.entity';
 export * from './offer.entity';
 export * from './plan.entity';
 export * from './types';
+export * from './project.entity';
 export * from './access-token.entity';

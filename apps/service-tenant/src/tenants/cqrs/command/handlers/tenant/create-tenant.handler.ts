@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { TenantMemberEmbed, TenantRepository } from '@ultimatebackend/repository';
 import { BillingsRpcClientService, RolesRpcClientService, TenantCreatedEvent } from '@ultimatebackend/core';
-import slugify from '@sindresorhus/slugify';
+import * as slugify from '@sindresorhus/slugify';
 import { ObjectID } from 'mongodb';
 import { DateTime } from 'luxon';
 import { CreateTenantCommand } from '../../impl';
