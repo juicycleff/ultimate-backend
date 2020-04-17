@@ -217,7 +217,7 @@ export class Tenant extends Node {
 ```
 
 After adding decorator to the fields you can now add generate your graphql input type.
-Not enums and sub types not supported at the moment.
+Note enums and sub types not supported at the moment.
 
 ```typescript
 import { FilterMongo } from '@ultimatebackend/contracts';
