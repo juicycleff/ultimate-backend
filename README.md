@@ -22,7 +22,7 @@ ULTIMATE BACKEND
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns  
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below.
   
-> **Note:** Seeing alot of clone of the project which is good, but please if you can start the project as it also motivates me in improving the project.
+> **Note:** Seeing alot of clone of the project which is good, but please if you can start the project as it also motivates me in improving the project. Also the docker files, azure and gitlab ci setups are broken and will be fixed soon.
 > 
   
 > **Note:** Also ultimate backend .is coming `rust` as a framework, if you want to be part of ir, please write to me. Here is the repo [ultimate](https://github.com/juicycleff/ultimate)
@@ -80,6 +80,7 @@ The next important folder is the  `/lib` folder. This folder contains all intern
  - `/lib/repository` It holds all reposirories used in the microservices, and this repository and created from the repo-rom library.
  - `/lib/proto-schema` All GRPC protobuf files required by each service is stored in here and shared amongs services that depends on them.
   
+  Other folders such as `iac` which simply means Infrastructure as Code is teraform setup for creating a kubernetes cluster with just a simple command for running the microservices. `scripts` contains helper bash scripts for CI/CD.
   
 ## Installation  
   
