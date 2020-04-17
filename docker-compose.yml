@@ -22,3 +22,14 @@ services:
       kompose.service.type: nodeport
       kompose.service.expose: "true"
       kompose.image-pull-policy: "Always"
+
+  memcached:
+    container_name: memcached
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    image: memcached/memcached
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
