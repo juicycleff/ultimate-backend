@@ -18,7 +18,7 @@ import { CardsModule } from './cards/cards.module';
 import { PlansModule } from './plans/plans.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { UsersModule } from './users/users.module';
-import { CoreModule, CursorScaler, RolesRpcClientService } from '@ultimatebackend/core';
+import { CoreModule, RolesRpcClientService } from '@ultimatebackend/core';
 import { TenantMembersModule } from './tenant-members/tenant-members.module';
 import { GqlConfigService } from './gql-config.service';
 import { AccessTokenModule } from './access-token/access-token.module';
@@ -49,6 +49,6 @@ import { GlobalClientModule } from './common/global-client.module';
     AccessTokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService, CursorScaler, CookieSerializer, RolesRpcClientService],
+  providers: [AppService, CookieSerializer, RolesRpcClientService],
 })
 export class AppModule {}

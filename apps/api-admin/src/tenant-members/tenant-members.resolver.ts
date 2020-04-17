@@ -1,8 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentTenant, NotImplementedError } from '@ultimatebackend/common';
-import { TenantEntity, TenantMemberEmbed } from '@ultimatebackend/repository';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { NotImplementedError } from '@ultimatebackend/common';
+import { TenantMemberEmbed } from '@ultimatebackend/repository';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { GqlAuthGuard, PermissionsInterceptor, Resource, TenantsRpcClientService } from '@ultimatebackend/core';
+import { Member as RpcMember} from '@ultimatebackend/proto-schema/tenant';
+import { GqlAuthGuard, GqlContext, PermissionsInterceptor, Resource, setRpcContext, TenantsRpcClientService } from '@ultimatebackend/core';
 import {
   Member, MemberFilterArgs, MemberFilterInput, MemberMutations,
 } from './types';
@@ -21,14 +22,18 @@ export class TenantMembersResolver {
   @Resource({ roles: ['guest', 'member', 'admin', 'developer', 'owner'], name: 'member', identify: 'member', action: 'read' })
   @UseGuards(GqlAuthGuard)
   @Query(() => Member)
-  async member(@Args('input') input: MemberFilterInput, @CurrentTenant() tenant: TenantEntity): Promise<TenantMemberEmbed> {
+  async member(@Args('input') input: MemberFilterInput, @Context() ctx: GqlContext): Promise<TenantMemberEmbed> {
     throw new NotImplementedError('Not implemented');
   }
 
   @Resource({ roles: ['guest', 'member', 'admin', 'developer', 'owner'], name: 'member', identify: 'member', action: 'read' })
   @UseGuards(GqlAuthGuard)
   @Query(() => [Member!])
-  async members(@Args() input: MemberFilterArgs, @CurrentTenant() tenant: TenantEntity): Promise<TenantMemberEmbed> {
-    throw new NotImplementedError('Not implemented');
+  async members(@Args() input: MemberFilterArgs, @Context() ctx: GqlContext): Promise<RpcMember[]> {
+    const result = await this.service.tenantService.findMembers({
+      filter: JSON.stringify(input.where)
+    }, setRpcContext(ctx)).toPromise();
+
+    return result.members;
   }
 }

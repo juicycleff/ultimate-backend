@@ -2,18 +2,18 @@ app:
   port: 9900
   auth:
     facebook:
-      clientID: '408656339979761'
-      clientSecret: 'ccbf2b7ca62802d7ba63d40404716c16'
+      clientID: 'gfgfggfgfgfgf'
+      clientSecret: 'fgfgfgfgf'
       fbGraphVersion: 'v3.0'
       callbackURL: 'https://142fa311.ngrok.io/account/facebook/callback'
     github:
-      clientID: '03c44edbead5e19009be'
-      clientSecret: '22f614ef3d85eb7c2edfa3e26392c2d3ce404b31'
+      clientID: 'gfgfgfgfgfgf'
+      clientSecret: 'gfgfgfgfgfgfgfg'
       fbGraphVersion: 'v3.0'
       callbackURL: 'https://142fa311.ngrok.io/account/github/callback'
     google:
-      clientID: '787252419166-2452q06cibijh7fpebjvd6q6cm8knt2o.apps.googleusercontent.com'
-      clientSecret: '1mZQscEYuY1ujwJ3TckzPh_M'
+      clientID: 'fgffgfgfg'
+      clientSecret: 'fgfgfgfgfggf'
       fbGraphVersion: 'v3.0'
       callbackURL: 'https://142fa311.ngrok.io/account/google/callback'
 

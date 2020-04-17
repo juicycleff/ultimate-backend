@@ -193,6 +193,41 @@ All going well you should have received the following reply as well as an email 
 }
 ```
 
+## Quick Tips
+
+#### Generating dynamic mongo filter GraphQL type.
+You can generate dynamic graphql filter by decorating the fields you want to be
+avaiable in your generated filter type with the `@Filterable()` decorator like below
+
+
+```typescript
+import { Filterable } from '@ultimatebackend/core';
+
+@ObjectType()
+export class Tenant extends Node {
+
+  @Filterable()
+  @Field({ nullable: true })
+  name: string;
+
+  @Filterable()
+  @Field({ nullable: true })
+  normalizedName: string;
+}
+```
+
+After adding decorator to the fields you can now add generate your graphql input type.
+Not enums and sub types not supported at the moment.
+
+```typescript
+import { FilterMongo } from '@ultimatebackend/contracts';
+
+@InputType()
+export class TenantFilterInput extends FilterMongo(Tenant, { simple: true }) {}
+```
+
+#### More docs updates coming.
+
 ## Test
 
 ```bash

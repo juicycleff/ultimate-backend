@@ -6,7 +6,7 @@ config:
 nats:
   url: nats://localhost:4222
 mqtt:
-  port: 1883,
+  port: 1883
   host: "localhost"
   username: ""
   password: ""
