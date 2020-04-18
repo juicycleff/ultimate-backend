@@ -48,7 +48,7 @@ Software features
 * ❌ (WiP) Documentation  
 * ❌ (WiP) Webhooks  
 * ❌ (WiP) Support for language translation  
-* ✅ Service Discovery (Default on Consul), supports ECTD, Kubernetes  
+* ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
 * ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)  
   
 ## Software stack
@@ -62,23 +62,23 @@ Software features
   
 
 ## Folder Structure  
-Senior candiate in the folder structure is the `/app` folder. This folder contains all executable programs or in this case microservices
+Senior candidate in the folder structure is the `/app` folder. This folder contains all executable programs or in this case microservices
 
- - `/app/service-access` The access microservice handles access token manangement for each tenant in the system. It also validates current tenant credentials againts tenant specific resources. It is the gate keeper for your tenant api.
+ - `/app/service-access` The access microservice handles access token management for each tenant in the system. It also validates current tenant credentials against a tenant specific resources. It is the gate keeper for your tenant api.
  - `/app/service-account` The account microservice handles user account commands and queries such as creating and validating new and current users in the system.
  - `/app/service-tenant` The tenant microservice handles creating new tenants as well as managing tenant specific commands and queries.
- - `/app/service-role` Similar to service-access, this service validates users based on roles againts the entire system and tenants they belong to. This service handles only user authorization, where service-access is for tenant access keys for externa api.
+ - `/app/service-role` Similar to service-access, this service validates users based on roles against the entire system and tenants they belong to. This service handles only user authorization, where service-access is for tenant access keys for external api.
  - `/app/service-notification` The microservice performs notification tasks in the entire systems. Right now it supports emailing, but can be extended to support push notification as well as activity feeds.
  - `/app/service-billing` The billing microservice manages billing and payment commands. It is tightly integrated with Stripe, but can be easily replaced.
- - `/app/service-project` This microservice is merly an example of supporting multitenant database strategy. It holds no other significance.
+ - `/app/service-project` This microservice is merely an example of supporting multi-tenant database strategy. It holds no other significance.
 
 The next important folder is the  `/lib` folder. This folder contains all internal libraries that is depended upon by the microservices, and they are,
- - `/lib/common` House shared/commond modules in the project.
+ - `/lib/common` House shared/common modules in the project.
  - `/lib/core` This is the core module of ultimate backend and houses most of the codebase that wires everything together.
- - `/lib/repo-orm` This library will be exctracted in the future as it matures. It is aimed at being a simple less cluttered NoSQL multi tenant object relational mapper (ORM), It supports Mongo and ArangoDB, with support for FaunaDB in the works as well as caching.
- - `/lib/contracts` Shared contracts for both typescript typings and graphql code first types are stored here.
- - `/lib/repository` It holds all reposirories used in the microservices, and this repository and created from the repo-rom library.
- - `/lib/proto-schema` All GRPC protobuf files required by each service is stored in here and shared amongs services that depends on them.
+ - `/lib/repo-orm` This library will be extracted in the future as it matures. It is aimed at being a simple, less cluttered NoSQL multi-tenant object relational mapper (ORM), It supports caching, MongoDB and ArangoDB, with support for FaunaDB in the works.
+ - `/lib/contracts` Shared contracts for both typescript typings and graphql code first types, are stored here.
+ - `/lib/repository` It holds all repositories used in the microservices, and this repository and created from the repo-rom library.
+ - `/lib/proto-schema` All GRPC protobuf files required by each service, is stored in here and shared amongst services that depends on them.
   
   Other folders such as `iac` which simply means Infrastructure as Code is teraform setup for creating a kubernetes cluster with just a simple command for running the microservices. `scripts` contains helper bash scripts for CI/CD.
   
@@ -93,7 +93,7 @@ $ yarn install
 Before starting the services, please create the appropriate consul (Default service registry Consul) kv store config for all the services. You can find the example config  
 in the folders of each service called `config.example`. The consul config key of say the `account service` should be  
 `ultimatebackend/config/io.ultimatebackend.srv.account` and just paste the config.yaml content in the consul store for that key in yaml and save.  
-You will need to set your sendgrid api key so the backend can send emails on signup etc. If using stripe for payments you'll also need to put your public and private keys there too.  
+You will need to set your sendgrid api key, so the backend can send emails on signup etc. If using stripe for payments you'll also need to put your public and private keys there too.  
 You can opt in for `etcd` or `kubernetes` as `service registry`.  
   
 ## Usage  
@@ -119,12 +119,12 @@ docker run -d -p 1113:1113 -p 2113:2113 eventstore/eventstore
 docker run -d -p 6379:6379 redis  
 ```  
   
-Otherwise you can install and run redis and eventstore locally if you choose.  
+Otherwise, you can install and run redis and eventstore locally if you choose.  
   
 ### Running the microservices  
 You should start the microservices in any other. Example  
   
-```bash  
+```bash
   
 # Generate protobuf typescript definitions and please fix the path for timestamps import (You should do this only when you update the protobuf files)  
 # in `lib/proto-schem`  
