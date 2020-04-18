@@ -44,12 +44,13 @@ Software features
 * ✅ Multi Tenancy  
 * ✅ Payment ([Stripe](https://stripe.com/))  
 * ✅ SaaS Plans ([Stripe](https://stripe.com/))  
-* ✅ Security  
+* ✅ Security
+* ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
+* ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 * ❌ (WiP) Documentation  
 * ❌ (WiP) Webhooks  
 * ❌ (WiP) Support for language translation  
-* ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
-* ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)  
+* ❌ (WiP) GraphQL dataloaders
   
 ## Software stack
   
@@ -105,7 +106,8 @@ Consul, Mongodb, redis, memcached, and eventstore all need to be started first a
 Start consul locally  
 ```bash  
 consul agent --dev  
-```  
+```
+For help installing consul on your local machine, visit [Consul Website](https://consul.io/)
   
 Start mongodb locally  
 ```bash  
@@ -248,24 +250,33 @@ export class TenantFilterInput extends FilterMongo(Tenant, { simple: true }) {}
 ```  
   
 #### Multi-tenant Database for services.  
-You can enable multi-tenant database support in your services doing the following  
-  
+You can enable multi-tenant database support in your micro-service by adding this
+```typescript
+MongoModule.registerAsync({  
+ useClass: MongoMultiTenantConfigService,  
+})
+```
+code block to the service app module. For example;
+
 ```typescript  
 import { Module } from '@nestjs/common';  
 import { MongoModule } from '@juicycleff/repo-orm/database';  
 import { MongoMultiTenantConfigService } from '@ultimatebackend/core/mutiltenancy';  
   
 @Module({  
-  imports: [  
+  imports: [
+    // ...
     MongoModule.registerAsync({  
       useClass: MongoMultiTenantConfigService,  
-    }),  
+    }),
+    // ...
   ],  
 })  
 export class AppModule {}  
 ```  
-A good example is the `service-project` microservice. Next you must enable multi-tenancy in your `api` service `main.ts`  
-file.  
+A good example is the `service-project` microservice.
+
+Next you must enable multi-tenancy in the  `main.ts` file of the `api-admin` service or any other api type microservice you create in your project.  
   
 ```typescript  
 import { NestFactory } from '@nestjs/core';  
