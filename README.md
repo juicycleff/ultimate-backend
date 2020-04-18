@@ -44,13 +44,13 @@ Software features
 * ✅ Multi Tenancy  
 * ✅ Payment ([Stripe](https://stripe.com/))  
 * ✅ SaaS Plans ([Stripe](https://stripe.com/))  
-* ✅ Security  
+* ✅ Security
+* ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
+* ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 * ❌ (WiP) Documentation  
 * ❌ (WiP) Webhooks  
 * ❌ (WiP) Support for language translation  
 * ❌ (WiP) GraphQL dataloaders
-* ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
-* ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)  
   
 ## Software stack
   
