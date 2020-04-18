@@ -25,7 +25,7 @@ to identify your tenants. The goal is to give your next big project that extra l
 > **Note:** Seeing alot of clone of the project which is good, but please if you can start the project as it also motivates me in improving the project. Also the docker files, azure and gitlab ci setups are broken and will be fixed soon.
 > 
   
-> **Note:** Also ultimate backend .is coming `rust` as a framework, if you want to be part of ir, please write to me. Here is the repo [ultimate](https://github.com/juicycleff/ultimate)
+> **Note:** Also ultimate backend .is coming `rust` as a framework, if you want to be part of it, please write to me. Here is the repo [ultimate](https://github.com/juicycleff/ultimate)
 > 
 ## Features  
   
