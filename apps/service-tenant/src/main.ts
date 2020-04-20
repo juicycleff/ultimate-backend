@@ -10,6 +10,6 @@ async function bootstrap() {
     new FastifyAdapter(),
   ));
 
-  await microserviceSetup(app, 'proto/tenant.proto', { enableNats: true });
+  await microserviceSetup(app, 'proto/tenant.proto', { enableNats: false });
 }
 (() => bootstrap())();
