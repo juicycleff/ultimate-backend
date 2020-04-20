@@ -1,0 +1,226 @@
+image: node:10.16.0
+
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+    - dist
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
+
+stages:
+  - prebuild
+  - build
+  - dockerize
+  - deploy
+
+before_script:
+  - apt-get update -qq && apt-get install
+  - apk update
+  - apk upgrade
+  - apk add --update curl && rm -rf /var/cache/apk/*
+
+Prebuild:
+  stage: prebuild
+  before_script:
+    - yarn config set cache-folder .yarn
+  script:
+    - yarn install
+    # - yarn lint
+  artifacts:
+    paths:
+      - node_modules/
+      - .yarn
+      - dist
+
+Build:
+  stage: build
+  before_script:
+    - apt-get update
+    - apt-get install software-properties-common -y
+    - apt-get update
+    - apt-get install jq  -y
+    - ln -s bash /bin/sh.bash
+    - mv /bin/sh.bash /bin/sh
+    - apt-get update
+    - yarn global add npx
+  script:
+    - sh ./scripts/setup.sh
+    - ln -s dash /bin/sh.dash
+    - mv /bin/sh.dash /bin/sh
+
+Dockerize:
+  stage: dockerize
+  image: docker/compose:1.25.0-rc1
+  services:
+    - docker:18.09.7-dind
+  when: manual
+  before_script:
+    - apk update
+    - apk upgrade
+    - apk add --update curl && rm -rf /var/cache/apk/*
+    - echo "$DOCKER_PASSWORD" | docker login -u ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY}
+  script:
+    - sh ./scripts/dockerize.sh
+
+Upgrade production:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  only:
+    - master
+  when: manual
+  before_script:
+    - curl -L https://github.com/kubernetes/kompose/releases/download/v1.20.0/kompose-linux-amd64 -o kompose
+    - chmod +x kompose
+    - mv ./kompose /usr/local/bin/kompose
+  script:
+    - mkdir deploy
+    - kompose -f docker-compose.yml convert -o deploy/
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - kubectl apply -f deploy/ --namespace default
+
+Upgrade development:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  except:
+    - testing
+    - master
+    - staging
+  when: manual
+  script:
+    - curl -L https://github.com/kubernetes/kompose/releases/download/v1.20.0/kompose-linux-amd64 -o kompose
+    - chmod +x kompose
+    - mv ./kompose /usr/local/bin/kompose
+    - mkdir deploy
+    - kompose -f docker-compose.yml convert -o deploy/
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - kubectl apply -f deploy/ --namespace development
+
+Deploy staging upgrade:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  only:
+    - staging
+  when: manual
+  before_script:
+    - curl -L https://github.com/kubernetes/kompose/releases/download/v1.20.0/kompose-linux-amd64 -o kompose
+    - chmod +x kompose
+    - mv ./kompose /usr/local/bin/kompose
+  script:
+    - mkdir deploy
+    - kompose -f docker-compose.yml convert -o deploy/
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - kubectl apply -f deploy/ --namespace staging
+
+Deploy testing upgrade:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  except:
+    - staging
+    - development
+    - master
+  when: manual
+  before_script:
+    - curl -L https://github.com/kubernetes/kompose/releases/download/v1.20.0/kompose-linux-amd64 -o kompose
+    - chmod +x kompose
+    - mv ./kompose /usr/local/bin/kompose
+  script:
+    - mkdir deploy
+    - kompose -f docker-compose.yml convert -o deploy/
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - kubectl apply -f deploy/ --namespace testing
+
+Patch production:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  only:
+    - master
+  when: manual
+  script:
+    - apk update
+    - apk add jq
+    - ln -s bash /bin/sh.bash
+    - mv /bin/sh.bash /bin/sh
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - NAMESPACE=default
+    - sh scripts/kubernetes/update-deployment.sh
+
+Deploy development patch:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  except:
+    - testing
+    - master
+    - staging
+  when: manual
+  before_script:
+    - NAMESPACE=development
+  script:
+    - sudo ln -s bash /bin/sh.bash
+    - sudo mv /bin/sh.bash /bin/sh
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - sh scripts/kubernetes/update-deployment.sh
+
+Deploy staging patch:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  only:
+    - staging
+  when: manual
+  before_script:
+    - NAMESPACE=staging
+  script:
+    - sudo ln -s bash /bin/sh.bash
+    - sudo mv /bin/sh.bash /bin/sh
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - sh scripts/kubernetes/update-deployment.sh
+
+Deploy testing patch:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  except:
+    - staging
+    - development
+    - master
+  when: manual
+  before_script:
+    - NAMESPACE=testing
+  script:
+    - sudo ln -s bash /bin/sh.bash
+    - sudo mv /bin/sh.bash /bin/sh
+    - kubectl config set-cluster k8s --server="${KUBE_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY}
+    - kubectl config set-credentials gitlab --token="${KUBE_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - sh scripts/kubernetes/update-deployment.sh

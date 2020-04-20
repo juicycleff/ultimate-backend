@@ -8,6 +8,7 @@ import { CreateSubscriptionCommand } from '../../impl';
 import { CreateSubscriptionResponse } from '@ultimatebackend/proto-schema/billing';
 import { RpcException } from '@nestjs/microservices';
 import { subsToProtoStripeSubs } from '../../../../../common';
+import { NotFoundRpcException } from '@ultimatebackend/common';
 
 @CommandHandler(CreateSubscriptionCommand)
 export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscriptionCommand> {
@@ -42,7 +43,7 @@ export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscrip
 
       const defaultCard = customer.default_source as cards.ICard;
       if (plan === null || defaultCard === null) { // Check to make sure input is not null
-        throw new RpcException('Please add a payment card'); // Throw an  input error
+        throw new NotFoundRpcException('Please add a payment card'); // Throw an input error
       }
 
       const sub = await this.stripeClient.subscriptions.create({

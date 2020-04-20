@@ -12,10 +12,10 @@ WORKDIR /nest
 RUN yarn install
 # Build production files
 RUN yarn build proto-schema
-RUN yarn build service-tenant
+RUN yarn build service-access
 
 # Bundle app source
 COPY . .
 
-EXPOSE 50053
-CMD ["node", "dist/apps/service-tenant/main.js"]
+EXPOSE 50089
+CMD ["node", "dist/apps/service-access/main.js"]

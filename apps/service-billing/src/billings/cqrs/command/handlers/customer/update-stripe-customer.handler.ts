@@ -26,7 +26,7 @@ export class UpdateStripeCustomerHandler implements ICommandHandler<UpdateStripe
 
       const customerExist = await this.stripeClient.customers.retrieve(id);
       if (!customerExist) { // Check to make sure input is not null
-        throw new RpcException('Customer is not found'); // Throw an input error
+        throw new RpcException('Customer not found'); // Throw an input error
       }
       const customer = await this.stripeClient.customers.update(id, data);
 

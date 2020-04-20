@@ -123,6 +123,7 @@
     "rxjs": "^6.5.5",
     "shortid": "^2.2.15",
     "sinon": "^9.0.2",
+    "query": "protobi/query",
     "stripe": "^7.14.0",
     "swagger-ui-express": "^4.1.4",
     "type-graphql": "^0.18.0-beta.16",

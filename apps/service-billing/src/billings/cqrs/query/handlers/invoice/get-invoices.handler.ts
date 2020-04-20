@@ -3,6 +3,7 @@ import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import * as Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
 import { GetInvoicesQuery } from '../../impl';
+import { BadRequestError } from '@ultimatebackend/common';
 import { FindInvoicesResponse, Invoice } from '@ultimatebackend/proto-schema/billing';
 import { invoiceSliceToProtoInvoiceSlice } from '../../../../../common';
 import { RpcException } from '@nestjs/microservices';
