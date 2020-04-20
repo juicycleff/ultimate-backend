@@ -131,7 +131,7 @@ export class BillingsController implements BillingService<any> {
     const { user, tenant } = getIdentityFromCtx(ctx);
     return await this.queryBus.execute(new GetSubscriptionsQuery(request, {
       customerId: user?.settings?.stripeId,
-      tenantId: tenant?.id,
+      tenantId: tenant?.id.toString(),
     }));
   }
 

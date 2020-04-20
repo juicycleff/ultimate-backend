@@ -1,21 +1,21 @@
-FROM node:stretch
+FROM node:12-alpine
 # set our node environment, either development or production
 # defaults to production, compose overrides this to development on build and run
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /nest
+ADD . /nest
 
-COPY package.json /usr/src/app/
+WORKDIR /nest
 
-RUN yarn global add rimraf
-RUN yarn
-
-COPY . /usr/src/app
-
+RUN yarn install
 # Build production files
-RUN yarn build service-payment
+RUN yarn build proto-schema
+RUN yarn build service-billing
 
-EXPOSE 9500
+# Bundle app source
+COPY . .
+
+EXPOSE 50067
 CMD ["node", "dist/apps/service-billing/main.js"]

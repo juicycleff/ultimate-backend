@@ -1,19 +1,19 @@
 billing:
   port: 9900
   database:
-    name: "srv-plan"
+    name: "srv-billing"
 
 memcached:
   uri: "localhost:11211"
   retries: 3
 
 stripe:
-  apiKey: "sk_*************************************"
+  apiKey: "*******_6776"
 
 database:
   mongodb:
     uri: mongodb://localhost:27017/
-    name: srv-account
+    name: srv-billing
     options: ""
 
   eventstore:

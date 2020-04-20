@@ -19,7 +19,7 @@ export class CardsService {
   async create(input: CreateCardRequest, customerId: string): Promise<CreateCardResponse> {
     try {
       if (input === null) { // Check to make sure input is not null
-        throw new RpcException('Card input missing'); // Throw an input error
+        throw new RpcException('Card input missing'); // Throw an apollo input error
       }
 
       if (!customerId) {
@@ -69,7 +69,7 @@ export class CardsService {
   async read(input: ReadCardRequest, customerId: string): Promise<CreateCardResponse> {
     try {
       if (input === null) { // Check to make sure input is not null
-        throw new RpcException('Card input missing'); // Throw an input error
+        throw new RpcException('Card input missing'); // Throw an apollo input error
       }
 
       if (!customerId) {
@@ -94,7 +94,7 @@ export class CardsService {
   async delete(input: DeleteCardRequest, customerId: string): Promise<DeleteCardResponse> {
     try {
       if (input === null) { // Check to make sure input is not null
-        throw new RpcException('Card input missing'); // Throw an input error
+        throw new RpcException('Card input missing'); // Throw an apollo input error
       }
 
       if (!customerId) {
@@ -124,7 +124,7 @@ export class CardsService {
   async list(input: FindCardsRequest, customerId: string): Promise<FindCardsResponse> {
     try {
       if (input === null) { // Check to make sure input is not null
-        throw new RpcException('Card input missing'); // Throw an input error
+        throw new RpcException('Card input missing'); // Throw an apollo input error
       }
 
       if (!customerId) {

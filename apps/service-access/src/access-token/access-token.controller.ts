@@ -33,13 +33,13 @@ export class AccessTokenController implements AccessService<any> {
   @GrpcMethod('AccessService')
   async deleteAccess(request: DeleteAccessRequest, ctx: any): Promise<DeleteAccessResponse> {
     const { tenant } = getIdentityFromCtx(ctx);
-    return await this.commandBus.execute(new DeleteAccessCommand(request, tenant.id));
+    return await this.commandBus.execute(new DeleteAccessCommand(request, tenant.id.toString()));
   }
 
   @GrpcMethod('AccessService')
   async findAccess(request: FindAccessRequest, ctx: any): Promise<FindAccessResponse> {
     const { tenant } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new FindAccessQuery({id: request.id, tenantId: tenant.id}));
+    return await this.queryBus.execute(new FindAccessQuery({id: request.id, tenantId: tenant.id.toString()}));
   }
 
   @GrpcMethod('AccessService')
@@ -50,6 +50,6 @@ export class AccessTokenController implements AccessService<any> {
   @GrpcMethod('AccessService')
   async readAccess(request: ReadAccessRequest, ctx: any): Promise<ReadAccessResponse> {
     const { tenant } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new ReadAccessQuery({id: request.id, tenantId: tenant.id}));
+    return await this.queryBus.execute(new ReadAccessQuery({id: request.id, tenantId: tenant.id.toString()}));
   }
 }

@@ -4,54 +4,24 @@ services:
   services-account:
     build:
       context: ""
-      dockerfile: docker/service-account.Dockerfile
+      dockerfile: apps/service-account/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-account:${IMAGE_TAG:?err}"
     restart: always
     ports:
-      - 9900:9900
-      - 7900:7900
+      - 50054:50054
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-user:
+  services-access:
     build:
       context: ""
-      dockerfile: docker/service-user.Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-user:${IMAGE_TAG:?err}"
+      dockerfile: apps/service-access/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-access:${IMAGE_TAG:?err}"
     restart: always
     ports:
-      - 9000:9000
-      - 7000:7000
-    labels:
-      kompose.service.type: clusterip
-      kompose.image-pull-secret: "gitlabregcrednew"
-      kompose.image-pull-policy: "Always"
-
-  services-notification:
-    build:
-      context: ""
-      dockerfile: docker/service-notification.Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-notification:${IMAGE_TAG:?err}"
-    restart: always
-    ports:
-      - 9400:9400
-      - 7400:7400
-    labels:
-      kompose.service.type: clusterip
-      kompose.image-pull-secret: "gitlabregcrednew"
-      kompose.image-pull-policy: "Always"
-
-  services-tenant:
-    build:
-      context: ""
-      dockerfile: docker/service-tenant.Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-tenant:${IMAGE_TAG:?err}"
-    restart: always
-    ports:
-      - 9200:9200
-      - 7200:7200
+    - 50089:50089
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -60,12 +30,50 @@ services:
   services-billing:
     build:
       context: ""
-      dockerfile: docker/service-billing.Dockerfile
+      dockerfile: apps/service-billing/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-billing:${IMAGE_TAG:?err}"
     restart: always
     ports:
-      - 9500:9500
-      - 7500:7500
+    - 50067:50067
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-notification:
+    build:
+      context: ""
+      dockerfile: apps/service-notification/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-notification:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+    - 50044:50044
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-role:
+    build:
+      context: ""
+      dockerfile: apps/service-role/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-role:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+    - 50052:50052
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-tenant:
+    build:
+      context: ""
+      dockerfile: apps/service-tenant/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-tenant:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+    - 50053:50053
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -74,11 +82,11 @@ services:
   api-admin:
     build:
       context: ""
-      dockerfile: docker/api-admin.Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/gateway-admin:${IMAGE_TAG:?err}"
+      dockerfile: apps/api-admin/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/api-admin:${IMAGE_TAG:?err}"
     restart: always
     ports:
-      - 80:4000
+    - 50020:50020
     labels:
       kompose.service.type: loadbalancer
       kompose.service.expose: "true"
