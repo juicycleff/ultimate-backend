@@ -17,5 +17,5 @@ RUN yarn build service-project
 # Bundle app source
 COPY . .
 
-EXPOSE 50052
+EXPOSE 50193
 CMD ["node", "dist/apps/service-project/main.js"]

@@ -5,7 +5,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-account/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-account:${IMAGE_TAG:?err}"
+    image: "service-account:latest"
     restart: always
     ports:
       - 50054:50054
@@ -18,7 +18,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-access/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-access:${IMAGE_TAG:?err}"
+    image: "service-access:latest"
     restart: always
     ports:
     - 50089:50089
@@ -31,7 +31,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-billing/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-billing:${IMAGE_TAG:?err}"
+    image: "service-billing:latest"
     restart: always
     ports:
     - 50067:50067
@@ -44,7 +44,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-notification/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-notification:${IMAGE_TAG:?err}"
+    image: "service-notification:latest"
     restart: always
     ports:
     - 50044:50044
@@ -57,7 +57,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-role/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-role:${IMAGE_TAG:?err}"
+    image: "service-role:latest"
     restart: always
     ports:
     - 50052:50052
@@ -70,7 +70,7 @@ services:
     build:
       context: ""
       dockerfile: apps/service-tenant/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-tenant:${IMAGE_TAG:?err}"
+    image: "service-tenant:latest"
     restart: always
     ports:
     - 50053:50053
@@ -83,7 +83,7 @@ services:
     build:
       context: ""
       dockerfile: apps/api-admin/Dockerfile
-    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/api-admin:${IMAGE_TAG:?err}"
+    image: "api-admin:latest"
     restart: always
     ports:
     - 50020:50020
@@ -103,3 +103,15 @@ services:
       kompose.service.type: nodeport
       kompose.service.expose: "true"
       kompose.image-pull-policy: "Always"
+
+  memcached:
+    container_name: some-memcached
+    image: launcher.gcr.io/google/memcached1
+    ports:
+      - '11211:11211'
+
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379

@@ -9,6 +9,6 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   ));
-  await microserviceSetup(app, 'proto/account.proto', { enableNats: true });
+  await microserviceSetup(app, 'proto/account.proto', { enableNats: false });
 }
 (async () => await bootstrap())();
