@@ -98,8 +98,16 @@ You will need to set your sendgrid api key, so the backend can send emails on si
 You can opt in for `etcd` or `kubernetes` as `service registry`.  
   
 ## Usage  
+
+### With Docker locally
+```bash
+$ docker-compose --project-directory=. -f docker-compose.dev.yml up --build
+```
+
+> **Note:** I've seen some issues with consul docker image and so would recommend setting up consul manually before running this command
+> 
   
-### Running the databases  
+### Without Docker locally 
   
 Consul, Mongodb, redis, memcached, and eventstore all need to be started first as our microservices need to connect to them.  
   
@@ -185,7 +193,7 @@ yarn start:dev api-admin
   
 ## Get started by registering a user on the admin gateway  
   
-In the graphql playground running at http://localhost:4000/graphql you can register a user:  
+In the graphql playground running at http://localhost:4000//graph you can register a user:  
   
 ```graphql  
 mutation register {  
