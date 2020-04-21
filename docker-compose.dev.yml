@@ -3,8 +3,10 @@ version: "3.2"
 services:
   services-account:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-account/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-account:latest"
     restart: always
     ports:
@@ -16,12 +18,14 @@ services:
 
   services-access:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-access/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-access:latest"
     restart: always
     ports:
-    - 50089:50089
+      - 50089:50089
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -29,12 +33,14 @@ services:
 
   services-billing:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-billing/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-billing:latest"
     restart: always
     ports:
-    - 50067:50067
+      - 50067:50067
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -42,12 +48,14 @@ services:
 
   services-notification:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-notification/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-notification:latest"
     restart: always
     ports:
-    - 50044:50044
+      - 50044:50044
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -55,12 +63,14 @@ services:
 
   services-role:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-role/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-role:latest"
     restart: always
     ports:
-    - 50052:50052
+      - 50052:50052
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -68,12 +78,14 @@ services:
 
   services-tenant:
     build:
-      context: ""
+      context: .
       dockerfile: apps/service-tenant/Dockerfile
+      args:
+        NODE_ENV: development
     image: "service-tenant:latest"
     restart: always
     ports:
-    - 50053:50053
+      - 50053:50053
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -81,12 +93,14 @@ services:
 
   api-admin:
     build:
-      context: ""
+      context: .
       dockerfile: apps/api-admin/Dockerfile
+      args:
+        NODE_ENV: development
     image: "api-admin:latest"
     restart: always
     ports:
-    - 50020:50020
+      - 50020:50020
     labels:
       kompose.service.type: loadbalancer
       kompose.service.expose: "true"
@@ -96,8 +110,8 @@ services:
   eventstore:
     container_name: eventstore-node
     ports:
-      - '2113:2113'
-      - '1113:1113'
+      - "2113:2113"
+      - "1113:1113"
     image: eventstore/eventstore
     labels:
       kompose.service.type: nodeport
@@ -108,7 +122,7 @@ services:
     container_name: some-memcached
     image: launcher.gcr.io/google/memcached1
     ports:
-      - '11211:11211'
+      - "11211:11211"
 
   redis:
     image: redis
