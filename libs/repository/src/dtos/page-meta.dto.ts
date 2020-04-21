@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 import { PageOptionsDto } from './page-options.dto';
 
 interface IPageMetaDtoParameters {
