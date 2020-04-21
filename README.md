@@ -22,7 +22,7 @@ ULTIMATE BACKEND
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns  
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below.
   
-> **Note:** Seeing alot of clone of the project which is good, but please if you can start the project as it also motivates me in improving the project. Also the docker files, azure and gitlab ci setups are broken and will be fixed soon.
+> **Note:** Seeing alot of clone of the project which is good, but please if you can 🌟 the project as it also motivates me in improving the project. Also the docker azure CI setups is broken and will be fixed soon.
 > 
   
 > **Note:** Also ultimate backend is coming to `rust` as a complete microservice framework, if you want to be part of it and you program in `rust`, please write to me. Here is the repo [ultimate](https://github.com/juicycleff/ultimate)
