@@ -10127,6 +10127,12 @@ query-string@^5.0.1:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
+query@protobi/query:
+  version "0.3.0"
+  resolved "https://codeload.github.com/protobi/query/tar.gz/f64bfb2a54cfbc014e7d6a9160db450dde9d38ca"
+  dependencies:
+    lodash "^4.17.15"
+
 querystring-es3@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
