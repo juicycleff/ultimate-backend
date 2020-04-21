@@ -24,6 +24,7 @@ export class SendgridConfigService implements SendGridModuleOptionsFactory {
             enable: true,
           },
         },
+        text: "N/A",
       },
     };
   }
