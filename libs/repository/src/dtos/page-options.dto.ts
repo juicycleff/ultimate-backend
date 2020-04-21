@@ -6,7 +6,7 @@ import { Order } from '../enums';
 
 export class PageOptionsDto {
   @ApiModelPropertyOptional({
-    enum: Order,
+    enum: Object.values(Order),
     default: Order.ASC,
   })
   // @IsEnum(Order)
