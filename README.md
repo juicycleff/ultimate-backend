@@ -340,7 +340,7 @@ $ yarn run test:cov
   
 ## Special Thanks  
   
-  This project is would't be possible without these two awesome projects,
+  This project wouldn't be possible without these two awesome projects,
   [NestJS (Server Framework)](https://nestjs.com) and [NestCloud](https://nestcloud.org/), please make sure to Star them.
   
 ## License  
