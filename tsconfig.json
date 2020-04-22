@@ -52,6 +52,10 @@
       ]
     }
   },
+  "include": [
+    "apps/**/*",
+    "libs/**/*"
+  ],
   "exclude": [
     "node_modules",
     "dist"
