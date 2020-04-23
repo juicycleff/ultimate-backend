@@ -9,6 +9,12 @@ services:
         NODE_ENV: development
     image: "service-account:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50054:50054
     labels:
@@ -24,6 +30,12 @@ services:
         NODE_ENV: development
     image: "service-access:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50089:50089
     labels:
@@ -39,6 +51,12 @@ services:
         NODE_ENV: development
     image: "service-billing:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50067:50067
     labels:
@@ -54,6 +72,12 @@ services:
         NODE_ENV: development
     image: "service-notification:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50044:50044
     labels:
@@ -69,6 +93,12 @@ services:
         NODE_ENV: development
     image: "service-role:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50052:50052
     labels:
@@ -84,6 +114,12 @@ services:
         NODE_ENV: development
     image: "service-tenant:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50053:50053
     labels:
@@ -99,6 +135,12 @@ services:
         NODE_ENV: development
     image: "api-admin:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=localhost
+      - NATS_HOST=localhost
+      - MQTT_HOST=localhost
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50020:50020
     labels:
