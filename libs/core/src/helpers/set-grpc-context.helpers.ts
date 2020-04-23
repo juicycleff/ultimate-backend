@@ -11,10 +11,6 @@ export function setRpcContext(ctx: GqlContext, inApp?: boolean): Metadata {
     meta.set('user', JSON.stringify(ctx.getUser()));
   }
 
-  if (ctx.isAuthenticated) {
-    meta.set('user', JSON.stringify(ctx.getUser()));
-  }
-
   // @ts-ignore
   if (ctx.req.tenantInfo) {
     // @ts-ignore
