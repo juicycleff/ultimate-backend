@@ -1,14 +1,22 @@
 version: "3.2"
 
 services:
-  services-account:
+  service-account:
     build:
       context: .
       dockerfile: apps/service-account/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-account:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50054:50054
     labels:
@@ -16,14 +24,22 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-access:
+  service-access:
     build:
       context: .
       dockerfile: apps/service-access/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-access:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50089:50089
     labels:
@@ -31,14 +47,22 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-billing:
+  service-billing:
     build:
       context: .
       dockerfile: apps/service-billing/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-billing:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50067:50067
     labels:
@@ -46,14 +70,22 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-notification:
+  service-notification:
     build:
       context: .
       dockerfile: apps/service-notification/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-notification:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50044:50044
     labels:
@@ -61,14 +93,22 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-role:
+  service-role:
     build:
       context: .
       dockerfile: apps/service-role/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-role:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50052:50052
     labels:
@@ -76,14 +116,22 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-tenant:
+  service-tenant:
     build:
       context: .
       dockerfile: apps/service-tenant/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "service-tenant:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50053:50053
     labels:
@@ -97,8 +145,16 @@ services:
       dockerfile: apps/api-admin/Dockerfile
       args:
         NODE_ENV: development
+    depends_on:
+      - consul
     image: "api-admin:latest"
     restart: always
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
+      - MQTT_USER=""
+      - MQTT_PASS=""
     ports:
       - 50020:50020
     labels:
@@ -107,8 +163,21 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
+  consul:
+    container_name: consul
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    image: consul
+    command: ["agent", "-server", "-bootstrap", "-ui", "-client", "0.0.0.0"]
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
+
   eventstore:
-    container_name: eventstore-node
+    container_name: eventstore
     ports:
       - "2113:2113"
       - "1113:1113"
@@ -118,14 +187,52 @@ services:
       kompose.service.expose: "true"
       kompose.image-pull-policy: "Always"
 
+  mqtt:
+    container_name: mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    image: eclipse-mosquitto
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
+
   memcached:
-    container_name: some-memcached
+    container_name: memcached
     image: launcher.gcr.io/google/memcached1
     ports:
       - "11211:11211"
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
+
+  nats:
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    image: nats
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: changeit
+    restart: always
+    expose:
+      - 27017
 
   redis:
+    container_name: redis
     image: redis
-    container_name: cache
+    restart: always
     expose:
       - 6379

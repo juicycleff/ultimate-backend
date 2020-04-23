@@ -1,25 +1,25 @@
 consul:
-  host: localhost
+  host: ${{CONSUL_HOST}}
   port: 8500
 config:
   key: ultimatebackend/config/${{ service.name }}
 nats:
-  url: nats://localhost:4222
+  url: nats://${{NATS_HOST}}:4222
 mqtt:
   port: 1883
-  host: "localhost"
-  username: ""
-  password: ""
+  host: ${{MQTT_HOST}}
+  username: ${{MQTT_USER}}
+  password: ${{MQTT_PASS}}
   protocol: "tcp"
 service:
-  discoveryHost: localhost
+  discoveryHost: ${{CONSUL_HOST}}
   healthCheck:
     timeout: 1s
     interval: 10s
     tcp: ${{ service.discoveryHost }}:${{ service.port }}
   maxRetry: 5
   retryInterval: 5000
-  tags: ['v1.0.0', 'microservice']
+  tags: ["v1.0.0", "microservice"]
   name: io.ultimatebackend.srv.account
   port: 50054
 loadbalance:
