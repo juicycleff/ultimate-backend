@@ -12,9 +12,9 @@ services:
     image: "service-account:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -35,9 +35,9 @@ services:
     image: "service-access:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -58,9 +58,9 @@ services:
     image: "service-billing:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -81,9 +81,9 @@ services:
     image: "service-notification:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -104,9 +104,9 @@ services:
     image: "service-role:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -127,9 +127,9 @@ services:
     image: "service-tenant:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
@@ -150,9 +150,9 @@ services:
     image: "api-admin:latest"
     restart: always
     environment:
-      - CONSUL_HOST=localhost
-      - NATS_HOST=localhost
-      - MQTT_HOST=localhost
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - MQTT_HOST=mqtt
       - MQTT_USER=""
       - MQTT_PASS=""
     ports:
