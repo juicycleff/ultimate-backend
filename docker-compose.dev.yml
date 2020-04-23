@@ -1,7 +1,7 @@
 version: "3.2"
 
 services:
-  services-account:
+  service-account:
     build:
       context: .
       dockerfile: apps/service-account/Dockerfile
@@ -16,7 +16,7 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-access:
+  service-access:
     build:
       context: .
       dockerfile: apps/service-access/Dockerfile
@@ -31,7 +31,7 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-billing:
+  service-billing:
     build:
       context: .
       dockerfile: apps/service-billing/Dockerfile
@@ -46,7 +46,7 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-notification:
+  service-notification:
     build:
       context: .
       dockerfile: apps/service-notification/Dockerfile
@@ -61,7 +61,7 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-role:
+  service-role:
     build:
       context: .
       dockerfile: apps/service-role/Dockerfile
@@ -76,7 +76,7 @@ services:
       kompose.image-pull-secret: "gitlabregcrednew"
       kompose.image-pull-policy: "Always"
 
-  services-tenant:
+  service-tenant:
     build:
       context: .
       dockerfile: apps/service-tenant/Dockerfile
@@ -108,7 +108,7 @@ services:
       kompose.image-pull-policy: "Always"
 
   eventstore:
-    container_name: eventstore-node
+    container_name: eventstore
     ports:
       - "2113:2113"
       - "1113:1113"
@@ -119,13 +119,13 @@ services:
       kompose.image-pull-policy: "Always"
 
   memcached:
-    container_name: some-memcached
+    container_name: memcached
     image: launcher.gcr.io/google/memcached1
     ports:
       - "11211:11211"
 
   redis:
+    container_name: redis
     image: redis
-    container_name: cache
     expose:
       - 6379
