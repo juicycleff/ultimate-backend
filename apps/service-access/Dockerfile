@@ -1,36 +1,27 @@
-FROM node:12-alpine AS proto-build
-
-WORKDIR /nest
-
-# Install dependencies
-ADD *.json yarn.lock ./
-RUN yarn install
-
-# Build proto files
-ADD definitions definitions
-ADD libs libs
-RUN yarn build proto-schema
-
-# Build app files
-FROM proto-build AS build
-
-ADD apps/service-access apps/service-access
-RUN yarn build service-access
-
 FROM node:12-alpine
-
-WORKDIR /nest
-
 # set our node environment, either development or production
 # defaults to production, compose overrides this to development on build and run
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
-ADD package.json yarn.lock ./
-RUN yarn install
+RUN mkdir -p /usr/src/app
+ADD . /usr/src/app
 
-COPY --from=proto-build /nest/dist/libs/proto-schema /libs/proto-schema
-COPY --from=build /nest/dist/apps/service-access .
+WORKDIR /usr/src/app
+
+RUN yarn global add @nestjs/cli
+
+RUN yarn install --production=false
+
+RUN yarn global add rimraf
+RUN yarn global add @nestjs/cli
+
+# Build production files
+RUN nest build proto-schema
+RUN nest build service-access
+
+# Bundle app source
+COPY . .
 
 EXPOSE 50089
-CMD ["node", "/nest/main.js"]
+CMD ["node", "dist/apps/service-access/main.js"]
