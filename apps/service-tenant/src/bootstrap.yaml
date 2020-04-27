@@ -1,10 +1,10 @@
 consul:
-  host: localhost
+  host: ${{CONSUL_HOST}}
   port: 8500
 config:
   key: ultimatebackend/config/${{ service.name }}
 service:
-  discoveryHost: localhost
+  discoveryHost: ${{CONSUL_HOST}}
   healthCheck:
     timeout: 1s
     interval: 10s

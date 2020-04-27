@@ -28,8 +28,8 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
     }
   }
 
-  async didReceiveResponse(response, request, context) {
-    const body = await super.didReceiveResponse(response, request, context);
+  async didReceiveResponse({ response, request, context }) {
+    const body = await super.didReceiveResponse({ response, request, context });
 
     if (context.res) {
       if (response.headers.get('set-cookie') !== null && response.headers.get('set-cookie') !== undefined) {

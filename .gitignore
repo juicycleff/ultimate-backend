@@ -15,6 +15,7 @@ lerna-debug.log*
 
 # Envss
 *.env
+apps/*/config.yaml
 
 # Terraform
 /iac/.terraform/*

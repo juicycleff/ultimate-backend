@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 // import { Transform } from 'class-transformer';
 // import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 

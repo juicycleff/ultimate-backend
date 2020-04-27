@@ -1,1 +1,1 @@
-export * from './order.edum';
+export * from './order.enum';

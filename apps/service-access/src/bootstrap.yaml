@@ -1,22 +1,26 @@
 consul:
-  host: localhost
+  host: ${{CONSUL_HOST}}
   port: 8500
 config:
-  key: dimensionfour/config/${{ service.name }}
+  key: ultimatebackend/config/${{ service.name }}
 nats:
-  url: nats://localhost:4222
+  url: nats://${{NATS_HOST}}:4222
 mqtt:
-  url: tcp://solace-cloud-client:9k2redcboe4k1acmbetksk686d@mr6m7sc2dy71j.messaging.solace.cloud:1883
+  port: 1883
+  host: ${{MQTT_HOST}}
+  username: ${{MQTT_USER}}
+  password: ${{MQTT_PASS}}
+  protocol: "tcp"
 service:
-  discoveryHost: localhost
+  discoveryHost: ${{CONSUL_HOST}}
   healthCheck:
     timeout: 1s
     interval: 10s
     tcp: ${{ service.discoveryHost }}:${{ service.port }}
   maxRetry: 5
   retryInterval: 5000
-  tags: ['v1.0.0', 'microservice']
-  name: io.dimensionfour.srv.access
+  tags: ["v1.0.0", "microservice"]
+  name: io.ultimatebackend.srv.access
   port: 50089
 loadbalance:
   ruleCls: RandomRule

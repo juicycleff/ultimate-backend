@@ -23,7 +23,7 @@ ULTIMATE BACKEND
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns  
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below.
   
-> **Note:** Seeing alot of clone of the project which is good, but please if you can start the project as it also motivates me in improving the project. Also the docker files, azure and gitlab ci setups are broken and will be fixed soon.
+> **Note:** Seeing alot of clone of the project which is good, but please if you can 🌟 the project as it also motivates me in improving the project. Also the docker azure CI setups is broken and will be fixed soon.
 > 
   
 > **Note:** Also ultimate backend is coming to `rust` as a complete microservice framework, if you want to be part of it and you program in `rust`, please write to me. Here is the repo [ultimate](https://github.com/juicycleff/ultimate)
@@ -99,8 +99,16 @@ You will need to set your sendgrid api key, so the backend can send emails on si
 You can opt in for `etcd` or `kubernetes` as `service registry`.  
   
 ## Usage  
+
+### With Docker locally
+```bash
+$ docker-compose --project-directory=. -f docker-compose.dev.yml up --build
+```
+
+> **Note:** I've seen some issues with consul docker image and so would recommend setting up consul manually before running this command
+> 
   
-### Running the databases  
+### Without Docker locally 
   
 Consul, Mongodb, redis, memcached, and eventstore all need to be started first as our microservices need to connect to them.  
   
@@ -186,7 +194,7 @@ yarn start:dev api-admin
   
 ## Get started by registering a user on the admin gateway  
   
-In the graphql playground running at http://localhost:4000/graphql you can register a user:  
+In the graphql playground running at http://localhost:4000//graph you can register a user:  
   
 ```graphql  
 mutation register {  
@@ -356,7 +364,7 @@ Support this project with your organization. Your logo will show up here with a 
   
 ## Special Thanks  
   
-  This project is would't be possible without these two awesome projects,
+  This project wouldn't be possible without these two awesome projects,
   [NestJS (Server Framework)](https://nestjs.com) and [NestCloud](https://nestcloud.org/), please make sure to Star them.
   
 ## License  

@@ -1,4 +1,4 @@
-import { ApiModelPropertyOptional } from '@nestjs/swagger';
+import { ApiModelPropertyOptional } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 // import { Type } from 'class-transformer';
 // import { IsEnum, IsInt, Min, IsOptional, Max, IsString, IsNotEmpty } from 'class-validator';
 
@@ -6,7 +6,7 @@ import { Order } from '../enums';
 
 export class PageOptionsDto {
   @ApiModelPropertyOptional({
-    enum: Order,
+    enum: Object.values(Order),
     default: Order.ASC,
   })
   // @IsEnum(Order)
