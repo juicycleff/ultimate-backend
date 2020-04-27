@@ -9,10 +9,13 @@ ADD . /nest
 
 WORKDIR /nest
 
-RUN yarn install
+RUN yarn global add @nestjs/cli
+
+RUN yarn install --production=false
+
 # Build production files
-RUN yarn build proto-schema
-RUN yarn build service-role
+RUN nest build proto-schema
+RUN nest build service-role
 
 # Bundle app source
 COPY . .

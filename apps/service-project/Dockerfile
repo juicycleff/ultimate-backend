@@ -9,13 +9,16 @@ ADD . /nest
 
 WORKDIR /nest
 
-RUN yarn install
+RUN yarn global add @nestjs/cli
+
+RUN yarn install --production=false
+
 # Build production files
-RUN yarn build proto-schema
-RUN yarn build service-project
+RUN nest build proto-schema
+RUN nest build service-project
 
 # Bundle app source
 COPY . .
 
-EXPOSE 50193
+EXPOSE 500193
 CMD ["node", "dist/apps/service-project/main.js"]

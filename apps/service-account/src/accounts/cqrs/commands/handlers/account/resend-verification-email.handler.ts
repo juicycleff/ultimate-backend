@@ -45,7 +45,7 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
       }
 
       /** Generate verification pin code for our user. */
-      const pincode = generateVerificationCode(6, { type: 'number' });
+      const pincode = generateVerificationCode(6, { type: 'string' });
 
       /** Update the user replacing old pin code with the new pin code. */
       const updatedUser: UserEntity & {activationLink?: string} = await this.userRepository.findOneAndUpdate({
