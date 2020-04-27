@@ -7,7 +7,7 @@ export function setRpcContext(ctx: GqlContext, inApp?: boolean): Metadata {
   const meta = new Metadata();
   meta.set('headers', JSON.stringify(ctx.req.headers));
 
-  if (ctx.isAuthenticated) {
+  if (ctx.isAuthenticated()) {
     meta.set('user', JSON.stringify(ctx.getUser()));
   }
 
