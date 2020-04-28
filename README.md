@@ -314,7 +314,36 @@ async function bootstrap() {
   
 ```  
   
-  
+#### Access token with scopes  
+Access tokens scopes just a combination of action and resource identifier. For example, take this mutation;
+```typescript
+  @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @Query(() => Card, {nullable: true})
+  async card(@Args('id') id: string, @Context() ctx: GqlContext): Promise<Card> {
+    const result = await this.service.billing.readCard({id}, setRpcContext(ctx)).toPromise();
+    return result.card;
+  }
+```
+Your access token scope will be `update_billing:card` and so your mutation to create an access token should look like this
+
+```graphql
+mutation {
+  accessToken {
+    create(input: {
+      name: "my-superb-token",
+      scopes: ["update_billing:card"]
+    }) {
+      token
+      id
+      name
+      active
+    }
+  }
+}
+``` 
+That's all you need to know when creating access token which should be used together with your tenant normalized name to access the API
+without a logged in user.
+
 #### More docs updates coming.  
   
 ## Test  
