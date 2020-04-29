@@ -361,7 +361,7 @@ $ yarn run test:cov
 
 ### Financial Contributors
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/ultimate-backend/contribute)]
+Become a financial contributor and help us help others in need, your contribution will go to people dire conditions in these difficult times. [[Contribute](https://opencollective.com/ultimate-backend/contribute)]
 
 #### Backers
 
