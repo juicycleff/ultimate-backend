@@ -59,7 +59,7 @@ Software features
 |----------------|-------------------------------|-----------------------------|
 |`Store and cache`|[Event Store (Event Source Store)](https://eventstore.org), [Memcached (cache)](https://memcached.org/), [Redis (Queue)](https://redis.io/) and [MongoDB (Database)](https://www.mongodb.com/)            |[ArangoDB (Database)](https://www.arangodb.com/)            |
 |`Stack and frameworks` |[NestJS (Server Framework)](https://nestjs.com), [NodeJS (System runtime)](https://nodejs.org), [Typescript](https://www.typescriptlang.org), [Express JS](https://expressjs.com), [Fastify](https://www.fastify.io), [GRPC](https://grpc.io/), [NestCloud](https://nestcloud.org/) and [Apollo GraphQL](https://www.apollographql.com)                |none            |
-|`Deployment and containerization`          |[Docker](https://www.docker.com/), [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/), GitLab CI |[Kubernetes](https://kubernetes.io/)||
+|`Deployment and containerization`          |[Docker](https://www.docker.com/) |[Kubernetes](https://kubernetes.io/), [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/), GitLab CI ||
 |`Service Registry`          |[Consul](https://consul.io/)|[Kubernetes](https://kubernetes.io/) and [etcd](https://etcd.io/)|
   
 
