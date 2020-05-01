@@ -1,4 +1,40 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.14.1
 ignore: {}
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestjs/swagger > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - bull > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - casbin > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - codacy-coverage > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - query > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/proxy > @nestcloud/loadbalance > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - cache-manager-memcached-store > memcache-plus > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - nestjs-casbin > casbin > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - nestjs-casbin-mongodb > casbin > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/proxy > @nestcloud/redis > @nestcloud/config > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/common > kubernetes-client > openid-client > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - codacy-coverage > request-promise > request-promise-core > lodash:
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/proxy > @nestcloud/redis > @nestcloud/config > @nestcloud/boot > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/common > kubernetes-client > openid-client > node-jose > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestjs/graphql > merge-graphql-schemas > @graphql-toolkit/schema-merging > @graphql-toolkit/common > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
+    - '@nestcloud/proxy > @nestcloud/redis > @nestcloud/config > @nestcloud/consul > @nestcloud/boot > lodash':
+        patched: '2020-05-01T00:39:41.516Z'
