@@ -7,7 +7,7 @@ import { UseGuards } from '@nestjs/common';
 export class CardsResolver {
   constructor(private readonly service: BillingsRpcClientService) {}
 
-  @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'read' })
   @UseGuards(GqlAuthGuard)
   @Query(() => Card, {nullable: true})
   async card(@Args('id') id: string, @Context() ctx: GqlContext): Promise<Card> {
@@ -15,7 +15,7 @@ export class CardsResolver {
     return result.card;
   }
 
-  @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
+  @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'read' })
   @UseGuards(GqlAuthGuard)
   @Query(() => [Card], {nullable: true})
   async cards(@Context() ctx: GqlContext): Promise<Card[]> {
