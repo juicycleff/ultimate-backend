@@ -317,10 +317,12 @@ async function bootstrap() {
 #### Access token with scopes  
 Access tokens scopes just a combination of action and resource identifier. For example, take this mutation;
 ```typescript
+  @UseGuards(GqlAuthGuard)
   @Resource({ name: 'billing', identify: 'billing:card', roles: ['customer'], action: 'update' })
-  @Query(() => Card, {nullable: true})
-  async card(@Args('id') id: string, @Context() ctx: GqlContext): Promise<Card> {
-    const result = await this.service.billing.readCard({id}, setRpcContext(ctx)).toPromise();
+  @ResolveField(() => Card)
+  async create(@Args('input') input: CreateCardInput, @Context() ctx: GqlContext): Promise<Card> {
+    // @ts-ignore
+    const result = await this.service.billing.createCard({...input}, setRpcContext(ctx)).toPromise();
     return result.card;
   }
 ```
@@ -360,8 +362,7 @@ $ yarn run test:cov
 ```  
 
 ### Financial Contributors
-
-Become a financial contributor and help us help others in need, your contribution will go to people dire conditions in these difficult times. [[Contribute](https://opencollective.com/ultimate-backend/contribute)]
+Become a financial contributor. Your funds go to; people in need [[Contribute](https://opencollective.com/ultimate-backend/contribute)]
 
 #### Backers
 
