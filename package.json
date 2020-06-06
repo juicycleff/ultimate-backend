@@ -67,7 +67,7 @@
     "@nestjs/typeorm": "^7.0.0",
     "@sindresorhus/slugify": "^0.11.0",
     "apollo-datasource": "^0.7.0",
-    "apollo-server": "^2.12.0",
+    "apollo-server": "^2.14.2",
     "apollo-server-cache-memcached": "^0.6.4",
     "apollo-server-express": "^2.12.0",
     "arangojs": "^6.14.0",
