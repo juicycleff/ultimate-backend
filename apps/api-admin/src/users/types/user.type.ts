@@ -33,5 +33,5 @@ export class User extends Node {
   primaryEmail: string;
 
   @Field(() => [EmailObject!])
-  emails: EmailObject;
+  emails: EmailObject[];
 }

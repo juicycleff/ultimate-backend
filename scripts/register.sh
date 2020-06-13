@@ -1,8 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2207
 PROJECTS=( $(jq -r '.projects[] | select(.type == "application") | .root' ./nest-cli.json) )
-BOOTSTRAP_PATH=src/bootstrap.yaml
-CONFIG_PATH=config.yaml
+BOOTSTRAP_PATH=src/bootstrap-development.yaml
+CONFIG_PATH=config.example
 
 echo "Service Registration system started"
 
@@ -19,6 +19,9 @@ for PROJECT_DIR in "${PROJECTS[@]}" ; do
     echo "./${PROJECT_DIR}/${CONFIG_PATH} not found, skipping service"
     continue
   fi
+
+    echo "**** ${PROJECT_DIR}"
+
   consul kv put ultimatebackend/config/${SVC_NAME} \@./${PROJECT_DIR}/${CONFIG_PATH}
 done
 

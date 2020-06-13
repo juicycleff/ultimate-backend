@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { TenantMemberEmbed, TenantRepository } from '@ultimatebackend/repository';
 import { MemberInvitedEvent, RolesRpcClientService } from '@ultimatebackend/core';
-import * as uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import { DateTime } from 'luxon';
 import { ObjectId } from 'bson';
 import { InviteMemberCommand } from '../../impl';

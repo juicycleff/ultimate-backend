@@ -1,0 +1,49 @@
+consul:
+  host: ${{CONSUL_HOST}}
+  port: 8500
+config:
+  key: ultimatebackend/config/${{ service.name }}
+nats:
+  url: nats://${{NATS_HOST}}:4222
+mqtt:
+  port: 1883
+  host: ${{MQTT_HOST}}
+  username: ${{MQTT_USER}}
+  password: ${{MQTT_PASS}}
+  protocol: "tcp"
+service:
+  discoveryHost: ${{CONSUL_HOST}}
+  healthCheck:
+    timeout: 1s
+    interval: 10s
+    tcp: ${{ service.discoveryHost }}:${{ service.port }}
+  maxRetry: 5
+  retryInterval: 5000
+  tags: ["v1.0.0", "microservice"]
+  name: io.ultimatebackend.srv.notification
+  port: 50044
+loadbalance:
+  ruleCls: RandomRule
+logger:
+  level: info
+  transports:
+    - transport: console
+      level: debug
+      colorize: true
+      datePattern: YYYY-MM-DD h:mm:ss
+      label: ${{ service.name }}
+    - transport: file
+      name: info
+      filename: info.log
+      datePattern: YYYY-MM-DD h:mm:ss
+      label: ${{ service.name }}
+      # 100M
+      maxSize: 104857600
+      json: false
+      maxFiles: 10
+    - transport: dailyRotateFile
+      filename: info.log
+      datePattern: YYYY-MM-DD-HH
+      zippedArchive: true
+      maxSize: 20m
+      maxFiles: 14d

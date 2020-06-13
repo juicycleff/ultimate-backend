@@ -4,7 +4,8 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { CONTEXT } from '@nestjs/graphql';
 import { ConsulDatabaseConfig } from '@ultimatebackend/common';
-import { ConsulConfig, InjectConfig } from '@nestcloud/config';
+import { InjectConfig } from '@nestcloud/config';
+import { EtcdConfig } from '@nestcloud/config/etcd-config';
 import { Metadata } from 'grpc';
 import { RequestContextHost } from '@nestjs/microservices/context/request-context-host';
 import { TenantDatabaseStrategy, TenantInfo } from '../';
@@ -23,7 +24,7 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @Inject(CONTEXT) private readonly context: RequestContextHost,
-    @InjectConfig() private readonly config: ConsulConfig,
+    @InjectConfig() private readonly config: EtcdConfig,
   ) {}
 
   createMongoOptions(): Promise<MongoModuleOptions> | MongoModuleOptions {
@@ -44,7 +45,6 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
     const uriWithName = database.mongodb.uri.endsWith('/') ?
       `${database.mongodb.uri}${database.mongodb.name}${database.mongodb.options}` :
       `${database.mongodb.uri}/${database.mongodb.name}${database.mongodb.options}`;
-
     /**
      * This block of code is the default config if for some reason, the req object is empty
      */
@@ -114,7 +114,7 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       },
-      tenantName: tenantInfo.tenantId,
+      tenantName: tenantInfo.tenantId ?? '*',
     };
   }
 

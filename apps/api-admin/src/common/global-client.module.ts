@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
-import { AccessTokenRpcClientService, GlobalClientService, RolesRpcClientService } from '@ultimatebackend/core';
+import { AccessTokenRpcClientService, GlobalClientService, RolesRpcClientService, TenantsRpcClientService } from '@ultimatebackend/core';
 
 @Global()
 @Module({
-  providers: [RolesRpcClientService, AccessTokenRpcClientService, GlobalClientService],
-  exports: [RolesRpcClientService, AccessTokenRpcClientService, GlobalClientService],
+  providers: [RolesRpcClientService, AccessTokenRpcClientService, TenantsRpcClientService, GlobalClientService],
+  exports: [RolesRpcClientService, AccessTokenRpcClientService, TenantsRpcClientService, GlobalClientService],
 })
 export class GlobalClientModule {}
