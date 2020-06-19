@@ -24,9 +24,6 @@ import { GlobalClientModule } from './common/global-client.module';
     GraphQLModule.forRootAsync({
       useClass: GqlConfigService,
     }),
-    GraphQLModule.forRootAsync({
-      useClass: GqlConfigService,
-    }),
     GlobalClientModule,
     CoreModule,
     RolesModule,
