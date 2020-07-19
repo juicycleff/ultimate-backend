@@ -1,7 +1,7 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { TenantMembersResolver } from './tenant-members.resolver';
 import { TenantMembersMutationResolver } from './tenant-members-mutation.resolver';
-import { GlobalClientService, TenantsRpcClientService } from '@ultimatebackend/core';
+import { AccountsRpcClientService, GlobalClientService, TenantsRpcClientService } from '@ultimatebackend/core';
 
 @Module({
   imports: [HttpModule],
@@ -10,6 +10,7 @@ import { GlobalClientService, TenantsRpcClientService } from '@ultimatebackend/c
     TenantMembersResolver,
     TenantMembersMutationResolver,
     TenantsRpcClientService,
+    AccountsRpcClientService,
   ],
 })
 export class TenantMembersModule {}
