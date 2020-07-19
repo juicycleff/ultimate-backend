@@ -2,9 +2,9 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { TenantMemberEmbed, TenantRepository } from '@ultimatebackend/repository';
 import { MemberInvitedEvent, RolesRpcClientService } from '@ultimatebackend/core';
-import { v1 as uuidv1 } from 'uuid';
+import {v1 as uuidv1} from 'uuid';
 import { DateTime } from 'luxon';
-import { ObjectId } from 'bson';
+import { ObjectId } from 'mongodb';
 import { InviteMemberCommand } from '../../impl';
 import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
 import { InviteMemberResponse, Member } from '@ultimatebackend/proto-schema/tenant';
@@ -24,7 +24,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
 
   async execute(command: InviteMemberCommand): Promise<InviteMemberResponse> {
     this.logger.log(`'Async '${command.constructor.name}...`);
-    const { input, user, tenant: userTenant } = command;
+    const { input, user, tenantId } = command;
 
     try {
       if (input.email === null || typeof input.email !== 'string' ) { // Check to make sure input is not null
@@ -33,7 +33,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
 
       // Check if tenant exist with normalized name
       const tenantExist = await this.tenantRepository.findOne({
-        normalizedName: userTenant.normalizedName,
+        normalizedName: tenantId,
         members: {
           $elemMatch: {
             $or: [
@@ -55,7 +55,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
 
       /** Check if tenant exist with normalized name */
       const tenant = await this.tenantRepository.findOne({
-        normalizedName: userTenant.normalizedName,
+        normalizedName: tenantId,
         members: {
           $elemMatch: {
             $or: [
@@ -87,7 +87,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
 
       await this.tenantRepository.findOneAndUpdate({
         conditions: {
-          normalizedName: userTenant.normalizedName,
+          normalizedName: tenantId,
         },
         updates: {
           $push: {
@@ -107,7 +107,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
       };
 
       const payload = {
-        tenantId: userTenant.normalizedName,
+        tenantId: tenantId,
         memberId,
       };
       member.token = await this.jwtService.sign(payload);

@@ -1,7 +1,5 @@
 /* eslint-disable */
 import { Observable } from 'rxjs';
-import { Timestamp } from './google/protobuf/timestamp';
-import * as Long from 'long';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -21,11 +19,25 @@ export interface TenantSubscription {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
+  /**
+   *  @inject_tag: bson:"collectionMethod,omitempty"
+   */
+  collectionMethod: string;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+  endedAt: string;
+  canceledAt: string;
+  latestInvoiceId: string;
+  startDate: string;
+  trialStart: string;
+  trialEnd: string;
+  customerEmail: string;
+  customerName: string;
 }
 
 export interface Customer {
@@ -63,6 +75,8 @@ export interface Card {
   address: Address | undefined;
   expMonth: number;
   expYear: number;
+  lastFourDigit: string;
+  isDefault: boolean;
 }
 
 export interface Price {
@@ -174,11 +188,11 @@ export interface Plan {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
   /**
    *  @inject_tag: bson:"name,omitempty"
    */
@@ -204,7 +218,7 @@ export interface Invoice {
   customerEmail: string;
   customerName: string;
   description: string;
-  dueDate: Date | undefined;
+  dueDate: string;
   endingBalance: number;
   hostedInvoiceUrl: string;
   invoicePdf: string;
@@ -221,11 +235,11 @@ export interface Invoice {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
 }
 
 export interface CreatePriceRequest {
@@ -305,6 +319,7 @@ export interface CreateSubscriptionRequest {
   tenantId: string;
   planId: string;
   couponId: string;
+  cardId: string;
 }
 
 export interface CreateSubscriptionResponse {
@@ -333,6 +348,7 @@ export interface CancelSubscriptionResponse {
 
 export interface ReadSubscriptionRequest {
   id: string;
+  tenantId: string;
 }
 
 export interface ReadSubscriptionResponse {
@@ -340,6 +356,7 @@ export interface ReadSubscriptionResponse {
 }
 
 export interface FindSubscriptionsRequest {
+  tenantId: string;
 }
 
 export interface FindSubscriptionsResponse {
@@ -360,6 +377,14 @@ export interface CreateCardRequest {
 }
 
 export interface CreateCardResponse {
+  card: Card | undefined;
+}
+
+export interface SetDefaultCardRequest {
+  id: string;
+}
+
+export interface SetDefaultCardResponse {
   card: Card | undefined;
 }
 
@@ -440,8 +465,19 @@ const baseTenantSubscription: object = {
   id: '',
   tenantId: '',
   status: '',
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
+  collectionMethod: '',
+  currentPeriodStart: '',
+  currentPeriodEnd: '',
+  endedAt: '',
+  canceledAt: '',
+  latestInvoiceId: '',
+  startDate: '',
+  trialStart: '',
+  trialEnd: '',
+  customerEmail: '',
+  customerName: '',
 };
 
 const baseCustomer: object = {
@@ -470,6 +506,8 @@ const baseCard: object = {
   address: undefined,
   expMonth: 0,
   expYear: 0,
+  lastFourDigit: '',
+  isDefault: false,
 };
 
 const basePrice: object = {
@@ -506,8 +544,8 @@ const basePlan: object = {
   features: undefined,
   active: false,
   free: false,
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
   name: '',
   stripeId: '',
 };
@@ -524,7 +562,7 @@ const baseInvoice: object = {
   customerEmail: '',
   customerName: '',
   description: '',
-  dueDate: undefined,
+  dueDate: '',
   endingBalance: 0,
   hostedInvoiceUrl: '',
   invoicePdf: '',
@@ -538,8 +576,8 @@ const baseInvoice: object = {
   tax: 0,
   taxPercent: 0,
   total: 0,
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
 };
 
 const baseCreatePriceRequest: object = {
@@ -616,6 +654,7 @@ const baseCreateSubscriptionRequest: object = {
   tenantId: '',
   planId: '',
   couponId: '',
+  cardId: '',
 };
 
 const baseCreateSubscriptionResponse: object = {
@@ -644,6 +683,7 @@ const baseCancelSubscriptionResponse: object = {
 
 const baseReadSubscriptionRequest: object = {
   id: '',
+  tenantId: '',
 };
 
 const baseReadSubscriptionResponse: object = {
@@ -651,6 +691,7 @@ const baseReadSubscriptionResponse: object = {
 };
 
 const baseFindSubscriptionsRequest: object = {
+  tenantId: '',
 };
 
 const baseFindSubscriptionsResponse: object = {
@@ -668,6 +709,14 @@ const baseCreateCardRequest: object = {
 };
 
 const baseCreateCardResponse: object = {
+  card: undefined,
+};
+
+const baseSetDefaultCardRequest: object = {
+  id: '',
+};
+
+const baseSetDefaultCardResponse: object = {
   card: undefined,
 };
 
@@ -754,6 +803,8 @@ export interface BillingService<Context extends DataLoaders> {
 
   deleteCard(request: DeleteCardRequest, ctx: Context): Promise<DeleteCardResponse>;
 
+  setDefaultCard(request: SetDefaultCardRequest, ctx: Context): Promise<SetDefaultCardResponse>;
+
   readCard(request: ReadCardRequest, ctx: Context): Promise<ReadCardResponse>;
 
   findCards(request: FindCardsRequest, ctx: Context): Promise<FindCardsResponse>;
@@ -796,6 +847,8 @@ export interface BillingServiceClient<Context extends DataLoaders> {
 
   deleteCard(request: DeleteCardRequest, ctx?: Context): Observable<DeleteCardResponse>;
 
+  setDefaultCard(request: SetDefaultCardRequest, ctx?: Context): Observable<SetDefaultCardResponse>;
+
   readCard(request: ReadCardRequest, ctx?: Context): Observable<ReadCardResponse>;
 
   findCards(request: FindCardsRequest, ctx?: Context): Observable<FindCardsResponse>;
@@ -822,75 +875,177 @@ interface DataLoaders {
 
 }
 
-function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000;
-  const nanos = (date.getTime() % 1_000) * 1_000_000;
-  return { seconds, nanos };
+export const PlanPriceInterval = {
+  MONTH: 0 as PlanPriceInterval,
+  YEAR: 1 as PlanPriceInterval,
+  WEEK: 2 as PlanPriceInterval,
+  DAY: 3 as PlanPriceInterval,
+  fromJSON(object: any): PlanPriceInterval {
+    switch (object) {
+      case 0:
+      case "MONTH":
+        return PlanPriceInterval.MONTH;
+      case 1:
+      case "YEAR":
+        return PlanPriceInterval.YEAR;
+      case 2:
+      case "WEEK":
+        return PlanPriceInterval.WEEK;
+      case 3:
+      case "DAY":
+        return PlanPriceInterval.DAY;
+      default:
+        throw new global.Error(`Invalid value ${object}`);
+    }
+  },
+  toJSON(object: PlanPriceInterval): string {
+    switch (object) {
+      case PlanPriceInterval.MONTH:
+        return "MONTH";
+      case PlanPriceInterval.YEAR:
+        return "YEAR";
+      case PlanPriceInterval.WEEK:
+        return "WEEK";
+      case PlanPriceInterval.DAY:
+        return "DAY";
+      default:
+        return "UNKNOWN";
+    }
+  },
 }
 
-function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
+export type PlanPriceInterval = 0 | 1 | 2 | 3;
+
+export const InvoiceStatus = {
+  DRAFT: 0 as InvoiceStatus,
+  OPEN: 1 as InvoiceStatus,
+  PAID: 2 as InvoiceStatus,
+  UNCOLLECTIBLE: 3 as InvoiceStatus,
+  VOID: 4 as InvoiceStatus,
+  fromJSON(object: any): InvoiceStatus {
+    switch (object) {
+      case 0:
+      case "DRAFT":
+        return InvoiceStatus.DRAFT;
+      case 1:
+      case "OPEN":
+        return InvoiceStatus.OPEN;
+      case 2:
+      case "PAID":
+        return InvoiceStatus.PAID;
+      case 3:
+      case "UNCOLLECTIBLE":
+        return InvoiceStatus.UNCOLLECTIBLE;
+      case 4:
+      case "VOID":
+        return InvoiceStatus.VOID;
+      default:
+        throw new global.Error(`Invalid value ${object}`);
+    }
+  },
+  toJSON(object: InvoiceStatus): string {
+    switch (object) {
+      case InvoiceStatus.DRAFT:
+        return "DRAFT";
+      case InvoiceStatus.OPEN:
+        return "OPEN";
+      case InvoiceStatus.PAID:
+        return "PAID";
+      case InvoiceStatus.UNCOLLECTIBLE:
+        return "UNCOLLECTIBLE";
+      case InvoiceStatus.VOID:
+        return "VOID";
+      default:
+        return "UNKNOWN";
+    }
+  },
 }
 
-function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
-    return o;
-  } else if (typeof o === 'string') {
-    return new Date(o);
-  } else {
-    return fromTimestamp(Timestamp.fromJSON(o));
-  }
+export type InvoiceStatus = 0 | 1 | 2 | 3 | 4;
+
+export const SubscriptionStatus = {
+  ACTIVE: 0 as SubscriptionStatus,
+  ALL: 1 as SubscriptionStatus,
+  CANCELED: 2 as SubscriptionStatus,
+  INCOMPLETE: 3 as SubscriptionStatus,
+  INCOMPLETE_EXPIRED: 4 as SubscriptionStatus,
+  PAST_DUE: 5 as SubscriptionStatus,
+  TRIALING: 6 as SubscriptionStatus,
+  UNPAID: 7 as SubscriptionStatus,
+  fromJSON(object: any): SubscriptionStatus {
+    switch (object) {
+      case 0:
+      case "ACTIVE":
+        return SubscriptionStatus.ACTIVE;
+      case 1:
+      case "ALL":
+        return SubscriptionStatus.ALL;
+      case 2:
+      case "CANCELED":
+        return SubscriptionStatus.CANCELED;
+      case 3:
+      case "INCOMPLETE":
+        return SubscriptionStatus.INCOMPLETE;
+      case 4:
+      case "INCOMPLETE_EXPIRED":
+        return SubscriptionStatus.INCOMPLETE_EXPIRED;
+      case 5:
+      case "PAST_DUE":
+        return SubscriptionStatus.PAST_DUE;
+      case 6:
+      case "TRIALING":
+        return SubscriptionStatus.TRIALING;
+      case 7:
+      case "UNPAID":
+        return SubscriptionStatus.UNPAID;
+      default:
+        throw new global.Error(`Invalid value ${object}`);
+    }
+  },
+  toJSON(object: SubscriptionStatus): string {
+    switch (object) {
+      case SubscriptionStatus.ACTIVE:
+        return "ACTIVE";
+      case SubscriptionStatus.ALL:
+        return "ALL";
+      case SubscriptionStatus.CANCELED:
+        return "CANCELED";
+      case SubscriptionStatus.INCOMPLETE:
+        return "INCOMPLETE";
+      case SubscriptionStatus.INCOMPLETE_EXPIRED:
+        return "INCOMPLETE_EXPIRED";
+      case SubscriptionStatus.PAST_DUE:
+        return "PAST_DUE";
+      case SubscriptionStatus.TRIALING:
+        return "TRIALING";
+      case SubscriptionStatus.UNPAID:
+        return "UNPAID";
+      default:
+        return "UNKNOWN";
+    }
+  },
 }
 
-function longToNumber(long: Long) {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new global.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-export enum PlanPriceInterval {
-  MONTH = 0,
-  YEAR = 1,
-  WEEK = 2,
-  DAY = 3,
-}
-
-
-export enum InvoiceStatus {
-  DRAFT = 0,
-  OPEN = 1,
-  PAID = 2,
-  UNCOLLECTIBLE = 3,
-  VOID = 4,
-}
-
-
-export enum SubscriptionStatus {
-  ACTIVE = 0,
-  ALL = 1,
-  CANCELED = 2,
-  INCOMPLETE = 3,
-  INCOMPLETE_EXPIRED = 4,
-  PAST_DUE = 5,
-  TRIALING = 6,
-  UNPAID = 7,
-}
-
+export type SubscriptionStatus = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export const TenantSubscription = {
   encode(message: TenantSubscription, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.tenantId);
     writer.uint32(26).string(message.status);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(50).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(58).fork()).ldelim();
-    }
+    writer.uint32(50).string(message.createdAt);
+    writer.uint32(58).string(message.updatedAt);
+    writer.uint32(66).string(message.collectionMethod);
+    writer.uint32(74).string(message.currentPeriodStart);
+    writer.uint32(82).string(message.currentPeriodEnd);
+    writer.uint32(90).string(message.endedAt);
+    writer.uint32(98).string(message.canceledAt);
+    writer.uint32(106).string(message.latestInvoiceId);
+    writer.uint32(114).string(message.startDate);
+    writer.uint32(122).string(message.trialStart);
+    writer.uint32(130).string(message.trialEnd);
+    writer.uint32(138).string(message.customerEmail);
+    writer.uint32(146).string(message.customerName);
     return writer;
   },
   decode(reader: Reader, length?: number): TenantSubscription {
@@ -909,10 +1064,43 @@ export const TenantSubscription = {
           message.status = reader.string();
           break;
         case 6:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 7:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
+          break;
+        case 8:
+          message.collectionMethod = reader.string();
+          break;
+        case 9:
+          message.currentPeriodStart = reader.string();
+          break;
+        case 10:
+          message.currentPeriodEnd = reader.string();
+          break;
+        case 11:
+          message.endedAt = reader.string();
+          break;
+        case 12:
+          message.canceledAt = reader.string();
+          break;
+        case 13:
+          message.latestInvoiceId = reader.string();
+          break;
+        case 14:
+          message.startDate = reader.string();
+          break;
+        case 15:
+          message.trialStart = reader.string();
+          break;
+        case 16:
+          message.trialEnd = reader.string();
+          break;
+        case 17:
+          message.customerEmail = reader.string();
+          break;
+        case 18:
+          message.customerName = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -939,14 +1127,69 @@ export const TenantSubscription = {
       message.status = '';
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
+    }
+    if (object.collectionMethod !== undefined && object.collectionMethod !== null) {
+      message.collectionMethod = String(object.collectionMethod);
+    } else {
+      message.collectionMethod = '';
+    }
+    if (object.currentPeriodStart !== undefined && object.currentPeriodStart !== null) {
+      message.currentPeriodStart = String(object.currentPeriodStart);
+    } else {
+      message.currentPeriodStart = '';
+    }
+    if (object.currentPeriodEnd !== undefined && object.currentPeriodEnd !== null) {
+      message.currentPeriodEnd = String(object.currentPeriodEnd);
+    } else {
+      message.currentPeriodEnd = '';
+    }
+    if (object.endedAt !== undefined && object.endedAt !== null) {
+      message.endedAt = String(object.endedAt);
+    } else {
+      message.endedAt = '';
+    }
+    if (object.canceledAt !== undefined && object.canceledAt !== null) {
+      message.canceledAt = String(object.canceledAt);
+    } else {
+      message.canceledAt = '';
+    }
+    if (object.latestInvoiceId !== undefined && object.latestInvoiceId !== null) {
+      message.latestInvoiceId = String(object.latestInvoiceId);
+    } else {
+      message.latestInvoiceId = '';
+    }
+    if (object.startDate !== undefined && object.startDate !== null) {
+      message.startDate = String(object.startDate);
+    } else {
+      message.startDate = '';
+    }
+    if (object.trialStart !== undefined && object.trialStart !== null) {
+      message.trialStart = String(object.trialStart);
+    } else {
+      message.trialStart = '';
+    }
+    if (object.trialEnd !== undefined && object.trialEnd !== null) {
+      message.trialEnd = String(object.trialEnd);
+    } else {
+      message.trialEnd = '';
+    }
+    if (object.customerEmail !== undefined && object.customerEmail !== null) {
+      message.customerEmail = String(object.customerEmail);
+    } else {
+      message.customerEmail = '';
+    }
+    if (object.customerName !== undefined && object.customerName !== null) {
+      message.customerName = String(object.customerName);
+    } else {
+      message.customerName = '';
     }
     return message;
   },
@@ -970,12 +1213,67 @@ export const TenantSubscription = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
+    }
+    if (object.collectionMethod !== undefined && object.collectionMethod !== null) {
+      message.collectionMethod = object.collectionMethod;
+    } else {
+      message.collectionMethod = '';
+    }
+    if (object.currentPeriodStart !== undefined && object.currentPeriodStart !== null) {
+      message.currentPeriodStart = object.currentPeriodStart;
+    } else {
+      message.currentPeriodStart = '';
+    }
+    if (object.currentPeriodEnd !== undefined && object.currentPeriodEnd !== null) {
+      message.currentPeriodEnd = object.currentPeriodEnd;
+    } else {
+      message.currentPeriodEnd = '';
+    }
+    if (object.endedAt !== undefined && object.endedAt !== null) {
+      message.endedAt = object.endedAt;
+    } else {
+      message.endedAt = '';
+    }
+    if (object.canceledAt !== undefined && object.canceledAt !== null) {
+      message.canceledAt = object.canceledAt;
+    } else {
+      message.canceledAt = '';
+    }
+    if (object.latestInvoiceId !== undefined && object.latestInvoiceId !== null) {
+      message.latestInvoiceId = object.latestInvoiceId;
+    } else {
+      message.latestInvoiceId = '';
+    }
+    if (object.startDate !== undefined && object.startDate !== null) {
+      message.startDate = object.startDate;
+    } else {
+      message.startDate = '';
+    }
+    if (object.trialStart !== undefined && object.trialStart !== null) {
+      message.trialStart = object.trialStart;
+    } else {
+      message.trialStart = '';
+    }
+    if (object.trialEnd !== undefined && object.trialEnd !== null) {
+      message.trialEnd = object.trialEnd;
+    } else {
+      message.trialEnd = '';
+    }
+    if (object.customerEmail !== undefined && object.customerEmail !== null) {
+      message.customerEmail = object.customerEmail;
+    } else {
+      message.customerEmail = '';
+    }
+    if (object.customerName !== undefined && object.customerName !== null) {
+      message.customerName = object.customerName;
+    } else {
+      message.customerName = '';
     }
     return message;
   },
@@ -984,8 +1282,19 @@ export const TenantSubscription = {
     obj.id = message.id || '';
     obj.tenantId = message.tenantId || '';
     obj.status = message.status || '';
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
+    obj.collectionMethod = message.collectionMethod || '';
+    obj.currentPeriodStart = message.currentPeriodStart || '';
+    obj.currentPeriodEnd = message.currentPeriodEnd || '';
+    obj.endedAt = message.endedAt || '';
+    obj.canceledAt = message.canceledAt || '';
+    obj.latestInvoiceId = message.latestInvoiceId || '';
+    obj.startDate = message.startDate || '';
+    obj.trialStart = message.trialStart || '';
+    obj.trialEnd = message.trialEnd || '';
+    obj.customerEmail = message.customerEmail || '';
+    obj.customerName = message.customerName || '';
     return obj;
   },
 };
@@ -1215,6 +1524,8 @@ export const Card = {
     }
     writer.uint32(64).uint32(message.expMonth);
     writer.uint32(72).uint32(message.expYear);
+    writer.uint32(82).string(message.lastFourDigit);
+    writer.uint32(88).bool(message.isDefault);
     return writer;
   },
   decode(reader: Reader, length?: number): Card {
@@ -1249,6 +1560,12 @@ export const Card = {
           break;
         case 9:
           message.expYear = reader.uint32();
+          break;
+        case 10:
+          message.lastFourDigit = reader.string();
+          break;
+        case 11:
+          message.isDefault = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1304,6 +1621,16 @@ export const Card = {
     } else {
       message.expYear = 0;
     }
+    if (object.lastFourDigit !== undefined && object.lastFourDigit !== null) {
+      message.lastFourDigit = String(object.lastFourDigit);
+    } else {
+      message.lastFourDigit = '';
+    }
+    if (object.isDefault !== undefined && object.isDefault !== null) {
+      message.isDefault = Boolean(object.isDefault);
+    } else {
+      message.isDefault = false;
+    }
     return message;
   },
   fromPartial(object: DeepPartial<Card>): Card {
@@ -1353,6 +1680,16 @@ export const Card = {
     } else {
       message.expYear = 0;
     }
+    if (object.lastFourDigit !== undefined && object.lastFourDigit !== null) {
+      message.lastFourDigit = object.lastFourDigit;
+    } else {
+      message.lastFourDigit = '';
+    }
+    if (object.isDefault !== undefined && object.isDefault !== null) {
+      message.isDefault = object.isDefault;
+    } else {
+      message.isDefault = false;
+    }
     return message;
   },
   toJSON(message: Card): unknown {
@@ -1366,6 +1703,8 @@ export const Card = {
     obj.address = message.address ? Address.toJSON(message.address) : undefined;
     obj.expMonth = message.expMonth || 0;
     obj.expYear = message.expYear || 0;
+    obj.lastFourDigit = message.lastFourDigit || '';
+    obj.isDefault = message.isDefault || false;
     return obj;
   },
 };
@@ -1375,7 +1714,7 @@ export const Price = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.currency);
     writer.uint32(26).string(message.id);
-    writer.uint32(32).int64(message.trialDays);
+    writer.uint32(32).int32(message.trialDays);
     writer.uint32(45).float(message.amount);
     return writer;
   },
@@ -1395,7 +1734,7 @@ export const Price = {
           message.id = reader.string();
           break;
         case 4:
-          message.trialDays = longToNumber(reader.int64() as Long);
+          message.trialDays = reader.int32();
           break;
         case 5:
           message.amount = reader.float();
@@ -1481,7 +1820,7 @@ export const StripePlan = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.currency);
     writer.uint32(26).string(message.id);
-    writer.uint32(32).int64(message.trialDays);
+    writer.uint32(32).int32(message.trialDays);
     writer.uint32(45).float(message.amount);
     return writer;
   },
@@ -1501,7 +1840,7 @@ export const StripePlan = {
           message.id = reader.string();
           break;
         case 4:
-          message.trialDays = longToNumber(reader.int64() as Long);
+          message.trialDays = reader.int32();
           break;
         case 5:
           message.amount = reader.float();
@@ -1587,8 +1926,8 @@ export const Feature = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.normalizedName);
     writer.uint32(26).string(message.description);
-    writer.uint32(32).int64(message.min);
-    writer.uint32(40).int64(message.max);
+    writer.uint32(32).int32(message.min);
+    writer.uint32(40).int32(message.max);
     writer.uint32(48).bool(message.active);
     writer.uint32(56).bool(message.full);
     writer.uint32(66).string(message.unit);
@@ -1610,10 +1949,10 @@ export const Feature = {
           message.description = reader.string();
           break;
         case 4:
-          message.min = longToNumber(reader.int64() as Long);
+          message.min = reader.int32();
           break;
         case 5:
-          message.max = longToNumber(reader.int64() as Long);
+          message.max = reader.int32();
           break;
         case 6:
           message.active = reader.bool();
@@ -1745,12 +2084,8 @@ export const Plan = {
     }
     writer.uint32(40).bool(message.active);
     writer.uint32(48).bool(message.free);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(58).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(66).fork()).ldelim();
-    }
+    writer.uint32(58).string(message.createdAt);
+    writer.uint32(66).string(message.updatedAt);
     writer.uint32(74).string(message.name);
     writer.uint32(82).string(message.stripeId);
     return writer;
@@ -1781,10 +2116,10 @@ export const Plan = {
           message.free = reader.bool();
           break;
         case 7:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 8:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         case 9:
           message.name = reader.string();
@@ -1833,14 +2168,14 @@ export const Plan = {
       message.free = false;
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
@@ -1890,12 +2225,12 @@ export const Plan = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
@@ -1921,8 +2256,8 @@ export const Plan = {
     }
     obj.active = message.active || false;
     obj.free = message.free || false;
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
     obj.name = message.name || '';
     obj.stripeId = message.stripeId || '';
     return obj;
@@ -1942,9 +2277,7 @@ export const Invoice = {
     writer.uint32(74).string(message.customerEmail);
     writer.uint32(82).string(message.customerName);
     writer.uint32(90).string(message.description);
-    if (message.dueDate !== undefined && message.dueDate !== undefined) {
-      Timestamp.encode(toTimestamp(message.dueDate), writer.uint32(98).fork()).ldelim();
-    }
+    writer.uint32(98).string(message.dueDate);
     writer.uint32(109).float(message.endingBalance);
     writer.uint32(114).string(message.hostedInvoiceUrl);
     writer.uint32(122).string(message.invoicePdf);
@@ -1954,16 +2287,12 @@ export const Invoice = {
     writer.uint32(157).float(message.startingBalance);
     writer.uint32(162).string(message.statementDescriptor);
     writer.uint32(170).string(message.status);
-    writer.uint32(176).int64(message.subtotal);
+    writer.uint32(176).int32(message.subtotal);
     writer.uint32(189).float(message.tax);
     writer.uint32(197).float(message.taxPercent);
     writer.uint32(205).float(message.total);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(210).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(218).fork()).ldelim();
-    }
+    writer.uint32(210).string(message.createdAt);
+    writer.uint32(218).string(message.updatedAt);
     return writer;
   },
   decode(reader: Reader, length?: number): Invoice {
@@ -2006,7 +2335,7 @@ export const Invoice = {
           message.description = reader.string();
           break;
         case 12:
-          message.dueDate = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.dueDate = reader.string();
           break;
         case 13:
           message.endingBalance = reader.float();
@@ -2036,7 +2365,7 @@ export const Invoice = {
           message.status = reader.string();
           break;
         case 22:
-          message.subtotal = longToNumber(reader.int64() as Long);
+          message.subtotal = reader.int32();
           break;
         case 23:
           message.tax = reader.float();
@@ -2048,10 +2377,10 @@ export const Invoice = {
           message.total = reader.float();
           break;
         case 26:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 27:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2118,9 +2447,9 @@ export const Invoice = {
       message.description = '';
     }
     if (object.dueDate !== undefined && object.dueDate !== null) {
-      message.dueDate = fromJsonTimestamp(object.dueDate);
+      message.dueDate = String(object.dueDate);
     } else {
-      message.dueDate = undefined;
+      message.dueDate = '';
     }
     if (object.endingBalance !== undefined && object.endingBalance !== null) {
       message.endingBalance = Number(object.endingBalance);
@@ -2188,14 +2517,14 @@ export const Invoice = {
       message.total = 0;
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -2259,7 +2588,7 @@ export const Invoice = {
     if (object.dueDate !== undefined && object.dueDate !== null) {
       message.dueDate = object.dueDate;
     } else {
-      message.dueDate = undefined;
+      message.dueDate = '';
     }
     if (object.endingBalance !== undefined && object.endingBalance !== null) {
       message.endingBalance = object.endingBalance;
@@ -2329,12 +2658,12 @@ export const Invoice = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -2351,7 +2680,7 @@ export const Invoice = {
     obj.customerEmail = message.customerEmail || '';
     obj.customerName = message.customerName || '';
     obj.description = message.description || '';
-    obj.dueDate = message.dueDate !== undefined ? message.dueDate.toISOString() : null;
+    obj.dueDate = message.dueDate || '';
     obj.endingBalance = message.endingBalance || 0;
     obj.hostedInvoiceUrl = message.hostedInvoiceUrl || '';
     obj.invoicePdf = message.invoicePdf || '';
@@ -2365,8 +2694,8 @@ export const Invoice = {
     obj.tax = message.tax || 0;
     obj.taxPercent = message.taxPercent || 0;
     obj.total = message.total || 0;
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
     return obj;
   },
 };
@@ -2377,8 +2706,8 @@ export const CreatePriceRequest = {
     writer.uint32(18).string(message.currency);
     writer.uint32(26).string(message.id);
     writer.uint32(34).string(message.nickname);
-    writer.uint32(40).int64(message.trialDays);
-    writer.uint32(48).int64(message.intervalCount);
+    writer.uint32(40).int32(message.trialDays);
+    writer.uint32(48).int32(message.intervalCount);
     writer.uint32(58).string(message.interval);
     return writer;
   },
@@ -2401,10 +2730,10 @@ export const CreatePriceRequest = {
           message.nickname = reader.string();
           break;
         case 5:
-          message.trialDays = longToNumber(reader.int64() as Long);
+          message.trialDays = reader.int32();
           break;
         case 6:
-          message.intervalCount = longToNumber(reader.int64() as Long);
+          message.intervalCount = reader.int32();
           break;
         case 7:
           message.interval = reader.string();
@@ -3255,6 +3584,7 @@ export const CreateSubscriptionRequest = {
     writer.uint32(18).string(message.tenantId);
     writer.uint32(26).string(message.planId);
     writer.uint32(34).string(message.couponId);
+    writer.uint32(42).string(message.cardId);
     return writer;
   },
   decode(reader: Reader, length?: number): CreateSubscriptionRequest {
@@ -3274,6 +3604,9 @@ export const CreateSubscriptionRequest = {
           break;
         case 4:
           message.couponId = reader.string();
+          break;
+        case 5:
+          message.cardId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3304,6 +3637,11 @@ export const CreateSubscriptionRequest = {
     } else {
       message.couponId = '';
     }
+    if (object.cardId !== undefined && object.cardId !== null) {
+      message.cardId = String(object.cardId);
+    } else {
+      message.cardId = '';
+    }
     return message;
   },
   fromPartial(object: DeepPartial<CreateSubscriptionRequest>): CreateSubscriptionRequest {
@@ -3328,6 +3666,11 @@ export const CreateSubscriptionRequest = {
     } else {
       message.couponId = '';
     }
+    if (object.cardId !== undefined && object.cardId !== null) {
+      message.cardId = object.cardId;
+    } else {
+      message.cardId = '';
+    }
     return message;
   },
   toJSON(message: CreateSubscriptionRequest): unknown {
@@ -3336,6 +3679,7 @@ export const CreateSubscriptionRequest = {
     obj.tenantId = message.tenantId || '';
     obj.planId = message.planId || '';
     obj.couponId = message.couponId || '';
+    obj.cardId = message.cardId || '';
     return obj;
   },
 };
@@ -3639,6 +3983,7 @@ export const CancelSubscriptionResponse = {
 export const ReadSubscriptionRequest = {
   encode(message: ReadSubscriptionRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
+    writer.uint32(18).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): ReadSubscriptionRequest {
@@ -3649,6 +3994,9 @@ export const ReadSubscriptionRequest = {
       switch (tag >>> 3) {
         case 1:
           message.id = reader.string();
+          break;
+        case 2:
+          message.tenantId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3664,6 +4012,11 @@ export const ReadSubscriptionRequest = {
     } else {
       message.id = '';
     }
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = String(object.tenantId);
+    } else {
+      message.tenantId = '';
+    }
     return message;
   },
   fromPartial(object: DeepPartial<ReadSubscriptionRequest>): ReadSubscriptionRequest {
@@ -3673,11 +4026,17 @@ export const ReadSubscriptionRequest = {
     } else {
       message.id = '';
     }
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = object.tenantId;
+    } else {
+      message.tenantId = '';
+    }
     return message;
   },
   toJSON(message: ReadSubscriptionRequest): unknown {
     const obj: any = {};
     obj.id = message.id || '';
+    obj.tenantId = message.tenantId || '';
     return obj;
   },
 };
@@ -3732,6 +4091,7 @@ export const ReadSubscriptionResponse = {
 
 export const FindSubscriptionsRequest = {
   encode(message: FindSubscriptionsRequest, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): FindSubscriptionsRequest {
@@ -3740,6 +4100,9 @@ export const FindSubscriptionsRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.tenantId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3749,14 +4112,25 @@ export const FindSubscriptionsRequest = {
   },
   fromJSON(object: any): FindSubscriptionsRequest {
     const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = String(object.tenantId);
+    } else {
+      message.tenantId = '';
+    }
     return message;
   },
   fromPartial(object: DeepPartial<FindSubscriptionsRequest>): FindSubscriptionsRequest {
     const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = object.tenantId;
+    } else {
+      message.tenantId = '';
+    }
     return message;
   },
   toJSON(message: FindSubscriptionsRequest): unknown {
     const obj: any = {};
+    obj.tenantId = message.tenantId || '';
     return obj;
   },
 };
@@ -3996,6 +4370,100 @@ export const CreateCardResponse = {
     return message;
   },
   toJSON(message: CreateCardResponse): unknown {
+    const obj: any = {};
+    obj.card = message.card ? Card.toJSON(message.card) : undefined;
+    return obj;
+  },
+};
+
+export const SetDefaultCardRequest = {
+  encode(message: SetDefaultCardRequest, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.id);
+    return writer;
+  },
+  decode(reader: Reader, length?: number): SetDefaultCardRequest {
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SetDefaultCardRequest {
+    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = '';
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SetDefaultCardRequest>): SetDefaultCardRequest {
+    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = '';
+    }
+    return message;
+  },
+  toJSON(message: SetDefaultCardRequest): unknown {
+    const obj: any = {};
+    obj.id = message.id || '';
+    return obj;
+  },
+};
+
+export const SetDefaultCardResponse = {
+  encode(message: SetDefaultCardResponse, writer: Writer = Writer.create()): Writer {
+    if (message.card !== undefined && message.card !== undefined) {
+      Card.encode(message.card, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(reader: Reader, length?: number): SetDefaultCardResponse {
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.card = Card.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SetDefaultCardResponse {
+    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+    if (object.card !== undefined && object.card !== null) {
+      message.card = Card.fromJSON(object.card);
+    } else {
+      message.card = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SetDefaultCardResponse>): SetDefaultCardResponse {
+    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+    if (object.card !== undefined && object.card !== null) {
+      message.card = Card.fromPartial(object.card);
+    } else {
+      message.card = undefined;
+    }
+    return message;
+  },
+  toJSON(message: SetDefaultCardResponse): unknown {
     const obj: any = {};
     obj.card = message.card ? Card.toJSON(message.card) : undefined;
     return obj;
@@ -4652,7 +5120,7 @@ export const Message = {
 export const Event = {
   encode(message: Event, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
-    writer.uint32(16).int64(message.timestamp);
+    writer.uint32(16).int32(message.timestamp);
     writer.uint32(26).string(message.message);
     writer.uint32(34).string(message.topic);
     return writer;
@@ -4667,7 +5135,7 @@ export const Event = {
           message.id = reader.string();
           break;
         case 2:
-          message.timestamp = longToNumber(reader.int64() as Long);
+          message.timestamp = reader.int32();
           break;
         case 3:
           message.message = reader.string();

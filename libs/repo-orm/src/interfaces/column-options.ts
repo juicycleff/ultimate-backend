@@ -1,4 +1,3 @@
-// FROM TYPEORM
 
 /**
  * Describes all column's options.

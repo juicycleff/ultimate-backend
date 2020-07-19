@@ -14,11 +14,11 @@ export class GetMemberHandler implements IQueryHandler<GetMemberQuery> {
 
   async execute(query: GetMemberQuery): Promise<ReadMemberResponse> {
     this.logger.log(`'Async '${query.constructor.name}...`);
-    const { where, tenant: userTenant } = query;
+    const { where, tenantId } = query;
     try {
 
       const tenant = await this.tenantRepository.findOne({
-        normalizedName: userTenant.normalizedName,
+        normalizedName: tenantId,
       });
 
       const member = tenant.members.reduce(previousValue => previousValue.id === where.id && previousValue);

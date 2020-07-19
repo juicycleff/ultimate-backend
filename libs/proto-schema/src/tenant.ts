@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { Observable } from 'rxjs';
-import { Timestamp } from './google/protobuf/timestamp';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -28,11 +27,11 @@ export interface Tenant {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
   /**
    *  @inject_tag: bson:"members,omitempty"
    */
@@ -45,6 +44,10 @@ export interface Tenant {
    *  @inject_tag: bson:"payment,omitempty"
    */
   billing: BillingSettings | undefined;
+  /**
+   *  @inject_tag: bson:"payment,omitempty"
+   */
+  totalPoints: number;
 }
 
 export interface UpdateTenantPayload {
@@ -74,7 +77,7 @@ export interface TenantAccess {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
 }
 
 export interface BillingSettings {
@@ -95,15 +98,38 @@ export interface ConnectionSettings {
   host: string;
 }
 
+export interface IotSubSettings {
+  /**
+   *  @inject_tag: bson:"uri,omitempty"
+   */
+  uri: string;
+  /**
+   *  @inject_tag: bson:"port,omitempty"
+   */
+  port: string;
+  /**
+   *  @inject_tag: bson:"password,omitempty"
+   */
+  password: string;
+  /**
+   *  @inject_tag: bson:"username,omitempty"
+   */
+  username: string;
+}
+
 export interface Settings {
   /**
    *  @inject_tag: bson:"connection,omitempty"
    */
-  enableTheme: boolean;
+  showStatusIcon: boolean;
   /**
    *  @inject_tag: bson:"connection,omitempty"
    */
   connection: ConnectionSettings | undefined;
+  /**
+   *  @inject_tag: bson:"mqtt,omitempty"
+   */
+  mqtt: IotSubSettings | undefined;
 }
 
 export interface Member {
@@ -122,7 +148,7 @@ export interface Member {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"status,omitempty"
    */
@@ -134,7 +160,7 @@ export interface Member {
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
 }
 
 /**
@@ -144,6 +170,7 @@ export interface CreateTenantRequest {
   name: string;
   planId: string;
   couponId: string;
+  cardId: string;
 }
 
 export interface CreateTenantResponse {
@@ -152,6 +179,14 @@ export interface CreateTenantResponse {
 
 export interface FindTenantRequest {
   filter: string;
+}
+
+export interface TenantAvailableRequest {
+  identifier: string;
+}
+
+export interface TenantAvailableResponse {
+  available: boolean;
 }
 
 export interface FindTenantResponse {
@@ -209,7 +244,9 @@ export interface InviteMemberResponse {
 }
 
 export interface FindMemberRequest {
-  filter: string;
+  status: string;
+  role: string;
+  tenantId: string;
 }
 
 export interface FindMemberResponse {
@@ -271,11 +308,12 @@ const baseTenant: object = {
   name: '',
   tokens: undefined,
   createdBy: '',
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
   members: undefined,
   settings: undefined,
   billing: undefined,
+  totalPoints: 0,
 };
 
 const baseUpdateTenantPayload: object = {
@@ -287,7 +325,7 @@ const baseTenantAccess: object = {
   key: '',
   secret: '',
   active: false,
-  createdAt: undefined,
+  createdAt: '',
 };
 
 const baseBillingSettings: object = {
@@ -299,25 +337,34 @@ const baseConnectionSettings: object = {
   host: '',
 };
 
+const baseIotSubSettings: object = {
+  uri: '',
+  port: '',
+  password: '',
+  username: '',
+};
+
 const baseSettings: object = {
-  enableTheme: false,
+  showStatusIcon: false,
   connection: undefined,
+  mqtt: undefined,
 };
 
 const baseMember: object = {
   id: '',
   email: '',
   userId: '',
-  createdAt: undefined,
+  createdAt: '',
   status: '',
   role: '',
-  updatedAt: undefined,
+  updatedAt: '',
 };
 
 const baseCreateTenantRequest: object = {
   name: '',
   planId: '',
   couponId: '',
+  cardId: '',
 };
 
 const baseCreateTenantResponse: object = {
@@ -326,6 +373,14 @@ const baseCreateTenantResponse: object = {
 
 const baseFindTenantRequest: object = {
   filter: '',
+};
+
+const baseTenantAvailableRequest: object = {
+  identifier: '',
+};
+
+const baseTenantAvailableResponse: object = {
+  available: false,
 };
 
 const baseFindTenantResponse: object = {
@@ -368,7 +423,9 @@ const baseInviteMemberResponse: object = {
 };
 
 const baseFindMemberRequest: object = {
-  filter: '',
+  status: '',
+  role: '',
+  tenantId: '',
 };
 
 const baseFindMemberResponse: object = {
@@ -424,6 +481,8 @@ export interface TenantService<Context extends DataLoaders> {
 
   deleteTenant(request: DeleteTenantRequest, ctx: Context): Promise<DeleteTenantResponse>;
 
+  tenantAvailable(request: TenantAvailableRequest, ctx: Context): Promise<TenantAvailableResponse>;
+
   /**
    *  Members
    */
@@ -456,6 +515,8 @@ export interface TenantServiceClient<Context extends DataLoaders> {
 
   deleteTenant(request: DeleteTenantRequest, ctx?: Context): Observable<DeleteTenantResponse>;
 
+  tenantAvailable(request: TenantAvailableRequest, ctx?: Context): Observable<TenantAvailableResponse>;
+
   /**
    *  Members
    */
@@ -479,36 +540,42 @@ interface DataLoaders {
 
 }
 
-function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000;
-  const nanos = (date.getTime() % 1_000) * 1_000_000;
-  return { seconds, nanos };
-}
-
-function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
-}
-
-function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
-    return o;
-  } else if (typeof o === 'string') {
-    return new Date(o);
-  } else {
-    return fromTimestamp(Timestamp.fromJSON(o));
-  }
-}
-
-export enum InvitationStatus {
+export const InvitationStatus = {
   /** PENDING -  option allow_alias = true;
    */
-  PENDING = 0,
-  ACCEPTED = 1,
-  REJECTED = 2,
+  PENDING: 0 as InvitationStatus,
+  ACCEPTED: 1 as InvitationStatus,
+  REJECTED: 2 as InvitationStatus,
+  fromJSON(object: any): InvitationStatus {
+    switch (object) {
+      case 0:
+      case "PENDING":
+        return InvitationStatus.PENDING;
+      case 1:
+      case "ACCEPTED":
+        return InvitationStatus.ACCEPTED;
+      case 2:
+      case "REJECTED":
+        return InvitationStatus.REJECTED;
+      default:
+        throw new global.Error(`Invalid value ${object}`);
+    }
+  },
+  toJSON(object: InvitationStatus): string {
+    switch (object) {
+      case InvitationStatus.PENDING:
+        return "PENDING";
+      case InvitationStatus.ACCEPTED:
+        return "ACCEPTED";
+      case InvitationStatus.REJECTED:
+        return "REJECTED";
+      default:
+        return "UNKNOWN";
+    }
+  },
 }
 
+export type InvitationStatus = 0 | 1 | 2;
 
 export const Tenant = {
   encode(message: Tenant, writer: Writer = Writer.create()): Writer {
@@ -519,12 +586,8 @@ export const Tenant = {
       TenantAccess.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     writer.uint32(42).string(message.createdBy);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(50).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(58).fork()).ldelim();
-    }
+    writer.uint32(50).string(message.createdAt);
+    writer.uint32(58).string(message.updatedAt);
     for (const v of message.members) {
       Member.encode(v!, writer.uint32(66).fork()).ldelim();
     }
@@ -534,6 +597,7 @@ export const Tenant = {
     if (message.billing !== undefined && message.billing !== undefined) {
       BillingSettings.encode(message.billing, writer.uint32(82).fork()).ldelim();
     }
+    writer.uint32(88).int32(message.totalPoints);
     return writer;
   },
   decode(reader: Reader, length?: number): Tenant {
@@ -560,10 +624,10 @@ export const Tenant = {
           message.createdBy = reader.string();
           break;
         case 6:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 7:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         case 8:
           message.members.push(Member.decode(reader, reader.uint32()));
@@ -573,6 +637,9 @@ export const Tenant = {
           break;
         case 10:
           message.billing = BillingSettings.decode(reader, reader.uint32());
+          break;
+        case 11:
+          message.totalPoints = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -611,14 +678,14 @@ export const Tenant = {
       message.createdBy = '';
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.members !== undefined && object.members !== null) {
       for (const e of object.members) {
@@ -634,6 +701,11 @@ export const Tenant = {
       message.billing = BillingSettings.fromJSON(object.billing);
     } else {
       message.billing = undefined;
+    }
+    if (object.totalPoints !== undefined && object.totalPoints !== null) {
+      message.totalPoints = Number(object.totalPoints);
+    } else {
+      message.totalPoints = 0;
     }
     return message;
   },
@@ -669,12 +741,12 @@ export const Tenant = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.members !== undefined && object.members !== null) {
       for (const e of object.members) {
@@ -691,6 +763,11 @@ export const Tenant = {
     } else {
       message.billing = undefined;
     }
+    if (object.totalPoints !== undefined && object.totalPoints !== null) {
+      message.totalPoints = object.totalPoints;
+    } else {
+      message.totalPoints = 0;
+    }
     return message;
   },
   toJSON(message: Tenant): unknown {
@@ -704,8 +781,8 @@ export const Tenant = {
       obj.tokens = [];
     }
     obj.createdBy = message.createdBy || '';
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
     if (message.members) {
       obj.members = message.members.map(e => e ? Member.toJSON(e) : undefined);
     } else {
@@ -713,6 +790,7 @@ export const Tenant = {
     }
     obj.settings = message.settings ? Settings.toJSON(message.settings) : undefined;
     obj.billing = message.billing ? BillingSettings.toJSON(message.billing) : undefined;
+    obj.totalPoints = message.totalPoints || 0;
     return obj;
   },
 };
@@ -785,9 +863,7 @@ export const TenantAccess = {
     writer.uint32(10).string(message.key);
     writer.uint32(18).string(message.secret);
     writer.uint32(24).bool(message.active);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(34).fork()).ldelim();
-    }
+    writer.uint32(34).string(message.createdAt);
     return writer;
   },
   decode(reader: Reader, length?: number): TenantAccess {
@@ -806,7 +882,7 @@ export const TenantAccess = {
           message.active = reader.bool();
           break;
         case 4:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -833,9 +909,9 @@ export const TenantAccess = {
       message.active = false;
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     return message;
   },
@@ -859,7 +935,7 @@ export const TenantAccess = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     return message;
   },
@@ -868,7 +944,7 @@ export const TenantAccess = {
     obj.key = message.key || '';
     obj.secret = message.secret || '';
     obj.active = message.active || false;
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
     return obj;
   },
 };
@@ -980,11 +1056,105 @@ export const ConnectionSettings = {
   },
 };
 
+export const IotSubSettings = {
+  encode(message: IotSubSettings, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.uri);
+    writer.uint32(18).string(message.port);
+    writer.uint32(26).string(message.password);
+    writer.uint32(34).string(message.username);
+    return writer;
+  },
+  decode(reader: Reader, length?: number): IotSubSettings {
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = Object.create(baseIotSubSettings) as IotSubSettings;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.uri = reader.string();
+          break;
+        case 2:
+          message.port = reader.string();
+          break;
+        case 3:
+          message.password = reader.string();
+          break;
+        case 4:
+          message.username = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): IotSubSettings {
+    const message = Object.create(baseIotSubSettings) as IotSubSettings;
+    if (object.uri !== undefined && object.uri !== null) {
+      message.uri = String(object.uri);
+    } else {
+      message.uri = '';
+    }
+    if (object.port !== undefined && object.port !== null) {
+      message.port = String(object.port);
+    } else {
+      message.port = '';
+    }
+    if (object.password !== undefined && object.password !== null) {
+      message.password = String(object.password);
+    } else {
+      message.password = '';
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username);
+    } else {
+      message.username = '';
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<IotSubSettings>): IotSubSettings {
+    const message = Object.create(baseIotSubSettings) as IotSubSettings;
+    if (object.uri !== undefined && object.uri !== null) {
+      message.uri = object.uri;
+    } else {
+      message.uri = '';
+    }
+    if (object.port !== undefined && object.port !== null) {
+      message.port = object.port;
+    } else {
+      message.port = '';
+    }
+    if (object.password !== undefined && object.password !== null) {
+      message.password = object.password;
+    } else {
+      message.password = '';
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username;
+    } else {
+      message.username = '';
+    }
+    return message;
+  },
+  toJSON(message: IotSubSettings): unknown {
+    const obj: any = {};
+    obj.uri = message.uri || '';
+    obj.port = message.port || '';
+    obj.password = message.password || '';
+    obj.username = message.username || '';
+    return obj;
+  },
+};
+
 export const Settings = {
   encode(message: Settings, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.enableTheme);
+    writer.uint32(8).bool(message.showStatusIcon);
     if (message.connection !== undefined && message.connection !== undefined) {
       ConnectionSettings.encode(message.connection, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.mqtt !== undefined && message.mqtt !== undefined) {
+      IotSubSettings.encode(message.mqtt, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -995,10 +1165,13 @@ export const Settings = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.enableTheme = reader.bool();
+          message.showStatusIcon = reader.bool();
           break;
         case 2:
           message.connection = ConnectionSettings.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.mqtt = IotSubSettings.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1009,36 +1182,47 @@ export const Settings = {
   },
   fromJSON(object: any): Settings {
     const message = Object.create(baseSettings) as Settings;
-    if (object.enableTheme !== undefined && object.enableTheme !== null) {
-      message.enableTheme = Boolean(object.enableTheme);
+    if (object.showStatusIcon !== undefined && object.showStatusIcon !== null) {
+      message.showStatusIcon = Boolean(object.showStatusIcon);
     } else {
-      message.enableTheme = false;
+      message.showStatusIcon = false;
     }
     if (object.connection !== undefined && object.connection !== null) {
       message.connection = ConnectionSettings.fromJSON(object.connection);
     } else {
       message.connection = undefined;
     }
+    if (object.mqtt !== undefined && object.mqtt !== null) {
+      message.mqtt = IotSubSettings.fromJSON(object.mqtt);
+    } else {
+      message.mqtt = undefined;
+    }
     return message;
   },
   fromPartial(object: DeepPartial<Settings>): Settings {
     const message = Object.create(baseSettings) as Settings;
-    if (object.enableTheme !== undefined && object.enableTheme !== null) {
-      message.enableTheme = object.enableTheme;
+    if (object.showStatusIcon !== undefined && object.showStatusIcon !== null) {
+      message.showStatusIcon = object.showStatusIcon;
     } else {
-      message.enableTheme = false;
+      message.showStatusIcon = false;
     }
     if (object.connection !== undefined && object.connection !== null) {
       message.connection = ConnectionSettings.fromPartial(object.connection);
     } else {
       message.connection = undefined;
     }
+    if (object.mqtt !== undefined && object.mqtt !== null) {
+      message.mqtt = IotSubSettings.fromPartial(object.mqtt);
+    } else {
+      message.mqtt = undefined;
+    }
     return message;
   },
   toJSON(message: Settings): unknown {
     const obj: any = {};
-    obj.enableTheme = message.enableTheme || false;
+    obj.showStatusIcon = message.showStatusIcon || false;
     obj.connection = message.connection ? ConnectionSettings.toJSON(message.connection) : undefined;
+    obj.mqtt = message.mqtt ? IotSubSettings.toJSON(message.mqtt) : undefined;
     return obj;
   },
 };
@@ -1048,14 +1232,10 @@ export const Member = {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.email);
     writer.uint32(26).string(message.userId);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(34).fork()).ldelim();
-    }
+    writer.uint32(34).string(message.createdAt);
     writer.uint32(42).string(message.status);
     writer.uint32(50).string(message.role);
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(58).fork()).ldelim();
-    }
+    writer.uint32(58).string(message.updatedAt);
     return writer;
   },
   decode(reader: Reader, length?: number): Member {
@@ -1074,7 +1254,7 @@ export const Member = {
           message.userId = reader.string();
           break;
         case 4:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 5:
           message.status = reader.string();
@@ -1083,7 +1263,7 @@ export const Member = {
           message.role = reader.string();
           break;
         case 7:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1110,9 +1290,9 @@ export const Member = {
       message.userId = '';
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.status !== undefined && object.status !== null) {
       message.status = String(object.status);
@@ -1125,9 +1305,9 @@ export const Member = {
       message.role = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -1151,7 +1331,7 @@ export const Member = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
@@ -1166,7 +1346,7 @@ export const Member = {
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -1175,10 +1355,10 @@ export const Member = {
     obj.id = message.id || '';
     obj.email = message.email || '';
     obj.userId = message.userId || '';
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
     obj.status = message.status || '';
     obj.role = message.role || '';
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.updatedAt = message.updatedAt || '';
     return obj;
   },
 };
@@ -1188,6 +1368,7 @@ export const CreateTenantRequest = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.planId);
     writer.uint32(26).string(message.couponId);
+    writer.uint32(34).string(message.cardId);
     return writer;
   },
   decode(reader: Reader, length?: number): CreateTenantRequest {
@@ -1204,6 +1385,9 @@ export const CreateTenantRequest = {
           break;
         case 3:
           message.couponId = reader.string();
+          break;
+        case 4:
+          message.cardId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1229,6 +1413,11 @@ export const CreateTenantRequest = {
     } else {
       message.couponId = '';
     }
+    if (object.cardId !== undefined && object.cardId !== null) {
+      message.cardId = String(object.cardId);
+    } else {
+      message.cardId = '';
+    }
     return message;
   },
   fromPartial(object: DeepPartial<CreateTenantRequest>): CreateTenantRequest {
@@ -1248,6 +1437,11 @@ export const CreateTenantRequest = {
     } else {
       message.couponId = '';
     }
+    if (object.cardId !== undefined && object.cardId !== null) {
+      message.cardId = object.cardId;
+    } else {
+      message.cardId = '';
+    }
     return message;
   },
   toJSON(message: CreateTenantRequest): unknown {
@@ -1255,6 +1449,7 @@ export const CreateTenantRequest = {
     obj.name = message.name || '';
     obj.planId = message.planId || '';
     obj.couponId = message.couponId || '';
+    obj.cardId = message.cardId || '';
     return obj;
   },
 };
@@ -1349,6 +1544,98 @@ export const FindTenantRequest = {
   toJSON(message: FindTenantRequest): unknown {
     const obj: any = {};
     obj.filter = message.filter || '';
+    return obj;
+  },
+};
+
+export const TenantAvailableRequest = {
+  encode(message: TenantAvailableRequest, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.identifier);
+    return writer;
+  },
+  decode(reader: Reader, length?: number): TenantAvailableRequest {
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = Object.create(baseTenantAvailableRequest) as TenantAvailableRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.identifier = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): TenantAvailableRequest {
+    const message = Object.create(baseTenantAvailableRequest) as TenantAvailableRequest;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
+    } else {
+      message.identifier = '';
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TenantAvailableRequest>): TenantAvailableRequest {
+    const message = Object.create(baseTenantAvailableRequest) as TenantAvailableRequest;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
+    } else {
+      message.identifier = '';
+    }
+    return message;
+  },
+  toJSON(message: TenantAvailableRequest): unknown {
+    const obj: any = {};
+    obj.identifier = message.identifier || '';
+    return obj;
+  },
+};
+
+export const TenantAvailableResponse = {
+  encode(message: TenantAvailableResponse, writer: Writer = Writer.create()): Writer {
+    writer.uint32(8).bool(message.available);
+    return writer;
+  },
+  decode(reader: Reader, length?: number): TenantAvailableResponse {
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = Object.create(baseTenantAvailableResponse) as TenantAvailableResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.available = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): TenantAvailableResponse {
+    const message = Object.create(baseTenantAvailableResponse) as TenantAvailableResponse;
+    if (object.available !== undefined && object.available !== null) {
+      message.available = Boolean(object.available);
+    } else {
+      message.available = false;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TenantAvailableResponse>): TenantAvailableResponse {
+    const message = Object.create(baseTenantAvailableResponse) as TenantAvailableResponse;
+    if (object.available !== undefined && object.available !== null) {
+      message.available = object.available;
+    } else {
+      message.available = false;
+    }
+    return message;
+  },
+  toJSON(message: TenantAvailableResponse): unknown {
+    const obj: any = {};
+    obj.available = message.available || false;
     return obj;
   },
 };
@@ -1833,7 +2120,9 @@ export const InviteMemberResponse = {
 
 export const FindMemberRequest = {
   encode(message: FindMemberRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.filter);
+    writer.uint32(10).string(message.status);
+    writer.uint32(18).string(message.role);
+    writer.uint32(26).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): FindMemberRequest {
@@ -1843,7 +2132,13 @@ export const FindMemberRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.filter = reader.string();
+          message.status = reader.string();
+          break;
+        case 2:
+          message.role = reader.string();
+          break;
+        case 3:
+          message.tenantId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1854,25 +2149,47 @@ export const FindMemberRequest = {
   },
   fromJSON(object: any): FindMemberRequest {
     const message = Object.create(baseFindMemberRequest) as FindMemberRequest;
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = String(object.filter);
+    if (object.status !== undefined && object.status !== null) {
+      message.status = String(object.status);
     } else {
-      message.filter = '';
+      message.status = '';
+    }
+    if (object.role !== undefined && object.role !== null) {
+      message.role = String(object.role);
+    } else {
+      message.role = '';
+    }
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = String(object.tenantId);
+    } else {
+      message.tenantId = '';
     }
     return message;
   },
   fromPartial(object: DeepPartial<FindMemberRequest>): FindMemberRequest {
     const message = Object.create(baseFindMemberRequest) as FindMemberRequest;
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = object.filter;
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
     } else {
-      message.filter = '';
+      message.status = '';
+    }
+    if (object.role !== undefined && object.role !== null) {
+      message.role = object.role;
+    } else {
+      message.role = '';
+    }
+    if (object.tenantId !== undefined && object.tenantId !== null) {
+      message.tenantId = object.tenantId;
+    } else {
+      message.tenantId = '';
     }
     return message;
   },
   toJSON(message: FindMemberRequest): unknown {
     const obj: any = {};
-    obj.filter = message.filter || '';
+    obj.status = message.status || '';
+    obj.role = message.role || '';
+    obj.tenantId = message.tenantId || '';
     return obj;
   },
 };

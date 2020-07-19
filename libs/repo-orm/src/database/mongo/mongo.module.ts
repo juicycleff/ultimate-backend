@@ -1,4 +1,4 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { Module, DynamicModule, Global } from '@nestjs/common';
 import { MongoCoreModule } from './mongo-core.module';
 import { MongoClientOptions } from 'mongodb';
 import { createMongoProviders } from './mongo.provider';
@@ -7,6 +7,7 @@ import { MongoModuleAsyncOptions } from './interfaces';
 /**
  * Module for the MongoDB driver
  */
+@Global()
 @Module({})
 export class MongoModule {
   /**

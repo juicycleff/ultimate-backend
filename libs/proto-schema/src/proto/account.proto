@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 package io.ultimatebackend.srv.account;
 
@@ -55,9 +55,9 @@ message User {
     // @inject_tag: bson:"lastname,omitempty"
     string lastname = 5;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 6;
+    string createdAt = 6;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 7;
+    string updatedAt = 7;
     // @inject_tag: bson:"emails,omitempty"
     repeated EmailObject emails = 8;
     // @inject_tag: bson:"services,omitempty"
@@ -73,8 +73,8 @@ message Settings {
 message Session {
     string id = 1;
     string email = 2;
-    int64 created = 3;      // unix
-    int64 expires = 4;      // unix
+    int32 created = 3;      // unix
+    int32 expires = 4;      // unix
 }
 
 message CreateRequest {
@@ -137,8 +137,8 @@ message ForgotPasswordResponse {
 message SearchRequest {
     string username = 1;
     string email = 2;
-    int64 limit = 3;
-    int64 offset = 4;
+    int32 limit = 3;
+    int32 offset = 4;
 }
 
 message SearchResponse {
@@ -154,10 +154,10 @@ message ReadSessionResponse {
 }
 
 enum LoginServiceTypes {
-   Password = 0;
-   Facebook = 1;
-   Github = 2;
-   Google = 3;
+    Password = 0;
+    Facebook = 1;
+    Github = 2;
+    Google = 3;
 }
 
 message LoginTypeParams {

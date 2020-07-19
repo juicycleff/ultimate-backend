@@ -1,4 +1,6 @@
-export type ArgType = 'OPERATOR' | 'COMPUTED' | 'PRIMITIVE' | 'ARRAY' | 'NESTED' | 'FLAT';
+import * as moment from 'moment';
+
+export type ArgType = 'OPERATOR' | 'COMPUTED' | 'PRIMITIVE' | 'ARRAY' | 'NESTED' | 'FLAT' | 'DATE';
 
 export type Resolver = (parent: any) => any;
 
@@ -57,6 +59,10 @@ export const isPrimitive = (val): boolean => {
   if (primitives.includes(typeof val)) { return true; } else { return false; }
 };
 
+export const isValidDate = (val): boolean => {
+  return moment(val, moment.ISO_8601, true).isValid();
+};
+
 export const isComputable = (key: string, resolvers: object): boolean => {
   return Object.keys(resolvers).includes(key);
 };
@@ -92,7 +98,21 @@ export const argType = (
   val?: string,
 ): ArgType => {
   // tslint:disable-next-line:max-line-length
-  if (isOperator(key, keywords)) { return 'OPERATOR'; } else if (isComputable(key, resolvers)) { return 'COMPUTED'; } else if (isPrimitive(val)) { return 'PRIMITIVE'; } else if (Array.isArray(val)) { return 'ARRAY'; } else if (isNested(val, keywords, resolvers)) { return 'NESTED'; } else if (typeof val === 'object') { return 'FLAT'; } else { return null; }
+  if (isOperator(key, keywords)) {
+    return 'OPERATOR';
+  } else if (isComputable(key, resolvers)) {
+    return 'COMPUTED';
+  } else if (isPrimitive(val)) {
+    return 'PRIMITIVE';
+  } else if (Array.isArray(val)) {
+    return 'ARRAY';
+  } else if (isNested(val, keywords, resolvers)) {
+    return 'NESTED';
+  } else if (typeof val === 'object') {
+    return 'FLAT';
+  } else {
+    return null;
+  }
 };
 
 const parseNested = (
@@ -162,6 +182,10 @@ export const buildFilters = (
 
   // NO PARENT AND ARGS IS A DIRECT VALUE
   if (!parentKey && isPrimitive(args)) {
+    if (typeof args === 'string' && isValidDate(args)) {
+      return new Date(args);
+    }
+
     return args;
   }
 

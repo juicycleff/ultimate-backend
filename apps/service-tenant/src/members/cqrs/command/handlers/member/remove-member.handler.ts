@@ -19,7 +19,7 @@ export class RemoveMemberHandler implements ICommandHandler<RemoveMemberCommand>
 
   async execute(command: RemoveMemberCommand): Promise<DeleteMemberResponse> {
     this.logger.log(`'Async '${command.constructor.name}...`);
-    const { input, user, tenant } = command;
+    const { input, user, tenantId } = command;
 
     try {
       if (input.id === null) { // Check to make sure input is not null
@@ -29,6 +29,14 @@ export class RemoveMemberHandler implements ICommandHandler<RemoveMemberCommand>
       if (user === null) { // Check to make sure input is not null
         throw new RpcException('Member owner or admin is missing');
       }
+
+      if (tenantId === null) { // Check to make sure input is not null
+        throw new RpcException('Tenant not found');
+      }
+
+      const tenant = await this.tenantRepository.findOne({
+        normalizeNamed: tenantId,
+      });
 
       if (tenant === null) { // Check to make sure input is not null
         throw new RpcException('Tenant not found');
@@ -64,7 +72,7 @@ export class RemoveMemberHandler implements ICommandHandler<RemoveMemberCommand>
       const member = updatedTenant.members.reduce(previousValue => previousValue.id === input.id && previousValue);
 
       await this.roleService.roleService.removeUserFromRole(
-        {tenantId: tenant.normalizedName, userId: member.userId.toString() },
+        {tenantId, userId: member.userId.toString() },
       ).toPromise();
 
       await this.eventBus.publish(new MemberRemovedEvent(member));

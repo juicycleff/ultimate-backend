@@ -1,7 +1,5 @@
 /* eslint-disable */
 import { Observable } from 'rxjs';
-import { Timestamp } from './google/protobuf/timestamp';
-import * as Long from 'long';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -62,11 +60,11 @@ export interface User {
   /**
    *  @inject_tag: bson:"createdAt,omitempty"
    */
-  createdAt: Date | undefined;
+  createdAt: string;
   /**
    *  @inject_tag: bson:"updatedAt,omitempty"
    */
-  updatedAt: Date | undefined;
+  updatedAt: string;
   /**
    *  @inject_tag: bson:"emails,omitempty"
    */
@@ -251,8 +249,8 @@ const baseUser: object = {
   primaryEmail: '',
   firstname: '',
   lastname: '',
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
   emails: undefined,
   services: undefined,
   settings: undefined,
@@ -467,42 +465,46 @@ interface DataLoaders {
 
 }
 
-function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000;
-  const nanos = (date.getTime() % 1_000) * 1_000_000;
-  return { seconds, nanos };
+export const LoginServiceTypes = {
+  Password: 0 as LoginServiceTypes,
+  Facebook: 1 as LoginServiceTypes,
+  Github: 2 as LoginServiceTypes,
+  Google: 3 as LoginServiceTypes,
+  fromJSON(object: any): LoginServiceTypes {
+    switch (object) {
+      case 0:
+      case "Password":
+        return LoginServiceTypes.Password;
+      case 1:
+      case "Facebook":
+        return LoginServiceTypes.Facebook;
+      case 2:
+      case "Github":
+        return LoginServiceTypes.Github;
+      case 3:
+      case "Google":
+        return LoginServiceTypes.Google;
+      default:
+        throw new global.Error(`Invalid value ${object}`);
+    }
+  },
+  toJSON(object: LoginServiceTypes): string {
+    switch (object) {
+      case LoginServiceTypes.Password:
+        return "Password";
+      case LoginServiceTypes.Facebook:
+        return "Facebook";
+      case LoginServiceTypes.Github:
+        return "Github";
+      case LoginServiceTypes.Google:
+        return "Google";
+      default:
+        return "UNKNOWN";
+    }
+  },
 }
 
-function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
-}
-
-function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
-    return o;
-  } else if (typeof o === 'string') {
-    return new Date(o);
-  } else {
-    return fromTimestamp(Timestamp.fromJSON(o));
-  }
-}
-
-function longToNumber(long: Long) {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new global.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-export enum LoginServiceTypes {
-  Password = 0,
-  Facebook = 1,
-  Github = 2,
-  Google = 3,
-}
-
+export type LoginServiceTypes = 0 | 1 | 2 | 3;
 
 export const PasswordStruct = {
   encode(message: PasswordStruct, writer: Writer = Writer.create()): Writer {
@@ -696,12 +698,8 @@ export const User = {
     writer.uint32(26).string(message.primaryEmail);
     writer.uint32(34).string(message.firstname);
     writer.uint32(42).string(message.lastname);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(50).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(58).fork()).ldelim();
-    }
+    writer.uint32(50).string(message.createdAt);
+    writer.uint32(58).string(message.updatedAt);
     for (const v of message.emails) {
       EmailObject.encode(v!, writer.uint32(66).fork()).ldelim();
     }
@@ -736,10 +734,10 @@ export const User = {
           message.lastname = reader.string();
           break;
         case 6:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 7:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         case 8:
           message.emails.push(EmailObject.decode(reader, reader.uint32()));
@@ -786,14 +784,14 @@ export const User = {
       message.lastname = '';
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.emails !== undefined && object.emails !== null) {
       for (const e of object.emails) {
@@ -843,12 +841,12 @@ export const User = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     if (object.emails !== undefined && object.emails !== null) {
       for (const e of object.emails) {
@@ -874,8 +872,8 @@ export const User = {
     obj.primaryEmail = message.primaryEmail || '';
     obj.firstname = message.firstname || '';
     obj.lastname = message.lastname || '';
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
     if (message.emails) {
       obj.emails = message.emails.map(e => e ? EmailObject.toJSON(e) : undefined);
     } else {
@@ -937,8 +935,8 @@ export const Session = {
   encode(message: Session, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.email);
-    writer.uint32(24).int64(message.created);
-    writer.uint32(32).int64(message.expires);
+    writer.uint32(24).int32(message.created);
+    writer.uint32(32).int32(message.expires);
     return writer;
   },
   decode(reader: Reader, length?: number): Session {
@@ -954,10 +952,10 @@ export const Session = {
           message.email = reader.string();
           break;
         case 3:
-          message.created = longToNumber(reader.int64() as Long);
+          message.created = reader.int32();
           break;
         case 4:
-          message.expires = longToNumber(reader.int64() as Long);
+          message.expires = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1104,7 +1102,7 @@ export const CreateRequest = {
       message.lastname = '';
     }
     if (object.service !== undefined && object.service !== null) {
-      message.service = object.service;
+      message.service = LoginServiceTypes.fromJSON(object.service);
     } else {
       message.service = 0;
     }
@@ -1164,7 +1162,7 @@ export const CreateRequest = {
     obj.email = message.email || '';
     obj.firstname = message.firstname || '';
     obj.lastname = message.lastname || '';
-    obj.service = message.service;
+    obj.service = LoginServiceTypes.toJSON(message.service);
     obj.tokens = message.tokens || undefined;
     return obj;
   },
@@ -1792,8 +1790,8 @@ export const SearchRequest = {
   encode(message: SearchRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.username);
     writer.uint32(18).string(message.email);
-    writer.uint32(24).int64(message.limit);
-    writer.uint32(32).int64(message.offset);
+    writer.uint32(24).int32(message.limit);
+    writer.uint32(32).int32(message.offset);
     return writer;
   },
   decode(reader: Reader, length?: number): SearchRequest {
@@ -1809,10 +1807,10 @@ export const SearchRequest = {
           message.email = reader.string();
           break;
         case 3:
-          message.limit = longToNumber(reader.int64() as Long);
+          message.limit = reader.int32();
           break;
         case 4:
-          message.offset = longToNumber(reader.int64() as Long);
+          message.offset = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2149,7 +2147,7 @@ export const LoginRequest = {
   fromJSON(object: any): LoginRequest {
     const message = Object.create(baseLoginRequest) as LoginRequest;
     if (object.service !== undefined && object.service !== null) {
-      message.service = object.service;
+      message.service = LoginServiceTypes.fromJSON(object.service);
     } else {
       message.service = 0;
     }
@@ -2176,7 +2174,7 @@ export const LoginRequest = {
   },
   toJSON(message: LoginRequest): unknown {
     const obj: any = {};
-    obj.service = message.service;
+    obj.service = LoginServiceTypes.toJSON(message.service);
     obj.params = message.params ? LoginTypeParams.toJSON(message.params) : undefined;
     return obj;
   },

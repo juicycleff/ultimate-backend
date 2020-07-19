@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.ultimatebackend.srv.billing;
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 service BillingService {
     rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse) {}
@@ -17,6 +17,7 @@ service BillingService {
 
     rpc CreateCard(CreateCardRequest) returns (CreateCardResponse) {}
     rpc DeleteCard(DeleteCardRequest) returns (DeleteCardResponse) {}
+    rpc SetDefaultCard(SetDefaultCardRequest) returns (SetDefaultCardResponse) {}
     rpc ReadCard(ReadCardRequest) returns (ReadCardResponse) {}
     rpc FindCards(FindCardsRequest) returns (FindCardsResponse) {}
 
@@ -64,9 +65,31 @@ message TenantSubscription {
     // @inject_tag: bson:"status,omitempty"
     string status = 3;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 6;
+    string createdAt = 6;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 7;
+    string updatedAt = 7;
+    // @inject_tag: bson:"collectionMethod,omitempty"
+    string collectionMethod = 8;
+
+    string currentPeriodStart = 9;
+
+    string currentPeriodEnd = 10;
+
+    string endedAt = 11;
+
+    string canceledAt = 12;
+
+    string latestInvoiceId = 13;
+
+    string startDate = 14;
+
+    string trialStart = 15;
+
+    string trialEnd = 16;
+
+    string customerEmail = 17;
+
+    string customerName = 18;
 }
 
 message Customer {
@@ -98,6 +121,8 @@ message Card {
     Address address = 7;
     uint32 expMonth = 8;
     uint32 expYear = 9;
+    string lastFourDigit = 10;
+    bool isDefault = 11;
 }
 
 message Price {
@@ -108,7 +133,7 @@ message Price {
     // @inject_tag: bson:"id,omitempty"
     string id = 3;
     // @inject_tag: bson:"trialDays,omitempty"
-    int64 trialDays = 4;
+    int32 trialDays = 4;
     // @inject_tag: bson:"amount,omitempty"
     float amount = 5;
 }
@@ -121,7 +146,7 @@ message StripePlan {
     // @inject_tag: bson:"id,omitempty"
     string id = 3;
     // @inject_tag: bson:"trialDays,omitempty"
-    int64 trialDays = 4;
+    int32 trialDays = 4;
     // @inject_tag: bson:"amount,omitempty"
     float amount = 5;
 }
@@ -134,9 +159,9 @@ message Feature {
     // @inject_tag: bson:"description,omitempty"
     string description = 3;
     // @inject_tag: bson:"min,omitempty"
-    int64 min = 4;
+    int32 min = 4;
     // @inject_tag: bson:"max,omitempty"
-    int64 max = 5;
+    int32 max = 5;
     // @inject_tag: bson:"active,omitempty"
     bool active = 6;
     // @inject_tag: bson:"full,omitempty"
@@ -159,9 +184,9 @@ message Plan {
     // @inject_tag: bson:"free,omitempty"
     bool free = 6;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 7;
+    string createdAt = 7;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 8;
+    string updatedAt = 8;
     // @inject_tag: bson:"name,omitempty"
     string name = 9;
     // @inject_tag: bson:"stripeId,omitempty"
@@ -181,7 +206,7 @@ message Invoice {
     string customerEmail = 9;
     string customerName = 10;
     string description = 11;
-    google.protobuf.Timestamp dueDate = 12;
+    string dueDate = 12;
     float endingBalance = 13;
     string hostedInvoiceUrl = 14;
     string invoicePdf = 15;
@@ -191,14 +216,14 @@ message Invoice {
     float startingBalance = 19;
     string statementDescriptor = 20;
     string status = 21;
-    int64 subtotal = 22;
+    int32 subtotal = 22;
     float tax = 23;
     float taxPercent = 24;
     float total = 25;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 26;
+    string createdAt = 26;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 27;
+    string updatedAt = 27;
 }
 
 message CreatePriceRequest {
@@ -206,8 +231,8 @@ message CreatePriceRequest {
     string currency = 2;
     string id = 3;
     string nickname = 4;
-    int64 trialDays = 5;
-    int64 intervalCount = 6;
+    int32 trialDays = 5;
+    int32 intervalCount = 6;
     string interval = 7;
 }
 
@@ -274,6 +299,7 @@ message CreateSubscriptionRequest {
     string tenantId = 2;
     string planId = 3;
     string couponId = 4;
+    string cardId = 5;
 }
 
 message CreateSubscriptionResponse {
@@ -302,13 +328,16 @@ message CancelSubscriptionResponse {
 
 message ReadSubscriptionRequest {
     string id = 1;
+    string tenantId = 2;
 }
 
 message ReadSubscriptionResponse {
     TenantSubscription subscription = 1;
 }
 
-message FindSubscriptionsRequest {}
+message FindSubscriptionsRequest {
+    string tenantId = 1;
+}
 
 message FindSubscriptionsResponse {
     repeated TenantSubscription subscriptions = 1;
@@ -326,6 +355,14 @@ message CreateCardRequest {
 }
 
 message CreateCardResponse {
+    Card card = 1;
+}
+
+message SetDefaultCardRequest {
+    string id = 1;
+}
+
+message SetDefaultCardResponse {
     Card card = 1;
 }
 
@@ -388,7 +425,7 @@ message Event {
     // unique id
     string id = 1;
     // unix timestamp
-    int64 timestamp = 2;
+    int32 timestamp = 2;
     // message
     string message = 3;
     // message

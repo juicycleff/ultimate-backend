@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { Observable } from 'rxjs';
-import { Timestamp } from './google/protobuf/timestamp';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -13,8 +12,8 @@ export interface Project {
   id: string;
   name: string;
   description: string;
-  createdAt: Date | undefined;
-  updatedAt: Date | undefined;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateProjectRequest {
@@ -70,8 +69,8 @@ const baseProject: object = {
   id: '',
   name: '',
   description: '',
-  createdAt: undefined,
-  updatedAt: undefined,
+  createdAt: '',
+  updatedAt: '',
 };
 
 const baseCreateProjectRequest: object = {
@@ -152,28 +151,6 @@ interface DataLoaders {
 
 }
 
-function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000;
-  const nanos = (date.getTime() % 1_000) * 1_000_000;
-  return { seconds, nanos };
-}
-
-function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
-}
-
-function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
-    return o;
-  } else if (typeof o === 'string') {
-    return new Date(o);
-  } else {
-    return fromTimestamp(Timestamp.fromJSON(o));
-  }
-}
-
 export const Paginate = {
   encode(message: Paginate, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).int32(message.skip);
@@ -240,12 +217,8 @@ export const Project = {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.name);
     writer.uint32(26).string(message.description);
-    if (message.createdAt !== undefined && message.createdAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(34).fork()).ldelim();
-    }
-    if (message.updatedAt !== undefined && message.updatedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(42).fork()).ldelim();
-    }
+    writer.uint32(34).string(message.createdAt);
+    writer.uint32(42).string(message.updatedAt);
     return writer;
   },
   decode(reader: Reader, length?: number): Project {
@@ -264,10 +237,10 @@ export const Project = {
           message.description = reader.string();
           break;
         case 4:
-          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createdAt = reader.string();
           break;
         case 5:
-          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updatedAt = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -294,14 +267,14 @@ export const Project = {
       message.description = '';
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = fromJsonTimestamp(object.createdAt);
+      message.createdAt = String(object.createdAt);
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
-      message.updatedAt = fromJsonTimestamp(object.updatedAt);
+      message.updatedAt = String(object.updatedAt);
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -325,12 +298,12 @@ export const Project = {
     if (object.createdAt !== undefined && object.createdAt !== null) {
       message.createdAt = object.createdAt;
     } else {
-      message.createdAt = undefined;
+      message.createdAt = '';
     }
     if (object.updatedAt !== undefined && object.updatedAt !== null) {
       message.updatedAt = object.updatedAt;
     } else {
-      message.updatedAt = undefined;
+      message.updatedAt = '';
     }
     return message;
   },
@@ -339,8 +312,8 @@ export const Project = {
     obj.id = message.id || '';
     obj.name = message.name || '';
     obj.description = message.description || '';
-    obj.createdAt = message.createdAt !== undefined ? message.createdAt.toISOString() : null;
-    obj.updatedAt = message.updatedAt !== undefined ? message.updatedAt.toISOString() : null;
+    obj.createdAt = message.createdAt || '';
+    obj.updatedAt = message.updatedAt || '';
     return obj;
   },
 };

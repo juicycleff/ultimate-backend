@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 package io.ultimatebackend.srv.role;
 
@@ -35,8 +35,8 @@ message Role {
 
     string name = 6;
     string normalizedName = 7;
-    google.protobuf.Timestamp createdAt = 8;
-    google.protobuf.Timestamp updatedAt = 9;
+    string createdAt = 8;
+    string updatedAt = 9;
 }
 
 message UserRole {

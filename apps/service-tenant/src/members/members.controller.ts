@@ -38,31 +38,31 @@ export class MembersController {
 
   @GrpcMethod('TenantService')
   async deleteMember(request: DeleteMemberRequest, ctx: any): Promise<DeleteMemberResponse> {
-    const { user, tenant } = getIdentityFromCtx(ctx);
-    return await this.commandBus.execute(new RemoveMemberCommand(request, tenant, user));
+    const { user, tenantInfo } = getIdentityFromCtx(ctx);
+    return await this.commandBus.execute(new RemoveMemberCommand(request, tenantInfo.tenantId, user));
   }
 
   @GrpcMethod('TenantService')
   async findMembers(request: FindMemberRequest, ctx: any): Promise<FindMemberResponse> {
-    const { tenant } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new GetMembersQuery(request, tenant));
+    const { tenantInfo } = getIdentityFromCtx(ctx);
+    return await this.queryBus.execute(new GetMembersQuery(request, tenantInfo?.tenantId));
   }
 
   @GrpcMethod('TenantService')
   async inviteMember(request: InviteMemberRequest, ctx: any): Promise<InviteMemberResponse> {
-    const { user, tenant } = getIdentityFromCtx(ctx);
-    return await this.commandBus.execute(new InviteMemberCommand(request, user, tenant));
+    const { user, tenantInfo } = getIdentityFromCtx(ctx);
+    return await this.commandBus.execute(new InviteMemberCommand(request, user, tenantInfo.tenantId));
   }
 
   @GrpcMethod('TenantService')
   async readMember(request: ReadMemberRequest, ctx: any): Promise<ReadMemberResponse> {
-    const { tenant } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new GetMemberQuery(request, tenant));
+    const { tenantInfo } = getIdentityFromCtx(ctx);
+    return await this.queryBus.execute(new GetMemberQuery(request, tenantInfo.tenantId));
   }
 
   @GrpcMethod('TenantService')
   async updateMember(request: UpdateMemberRequest, ctx: any): Promise<UpdateMemberResponse> {
-    const { user, tenant } = getIdentityFromCtx(ctx);
-    return await this.commandBus.execute(new UpdateMemberCommand(request, tenant, user));
+    const { user, tenantInfo } = getIdentityFromCtx(ctx);
+    return await this.commandBus.execute(new UpdateMemberCommand(request, tenantInfo.tenantId, user));
   }
 }

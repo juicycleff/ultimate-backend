@@ -18,7 +18,7 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
 
   async execute(command: UpdateMemberCommand): Promise<UpdateMemberResponse> {
     this.logger.log(`'Async '${command.constructor.name}...`);
-    const { input, user, tenant } = command;
+    const { input, user, tenantId } = command;
 
     try {
       if (!input.role || !input.id || !input.status) { // Check to make sure input is not null
@@ -27,6 +27,18 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
 
       if (!user) { // Check to make sure input is not null
         throw new RpcException('Current user not found'); // Throw an apollo input error
+      }
+
+      if (tenantId === null) { // Check to make sure input is not null
+        throw new RpcException('Tenant not found');
+      }
+
+      const tenant = await this.tenantRepository.findOne({
+        normalizeNamed: tenantId,
+      });
+
+      if (tenant === null) { // Check to make sure input is not null
+        throw new RpcException('Tenant not found');
       }
 
       const memberRights = tenant.members.reduce(previousValue => previousValue.id === input.id && previousValue);

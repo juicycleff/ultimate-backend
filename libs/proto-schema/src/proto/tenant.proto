@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.ultimatebackend.srv.tenant;
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 service TenantService {
     // Tenants
@@ -11,6 +11,7 @@ service TenantService {
     rpc FindTenant(FindTenantRequest) returns (FindTenantResponse) {}
     rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantResponse) {}
     rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantResponse) {}
+    rpc TenantAvailable(TenantAvailableRequest) returns (TenantAvailableResponse) {}
 
     // Members
     rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
@@ -33,15 +34,17 @@ message Tenant {
     // @inject_tag: bson:"createdBy,omitempty"
     string createdBy = 5;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 6;
+    string createdAt = 6;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 7;
+    string updatedAt = 7;
     // @inject_tag: bson:"members,omitempty"
     repeated Member members = 8;
     // @inject_tag: bson:"settings,omitempty"
     Settings settings = 9;
     // @inject_tag: bson:"payment,omitempty"
     BillingSettings billing = 10;
+    // @inject_tag: bson:"payment,omitempty"
+    int32 totalPoints = 11;
 }
 
 message UpdateTenantPayload {
@@ -59,7 +62,7 @@ message TenantAccess {
     // @inject_tag: bson:"active,omitempty"
     bool active = 3;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 4;
+    string createdAt = 4;
 }
 
 message BillingSettings {
@@ -74,11 +77,24 @@ message ConnectionSettings {
     string host = 1;
 }
 
+message IotSubSettings {
+    // @inject_tag: bson:"uri,omitempty"
+    string uri = 1;
+    // @inject_tag: bson:"port,omitempty"
+    string port = 2;
+    // @inject_tag: bson:"password,omitempty"
+    string password = 3;
+    // @inject_tag: bson:"username,omitempty"
+    string username = 4;
+}
+
 message Settings {
     // @inject_tag: bson:"connection,omitempty"
-    bool enableTheme = 1;
+    bool showStatusIcon = 1;
     // @inject_tag: bson:"connection,omitempty"
     ConnectionSettings connection = 2;
+    // @inject_tag: bson:"mqtt,omitempty"
+    IotSubSettings mqtt = 3;
 }
 
 enum InvitationStatus {
@@ -96,13 +112,13 @@ message Member {
     // @inject_tag: bson:"userId,omitempty"
     string userId = 3;
     // @inject_tag: bson:"createdAt,omitempty"
-    google.protobuf.Timestamp createdAt = 4;
+    string createdAt = 4;
     // @inject_tag: bson:"status,omitempty"
     string status = 5;
     // @inject_tag: bson:"role,omitempty"
     string role = 6;
     // @inject_tag: bson:"updatedAt,omitempty"
-    google.protobuf.Timestamp updatedAt = 7;
+    string updatedAt = 7;
 }
 
 // Tenant
@@ -110,6 +126,7 @@ message CreateTenantRequest {
     string name = 1;
     string planId = 2;
     string couponId = 3;
+    string cardId = 4;
 }
 
 message CreateTenantResponse {
@@ -118,6 +135,14 @@ message CreateTenantResponse {
 
 message FindTenantRequest {
     string filter = 1;
+}
+
+message TenantAvailableRequest {
+    string identifier = 1;
+}
+
+message TenantAvailableResponse {
+    bool available = 1;
 }
 
 message FindTenantResponse {
@@ -165,7 +190,9 @@ message InviteMemberResponse {
 }
 
 message FindMemberRequest {
-    string filter = 1;
+    string status = 1;
+    string role = 2;
+    string tenantId = 3;
 }
 
 message FindMemberResponse {

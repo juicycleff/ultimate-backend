@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 
 package io.ultimatebackend.srv.access;
+// import "google/protobuf/timestamp.proto";
 
 service AccessService {
     rpc CreateAccess(CreateAccessRequest) returns (CreateAccessResponse) {}
@@ -19,8 +19,8 @@ message Access {
     string tenantId = 3;
     repeated string scopes = 4;
     string name = 5;
-    google.protobuf.Timestamp createdAt = 8;
-    google.protobuf.Timestamp updatedAt = 9;
+    string createdAt = 8;
+    string updatedAt = 9;
     bool active = 10;
     string createdBy = 11;
 }
@@ -29,6 +29,7 @@ message CreateAccessRequest {
     string tenantId = 1;
     repeated string scopes = 2;
     string name = 3;
+    string expireAt = 4;
 }
 
 message CreateAccessResponse {
@@ -37,6 +38,7 @@ message CreateAccessResponse {
 
 message DeleteAccessRequest {
     string id = 1;
+    string tenantId = 2;
 }
 
 message DeleteAccessResponse {
@@ -53,7 +55,7 @@ message ReadAccessResponse {
 }
 
 message FindAccessRequest {
-    string id = 1;
+    string filter = 1;
     string tenantId = 2;
 }
 

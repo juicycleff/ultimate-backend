@@ -10,10 +10,19 @@ import {
   FindTenantResponse,
   ReadTenantRequest,
   ReadTenantResponse,
+  TenantAvailableRequest,
+  TenantAvailableResponse,
   UpdateTenantRequest,
   UpdateTenantResponse,
 } from '@ultimatebackend/proto-schema/tenant';
-import { CreateTenantCommand, GetTenantQuery, GetTenantsQuery, RemoveTenantCommand, UpdateTenantCommand } from './cqrs';
+import {
+  CreateTenantCommand,
+  GetTenantQuery,
+  GetTenantsQuery,
+  RemoveTenantCommand,
+  TenantAvailableQuery,
+  UpdateTenantCommand
+} from './cqrs';
 import { getIdentityFromCtx } from '@ultimatebackend/core';
 
 @Controller('tenants')
@@ -45,6 +54,11 @@ export class TenantsController {
   async readTenant(request: ReadTenantRequest, ctx: any): Promise<ReadTenantResponse> {
     const { user, inApp } = getIdentityFromCtx(ctx);
     return await this.queryBus.execute(new GetTenantQuery(request, user, inApp));
+  }
+
+  @GrpcMethod('TenantService')
+  async tenantAvailable(request: TenantAvailableRequest, ctx: any): Promise<TenantAvailableResponse> {
+    return await this.queryBus.execute(new TenantAvailableQuery(request));
   }
 
   @GrpcMethod('TenantService')
