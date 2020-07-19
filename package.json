@@ -100,7 +100,7 @@
     "graphql-mqtt-subscriptions": "^1.2.0",
     "graphql-passport": "^0.6.3",
     "graphql-relay": "^0.6.0",
-    "graphql-tools": "^6.0.9",
+    "graphql-tools": "^6.0.13",
     "graphql-type-json": "^0.3.1",
     "groq-js": "^0.1.5",
     "grpc": "^1.24.3",
@@ -143,7 +143,8 @@
     "ursa-optional": "^0.10.1",
     "uuid": "^8.1.0",
     "uuid-apikey": "^1.4.6",
-    "vhost": "^3.0.2"
+    "vhost": "^3.0.2",
+    "snyk": "^1.362.1"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.10.1",
@@ -173,7 +174,6 @@
     "remark-lint-emphasis-marker": "^2.0.0",
     "remark-lint-strong-marker": "^2.0.0",
     "remark-preset-lint-recommended": "^4.0.0",
-    "snyk": "^1.337.0",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.0",
     "ts-loader": "^7.0.5",

@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.14.1
+version: v1.16.0
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -38,3 +38,49 @@ patch:
         patched: '2020-05-01T00:39:41.516Z'
     - '@nestcloud/proxy > @nestcloud/redis > @nestcloud/config > @nestcloud/consul > @nestcloud/boot > lodash':
         patched: '2020-05-01T00:39:41.516Z'
+    - cache-manager > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - sinon > @sinonjs/samsam > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/graphql-tag-pluck > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - sinon > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/github-loader > @graphql-tools/graphql-tag-pluck > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/github-loader > @graphql-tools/graphql-tag-pluck > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helper-module-transforms > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-transform-block-scoping > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/github-loader > @graphql-tools/graphql-tag-pluck > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helpers > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-transform-classes > @babel/helper-define-map > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/github-loader > @graphql-tools/graphql-tag-pluck > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-transform-object-super > @babel/helper-replace-supers > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > babel-preset-fbjs > @babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-07-19T18:32:20.845Z'
