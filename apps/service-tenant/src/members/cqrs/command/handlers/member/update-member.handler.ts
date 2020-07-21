@@ -36,11 +36,11 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
       }
 
       if (memberRights.role === AppRole.OWNER && currentUserRights.role === AppRole.OWNER && memberRights.userId === tenant.createdBy.toString()) {
-        throw new RpcException('You are not authorized to remove this member');
+        throw new RpcException('You are not authorized to update this member');
       } else if (
         currentUserRights.status !== InvitationStatus.ACCEPTED
       ) {
-        throw new RpcException('You are not authorized to remove this member');
+        throw new RpcException('You are not authorized to update this member');
       }
 
       const updatedTenant = await this.tenantRepository.findOneAndUpdate({
