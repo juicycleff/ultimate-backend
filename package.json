@@ -82,7 +82,7 @@
     "cache-manager-memcached-store": "^2.2.0",
     "casbin": "^5.0.4",
     "casbin-mongodb-adapter": "^1.1.11",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "codacy-coverage": "^3.4.0",
     "connect-memcached": "^1.0.0",
