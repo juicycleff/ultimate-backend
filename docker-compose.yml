@@ -98,7 +98,7 @@ services:
     ports:
       - '2113:2113'
       - '1113:1113'
-    image: eventstore/eventstore
+    image: eventstore/eventstore:release-5.0.8
     labels:
       kompose.service.type: nodeport
       kompose.service.expose: "true"
