@@ -3,7 +3,8 @@ ULTIMATE BACKEND
 </h1>  
     
 <p align="center">  
-  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern.  
+  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern.
+  Want to ask <a target="_blank" href="https://join.slack.com/t/ultimate-backend/shared_invite/zt-gd6kuuh2-B665Di4cRLqzVqXvhbmrHg">Rex Isaac Raphael</a> questions, join the slack channel :)
 </p>  
     <p align="center">  
 </p>  
