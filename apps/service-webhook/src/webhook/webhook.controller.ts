@@ -1,7 +1,4 @@
-import {
-  Controller,
-  Logger,
-} from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   CreateWebhookRequest,
@@ -17,9 +14,7 @@ import {
   WebhookService,
 } from '@ultimatebackend/proto-schema/webhook';
 import { WebhookRepository } from '@ultimatebackend/repository';
-import {
-  getIdentityFromCtx,
-} from '@ultimatebackend/core';
+import { getIdentityFromCtx } from '@ultimatebackend/core';
 import {
   CreateWebhookCommand,
   DeleteWebhookCommand,
@@ -30,8 +25,7 @@ import {
 import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('webhook')
-export class WebhookController
-  implements WebhookService<any> {
+export class WebhookController implements WebhookService<any> {
   logger = new Logger(this.constructor.name);
 
   constructor(

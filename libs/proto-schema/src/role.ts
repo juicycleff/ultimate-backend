@@ -2,7 +2,6 @@
 import { Observable } from 'rxjs';
 import { Writer, Reader } from 'protobufjs/minimal';
 
-
 export interface StringMessage {
   params: string[];
 }
@@ -226,49 +225,88 @@ const baseAddPolicyResponse: object = {
 };
 
 export interface RoleService<Context extends DataLoaders> {
-
-  createRole(request: CreateRoleRequest, ctx: Context): Promise<CreateRoleResponse>;
+  createRole(
+    request: CreateRoleRequest,
+    ctx: Context,
+  ): Promise<CreateRoleResponse>;
 
   readRole(request: ReadRoleRequest, ctx: Context): Promise<ReadRoleResponse>;
 
-  hasRights(request: HasRightsRequest, ctx: Context): Promise<HasRightsResponse>;
+  hasRights(
+    request: HasRightsRequest,
+    ctx: Context,
+  ): Promise<HasRightsResponse>;
 
-  addPolicy(request: AddPolicyRequest, ctx: Context): Promise<AddPolicyResponse>;
+  addPolicy(
+    request: AddPolicyRequest,
+    ctx: Context,
+  ): Promise<AddPolicyResponse>;
 
-  addTenantRoles(request: AddTenantRolesRequest, ctx: Context): Promise<AddTenantRolesResponse>;
+  addTenantRoles(
+    request: AddTenantRolesRequest,
+    ctx: Context,
+  ): Promise<AddTenantRolesResponse>;
 
-  addUserToRole(request: AddUserToRoleRequest, ctx: Context): Promise<AddUserToRoleResponse>;
+  addUserToRole(
+    request: AddUserToRoleRequest,
+    ctx: Context,
+  ): Promise<AddUserToRoleResponse>;
 
-  removeUserFromRole(request: RemoveUserFromRoleRequest, ctx: Context): Promise<RemoveUserFromRoleResponse>;
+  removeUserFromRole(
+    request: RemoveUserFromRoleRequest,
+    ctx: Context,
+  ): Promise<RemoveUserFromRoleResponse>;
 
-  readUserRoles(request: ReadUserRolesRequest, ctx: Context): Promise<ReadUserRolesResponse>;
-
+  readUserRoles(
+    request: ReadUserRolesRequest,
+    ctx: Context,
+  ): Promise<ReadUserRolesResponse>;
 }
 
 export interface RoleServiceClient<Context extends DataLoaders> {
+  createRole(
+    request: CreateRoleRequest,
+    ctx?: Context,
+  ): Observable<CreateRoleResponse>;
 
-  createRole(request: CreateRoleRequest, ctx?: Context): Observable<CreateRoleResponse>;
+  readRole(
+    request: ReadRoleRequest,
+    ctx?: Context,
+  ): Observable<ReadRoleResponse>;
 
-  readRole(request: ReadRoleRequest, ctx?: Context): Observable<ReadRoleResponse>;
+  hasRights(
+    request: HasRightsRequest,
+    ctx?: Context,
+  ): Observable<HasRightsResponse>;
 
-  hasRights(request: HasRightsRequest, ctx?: Context): Observable<HasRightsResponse>;
+  addPolicy(
+    request: AddPolicyRequest,
+    ctx?: Context,
+  ): Observable<AddPolicyResponse>;
 
-  addPolicy(request: AddPolicyRequest, ctx?: Context): Observable<AddPolicyResponse>;
+  addTenantRoles(
+    request: AddTenantRolesRequest,
+    ctx?: Context,
+  ): Observable<AddTenantRolesResponse>;
 
-  addTenantRoles(request: AddTenantRolesRequest, ctx?: Context): Observable<AddTenantRolesResponse>;
+  addUserToRole(
+    request: AddUserToRoleRequest,
+    ctx?: Context,
+  ): Observable<AddUserToRoleResponse>;
 
-  addUserToRole(request: AddUserToRoleRequest, ctx?: Context): Observable<AddUserToRoleResponse>;
+  removeUserFromRole(
+    request: RemoveUserFromRoleRequest,
+    ctx?: Context,
+  ): Observable<RemoveUserFromRoleResponse>;
 
-  removeUserFromRole(request: RemoveUserFromRoleRequest, ctx?: Context): Observable<RemoveUserFromRoleResponse>;
-
-  readUserRoles(request: ReadUserRolesRequest, ctx?: Context): Observable<ReadUserRolesResponse>;
-
+  readUserRoles(
+    request: ReadUserRolesRequest,
+    ctx?: Context,
+  ): Observable<ReadUserRolesResponse>;
 }
 
 interface DataLoaders {
-
   getDataLoader<T>(identifier: string, constructorFn: () => T): T;
-
 }
 
 export const StringMessage = {
@@ -318,7 +356,7 @@ export const StringMessage = {
   toJSON(message: StringMessage): unknown {
     const obj: any = {};
     if (message.params) {
-      obj.params = message.params.map(e => e || '');
+      obj.params = message.params.map((e) => e || '');
     } else {
       obj.params = [];
     }
@@ -706,7 +744,10 @@ export const CreateRoleRequest = {
 };
 
 export const CreateRoleResponse = {
-  encode(message: CreateRoleResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateRoleResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.role !== undefined && message.role !== undefined) {
       Role.encode(message.role, writer.uint32(10).fork()).ldelim();
     }
@@ -863,7 +904,10 @@ export const ReadRoleResponse = {
 };
 
 export const ReadUserRolesResponse = {
-  encode(message: ReadUserRolesResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadUserRolesResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.roles) {
       writer.uint32(10).string(v!);
     }
@@ -871,7 +915,9 @@ export const ReadUserRolesResponse = {
   },
   decode(reader: Reader, length?: number): ReadUserRolesResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadUserRolesResponse) as ReadUserRolesResponse;
+    const message = Object.create(
+      baseReadUserRolesResponse,
+    ) as ReadUserRolesResponse;
     message.roles = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -887,7 +933,9 @@ export const ReadUserRolesResponse = {
     return message;
   },
   fromJSON(object: any): ReadUserRolesResponse {
-    const message = Object.create(baseReadUserRolesResponse) as ReadUserRolesResponse;
+    const message = Object.create(
+      baseReadUserRolesResponse,
+    ) as ReadUserRolesResponse;
     message.roles = [];
     if (object.roles !== undefined && object.roles !== null) {
       for (const e of object.roles) {
@@ -896,8 +944,12 @@ export const ReadUserRolesResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ReadUserRolesResponse>): ReadUserRolesResponse {
-    const message = Object.create(baseReadUserRolesResponse) as ReadUserRolesResponse;
+  fromPartial(
+    object: DeepPartial<ReadUserRolesResponse>,
+  ): ReadUserRolesResponse {
+    const message = Object.create(
+      baseReadUserRolesResponse,
+    ) as ReadUserRolesResponse;
     message.roles = [];
     if (object.roles !== undefined && object.roles !== null) {
       for (const e of object.roles) {
@@ -909,7 +961,7 @@ export const ReadUserRolesResponse = {
   toJSON(message: ReadUserRolesResponse): unknown {
     const obj: any = {};
     if (message.roles) {
-      obj.roles = message.roles.map(e => e || '');
+      obj.roles = message.roles.map((e) => e || '');
     } else {
       obj.roles = [];
     }
@@ -1070,14 +1122,19 @@ export const HasRightsResponse = {
 };
 
 export const ReadUserRolesRequest = {
-  encode(message: ReadUserRolesRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadUserRolesRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.userId);
     writer.uint32(18).string(message.tenant);
     return writer;
   },
   decode(reader: Reader, length?: number): ReadUserRolesRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadUserRolesRequest) as ReadUserRolesRequest;
+    const message = Object.create(
+      baseReadUserRolesRequest,
+    ) as ReadUserRolesRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1095,7 +1152,9 @@ export const ReadUserRolesRequest = {
     return message;
   },
   fromJSON(object: any): ReadUserRolesRequest {
-    const message = Object.create(baseReadUserRolesRequest) as ReadUserRolesRequest;
+    const message = Object.create(
+      baseReadUserRolesRequest,
+    ) as ReadUserRolesRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
     } else {
@@ -1109,7 +1168,9 @@ export const ReadUserRolesRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadUserRolesRequest>): ReadUserRolesRequest {
-    const message = Object.create(baseReadUserRolesRequest) as ReadUserRolesRequest;
+    const message = Object.create(
+      baseReadUserRolesRequest,
+    ) as ReadUserRolesRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = object.userId;
     } else {
@@ -1223,7 +1284,7 @@ export const FindRolesResponse = {
   toJSON(message: FindRolesResponse): unknown {
     const obj: any = {};
     if (message.roles) {
-      obj.roles = message.roles.map(e => e ? Role.toJSON(e) : undefined);
+      obj.roles = message.roles.map((e) => (e ? Role.toJSON(e) : undefined));
     } else {
       obj.roles = [];
     }
@@ -1232,7 +1293,10 @@ export const FindRolesResponse = {
 };
 
 export const AddUserToRoleRequest = {
-  encode(message: AddUserToRoleRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddUserToRoleRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.role);
     writer.uint32(18).string(message.userId);
     writer.uint32(26).string(message.actor);
@@ -1241,7 +1305,9 @@ export const AddUserToRoleRequest = {
   },
   decode(reader: Reader, length?: number): AddUserToRoleRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseAddUserToRoleRequest) as AddUserToRoleRequest;
+    const message = Object.create(
+      baseAddUserToRoleRequest,
+    ) as AddUserToRoleRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1265,7 +1331,9 @@ export const AddUserToRoleRequest = {
     return message;
   },
   fromJSON(object: any): AddUserToRoleRequest {
-    const message = Object.create(baseAddUserToRoleRequest) as AddUserToRoleRequest;
+    const message = Object.create(
+      baseAddUserToRoleRequest,
+    ) as AddUserToRoleRequest;
     if (object.role !== undefined && object.role !== null) {
       message.role = String(object.role);
     } else {
@@ -1289,7 +1357,9 @@ export const AddUserToRoleRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<AddUserToRoleRequest>): AddUserToRoleRequest {
-    const message = Object.create(baseAddUserToRoleRequest) as AddUserToRoleRequest;
+    const message = Object.create(
+      baseAddUserToRoleRequest,
+    ) as AddUserToRoleRequest;
     if (object.role !== undefined && object.role !== null) {
       message.role = object.role;
     } else {
@@ -1323,7 +1393,10 @@ export const AddUserToRoleRequest = {
 };
 
 export const AddUserToRoleResponse = {
-  encode(message: AddUserToRoleResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddUserToRoleResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.roles) {
       writer.uint32(10).string(v!);
     }
@@ -1331,7 +1404,9 @@ export const AddUserToRoleResponse = {
   },
   decode(reader: Reader, length?: number): AddUserToRoleResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseAddUserToRoleResponse) as AddUserToRoleResponse;
+    const message = Object.create(
+      baseAddUserToRoleResponse,
+    ) as AddUserToRoleResponse;
     message.roles = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1347,7 +1422,9 @@ export const AddUserToRoleResponse = {
     return message;
   },
   fromJSON(object: any): AddUserToRoleResponse {
-    const message = Object.create(baseAddUserToRoleResponse) as AddUserToRoleResponse;
+    const message = Object.create(
+      baseAddUserToRoleResponse,
+    ) as AddUserToRoleResponse;
     message.roles = [];
     if (object.roles !== undefined && object.roles !== null) {
       for (const e of object.roles) {
@@ -1356,8 +1433,12 @@ export const AddUserToRoleResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<AddUserToRoleResponse>): AddUserToRoleResponse {
-    const message = Object.create(baseAddUserToRoleResponse) as AddUserToRoleResponse;
+  fromPartial(
+    object: DeepPartial<AddUserToRoleResponse>,
+  ): AddUserToRoleResponse {
+    const message = Object.create(
+      baseAddUserToRoleResponse,
+    ) as AddUserToRoleResponse;
     message.roles = [];
     if (object.roles !== undefined && object.roles !== null) {
       for (const e of object.roles) {
@@ -1369,7 +1450,7 @@ export const AddUserToRoleResponse = {
   toJSON(message: AddUserToRoleResponse): unknown {
     const obj: any = {};
     if (message.roles) {
-      obj.roles = message.roles.map(e => e || '');
+      obj.roles = message.roles.map((e) => e || '');
     } else {
       obj.roles = [];
     }
@@ -1378,13 +1459,18 @@ export const AddUserToRoleResponse = {
 };
 
 export const AddTenantRolesRequest = {
-  encode(message: AddTenantRolesRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddTenantRolesRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.domain);
     return writer;
   },
   decode(reader: Reader, length?: number): AddTenantRolesRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseAddTenantRolesRequest) as AddTenantRolesRequest;
+    const message = Object.create(
+      baseAddTenantRolesRequest,
+    ) as AddTenantRolesRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1399,7 +1485,9 @@ export const AddTenantRolesRequest = {
     return message;
   },
   fromJSON(object: any): AddTenantRolesRequest {
-    const message = Object.create(baseAddTenantRolesRequest) as AddTenantRolesRequest;
+    const message = Object.create(
+      baseAddTenantRolesRequest,
+    ) as AddTenantRolesRequest;
     if (object.domain !== undefined && object.domain !== null) {
       message.domain = String(object.domain);
     } else {
@@ -1407,8 +1495,12 @@ export const AddTenantRolesRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<AddTenantRolesRequest>): AddTenantRolesRequest {
-    const message = Object.create(baseAddTenantRolesRequest) as AddTenantRolesRequest;
+  fromPartial(
+    object: DeepPartial<AddTenantRolesRequest>,
+  ): AddTenantRolesRequest {
+    const message = Object.create(
+      baseAddTenantRolesRequest,
+    ) as AddTenantRolesRequest;
     if (object.domain !== undefined && object.domain !== null) {
       message.domain = object.domain;
     } else {
@@ -1424,13 +1516,18 @@ export const AddTenantRolesRequest = {
 };
 
 export const AddTenantRolesResponse = {
-  encode(message: AddTenantRolesResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddTenantRolesResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): AddTenantRolesResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseAddTenantRolesResponse) as AddTenantRolesResponse;
+    const message = Object.create(
+      baseAddTenantRolesResponse,
+    ) as AddTenantRolesResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1445,7 +1542,9 @@ export const AddTenantRolesResponse = {
     return message;
   },
   fromJSON(object: any): AddTenantRolesResponse {
-    const message = Object.create(baseAddTenantRolesResponse) as AddTenantRolesResponse;
+    const message = Object.create(
+      baseAddTenantRolesResponse,
+    ) as AddTenantRolesResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -1453,8 +1552,12 @@ export const AddTenantRolesResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<AddTenantRolesResponse>): AddTenantRolesResponse {
-    const message = Object.create(baseAddTenantRolesResponse) as AddTenantRolesResponse;
+  fromPartial(
+    object: DeepPartial<AddTenantRolesResponse>,
+  ): AddTenantRolesResponse {
+    const message = Object.create(
+      baseAddTenantRolesResponse,
+    ) as AddTenantRolesResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -1470,14 +1573,19 @@ export const AddTenantRolesResponse = {
 };
 
 export const RemoveUserFromRoleRequest = {
-  encode(message: RemoveUserFromRoleRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RemoveUserFromRoleRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.tenantId);
     writer.uint32(18).string(message.userId);
     return writer;
   },
   decode(reader: Reader, length?: number): RemoveUserFromRoleRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseRemoveUserFromRoleRequest) as RemoveUserFromRoleRequest;
+    const message = Object.create(
+      baseRemoveUserFromRoleRequest,
+    ) as RemoveUserFromRoleRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1495,7 +1603,9 @@ export const RemoveUserFromRoleRequest = {
     return message;
   },
   fromJSON(object: any): RemoveUserFromRoleRequest {
-    const message = Object.create(baseRemoveUserFromRoleRequest) as RemoveUserFromRoleRequest;
+    const message = Object.create(
+      baseRemoveUserFromRoleRequest,
+    ) as RemoveUserFromRoleRequest;
     if (object.tenantId !== undefined && object.tenantId !== null) {
       message.tenantId = String(object.tenantId);
     } else {
@@ -1508,8 +1618,12 @@ export const RemoveUserFromRoleRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<RemoveUserFromRoleRequest>): RemoveUserFromRoleRequest {
-    const message = Object.create(baseRemoveUserFromRoleRequest) as RemoveUserFromRoleRequest;
+  fromPartial(
+    object: DeepPartial<RemoveUserFromRoleRequest>,
+  ): RemoveUserFromRoleRequest {
+    const message = Object.create(
+      baseRemoveUserFromRoleRequest,
+    ) as RemoveUserFromRoleRequest;
     if (object.tenantId !== undefined && object.tenantId !== null) {
       message.tenantId = object.tenantId;
     } else {
@@ -1531,13 +1645,18 @@ export const RemoveUserFromRoleRequest = {
 };
 
 export const RemoveUserFromRoleResponse = {
-  encode(message: RemoveUserFromRoleResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RemoveUserFromRoleResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): RemoveUserFromRoleResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseRemoveUserFromRoleResponse) as RemoveUserFromRoleResponse;
+    const message = Object.create(
+      baseRemoveUserFromRoleResponse,
+    ) as RemoveUserFromRoleResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1552,7 +1671,9 @@ export const RemoveUserFromRoleResponse = {
     return message;
   },
   fromJSON(object: any): RemoveUserFromRoleResponse {
-    const message = Object.create(baseRemoveUserFromRoleResponse) as RemoveUserFromRoleResponse;
+    const message = Object.create(
+      baseRemoveUserFromRoleResponse,
+    ) as RemoveUserFromRoleResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -1560,8 +1681,12 @@ export const RemoveUserFromRoleResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<RemoveUserFromRoleResponse>): RemoveUserFromRoleResponse {
-    const message = Object.create(baseRemoveUserFromRoleResponse) as RemoveUserFromRoleResponse;
+  fromPartial(
+    object: DeepPartial<RemoveUserFromRoleResponse>,
+  ): RemoveUserFromRoleResponse {
+    const message = Object.create(
+      baseRemoveUserFromRoleResponse,
+    ) as RemoveUserFromRoleResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -1623,7 +1748,7 @@ export const AddPolicyRequest = {
   toJSON(message: AddPolicyRequest): unknown {
     const obj: any = {};
     if (message.params) {
-      obj.params = message.params.map(e => e || '');
+      obj.params = message.params.map((e) => e || '');
     } else {
       obj.params = [];
     }
@@ -1679,14 +1804,14 @@ export const AddPolicyResponse = {
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T[P] extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T[P] extends Date | Function | Uint8Array | undefined
-  ? T[P]
-  : T[P] extends infer U | undefined
-  ? DeepPartial<U>
-  : T[P] extends object
-  ? DeepPartial<T[P]>
-  : T[P]
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : T[P] extends Date | Function | Uint8Array | undefined
+    ? T[P]
+    : T[P] extends infer U | undefined
+    ? DeepPartial<U>
+    : T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P];
 };

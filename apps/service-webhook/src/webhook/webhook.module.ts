@@ -4,9 +4,7 @@ import {
   EventStoreModule,
   EventStoreSubscriptionType,
 } from '@juicycleff/nestjs-event-store';
-import {
-  WebhookEventHandlers,
-} from '@ultimatebackend/core';
+import { WebhookEventHandlers } from '@ultimatebackend/core';
 import { WebhookCommandHandlers, WebhookQueryHandlers } from '../cqrs';
 import { WebhookRepository } from '@ultimatebackend/repository';
 

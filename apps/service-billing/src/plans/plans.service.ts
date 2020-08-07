@@ -176,8 +176,13 @@ export class PlansService implements OnModuleInit {
   }
 
   async seedDatabasePlan() {
-    const hasPlan = await this.planRepository.find({limit: 4, conditions: {}});
-    if (hasPlan && hasPlan.length > 0) { return }
+    const hasPlan = await this.planRepository.find({
+      limit: 4,
+      conditions: {},
+    });
+    if (hasPlan && hasPlan.length > 0) {
+      return;
+    }
 
     const seeds = new PlanSeed();
 

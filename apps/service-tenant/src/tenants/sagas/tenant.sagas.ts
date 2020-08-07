@@ -2,9 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ICommand, ofType, Saga } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import {
-  TenantCreatedEvent,
-} from '@ultimatebackend/core/cqrs';
+import { TenantCreatedEvent } from '@ultimatebackend/core/cqrs';
 import { TenantRepository } from '@ultimatebackend/repository';
 
 @Injectable()

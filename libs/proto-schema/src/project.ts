@@ -2,7 +2,6 @@
 import { Observable } from 'rxjs';
 import { Writer, Reader } from 'protobufjs/minimal';
 
-
 export interface Paginate {
   skip: number;
   limit: number;
@@ -118,37 +117,61 @@ const baseFindProjectsResponse: object = {
 };
 
 export interface ProjectService<Context extends DataLoaders> {
+  createProject(
+    request: CreateProjectRequest,
+    ctx: Context,
+  ): Promise<CreateProjectResponse>;
 
-  createProject(request: CreateProjectRequest, ctx: Context): Promise<CreateProjectResponse>;
+  deleteProject(
+    request: DeleteProjectRequest,
+    ctx: Context,
+  ): Promise<DeleteProjectResponse>;
 
-  deleteProject(request: DeleteProjectRequest, ctx: Context): Promise<DeleteProjectResponse>;
+  updateProject(
+    request: UpdateProjectRequest,
+    ctx: Context,
+  ): Promise<UpdateProjectResponse>;
 
-  updateProject(request: UpdateProjectRequest, ctx: Context): Promise<UpdateProjectResponse>;
+  readProject(
+    request: ReadProjectRequest,
+    ctx: Context,
+  ): Promise<ReadProjectResponse>;
 
-  readProject(request: ReadProjectRequest, ctx: Context): Promise<ReadProjectResponse>;
-
-  findProjects(request: FindProjectsRequest, ctx: Context): Promise<FindProjectsResponse>;
-
+  findProjects(
+    request: FindProjectsRequest,
+    ctx: Context,
+  ): Promise<FindProjectsResponse>;
 }
 
 export interface ProjectServiceClient<Context extends DataLoaders> {
+  createProject(
+    request: CreateProjectRequest,
+    ctx?: Context,
+  ): Observable<CreateProjectResponse>;
 
-  createProject(request: CreateProjectRequest, ctx?: Context): Observable<CreateProjectResponse>;
+  deleteProject(
+    request: DeleteProjectRequest,
+    ctx?: Context,
+  ): Observable<DeleteProjectResponse>;
 
-  deleteProject(request: DeleteProjectRequest, ctx?: Context): Observable<DeleteProjectResponse>;
+  updateProject(
+    request: UpdateProjectRequest,
+    ctx?: Context,
+  ): Observable<UpdateProjectResponse>;
 
-  updateProject(request: UpdateProjectRequest, ctx?: Context): Observable<UpdateProjectResponse>;
+  readProject(
+    request: ReadProjectRequest,
+    ctx?: Context,
+  ): Observable<ReadProjectResponse>;
 
-  readProject(request: ReadProjectRequest, ctx?: Context): Observable<ReadProjectResponse>;
-
-  findProjects(request: FindProjectsRequest, ctx?: Context): Observable<FindProjectsResponse>;
-
+  findProjects(
+    request: FindProjectsRequest,
+    ctx?: Context,
+  ): Observable<FindProjectsResponse>;
 }
 
 interface DataLoaders {
-
   getDataLoader<T>(identifier: string, constructorFn: () => T): T;
-
 }
 
 export const Paginate = {
@@ -319,14 +342,19 @@ export const Project = {
 };
 
 export const CreateProjectRequest = {
-  encode(message: CreateProjectRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateProjectRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.description);
     return writer;
   },
   decode(reader: Reader, length?: number): CreateProjectRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateProjectRequest) as CreateProjectRequest;
+    const message = Object.create(
+      baseCreateProjectRequest,
+    ) as CreateProjectRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -344,7 +372,9 @@ export const CreateProjectRequest = {
     return message;
   },
   fromJSON(object: any): CreateProjectRequest {
-    const message = Object.create(baseCreateProjectRequest) as CreateProjectRequest;
+    const message = Object.create(
+      baseCreateProjectRequest,
+    ) as CreateProjectRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -358,7 +388,9 @@ export const CreateProjectRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<CreateProjectRequest>): CreateProjectRequest {
-    const message = Object.create(baseCreateProjectRequest) as CreateProjectRequest;
+    const message = Object.create(
+      baseCreateProjectRequest,
+    ) as CreateProjectRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -380,7 +412,10 @@ export const CreateProjectRequest = {
 };
 
 export const CreateProjectResponse = {
-  encode(message: CreateProjectResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateProjectResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.project !== undefined && message.project !== undefined) {
       Project.encode(message.project, writer.uint32(10).fork()).ldelim();
     }
@@ -388,7 +423,9 @@ export const CreateProjectResponse = {
   },
   decode(reader: Reader, length?: number): CreateProjectResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateProjectResponse) as CreateProjectResponse;
+    const message = Object.create(
+      baseCreateProjectResponse,
+    ) as CreateProjectResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -403,7 +440,9 @@ export const CreateProjectResponse = {
     return message;
   },
   fromJSON(object: any): CreateProjectResponse {
-    const message = Object.create(baseCreateProjectResponse) as CreateProjectResponse;
+    const message = Object.create(
+      baseCreateProjectResponse,
+    ) as CreateProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromJSON(object.project);
     } else {
@@ -411,8 +450,12 @@ export const CreateProjectResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateProjectResponse>): CreateProjectResponse {
-    const message = Object.create(baseCreateProjectResponse) as CreateProjectResponse;
+  fromPartial(
+    object: DeepPartial<CreateProjectResponse>,
+  ): CreateProjectResponse {
+    const message = Object.create(
+      baseCreateProjectResponse,
+    ) as CreateProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromPartial(object.project);
     } else {
@@ -428,7 +471,10 @@ export const CreateProjectResponse = {
 };
 
 export const UpdateProjectRequest = {
-  encode(message: UpdateProjectRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: UpdateProjectRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.name);
     writer.uint32(26).string(message.description);
@@ -436,7 +482,9 @@ export const UpdateProjectRequest = {
   },
   decode(reader: Reader, length?: number): UpdateProjectRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseUpdateProjectRequest) as UpdateProjectRequest;
+    const message = Object.create(
+      baseUpdateProjectRequest,
+    ) as UpdateProjectRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -457,7 +505,9 @@ export const UpdateProjectRequest = {
     return message;
   },
   fromJSON(object: any): UpdateProjectRequest {
-    const message = Object.create(baseUpdateProjectRequest) as UpdateProjectRequest;
+    const message = Object.create(
+      baseUpdateProjectRequest,
+    ) as UpdateProjectRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -476,7 +526,9 @@ export const UpdateProjectRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<UpdateProjectRequest>): UpdateProjectRequest {
-    const message = Object.create(baseUpdateProjectRequest) as UpdateProjectRequest;
+    const message = Object.create(
+      baseUpdateProjectRequest,
+    ) as UpdateProjectRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -504,7 +556,10 @@ export const UpdateProjectRequest = {
 };
 
 export const UpdateProjectResponse = {
-  encode(message: UpdateProjectResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: UpdateProjectResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.project !== undefined && message.project !== undefined) {
       Project.encode(message.project, writer.uint32(10).fork()).ldelim();
     }
@@ -512,7 +567,9 @@ export const UpdateProjectResponse = {
   },
   decode(reader: Reader, length?: number): UpdateProjectResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseUpdateProjectResponse) as UpdateProjectResponse;
+    const message = Object.create(
+      baseUpdateProjectResponse,
+    ) as UpdateProjectResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -527,7 +584,9 @@ export const UpdateProjectResponse = {
     return message;
   },
   fromJSON(object: any): UpdateProjectResponse {
-    const message = Object.create(baseUpdateProjectResponse) as UpdateProjectResponse;
+    const message = Object.create(
+      baseUpdateProjectResponse,
+    ) as UpdateProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromJSON(object.project);
     } else {
@@ -535,8 +594,12 @@ export const UpdateProjectResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<UpdateProjectResponse>): UpdateProjectResponse {
-    const message = Object.create(baseUpdateProjectResponse) as UpdateProjectResponse;
+  fromPartial(
+    object: DeepPartial<UpdateProjectResponse>,
+  ): UpdateProjectResponse {
+    const message = Object.create(
+      baseUpdateProjectResponse,
+    ) as UpdateProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromPartial(object.project);
     } else {
@@ -552,13 +615,18 @@ export const UpdateProjectResponse = {
 };
 
 export const DeleteProjectRequest = {
-  encode(message: DeleteProjectRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteProjectRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteProjectRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseDeleteProjectRequest) as DeleteProjectRequest;
+    const message = Object.create(
+      baseDeleteProjectRequest,
+    ) as DeleteProjectRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -573,7 +641,9 @@ export const DeleteProjectRequest = {
     return message;
   },
   fromJSON(object: any): DeleteProjectRequest {
-    const message = Object.create(baseDeleteProjectRequest) as DeleteProjectRequest;
+    const message = Object.create(
+      baseDeleteProjectRequest,
+    ) as DeleteProjectRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -582,7 +652,9 @@ export const DeleteProjectRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<DeleteProjectRequest>): DeleteProjectRequest {
-    const message = Object.create(baseDeleteProjectRequest) as DeleteProjectRequest;
+    const message = Object.create(
+      baseDeleteProjectRequest,
+    ) as DeleteProjectRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -598,7 +670,10 @@ export const DeleteProjectRequest = {
 };
 
 export const DeleteProjectResponse = {
-  encode(message: DeleteProjectResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteProjectResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.project !== undefined && message.project !== undefined) {
       Project.encode(message.project, writer.uint32(10).fork()).ldelim();
     }
@@ -606,7 +681,9 @@ export const DeleteProjectResponse = {
   },
   decode(reader: Reader, length?: number): DeleteProjectResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseDeleteProjectResponse) as DeleteProjectResponse;
+    const message = Object.create(
+      baseDeleteProjectResponse,
+    ) as DeleteProjectResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -621,7 +698,9 @@ export const DeleteProjectResponse = {
     return message;
   },
   fromJSON(object: any): DeleteProjectResponse {
-    const message = Object.create(baseDeleteProjectResponse) as DeleteProjectResponse;
+    const message = Object.create(
+      baseDeleteProjectResponse,
+    ) as DeleteProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromJSON(object.project);
     } else {
@@ -629,8 +708,12 @@ export const DeleteProjectResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<DeleteProjectResponse>): DeleteProjectResponse {
-    const message = Object.create(baseDeleteProjectResponse) as DeleteProjectResponse;
+  fromPartial(
+    object: DeepPartial<DeleteProjectResponse>,
+  ): DeleteProjectResponse {
+    const message = Object.create(
+      baseDeleteProjectResponse,
+    ) as DeleteProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromPartial(object.project);
     } else {
@@ -646,7 +729,10 @@ export const DeleteProjectResponse = {
 };
 
 export const ReadProjectRequest = {
-  encode(message: ReadProjectRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadProjectRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.filter);
     return writer;
   },
@@ -692,7 +778,10 @@ export const ReadProjectRequest = {
 };
 
 export const ReadProjectResponse = {
-  encode(message: ReadProjectResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadProjectResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.project !== undefined && message.project !== undefined) {
       Project.encode(message.project, writer.uint32(10).fork()).ldelim();
     }
@@ -700,7 +789,9 @@ export const ReadProjectResponse = {
   },
   decode(reader: Reader, length?: number): ReadProjectResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadProjectResponse) as ReadProjectResponse;
+    const message = Object.create(
+      baseReadProjectResponse,
+    ) as ReadProjectResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -715,7 +806,9 @@ export const ReadProjectResponse = {
     return message;
   },
   fromJSON(object: any): ReadProjectResponse {
-    const message = Object.create(baseReadProjectResponse) as ReadProjectResponse;
+    const message = Object.create(
+      baseReadProjectResponse,
+    ) as ReadProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromJSON(object.project);
     } else {
@@ -724,7 +817,9 @@ export const ReadProjectResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadProjectResponse>): ReadProjectResponse {
-    const message = Object.create(baseReadProjectResponse) as ReadProjectResponse;
+    const message = Object.create(
+      baseReadProjectResponse,
+    ) as ReadProjectResponse;
     if (object.project !== undefined && object.project !== null) {
       message.project = Project.fromPartial(object.project);
     } else {
@@ -740,7 +835,10 @@ export const ReadProjectResponse = {
 };
 
 export const FindProjectsRequest = {
-  encode(message: FindProjectsRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindProjectsRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.filter);
     if (message.paginate !== undefined && message.paginate !== undefined) {
       Paginate.encode(message.paginate, writer.uint32(18).fork()).ldelim();
@@ -749,7 +847,9 @@ export const FindProjectsRequest = {
   },
   decode(reader: Reader, length?: number): FindProjectsRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindProjectsRequest) as FindProjectsRequest;
+    const message = Object.create(
+      baseFindProjectsRequest,
+    ) as FindProjectsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -767,7 +867,9 @@ export const FindProjectsRequest = {
     return message;
   },
   fromJSON(object: any): FindProjectsRequest {
-    const message = Object.create(baseFindProjectsRequest) as FindProjectsRequest;
+    const message = Object.create(
+      baseFindProjectsRequest,
+    ) as FindProjectsRequest;
     if (object.filter !== undefined && object.filter !== null) {
       message.filter = String(object.filter);
     } else {
@@ -781,7 +883,9 @@ export const FindProjectsRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<FindProjectsRequest>): FindProjectsRequest {
-    const message = Object.create(baseFindProjectsRequest) as FindProjectsRequest;
+    const message = Object.create(
+      baseFindProjectsRequest,
+    ) as FindProjectsRequest;
     if (object.filter !== undefined && object.filter !== null) {
       message.filter = object.filter;
     } else {
@@ -797,13 +901,18 @@ export const FindProjectsRequest = {
   toJSON(message: FindProjectsRequest): unknown {
     const obj: any = {};
     obj.filter = message.filter || '';
-    obj.paginate = message.paginate ? Paginate.toJSON(message.paginate) : undefined;
+    obj.paginate = message.paginate
+      ? Paginate.toJSON(message.paginate)
+      : undefined;
     return obj;
   },
 };
 
 export const FindProjectsResponse = {
-  encode(message: FindProjectsResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindProjectsResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.projects) {
       Project.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -811,7 +920,9 @@ export const FindProjectsResponse = {
   },
   decode(reader: Reader, length?: number): FindProjectsResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindProjectsResponse) as FindProjectsResponse;
+    const message = Object.create(
+      baseFindProjectsResponse,
+    ) as FindProjectsResponse;
     message.projects = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -827,7 +938,9 @@ export const FindProjectsResponse = {
     return message;
   },
   fromJSON(object: any): FindProjectsResponse {
-    const message = Object.create(baseFindProjectsResponse) as FindProjectsResponse;
+    const message = Object.create(
+      baseFindProjectsResponse,
+    ) as FindProjectsResponse;
     message.projects = [];
     if (object.projects !== undefined && object.projects !== null) {
       for (const e of object.projects) {
@@ -837,7 +950,9 @@ export const FindProjectsResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<FindProjectsResponse>): FindProjectsResponse {
-    const message = Object.create(baseFindProjectsResponse) as FindProjectsResponse;
+    const message = Object.create(
+      baseFindProjectsResponse,
+    ) as FindProjectsResponse;
     message.projects = [];
     if (object.projects !== undefined && object.projects !== null) {
       for (const e of object.projects) {
@@ -849,7 +964,9 @@ export const FindProjectsResponse = {
   toJSON(message: FindProjectsResponse): unknown {
     const obj: any = {};
     if (message.projects) {
-      obj.projects = message.projects.map(e => e ? Project.toJSON(e) : undefined);
+      obj.projects = message.projects.map((e) =>
+        e ? Project.toJSON(e) : undefined,
+      );
     } else {
       obj.projects = [];
     }
@@ -859,14 +976,14 @@ export const FindProjectsResponse = {
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T[P] extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T[P] extends Date | Function | Uint8Array | undefined
-  ? T[P]
-  : T[P] extends infer U | undefined
-  ? DeepPartial<U>
-  : T[P] extends object
-  ? DeepPartial<T[P]>
-  : T[P]
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : T[P] extends Date | Function | Uint8Array | undefined
+    ? T[P]
+    : T[P] extends infer U | undefined
+    ? DeepPartial<U>
+    : T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P];
 };

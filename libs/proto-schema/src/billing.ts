@@ -2,7 +2,6 @@
 import { Observable } from 'rxjs';
 import { Writer, Reader } from 'protobufjs/minimal';
 
-
 export interface TenantSubscription {
   /**
    *  @inject_tag: bson:"_id,omitempty"
@@ -273,8 +272,7 @@ export interface ReadPlanResponse {
   plan: Plan | undefined;
 }
 
-export interface FindPlansRequest {
-}
+export interface FindPlansRequest {}
 
 export interface FindPlansResponse {
   plans: Plan[];
@@ -304,8 +302,7 @@ export interface ReadInvoiceResponse {
   invoice: Invoice | undefined;
 }
 
-export interface FindInvoicesRequest {
-}
+export interface FindInvoicesRequest {}
 
 export interface FindInvoicesResponse {
   invoices: Invoice[];
@@ -404,8 +401,7 @@ export interface ReadCardResponse {
   card: Card | undefined;
 }
 
-export interface FindCardsRequest {
-}
+export interface FindCardsRequest {}
 
 export interface FindCardsResponse {
   cards: Card[];
@@ -611,8 +607,7 @@ const baseReadPlanResponse: object = {
   plan: undefined,
 };
 
-const baseFindPlansRequest: object = {
-};
+const baseFindPlansRequest: object = {};
 
 const baseFindPlansResponse: object = {
   plans: undefined,
@@ -642,8 +637,7 @@ const baseReadInvoiceResponse: object = {
   invoice: undefined,
 };
 
-const baseFindInvoicesRequest: object = {
-};
+const baseFindInvoicesRequest: object = {};
 
 const baseFindInvoicesResponse: object = {
   invoices: undefined,
@@ -736,8 +730,7 @@ const baseReadCardResponse: object = {
   card: undefined,
 };
 
-const baseFindCardsRequest: object = {
-};
+const baseFindCardsRequest: object = {};
 
 const baseFindCardsResponse: object = {
   cards: undefined,
@@ -782,97 +775,205 @@ const baseEvent: object = {
 };
 
 export interface BillingService<Context extends DataLoaders> {
+  createCustomer(
+    request: CreateCustomerRequest,
+    ctx: Context,
+  ): Promise<CreateCustomerResponse>;
 
-  createCustomer(request: CreateCustomerRequest, ctx: Context): Promise<CreateCustomerResponse>;
+  deleteCustomer(
+    request: DeleteCustomerRequest,
+    ctx: Context,
+  ): Promise<DeleteCustomerResponse>;
 
-  deleteCustomer(request: DeleteCustomerRequest, ctx: Context): Promise<DeleteCustomerResponse>;
+  readCustomer(
+    request: ReadCustomerRequest,
+    ctx: Context,
+  ): Promise<ReadCustomerResponse>;
 
-  readCustomer(request: ReadCustomerRequest, ctx: Context): Promise<ReadCustomerResponse>;
-
-  createPlan(request: CreatePlanRequest, ctx: Context): Promise<CreatePlanResponse>;
+  createPlan(
+    request: CreatePlanRequest,
+    ctx: Context,
+  ): Promise<CreatePlanResponse>;
 
   readPlan(request: ReadPlanRequest, ctx: Context): Promise<ReadPlanResponse>;
 
-  findPlans(request: FindPlansRequest, ctx: Context): Promise<FindPlansResponse>;
+  findPlans(
+    request: FindPlansRequest,
+    ctx: Context,
+  ): Promise<FindPlansResponse>;
 
-  readStripePlan(request: ReadStripePlanRequest, ctx: Context): Promise<ReadStripePlanResponse>;
+  readStripePlan(
+    request: ReadStripePlanRequest,
+    ctx: Context,
+  ): Promise<ReadStripePlanResponse>;
 
-  findStripePlans(request: FindStripePlansRequest, ctx: Context): Promise<FindStripePlansResponse>;
+  findStripePlans(
+    request: FindStripePlansRequest,
+    ctx: Context,
+  ): Promise<FindStripePlansResponse>;
 
-  createCard(request: CreateCardRequest, ctx: Context): Promise<CreateCardResponse>;
+  createCard(
+    request: CreateCardRequest,
+    ctx: Context,
+  ): Promise<CreateCardResponse>;
 
-  deleteCard(request: DeleteCardRequest, ctx: Context): Promise<DeleteCardResponse>;
+  deleteCard(
+    request: DeleteCardRequest,
+    ctx: Context,
+  ): Promise<DeleteCardResponse>;
 
-  setDefaultCard(request: SetDefaultCardRequest, ctx: Context): Promise<SetDefaultCardResponse>;
+  setDefaultCard(
+    request: SetDefaultCardRequest,
+    ctx: Context,
+  ): Promise<SetDefaultCardResponse>;
 
   readCard(request: ReadCardRequest, ctx: Context): Promise<ReadCardResponse>;
 
-  findCards(request: FindCardsRequest, ctx: Context): Promise<FindCardsResponse>;
+  findCards(
+    request: FindCardsRequest,
+    ctx: Context,
+  ): Promise<FindCardsResponse>;
 
-  createSubscription(request: CreateSubscriptionRequest, ctx: Context): Promise<CreateSubscriptionResponse>;
+  createSubscription(
+    request: CreateSubscriptionRequest,
+    ctx: Context,
+  ): Promise<CreateSubscriptionResponse>;
 
-  cancelSubscription(request: CancelSubscriptionRequest, ctx: Context): Promise<CancelSubscriptionResponse>;
+  cancelSubscription(
+    request: CancelSubscriptionRequest,
+    ctx: Context,
+  ): Promise<CancelSubscriptionResponse>;
 
-  changeSubscription(request: ChangeSubscriptionRequest, ctx: Context): Promise<ChangeSubscriptionResponse>;
+  changeSubscription(
+    request: ChangeSubscriptionRequest,
+    ctx: Context,
+  ): Promise<ChangeSubscriptionResponse>;
 
-  readSubscription(request: ReadSubscriptionRequest, ctx: Context): Promise<ReadSubscriptionResponse>;
+  readSubscription(
+    request: ReadSubscriptionRequest,
+    ctx: Context,
+  ): Promise<ReadSubscriptionResponse>;
 
-  findSubscriptions(request: FindSubscriptionsRequest, ctx: Context): Promise<FindSubscriptionsResponse>;
+  findSubscriptions(
+    request: FindSubscriptionsRequest,
+    ctx: Context,
+  ): Promise<FindSubscriptionsResponse>;
 
-  readInvoice(request: ReadInvoiceRequest, ctx: Context): Promise<ReadInvoiceResponse>;
+  readInvoice(
+    request: ReadInvoiceRequest,
+    ctx: Context,
+  ): Promise<ReadInvoiceResponse>;
 
-  findInvoices(request: FindInvoicesRequest, ctx: Context): Promise<FindInvoicesResponse>;
-
+  findInvoices(
+    request: FindInvoicesRequest,
+    ctx: Context,
+  ): Promise<FindInvoicesResponse>;
 }
 
 export interface BillingServiceClient<Context extends DataLoaders> {
+  createCustomer(
+    request: CreateCustomerRequest,
+    ctx?: Context,
+  ): Observable<CreateCustomerResponse>;
 
-  createCustomer(request: CreateCustomerRequest, ctx?: Context): Observable<CreateCustomerResponse>;
+  deleteCustomer(
+    request: DeleteCustomerRequest,
+    ctx?: Context,
+  ): Observable<DeleteCustomerResponse>;
 
-  deleteCustomer(request: DeleteCustomerRequest, ctx?: Context): Observable<DeleteCustomerResponse>;
+  readCustomer(
+    request: ReadCustomerRequest,
+    ctx?: Context,
+  ): Observable<ReadCustomerResponse>;
 
-  readCustomer(request: ReadCustomerRequest, ctx?: Context): Observable<ReadCustomerResponse>;
+  createPlan(
+    request: CreatePlanRequest,
+    ctx?: Context,
+  ): Observable<CreatePlanResponse>;
 
-  createPlan(request: CreatePlanRequest, ctx?: Context): Observable<CreatePlanResponse>;
+  readPlan(
+    request: ReadPlanRequest,
+    ctx?: Context,
+  ): Observable<ReadPlanResponse>;
 
-  readPlan(request: ReadPlanRequest, ctx?: Context): Observable<ReadPlanResponse>;
+  findPlans(
+    request: FindPlansRequest,
+    ctx?: Context,
+  ): Observable<FindPlansResponse>;
 
-  findPlans(request: FindPlansRequest, ctx?: Context): Observable<FindPlansResponse>;
+  readStripePlan(
+    request: ReadStripePlanRequest,
+    ctx?: Context,
+  ): Observable<ReadStripePlanResponse>;
 
-  readStripePlan(request: ReadStripePlanRequest, ctx?: Context): Observable<ReadStripePlanResponse>;
+  findStripePlans(
+    request: FindStripePlansRequest,
+    ctx?: Context,
+  ): Observable<FindStripePlansResponse>;
 
-  findStripePlans(request: FindStripePlansRequest, ctx?: Context): Observable<FindStripePlansResponse>;
+  createCard(
+    request: CreateCardRequest,
+    ctx?: Context,
+  ): Observable<CreateCardResponse>;
 
-  createCard(request: CreateCardRequest, ctx?: Context): Observable<CreateCardResponse>;
+  deleteCard(
+    request: DeleteCardRequest,
+    ctx?: Context,
+  ): Observable<DeleteCardResponse>;
 
-  deleteCard(request: DeleteCardRequest, ctx?: Context): Observable<DeleteCardResponse>;
+  setDefaultCard(
+    request: SetDefaultCardRequest,
+    ctx?: Context,
+  ): Observable<SetDefaultCardResponse>;
 
-  setDefaultCard(request: SetDefaultCardRequest, ctx?: Context): Observable<SetDefaultCardResponse>;
+  readCard(
+    request: ReadCardRequest,
+    ctx?: Context,
+  ): Observable<ReadCardResponse>;
 
-  readCard(request: ReadCardRequest, ctx?: Context): Observable<ReadCardResponse>;
+  findCards(
+    request: FindCardsRequest,
+    ctx?: Context,
+  ): Observable<FindCardsResponse>;
 
-  findCards(request: FindCardsRequest, ctx?: Context): Observable<FindCardsResponse>;
+  createSubscription(
+    request: CreateSubscriptionRequest,
+    ctx?: Context,
+  ): Observable<CreateSubscriptionResponse>;
 
-  createSubscription(request: CreateSubscriptionRequest, ctx?: Context): Observable<CreateSubscriptionResponse>;
+  cancelSubscription(
+    request: CancelSubscriptionRequest,
+    ctx?: Context,
+  ): Observable<CancelSubscriptionResponse>;
 
-  cancelSubscription(request: CancelSubscriptionRequest, ctx?: Context): Observable<CancelSubscriptionResponse>;
+  changeSubscription(
+    request: ChangeSubscriptionRequest,
+    ctx?: Context,
+  ): Observable<ChangeSubscriptionResponse>;
 
-  changeSubscription(request: ChangeSubscriptionRequest, ctx?: Context): Observable<ChangeSubscriptionResponse>;
+  readSubscription(
+    request: ReadSubscriptionRequest,
+    ctx?: Context,
+  ): Observable<ReadSubscriptionResponse>;
 
-  readSubscription(request: ReadSubscriptionRequest, ctx?: Context): Observable<ReadSubscriptionResponse>;
+  findSubscriptions(
+    request: FindSubscriptionsRequest,
+    ctx?: Context,
+  ): Observable<FindSubscriptionsResponse>;
 
-  findSubscriptions(request: FindSubscriptionsRequest, ctx?: Context): Observable<FindSubscriptionsResponse>;
+  readInvoice(
+    request: ReadInvoiceRequest,
+    ctx?: Context,
+  ): Observable<ReadInvoiceResponse>;
 
-  readInvoice(request: ReadInvoiceRequest, ctx?: Context): Observable<ReadInvoiceResponse>;
-
-  findInvoices(request: FindInvoicesRequest, ctx?: Context): Observable<FindInvoicesResponse>;
-
+  findInvoices(
+    request: FindInvoicesRequest,
+    ctx?: Context,
+  ): Observable<FindInvoicesResponse>;
 }
 
 interface DataLoaders {
-
   getDataLoader<T>(identifier: string, constructorFn: () => T): T;
-
 }
 
 export const PlanPriceInterval = {
@@ -883,16 +984,16 @@ export const PlanPriceInterval = {
   fromJSON(object: any): PlanPriceInterval {
     switch (object) {
       case 0:
-      case "MONTH":
+      case 'MONTH':
         return PlanPriceInterval.MONTH;
       case 1:
-      case "YEAR":
+      case 'YEAR':
         return PlanPriceInterval.YEAR;
       case 2:
-      case "WEEK":
+      case 'WEEK':
         return PlanPriceInterval.WEEK;
       case 3:
-      case "DAY":
+      case 'DAY':
         return PlanPriceInterval.DAY;
       default:
         throw new global.Error(`Invalid value ${object}`);
@@ -901,18 +1002,18 @@ export const PlanPriceInterval = {
   toJSON(object: PlanPriceInterval): string {
     switch (object) {
       case PlanPriceInterval.MONTH:
-        return "MONTH";
+        return 'MONTH';
       case PlanPriceInterval.YEAR:
-        return "YEAR";
+        return 'YEAR';
       case PlanPriceInterval.WEEK:
-        return "WEEK";
+        return 'WEEK';
       case PlanPriceInterval.DAY:
-        return "DAY";
+        return 'DAY';
       default:
-        return "UNKNOWN";
+        return 'UNKNOWN';
     }
   },
-}
+};
 
 export type PlanPriceInterval = 0 | 1 | 2 | 3;
 
@@ -925,19 +1026,19 @@ export const InvoiceStatus = {
   fromJSON(object: any): InvoiceStatus {
     switch (object) {
       case 0:
-      case "DRAFT":
+      case 'DRAFT':
         return InvoiceStatus.DRAFT;
       case 1:
-      case "OPEN":
+      case 'OPEN':
         return InvoiceStatus.OPEN;
       case 2:
-      case "PAID":
+      case 'PAID':
         return InvoiceStatus.PAID;
       case 3:
-      case "UNCOLLECTIBLE":
+      case 'UNCOLLECTIBLE':
         return InvoiceStatus.UNCOLLECTIBLE;
       case 4:
-      case "VOID":
+      case 'VOID':
         return InvoiceStatus.VOID;
       default:
         throw new global.Error(`Invalid value ${object}`);
@@ -946,20 +1047,20 @@ export const InvoiceStatus = {
   toJSON(object: InvoiceStatus): string {
     switch (object) {
       case InvoiceStatus.DRAFT:
-        return "DRAFT";
+        return 'DRAFT';
       case InvoiceStatus.OPEN:
-        return "OPEN";
+        return 'OPEN';
       case InvoiceStatus.PAID:
-        return "PAID";
+        return 'PAID';
       case InvoiceStatus.UNCOLLECTIBLE:
-        return "UNCOLLECTIBLE";
+        return 'UNCOLLECTIBLE';
       case InvoiceStatus.VOID:
-        return "VOID";
+        return 'VOID';
       default:
-        return "UNKNOWN";
+        return 'UNKNOWN';
     }
   },
-}
+};
 
 export type InvoiceStatus = 0 | 1 | 2 | 3 | 4;
 
@@ -975,28 +1076,28 @@ export const SubscriptionStatus = {
   fromJSON(object: any): SubscriptionStatus {
     switch (object) {
       case 0:
-      case "ACTIVE":
+      case 'ACTIVE':
         return SubscriptionStatus.ACTIVE;
       case 1:
-      case "ALL":
+      case 'ALL':
         return SubscriptionStatus.ALL;
       case 2:
-      case "CANCELED":
+      case 'CANCELED':
         return SubscriptionStatus.CANCELED;
       case 3:
-      case "INCOMPLETE":
+      case 'INCOMPLETE':
         return SubscriptionStatus.INCOMPLETE;
       case 4:
-      case "INCOMPLETE_EXPIRED":
+      case 'INCOMPLETE_EXPIRED':
         return SubscriptionStatus.INCOMPLETE_EXPIRED;
       case 5:
-      case "PAST_DUE":
+      case 'PAST_DUE':
         return SubscriptionStatus.PAST_DUE;
       case 6:
-      case "TRIALING":
+      case 'TRIALING':
         return SubscriptionStatus.TRIALING;
       case 7:
-      case "UNPAID":
+      case 'UNPAID':
         return SubscriptionStatus.UNPAID;
       default:
         throw new global.Error(`Invalid value ${object}`);
@@ -1005,31 +1106,34 @@ export const SubscriptionStatus = {
   toJSON(object: SubscriptionStatus): string {
     switch (object) {
       case SubscriptionStatus.ACTIVE:
-        return "ACTIVE";
+        return 'ACTIVE';
       case SubscriptionStatus.ALL:
-        return "ALL";
+        return 'ALL';
       case SubscriptionStatus.CANCELED:
-        return "CANCELED";
+        return 'CANCELED';
       case SubscriptionStatus.INCOMPLETE:
-        return "INCOMPLETE";
+        return 'INCOMPLETE';
       case SubscriptionStatus.INCOMPLETE_EXPIRED:
-        return "INCOMPLETE_EXPIRED";
+        return 'INCOMPLETE_EXPIRED';
       case SubscriptionStatus.PAST_DUE:
-        return "PAST_DUE";
+        return 'PAST_DUE';
       case SubscriptionStatus.TRIALING:
-        return "TRIALING";
+        return 'TRIALING';
       case SubscriptionStatus.UNPAID:
-        return "UNPAID";
+        return 'UNPAID';
       default:
-        return "UNKNOWN";
+        return 'UNKNOWN';
     }
   },
-}
+};
 
 export type SubscriptionStatus = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export const TenantSubscription = {
-  encode(message: TenantSubscription, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: TenantSubscription,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.tenantId);
     writer.uint32(26).string(message.status);
@@ -1136,17 +1240,26 @@ export const TenantSubscription = {
     } else {
       message.updatedAt = '';
     }
-    if (object.collectionMethod !== undefined && object.collectionMethod !== null) {
+    if (
+      object.collectionMethod !== undefined &&
+      object.collectionMethod !== null
+    ) {
       message.collectionMethod = String(object.collectionMethod);
     } else {
       message.collectionMethod = '';
     }
-    if (object.currentPeriodStart !== undefined && object.currentPeriodStart !== null) {
+    if (
+      object.currentPeriodStart !== undefined &&
+      object.currentPeriodStart !== null
+    ) {
       message.currentPeriodStart = String(object.currentPeriodStart);
     } else {
       message.currentPeriodStart = '';
     }
-    if (object.currentPeriodEnd !== undefined && object.currentPeriodEnd !== null) {
+    if (
+      object.currentPeriodEnd !== undefined &&
+      object.currentPeriodEnd !== null
+    ) {
       message.currentPeriodEnd = String(object.currentPeriodEnd);
     } else {
       message.currentPeriodEnd = '';
@@ -1161,7 +1274,10 @@ export const TenantSubscription = {
     } else {
       message.canceledAt = '';
     }
-    if (object.latestInvoiceId !== undefined && object.latestInvoiceId !== null) {
+    if (
+      object.latestInvoiceId !== undefined &&
+      object.latestInvoiceId !== null
+    ) {
       message.latestInvoiceId = String(object.latestInvoiceId);
     } else {
       message.latestInvoiceId = '';
@@ -1220,17 +1336,26 @@ export const TenantSubscription = {
     } else {
       message.updatedAt = '';
     }
-    if (object.collectionMethod !== undefined && object.collectionMethod !== null) {
+    if (
+      object.collectionMethod !== undefined &&
+      object.collectionMethod !== null
+    ) {
       message.collectionMethod = object.collectionMethod;
     } else {
       message.collectionMethod = '';
     }
-    if (object.currentPeriodStart !== undefined && object.currentPeriodStart !== null) {
+    if (
+      object.currentPeriodStart !== undefined &&
+      object.currentPeriodStart !== null
+    ) {
       message.currentPeriodStart = object.currentPeriodStart;
     } else {
       message.currentPeriodStart = '';
     }
-    if (object.currentPeriodEnd !== undefined && object.currentPeriodEnd !== null) {
+    if (
+      object.currentPeriodEnd !== undefined &&
+      object.currentPeriodEnd !== null
+    ) {
       message.currentPeriodEnd = object.currentPeriodEnd;
     } else {
       message.currentPeriodEnd = '';
@@ -1245,7 +1370,10 @@ export const TenantSubscription = {
     } else {
       message.canceledAt = '';
     }
-    if (object.latestInvoiceId !== undefined && object.latestInvoiceId !== null) {
+    if (
+      object.latestInvoiceId !== undefined &&
+      object.latestInvoiceId !== null
+    ) {
       message.latestInvoiceId = object.latestInvoiceId;
     } else {
       message.latestInvoiceId = '';
@@ -2250,7 +2378,9 @@ export const Plan = {
     obj.normalizedName = message.normalizedName || '';
     obj.price = message.price ? Price.toJSON(message.price) : undefined;
     if (message.features) {
-      obj.features = message.features.map(e => e ? Feature.toJSON(e) : undefined);
+      obj.features = message.features.map((e) =>
+        e ? Feature.toJSON(e) : undefined,
+      );
     } else {
       obj.features = [];
     }
@@ -2416,7 +2546,10 @@ export const Invoice = {
     } else {
       message.amountPaid = 0;
     }
-    if (object.amountRemaining !== undefined && object.amountRemaining !== null) {
+    if (
+      object.amountRemaining !== undefined &&
+      object.amountRemaining !== null
+    ) {
       message.amountRemaining = Number(object.amountRemaining);
     } else {
       message.amountRemaining = 0;
@@ -2456,7 +2589,10 @@ export const Invoice = {
     } else {
       message.endingBalance = 0;
     }
-    if (object.hostedInvoiceUrl !== undefined && object.hostedInvoiceUrl !== null) {
+    if (
+      object.hostedInvoiceUrl !== undefined &&
+      object.hostedInvoiceUrl !== null
+    ) {
       message.hostedInvoiceUrl = String(object.hostedInvoiceUrl);
     } else {
       message.hostedInvoiceUrl = '';
@@ -2481,12 +2617,18 @@ export const Invoice = {
     } else {
       message.receiptNumber = '';
     }
-    if (object.startingBalance !== undefined && object.startingBalance !== null) {
+    if (
+      object.startingBalance !== undefined &&
+      object.startingBalance !== null
+    ) {
       message.startingBalance = Number(object.startingBalance);
     } else {
       message.startingBalance = 0;
     }
-    if (object.statementDescriptor !== undefined && object.statementDescriptor !== null) {
+    if (
+      object.statementDescriptor !== undefined &&
+      object.statementDescriptor !== null
+    ) {
       message.statementDescriptor = String(object.statementDescriptor);
     } else {
       message.statementDescriptor = '';
@@ -2555,7 +2697,10 @@ export const Invoice = {
     } else {
       message.amountPaid = 0;
     }
-    if (object.amountRemaining !== undefined && object.amountRemaining !== null) {
+    if (
+      object.amountRemaining !== undefined &&
+      object.amountRemaining !== null
+    ) {
       message.amountRemaining = object.amountRemaining;
     } else {
       message.amountRemaining = 0;
@@ -2595,7 +2740,10 @@ export const Invoice = {
     } else {
       message.endingBalance = 0;
     }
-    if (object.hostedInvoiceUrl !== undefined && object.hostedInvoiceUrl !== null) {
+    if (
+      object.hostedInvoiceUrl !== undefined &&
+      object.hostedInvoiceUrl !== null
+    ) {
       message.hostedInvoiceUrl = object.hostedInvoiceUrl;
     } else {
       message.hostedInvoiceUrl = '';
@@ -2620,12 +2768,18 @@ export const Invoice = {
     } else {
       message.receiptNumber = '';
     }
-    if (object.startingBalance !== undefined && object.startingBalance !== null) {
+    if (
+      object.startingBalance !== undefined &&
+      object.startingBalance !== null
+    ) {
       message.startingBalance = object.startingBalance;
     } else {
       message.startingBalance = 0;
     }
-    if (object.statementDescriptor !== undefined && object.statementDescriptor !== null) {
+    if (
+      object.statementDescriptor !== undefined &&
+      object.statementDescriptor !== null
+    ) {
       message.statementDescriptor = object.statementDescriptor;
     } else {
       message.statementDescriptor = '';
@@ -2701,7 +2855,10 @@ export const Invoice = {
 };
 
 export const CreatePriceRequest = {
-  encode(message: CreatePriceRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreatePriceRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(13).float(message.price);
     writer.uint32(18).string(message.currency);
     writer.uint32(26).string(message.id);
@@ -2865,7 +3022,9 @@ export const CreatePlanRequest = {
           message.description = reader.string();
           break;
         case 3:
-          message.prices.push(CreatePriceRequest.decode(reader, reader.uint32()));
+          message.prices.push(
+            CreatePriceRequest.decode(reader, reader.uint32()),
+          );
           break;
         case 4:
           message.features.push(Feature.decode(reader, reader.uint32()));
@@ -2960,12 +3119,16 @@ export const CreatePlanRequest = {
     obj.name = message.name || '';
     obj.description = message.description || '';
     if (message.prices) {
-      obj.prices = message.prices.map(e => e ? CreatePriceRequest.toJSON(e) : undefined);
+      obj.prices = message.prices.map((e) =>
+        e ? CreatePriceRequest.toJSON(e) : undefined,
+      );
     } else {
       obj.prices = [];
     }
     if (message.features) {
-      obj.features = message.features.map(e => e ? Feature.toJSON(e) : undefined);
+      obj.features = message.features.map((e) =>
+        e ? Feature.toJSON(e) : undefined,
+      );
     } else {
       obj.features = [];
     }
@@ -2976,7 +3139,10 @@ export const CreatePlanRequest = {
 };
 
 export const CreatePlanResponse = {
-  encode(message: CreatePlanResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreatePlanResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.plan !== undefined && message.plan !== undefined) {
       Plan.encode(message.plan, writer.uint32(10).fork()).ldelim();
     }
@@ -3195,7 +3361,7 @@ export const FindPlansResponse = {
   toJSON(message: FindPlansResponse): unknown {
     const obj: any = {};
     if (message.plans) {
-      obj.plans = message.plans.map(e => e ? Plan.toJSON(e) : undefined);
+      obj.plans = message.plans.map((e) => (e ? Plan.toJSON(e) : undefined));
     } else {
       obj.plans = [];
     }
@@ -3204,13 +3370,18 @@ export const FindPlansResponse = {
 };
 
 export const ReadStripePlanRequest = {
-  encode(message: ReadStripePlanRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadStripePlanRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
   decode(reader: Reader, length?: number): ReadStripePlanRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadStripePlanRequest) as ReadStripePlanRequest;
+    const message = Object.create(
+      baseReadStripePlanRequest,
+    ) as ReadStripePlanRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3225,7 +3396,9 @@ export const ReadStripePlanRequest = {
     return message;
   },
   fromJSON(object: any): ReadStripePlanRequest {
-    const message = Object.create(baseReadStripePlanRequest) as ReadStripePlanRequest;
+    const message = Object.create(
+      baseReadStripePlanRequest,
+    ) as ReadStripePlanRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -3233,8 +3406,12 @@ export const ReadStripePlanRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ReadStripePlanRequest>): ReadStripePlanRequest {
-    const message = Object.create(baseReadStripePlanRequest) as ReadStripePlanRequest;
+  fromPartial(
+    object: DeepPartial<ReadStripePlanRequest>,
+  ): ReadStripePlanRequest {
+    const message = Object.create(
+      baseReadStripePlanRequest,
+    ) as ReadStripePlanRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -3250,7 +3427,10 @@ export const ReadStripePlanRequest = {
 };
 
 export const ReadStripePlanResponse = {
-  encode(message: ReadStripePlanResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadStripePlanResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.plan !== undefined && message.plan !== undefined) {
       StripePlan.encode(message.plan, writer.uint32(10).fork()).ldelim();
     }
@@ -3258,7 +3438,9 @@ export const ReadStripePlanResponse = {
   },
   decode(reader: Reader, length?: number): ReadStripePlanResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadStripePlanResponse) as ReadStripePlanResponse;
+    const message = Object.create(
+      baseReadStripePlanResponse,
+    ) as ReadStripePlanResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3273,7 +3455,9 @@ export const ReadStripePlanResponse = {
     return message;
   },
   fromJSON(object: any): ReadStripePlanResponse {
-    const message = Object.create(baseReadStripePlanResponse) as ReadStripePlanResponse;
+    const message = Object.create(
+      baseReadStripePlanResponse,
+    ) as ReadStripePlanResponse;
     if (object.plan !== undefined && object.plan !== null) {
       message.plan = StripePlan.fromJSON(object.plan);
     } else {
@@ -3281,8 +3465,12 @@ export const ReadStripePlanResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ReadStripePlanResponse>): ReadStripePlanResponse {
-    const message = Object.create(baseReadStripePlanResponse) as ReadStripePlanResponse;
+  fromPartial(
+    object: DeepPartial<ReadStripePlanResponse>,
+  ): ReadStripePlanResponse {
+    const message = Object.create(
+      baseReadStripePlanResponse,
+    ) as ReadStripePlanResponse;
     if (object.plan !== undefined && object.plan !== null) {
       message.plan = StripePlan.fromPartial(object.plan);
     } else {
@@ -3298,13 +3486,18 @@ export const ReadStripePlanResponse = {
 };
 
 export const FindStripePlansRequest = {
-  encode(message: FindStripePlansRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindStripePlansRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.productId);
     return writer;
   },
   decode(reader: Reader, length?: number): FindStripePlansRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindStripePlansRequest) as FindStripePlansRequest;
+    const message = Object.create(
+      baseFindStripePlansRequest,
+    ) as FindStripePlansRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3319,7 +3512,9 @@ export const FindStripePlansRequest = {
     return message;
   },
   fromJSON(object: any): FindStripePlansRequest {
-    const message = Object.create(baseFindStripePlansRequest) as FindStripePlansRequest;
+    const message = Object.create(
+      baseFindStripePlansRequest,
+    ) as FindStripePlansRequest;
     if (object.productId !== undefined && object.productId !== null) {
       message.productId = String(object.productId);
     } else {
@@ -3327,8 +3522,12 @@ export const FindStripePlansRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<FindStripePlansRequest>): FindStripePlansRequest {
-    const message = Object.create(baseFindStripePlansRequest) as FindStripePlansRequest;
+  fromPartial(
+    object: DeepPartial<FindStripePlansRequest>,
+  ): FindStripePlansRequest {
+    const message = Object.create(
+      baseFindStripePlansRequest,
+    ) as FindStripePlansRequest;
     if (object.productId !== undefined && object.productId !== null) {
       message.productId = object.productId;
     } else {
@@ -3344,7 +3543,10 @@ export const FindStripePlansRequest = {
 };
 
 export const FindStripePlansResponse = {
-  encode(message: FindStripePlansResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindStripePlansResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.plans) {
       StripePlan.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3352,7 +3554,9 @@ export const FindStripePlansResponse = {
   },
   decode(reader: Reader, length?: number): FindStripePlansResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindStripePlansResponse) as FindStripePlansResponse;
+    const message = Object.create(
+      baseFindStripePlansResponse,
+    ) as FindStripePlansResponse;
     message.plans = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3368,7 +3572,9 @@ export const FindStripePlansResponse = {
     return message;
   },
   fromJSON(object: any): FindStripePlansResponse {
-    const message = Object.create(baseFindStripePlansResponse) as FindStripePlansResponse;
+    const message = Object.create(
+      baseFindStripePlansResponse,
+    ) as FindStripePlansResponse;
     message.plans = [];
     if (object.plans !== undefined && object.plans !== null) {
       for (const e of object.plans) {
@@ -3377,8 +3583,12 @@ export const FindStripePlansResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<FindStripePlansResponse>): FindStripePlansResponse {
-    const message = Object.create(baseFindStripePlansResponse) as FindStripePlansResponse;
+  fromPartial(
+    object: DeepPartial<FindStripePlansResponse>,
+  ): FindStripePlansResponse {
+    const message = Object.create(
+      baseFindStripePlansResponse,
+    ) as FindStripePlansResponse;
     message.plans = [];
     if (object.plans !== undefined && object.plans !== null) {
       for (const e of object.plans) {
@@ -3390,7 +3600,9 @@ export const FindStripePlansResponse = {
   toJSON(message: FindStripePlansResponse): unknown {
     const obj: any = {};
     if (message.plans) {
-      obj.plans = message.plans.map(e => e ? StripePlan.toJSON(e) : undefined);
+      obj.plans = message.plans.map((e) =>
+        e ? StripePlan.toJSON(e) : undefined,
+      );
     } else {
       obj.plans = [];
     }
@@ -3399,7 +3611,10 @@ export const FindStripePlansResponse = {
 };
 
 export const ReadInvoiceRequest = {
-  encode(message: ReadInvoiceRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadInvoiceRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
@@ -3445,7 +3660,10 @@ export const ReadInvoiceRequest = {
 };
 
 export const ReadInvoiceResponse = {
-  encode(message: ReadInvoiceResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadInvoiceResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.invoice !== undefined && message.invoice !== undefined) {
       Invoice.encode(message.invoice, writer.uint32(10).fork()).ldelim();
     }
@@ -3453,7 +3671,9 @@ export const ReadInvoiceResponse = {
   },
   decode(reader: Reader, length?: number): ReadInvoiceResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadInvoiceResponse) as ReadInvoiceResponse;
+    const message = Object.create(
+      baseReadInvoiceResponse,
+    ) as ReadInvoiceResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3468,7 +3688,9 @@ export const ReadInvoiceResponse = {
     return message;
   },
   fromJSON(object: any): ReadInvoiceResponse {
-    const message = Object.create(baseReadInvoiceResponse) as ReadInvoiceResponse;
+    const message = Object.create(
+      baseReadInvoiceResponse,
+    ) as ReadInvoiceResponse;
     if (object.invoice !== undefined && object.invoice !== null) {
       message.invoice = Invoice.fromJSON(object.invoice);
     } else {
@@ -3477,7 +3699,9 @@ export const ReadInvoiceResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadInvoiceResponse>): ReadInvoiceResponse {
-    const message = Object.create(baseReadInvoiceResponse) as ReadInvoiceResponse;
+    const message = Object.create(
+      baseReadInvoiceResponse,
+    ) as ReadInvoiceResponse;
     if (object.invoice !== undefined && object.invoice !== null) {
       message.invoice = Invoice.fromPartial(object.invoice);
     } else {
@@ -3493,12 +3717,17 @@ export const ReadInvoiceResponse = {
 };
 
 export const FindInvoicesRequest = {
-  encode(message: FindInvoicesRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindInvoicesRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     return writer;
   },
   decode(reader: Reader, length?: number): FindInvoicesRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindInvoicesRequest) as FindInvoicesRequest;
+    const message = Object.create(
+      baseFindInvoicesRequest,
+    ) as FindInvoicesRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3510,11 +3739,15 @@ export const FindInvoicesRequest = {
     return message;
   },
   fromJSON(object: any): FindInvoicesRequest {
-    const message = Object.create(baseFindInvoicesRequest) as FindInvoicesRequest;
+    const message = Object.create(
+      baseFindInvoicesRequest,
+    ) as FindInvoicesRequest;
     return message;
   },
   fromPartial(object: DeepPartial<FindInvoicesRequest>): FindInvoicesRequest {
-    const message = Object.create(baseFindInvoicesRequest) as FindInvoicesRequest;
+    const message = Object.create(
+      baseFindInvoicesRequest,
+    ) as FindInvoicesRequest;
     return message;
   },
   toJSON(message: FindInvoicesRequest): unknown {
@@ -3524,7 +3757,10 @@ export const FindInvoicesRequest = {
 };
 
 export const FindInvoicesResponse = {
-  encode(message: FindInvoicesResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindInvoicesResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.invoices) {
       Invoice.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3532,7 +3768,9 @@ export const FindInvoicesResponse = {
   },
   decode(reader: Reader, length?: number): FindInvoicesResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindInvoicesResponse) as FindInvoicesResponse;
+    const message = Object.create(
+      baseFindInvoicesResponse,
+    ) as FindInvoicesResponse;
     message.invoices = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3548,7 +3786,9 @@ export const FindInvoicesResponse = {
     return message;
   },
   fromJSON(object: any): FindInvoicesResponse {
-    const message = Object.create(baseFindInvoicesResponse) as FindInvoicesResponse;
+    const message = Object.create(
+      baseFindInvoicesResponse,
+    ) as FindInvoicesResponse;
     message.invoices = [];
     if (object.invoices !== undefined && object.invoices !== null) {
       for (const e of object.invoices) {
@@ -3558,7 +3798,9 @@ export const FindInvoicesResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<FindInvoicesResponse>): FindInvoicesResponse {
-    const message = Object.create(baseFindInvoicesResponse) as FindInvoicesResponse;
+    const message = Object.create(
+      baseFindInvoicesResponse,
+    ) as FindInvoicesResponse;
     message.invoices = [];
     if (object.invoices !== undefined && object.invoices !== null) {
       for (const e of object.invoices) {
@@ -3570,7 +3812,9 @@ export const FindInvoicesResponse = {
   toJSON(message: FindInvoicesResponse): unknown {
     const obj: any = {};
     if (message.invoices) {
-      obj.invoices = message.invoices.map(e => e ? Invoice.toJSON(e) : undefined);
+      obj.invoices = message.invoices.map((e) =>
+        e ? Invoice.toJSON(e) : undefined,
+      );
     } else {
       obj.invoices = [];
     }
@@ -3579,7 +3823,10 @@ export const FindInvoicesResponse = {
 };
 
 export const CreateSubscriptionRequest = {
-  encode(message: CreateSubscriptionRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateSubscriptionRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.customerId);
     writer.uint32(18).string(message.tenantId);
     writer.uint32(26).string(message.planId);
@@ -3589,7 +3836,9 @@ export const CreateSubscriptionRequest = {
   },
   decode(reader: Reader, length?: number): CreateSubscriptionRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateSubscriptionRequest) as CreateSubscriptionRequest;
+    const message = Object.create(
+      baseCreateSubscriptionRequest,
+    ) as CreateSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3616,7 +3865,9 @@ export const CreateSubscriptionRequest = {
     return message;
   },
   fromJSON(object: any): CreateSubscriptionRequest {
-    const message = Object.create(baseCreateSubscriptionRequest) as CreateSubscriptionRequest;
+    const message = Object.create(
+      baseCreateSubscriptionRequest,
+    ) as CreateSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = String(object.customerId);
     } else {
@@ -3644,8 +3895,12 @@ export const CreateSubscriptionRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateSubscriptionRequest>): CreateSubscriptionRequest {
-    const message = Object.create(baseCreateSubscriptionRequest) as CreateSubscriptionRequest;
+  fromPartial(
+    object: DeepPartial<CreateSubscriptionRequest>,
+  ): CreateSubscriptionRequest {
+    const message = Object.create(
+      baseCreateSubscriptionRequest,
+    ) as CreateSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = object.customerId;
     } else {
@@ -3685,20 +3940,34 @@ export const CreateSubscriptionRequest = {
 };
 
 export const CreateSubscriptionResponse = {
-  encode(message: CreateSubscriptionResponse, writer: Writer = Writer.create()): Writer {
-    if (message.subscription !== undefined && message.subscription !== undefined) {
-      TenantSubscription.encode(message.subscription, writer.uint32(10).fork()).ldelim();
+  encode(
+    message: CreateSubscriptionResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
+    if (
+      message.subscription !== undefined &&
+      message.subscription !== undefined
+    ) {
+      TenantSubscription.encode(
+        message.subscription,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     return writer;
   },
   decode(reader: Reader, length?: number): CreateSubscriptionResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateSubscriptionResponse) as CreateSubscriptionResponse;
+    const message = Object.create(
+      baseCreateSubscriptionResponse,
+    ) as CreateSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subscription = TenantSubscription.decode(reader, reader.uint32());
+          message.subscription = TenantSubscription.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -3708,7 +3977,9 @@ export const CreateSubscriptionResponse = {
     return message;
   },
   fromJSON(object: any): CreateSubscriptionResponse {
-    const message = Object.create(baseCreateSubscriptionResponse) as CreateSubscriptionResponse;
+    const message = Object.create(
+      baseCreateSubscriptionResponse,
+    ) as CreateSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
       message.subscription = TenantSubscription.fromJSON(object.subscription);
     } else {
@@ -3716,10 +3987,16 @@ export const CreateSubscriptionResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateSubscriptionResponse>): CreateSubscriptionResponse {
-    const message = Object.create(baseCreateSubscriptionResponse) as CreateSubscriptionResponse;
+  fromPartial(
+    object: DeepPartial<CreateSubscriptionResponse>,
+  ): CreateSubscriptionResponse {
+    const message = Object.create(
+      baseCreateSubscriptionResponse,
+    ) as CreateSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
-      message.subscription = TenantSubscription.fromPartial(object.subscription);
+      message.subscription = TenantSubscription.fromPartial(
+        object.subscription,
+      );
     } else {
       message.subscription = undefined;
     }
@@ -3727,13 +4004,18 @@ export const CreateSubscriptionResponse = {
   },
   toJSON(message: CreateSubscriptionResponse): unknown {
     const obj: any = {};
-    obj.subscription = message.subscription ? TenantSubscription.toJSON(message.subscription) : undefined;
+    obj.subscription = message.subscription
+      ? TenantSubscription.toJSON(message.subscription)
+      : undefined;
     return obj;
   },
 };
 
 export const ChangeSubscriptionRequest = {
-  encode(message: ChangeSubscriptionRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ChangeSubscriptionRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.customerId);
     writer.uint32(18).string(message.tenantId);
     writer.uint32(26).string(message.planId);
@@ -3742,7 +4024,9 @@ export const ChangeSubscriptionRequest = {
   },
   decode(reader: Reader, length?: number): ChangeSubscriptionRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseChangeSubscriptionRequest) as ChangeSubscriptionRequest;
+    const message = Object.create(
+      baseChangeSubscriptionRequest,
+    ) as ChangeSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3766,7 +4050,9 @@ export const ChangeSubscriptionRequest = {
     return message;
   },
   fromJSON(object: any): ChangeSubscriptionRequest {
-    const message = Object.create(baseChangeSubscriptionRequest) as ChangeSubscriptionRequest;
+    const message = Object.create(
+      baseChangeSubscriptionRequest,
+    ) as ChangeSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = String(object.customerId);
     } else {
@@ -3789,8 +4075,12 @@ export const ChangeSubscriptionRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ChangeSubscriptionRequest>): ChangeSubscriptionRequest {
-    const message = Object.create(baseChangeSubscriptionRequest) as ChangeSubscriptionRequest;
+  fromPartial(
+    object: DeepPartial<ChangeSubscriptionRequest>,
+  ): ChangeSubscriptionRequest {
+    const message = Object.create(
+      baseChangeSubscriptionRequest,
+    ) as ChangeSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = object.customerId;
     } else {
@@ -3824,20 +4114,34 @@ export const ChangeSubscriptionRequest = {
 };
 
 export const ChangeSubscriptionResponse = {
-  encode(message: ChangeSubscriptionResponse, writer: Writer = Writer.create()): Writer {
-    if (message.subscription !== undefined && message.subscription !== undefined) {
-      TenantSubscription.encode(message.subscription, writer.uint32(10).fork()).ldelim();
+  encode(
+    message: ChangeSubscriptionResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
+    if (
+      message.subscription !== undefined &&
+      message.subscription !== undefined
+    ) {
+      TenantSubscription.encode(
+        message.subscription,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     return writer;
   },
   decode(reader: Reader, length?: number): ChangeSubscriptionResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseChangeSubscriptionResponse) as ChangeSubscriptionResponse;
+    const message = Object.create(
+      baseChangeSubscriptionResponse,
+    ) as ChangeSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subscription = TenantSubscription.decode(reader, reader.uint32());
+          message.subscription = TenantSubscription.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -3847,7 +4151,9 @@ export const ChangeSubscriptionResponse = {
     return message;
   },
   fromJSON(object: any): ChangeSubscriptionResponse {
-    const message = Object.create(baseChangeSubscriptionResponse) as ChangeSubscriptionResponse;
+    const message = Object.create(
+      baseChangeSubscriptionResponse,
+    ) as ChangeSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
       message.subscription = TenantSubscription.fromJSON(object.subscription);
     } else {
@@ -3855,10 +4161,16 @@ export const ChangeSubscriptionResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ChangeSubscriptionResponse>): ChangeSubscriptionResponse {
-    const message = Object.create(baseChangeSubscriptionResponse) as ChangeSubscriptionResponse;
+  fromPartial(
+    object: DeepPartial<ChangeSubscriptionResponse>,
+  ): ChangeSubscriptionResponse {
+    const message = Object.create(
+      baseChangeSubscriptionResponse,
+    ) as ChangeSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
-      message.subscription = TenantSubscription.fromPartial(object.subscription);
+      message.subscription = TenantSubscription.fromPartial(
+        object.subscription,
+      );
     } else {
       message.subscription = undefined;
     }
@@ -3866,20 +4178,27 @@ export const ChangeSubscriptionResponse = {
   },
   toJSON(message: ChangeSubscriptionResponse): unknown {
     const obj: any = {};
-    obj.subscription = message.subscription ? TenantSubscription.toJSON(message.subscription) : undefined;
+    obj.subscription = message.subscription
+      ? TenantSubscription.toJSON(message.subscription)
+      : undefined;
     return obj;
   },
 };
 
 export const CancelSubscriptionRequest = {
-  encode(message: CancelSubscriptionRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CancelSubscriptionRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.customerId);
     writer.uint32(18).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): CancelSubscriptionRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCancelSubscriptionRequest) as CancelSubscriptionRequest;
+    const message = Object.create(
+      baseCancelSubscriptionRequest,
+    ) as CancelSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3897,7 +4216,9 @@ export const CancelSubscriptionRequest = {
     return message;
   },
   fromJSON(object: any): CancelSubscriptionRequest {
-    const message = Object.create(baseCancelSubscriptionRequest) as CancelSubscriptionRequest;
+    const message = Object.create(
+      baseCancelSubscriptionRequest,
+    ) as CancelSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = String(object.customerId);
     } else {
@@ -3910,8 +4231,12 @@ export const CancelSubscriptionRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CancelSubscriptionRequest>): CancelSubscriptionRequest {
-    const message = Object.create(baseCancelSubscriptionRequest) as CancelSubscriptionRequest;
+  fromPartial(
+    object: DeepPartial<CancelSubscriptionRequest>,
+  ): CancelSubscriptionRequest {
+    const message = Object.create(
+      baseCancelSubscriptionRequest,
+    ) as CancelSubscriptionRequest;
     if (object.customerId !== undefined && object.customerId !== null) {
       message.customerId = object.customerId;
     } else {
@@ -3933,20 +4258,34 @@ export const CancelSubscriptionRequest = {
 };
 
 export const CancelSubscriptionResponse = {
-  encode(message: CancelSubscriptionResponse, writer: Writer = Writer.create()): Writer {
-    if (message.subscription !== undefined && message.subscription !== undefined) {
-      TenantSubscription.encode(message.subscription, writer.uint32(10).fork()).ldelim();
+  encode(
+    message: CancelSubscriptionResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
+    if (
+      message.subscription !== undefined &&
+      message.subscription !== undefined
+    ) {
+      TenantSubscription.encode(
+        message.subscription,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     return writer;
   },
   decode(reader: Reader, length?: number): CancelSubscriptionResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCancelSubscriptionResponse) as CancelSubscriptionResponse;
+    const message = Object.create(
+      baseCancelSubscriptionResponse,
+    ) as CancelSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subscription = TenantSubscription.decode(reader, reader.uint32());
+          message.subscription = TenantSubscription.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -3956,7 +4295,9 @@ export const CancelSubscriptionResponse = {
     return message;
   },
   fromJSON(object: any): CancelSubscriptionResponse {
-    const message = Object.create(baseCancelSubscriptionResponse) as CancelSubscriptionResponse;
+    const message = Object.create(
+      baseCancelSubscriptionResponse,
+    ) as CancelSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
       message.subscription = TenantSubscription.fromJSON(object.subscription);
     } else {
@@ -3964,10 +4305,16 @@ export const CancelSubscriptionResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CancelSubscriptionResponse>): CancelSubscriptionResponse {
-    const message = Object.create(baseCancelSubscriptionResponse) as CancelSubscriptionResponse;
+  fromPartial(
+    object: DeepPartial<CancelSubscriptionResponse>,
+  ): CancelSubscriptionResponse {
+    const message = Object.create(
+      baseCancelSubscriptionResponse,
+    ) as CancelSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
-      message.subscription = TenantSubscription.fromPartial(object.subscription);
+      message.subscription = TenantSubscription.fromPartial(
+        object.subscription,
+      );
     } else {
       message.subscription = undefined;
     }
@@ -3975,20 +4322,27 @@ export const CancelSubscriptionResponse = {
   },
   toJSON(message: CancelSubscriptionResponse): unknown {
     const obj: any = {};
-    obj.subscription = message.subscription ? TenantSubscription.toJSON(message.subscription) : undefined;
+    obj.subscription = message.subscription
+      ? TenantSubscription.toJSON(message.subscription)
+      : undefined;
     return obj;
   },
 };
 
 export const ReadSubscriptionRequest = {
-  encode(message: ReadSubscriptionRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadSubscriptionRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): ReadSubscriptionRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadSubscriptionRequest) as ReadSubscriptionRequest;
+    const message = Object.create(
+      baseReadSubscriptionRequest,
+    ) as ReadSubscriptionRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4006,7 +4360,9 @@ export const ReadSubscriptionRequest = {
     return message;
   },
   fromJSON(object: any): ReadSubscriptionRequest {
-    const message = Object.create(baseReadSubscriptionRequest) as ReadSubscriptionRequest;
+    const message = Object.create(
+      baseReadSubscriptionRequest,
+    ) as ReadSubscriptionRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -4019,8 +4375,12 @@ export const ReadSubscriptionRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ReadSubscriptionRequest>): ReadSubscriptionRequest {
-    const message = Object.create(baseReadSubscriptionRequest) as ReadSubscriptionRequest;
+  fromPartial(
+    object: DeepPartial<ReadSubscriptionRequest>,
+  ): ReadSubscriptionRequest {
+    const message = Object.create(
+      baseReadSubscriptionRequest,
+    ) as ReadSubscriptionRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -4042,20 +4402,34 @@ export const ReadSubscriptionRequest = {
 };
 
 export const ReadSubscriptionResponse = {
-  encode(message: ReadSubscriptionResponse, writer: Writer = Writer.create()): Writer {
-    if (message.subscription !== undefined && message.subscription !== undefined) {
-      TenantSubscription.encode(message.subscription, writer.uint32(10).fork()).ldelim();
+  encode(
+    message: ReadSubscriptionResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
+    if (
+      message.subscription !== undefined &&
+      message.subscription !== undefined
+    ) {
+      TenantSubscription.encode(
+        message.subscription,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     return writer;
   },
   decode(reader: Reader, length?: number): ReadSubscriptionResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadSubscriptionResponse) as ReadSubscriptionResponse;
+    const message = Object.create(
+      baseReadSubscriptionResponse,
+    ) as ReadSubscriptionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subscription = TenantSubscription.decode(reader, reader.uint32());
+          message.subscription = TenantSubscription.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -4065,7 +4439,9 @@ export const ReadSubscriptionResponse = {
     return message;
   },
   fromJSON(object: any): ReadSubscriptionResponse {
-    const message = Object.create(baseReadSubscriptionResponse) as ReadSubscriptionResponse;
+    const message = Object.create(
+      baseReadSubscriptionResponse,
+    ) as ReadSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
       message.subscription = TenantSubscription.fromJSON(object.subscription);
     } else {
@@ -4073,10 +4449,16 @@ export const ReadSubscriptionResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ReadSubscriptionResponse>): ReadSubscriptionResponse {
-    const message = Object.create(baseReadSubscriptionResponse) as ReadSubscriptionResponse;
+  fromPartial(
+    object: DeepPartial<ReadSubscriptionResponse>,
+  ): ReadSubscriptionResponse {
+    const message = Object.create(
+      baseReadSubscriptionResponse,
+    ) as ReadSubscriptionResponse;
     if (object.subscription !== undefined && object.subscription !== null) {
-      message.subscription = TenantSubscription.fromPartial(object.subscription);
+      message.subscription = TenantSubscription.fromPartial(
+        object.subscription,
+      );
     } else {
       message.subscription = undefined;
     }
@@ -4084,19 +4466,26 @@ export const ReadSubscriptionResponse = {
   },
   toJSON(message: ReadSubscriptionResponse): unknown {
     const obj: any = {};
-    obj.subscription = message.subscription ? TenantSubscription.toJSON(message.subscription) : undefined;
+    obj.subscription = message.subscription
+      ? TenantSubscription.toJSON(message.subscription)
+      : undefined;
     return obj;
   },
 };
 
 export const FindSubscriptionsRequest = {
-  encode(message: FindSubscriptionsRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindSubscriptionsRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.tenantId);
     return writer;
   },
   decode(reader: Reader, length?: number): FindSubscriptionsRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
+    const message = Object.create(
+      baseFindSubscriptionsRequest,
+    ) as FindSubscriptionsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4111,7 +4500,9 @@ export const FindSubscriptionsRequest = {
     return message;
   },
   fromJSON(object: any): FindSubscriptionsRequest {
-    const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
+    const message = Object.create(
+      baseFindSubscriptionsRequest,
+    ) as FindSubscriptionsRequest;
     if (object.tenantId !== undefined && object.tenantId !== null) {
       message.tenantId = String(object.tenantId);
     } else {
@@ -4119,8 +4510,12 @@ export const FindSubscriptionsRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<FindSubscriptionsRequest>): FindSubscriptionsRequest {
-    const message = Object.create(baseFindSubscriptionsRequest) as FindSubscriptionsRequest;
+  fromPartial(
+    object: DeepPartial<FindSubscriptionsRequest>,
+  ): FindSubscriptionsRequest {
+    const message = Object.create(
+      baseFindSubscriptionsRequest,
+    ) as FindSubscriptionsRequest;
     if (object.tenantId !== undefined && object.tenantId !== null) {
       message.tenantId = object.tenantId;
     } else {
@@ -4136,7 +4531,10 @@ export const FindSubscriptionsRequest = {
 };
 
 export const FindSubscriptionsResponse = {
-  encode(message: FindSubscriptionsResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindSubscriptionsResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     for (const v of message.subscriptions) {
       TenantSubscription.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4144,13 +4542,17 @@ export const FindSubscriptionsResponse = {
   },
   decode(reader: Reader, length?: number): FindSubscriptionsResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseFindSubscriptionsResponse) as FindSubscriptionsResponse;
+    const message = Object.create(
+      baseFindSubscriptionsResponse,
+    ) as FindSubscriptionsResponse;
     message.subscriptions = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subscriptions.push(TenantSubscription.decode(reader, reader.uint32()));
+          message.subscriptions.push(
+            TenantSubscription.decode(reader, reader.uint32()),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -4160,7 +4562,9 @@ export const FindSubscriptionsResponse = {
     return message;
   },
   fromJSON(object: any): FindSubscriptionsResponse {
-    const message = Object.create(baseFindSubscriptionsResponse) as FindSubscriptionsResponse;
+    const message = Object.create(
+      baseFindSubscriptionsResponse,
+    ) as FindSubscriptionsResponse;
     message.subscriptions = [];
     if (object.subscriptions !== undefined && object.subscriptions !== null) {
       for (const e of object.subscriptions) {
@@ -4169,8 +4573,12 @@ export const FindSubscriptionsResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<FindSubscriptionsResponse>): FindSubscriptionsResponse {
-    const message = Object.create(baseFindSubscriptionsResponse) as FindSubscriptionsResponse;
+  fromPartial(
+    object: DeepPartial<FindSubscriptionsResponse>,
+  ): FindSubscriptionsResponse {
+    const message = Object.create(
+      baseFindSubscriptionsResponse,
+    ) as FindSubscriptionsResponse;
     message.subscriptions = [];
     if (object.subscriptions !== undefined && object.subscriptions !== null) {
       for (const e of object.subscriptions) {
@@ -4182,7 +4590,9 @@ export const FindSubscriptionsResponse = {
   toJSON(message: FindSubscriptionsResponse): unknown {
     const obj: any = {};
     if (message.subscriptions) {
-      obj.subscriptions = message.subscriptions.map(e => e ? TenantSubscription.toJSON(e) : undefined);
+      obj.subscriptions = message.subscriptions.map((e) =>
+        e ? TenantSubscription.toJSON(e) : undefined,
+      );
     } else {
       obj.subscriptions = [];
     }
@@ -4329,7 +4739,10 @@ export const CreateCardRequest = {
 };
 
 export const CreateCardResponse = {
-  encode(message: CreateCardResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateCardResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.card !== undefined && message.card !== undefined) {
       Card.encode(message.card, writer.uint32(10).fork()).ldelim();
     }
@@ -4377,13 +4790,18 @@ export const CreateCardResponse = {
 };
 
 export const SetDefaultCardRequest = {
-  encode(message: SetDefaultCardRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SetDefaultCardRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
   decode(reader: Reader, length?: number): SetDefaultCardRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+    const message = Object.create(
+      baseSetDefaultCardRequest,
+    ) as SetDefaultCardRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4398,7 +4816,9 @@ export const SetDefaultCardRequest = {
     return message;
   },
   fromJSON(object: any): SetDefaultCardRequest {
-    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+    const message = Object.create(
+      baseSetDefaultCardRequest,
+    ) as SetDefaultCardRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -4406,8 +4826,12 @@ export const SetDefaultCardRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<SetDefaultCardRequest>): SetDefaultCardRequest {
-    const message = Object.create(baseSetDefaultCardRequest) as SetDefaultCardRequest;
+  fromPartial(
+    object: DeepPartial<SetDefaultCardRequest>,
+  ): SetDefaultCardRequest {
+    const message = Object.create(
+      baseSetDefaultCardRequest,
+    ) as SetDefaultCardRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -4423,7 +4847,10 @@ export const SetDefaultCardRequest = {
 };
 
 export const SetDefaultCardResponse = {
-  encode(message: SetDefaultCardResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SetDefaultCardResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.card !== undefined && message.card !== undefined) {
       Card.encode(message.card, writer.uint32(10).fork()).ldelim();
     }
@@ -4431,7 +4858,9 @@ export const SetDefaultCardResponse = {
   },
   decode(reader: Reader, length?: number): SetDefaultCardResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+    const message = Object.create(
+      baseSetDefaultCardResponse,
+    ) as SetDefaultCardResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4446,7 +4875,9 @@ export const SetDefaultCardResponse = {
     return message;
   },
   fromJSON(object: any): SetDefaultCardResponse {
-    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+    const message = Object.create(
+      baseSetDefaultCardResponse,
+    ) as SetDefaultCardResponse;
     if (object.card !== undefined && object.card !== null) {
       message.card = Card.fromJSON(object.card);
     } else {
@@ -4454,8 +4885,12 @@ export const SetDefaultCardResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<SetDefaultCardResponse>): SetDefaultCardResponse {
-    const message = Object.create(baseSetDefaultCardResponse) as SetDefaultCardResponse;
+  fromPartial(
+    object: DeepPartial<SetDefaultCardResponse>,
+  ): SetDefaultCardResponse {
+    const message = Object.create(
+      baseSetDefaultCardResponse,
+    ) as SetDefaultCardResponse;
     if (object.card !== undefined && object.card !== null) {
       message.card = Card.fromPartial(object.card);
     } else {
@@ -4517,7 +4952,10 @@ export const DeleteCardRequest = {
 };
 
 export const DeleteCardResponse = {
-  encode(message: DeleteCardResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteCardResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.card !== undefined && message.card !== undefined) {
       Card.encode(message.card, writer.uint32(10).fork()).ldelim();
     }
@@ -4736,7 +5174,7 @@ export const FindCardsResponse = {
   toJSON(message: FindCardsResponse): unknown {
     const obj: any = {};
     if (message.cards) {
-      obj.cards = message.cards.map(e => e ? Card.toJSON(e) : undefined);
+      obj.cards = message.cards.map((e) => (e ? Card.toJSON(e) : undefined));
     } else {
       obj.cards = [];
     }
@@ -4745,7 +5183,10 @@ export const FindCardsResponse = {
 };
 
 export const CreateCustomerRequest = {
-  encode(message: CreateCustomerRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateCustomerRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.email);
     writer.uint32(26).string(message.number);
@@ -4754,7 +5195,9 @@ export const CreateCustomerRequest = {
   },
   decode(reader: Reader, length?: number): CreateCustomerRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateCustomerRequest) as CreateCustomerRequest;
+    const message = Object.create(
+      baseCreateCustomerRequest,
+    ) as CreateCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4778,7 +5221,9 @@ export const CreateCustomerRequest = {
     return message;
   },
   fromJSON(object: any): CreateCustomerRequest {
-    const message = Object.create(baseCreateCustomerRequest) as CreateCustomerRequest;
+    const message = Object.create(
+      baseCreateCustomerRequest,
+    ) as CreateCustomerRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -4801,8 +5246,12 @@ export const CreateCustomerRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateCustomerRequest>): CreateCustomerRequest {
-    const message = Object.create(baseCreateCustomerRequest) as CreateCustomerRequest;
+  fromPartial(
+    object: DeepPartial<CreateCustomerRequest>,
+  ): CreateCustomerRequest {
+    const message = Object.create(
+      baseCreateCustomerRequest,
+    ) as CreateCustomerRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -4836,7 +5285,10 @@ export const CreateCustomerRequest = {
 };
 
 export const CreateCustomerResponse = {
-  encode(message: CreateCustomerResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateCustomerResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.customer !== undefined && message.customer !== undefined) {
       Customer.encode(message.customer, writer.uint32(10).fork()).ldelim();
     }
@@ -4844,7 +5296,9 @@ export const CreateCustomerResponse = {
   },
   decode(reader: Reader, length?: number): CreateCustomerResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateCustomerResponse) as CreateCustomerResponse;
+    const message = Object.create(
+      baseCreateCustomerResponse,
+    ) as CreateCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4859,7 +5313,9 @@ export const CreateCustomerResponse = {
     return message;
   },
   fromJSON(object: any): CreateCustomerResponse {
-    const message = Object.create(baseCreateCustomerResponse) as CreateCustomerResponse;
+    const message = Object.create(
+      baseCreateCustomerResponse,
+    ) as CreateCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromJSON(object.customer);
     } else {
@@ -4867,8 +5323,12 @@ export const CreateCustomerResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateCustomerResponse>): CreateCustomerResponse {
-    const message = Object.create(baseCreateCustomerResponse) as CreateCustomerResponse;
+  fromPartial(
+    object: DeepPartial<CreateCustomerResponse>,
+  ): CreateCustomerResponse {
+    const message = Object.create(
+      baseCreateCustomerResponse,
+    ) as CreateCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromPartial(object.customer);
     } else {
@@ -4878,19 +5338,26 @@ export const CreateCustomerResponse = {
   },
   toJSON(message: CreateCustomerResponse): unknown {
     const obj: any = {};
-    obj.customer = message.customer ? Customer.toJSON(message.customer) : undefined;
+    obj.customer = message.customer
+      ? Customer.toJSON(message.customer)
+      : undefined;
     return obj;
   },
 };
 
 export const DeleteCustomerRequest = {
-  encode(message: DeleteCustomerRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteCustomerRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
   decode(reader: Reader, length?: number): DeleteCustomerRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseDeleteCustomerRequest) as DeleteCustomerRequest;
+    const message = Object.create(
+      baseDeleteCustomerRequest,
+    ) as DeleteCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4905,7 +5372,9 @@ export const DeleteCustomerRequest = {
     return message;
   },
   fromJSON(object: any): DeleteCustomerRequest {
-    const message = Object.create(baseDeleteCustomerRequest) as DeleteCustomerRequest;
+    const message = Object.create(
+      baseDeleteCustomerRequest,
+    ) as DeleteCustomerRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -4913,8 +5382,12 @@ export const DeleteCustomerRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<DeleteCustomerRequest>): DeleteCustomerRequest {
-    const message = Object.create(baseDeleteCustomerRequest) as DeleteCustomerRequest;
+  fromPartial(
+    object: DeepPartial<DeleteCustomerRequest>,
+  ): DeleteCustomerRequest {
+    const message = Object.create(
+      baseDeleteCustomerRequest,
+    ) as DeleteCustomerRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -4930,7 +5403,10 @@ export const DeleteCustomerRequest = {
 };
 
 export const DeleteCustomerResponse = {
-  encode(message: DeleteCustomerResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteCustomerResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.customer !== undefined && message.customer !== undefined) {
       Customer.encode(message.customer, writer.uint32(10).fork()).ldelim();
     }
@@ -4938,7 +5414,9 @@ export const DeleteCustomerResponse = {
   },
   decode(reader: Reader, length?: number): DeleteCustomerResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseDeleteCustomerResponse) as DeleteCustomerResponse;
+    const message = Object.create(
+      baseDeleteCustomerResponse,
+    ) as DeleteCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4953,7 +5431,9 @@ export const DeleteCustomerResponse = {
     return message;
   },
   fromJSON(object: any): DeleteCustomerResponse {
-    const message = Object.create(baseDeleteCustomerResponse) as DeleteCustomerResponse;
+    const message = Object.create(
+      baseDeleteCustomerResponse,
+    ) as DeleteCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromJSON(object.customer);
     } else {
@@ -4961,8 +5441,12 @@ export const DeleteCustomerResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<DeleteCustomerResponse>): DeleteCustomerResponse {
-    const message = Object.create(baseDeleteCustomerResponse) as DeleteCustomerResponse;
+  fromPartial(
+    object: DeepPartial<DeleteCustomerResponse>,
+  ): DeleteCustomerResponse {
+    const message = Object.create(
+      baseDeleteCustomerResponse,
+    ) as DeleteCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromPartial(object.customer);
     } else {
@@ -4972,19 +5456,26 @@ export const DeleteCustomerResponse = {
   },
   toJSON(message: DeleteCustomerResponse): unknown {
     const obj: any = {};
-    obj.customer = message.customer ? Customer.toJSON(message.customer) : undefined;
+    obj.customer = message.customer
+      ? Customer.toJSON(message.customer)
+      : undefined;
     return obj;
   },
 };
 
 export const ReadCustomerRequest = {
-  encode(message: ReadCustomerRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadCustomerRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
   decode(reader: Reader, length?: number): ReadCustomerRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadCustomerRequest) as ReadCustomerRequest;
+    const message = Object.create(
+      baseReadCustomerRequest,
+    ) as ReadCustomerRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4999,7 +5490,9 @@ export const ReadCustomerRequest = {
     return message;
   },
   fromJSON(object: any): ReadCustomerRequest {
-    const message = Object.create(baseReadCustomerRequest) as ReadCustomerRequest;
+    const message = Object.create(
+      baseReadCustomerRequest,
+    ) as ReadCustomerRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -5008,7 +5501,9 @@ export const ReadCustomerRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadCustomerRequest>): ReadCustomerRequest {
-    const message = Object.create(baseReadCustomerRequest) as ReadCustomerRequest;
+    const message = Object.create(
+      baseReadCustomerRequest,
+    ) as ReadCustomerRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -5024,7 +5519,10 @@ export const ReadCustomerRequest = {
 };
 
 export const ReadCustomerResponse = {
-  encode(message: ReadCustomerResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadCustomerResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.customer !== undefined && message.customer !== undefined) {
       Customer.encode(message.customer, writer.uint32(10).fork()).ldelim();
     }
@@ -5032,7 +5530,9 @@ export const ReadCustomerResponse = {
   },
   decode(reader: Reader, length?: number): ReadCustomerResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadCustomerResponse) as ReadCustomerResponse;
+    const message = Object.create(
+      baseReadCustomerResponse,
+    ) as ReadCustomerResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5047,7 +5547,9 @@ export const ReadCustomerResponse = {
     return message;
   },
   fromJSON(object: any): ReadCustomerResponse {
-    const message = Object.create(baseReadCustomerResponse) as ReadCustomerResponse;
+    const message = Object.create(
+      baseReadCustomerResponse,
+    ) as ReadCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromJSON(object.customer);
     } else {
@@ -5056,7 +5558,9 @@ export const ReadCustomerResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadCustomerResponse>): ReadCustomerResponse {
-    const message = Object.create(baseReadCustomerResponse) as ReadCustomerResponse;
+    const message = Object.create(
+      baseReadCustomerResponse,
+    ) as ReadCustomerResponse;
     if (object.customer !== undefined && object.customer !== null) {
       message.customer = Customer.fromPartial(object.customer);
     } else {
@@ -5066,7 +5570,9 @@ export const ReadCustomerResponse = {
   },
   toJSON(message: ReadCustomerResponse): unknown {
     const obj: any = {};
-    obj.customer = message.customer ? Customer.toJSON(message.customer) : undefined;
+    obj.customer = message.customer
+      ? Customer.toJSON(message.customer)
+      : undefined;
     return obj;
   },
 };
@@ -5210,14 +5716,14 @@ export const Event = {
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T[P] extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T[P] extends Date | Function | Uint8Array | undefined
-  ? T[P]
-  : T[P] extends infer U | undefined
-  ? DeepPartial<U>
-  : T[P] extends object
-  ? DeepPartial<T[P]>
-  : T[P]
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : T[P] extends Date | Function | Uint8Array | undefined
+    ? T[P]
+    : T[P] extends infer U | undefined
+    ? DeepPartial<U>
+    : T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P];
 };

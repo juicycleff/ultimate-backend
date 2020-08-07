@@ -2,7 +2,6 @@
 import { Observable } from 'rxjs';
 import { Writer, Reader } from 'protobufjs/minimal';
 
-
 export interface PasswordStruct {
   /**
    *  @inject_tag: bson:"hashed,omitempty"
@@ -400,16 +399,24 @@ const baseResendVerificationCodeResponse: object = {
 };
 
 export interface AccountService<Context extends DataLoaders> {
-
   create(request: CreateRequest, ctx: Context): Promise<CreateResponse>;
 
   read(request: ReadRequest, ctx: Context): Promise<ReadResponse>;
 
-  verifyAccount(request: VerifyAccountRequest, ctx: Context): Promise<VerifyAccountResponse>;
+  verifyAccount(
+    request: VerifyAccountRequest,
+    ctx: Context,
+  ): Promise<VerifyAccountResponse>;
 
-  verifyActivationLink(request: VerifyActivationLinkRequest, ctx: Context): Promise<VerifyActivationLinkResponse>;
+  verifyActivationLink(
+    request: VerifyActivationLinkRequest,
+    ctx: Context,
+  ): Promise<VerifyActivationLinkResponse>;
 
-  resendVerificationCode(request: ResendVerificationCodeRequest, ctx: Context): Promise<ResendVerificationCodeResponse>;
+  resendVerificationCode(
+    request: ResendVerificationCodeRequest,
+    ctx: Context,
+  ): Promise<ResendVerificationCodeResponse>;
 
   update(request: UpdateRequest, ctx: Context): Promise<UpdateResponse>;
 
@@ -417,29 +424,45 @@ export interface AccountService<Context extends DataLoaders> {
 
   search(request: SearchRequest, ctx: Context): Promise<SearchResponse>;
 
-  forgotPassword(request: ForgotPasswordRequest, ctx: Context): Promise<ForgotPasswordResponse>;
+  forgotPassword(
+    request: ForgotPasswordRequest,
+    ctx: Context,
+  ): Promise<ForgotPasswordResponse>;
 
-  updatePassword(request: UpdatePasswordRequest, ctx: Context): Promise<UpdatePasswordResponse>;
+  updatePassword(
+    request: UpdatePasswordRequest,
+    ctx: Context,
+  ): Promise<UpdatePasswordResponse>;
 
   login(request: LoginRequest, ctx: Context): Promise<LoginResponse>;
 
   logout(request: LogoutRequest, ctx: Context): Promise<LogoutResponse>;
 
-  readSession(request: ReadSessionRequest, ctx: Context): Promise<ReadSessionResponse>;
-
+  readSession(
+    request: ReadSessionRequest,
+    ctx: Context,
+  ): Promise<ReadSessionResponse>;
 }
 
 export interface AccountServiceClient<Context extends DataLoaders> {
-
   create(request: CreateRequest, ctx?: Context): Observable<CreateResponse>;
 
   read(request: ReadRequest, ctx?: Context): Observable<ReadResponse>;
 
-  verifyAccount(request: VerifyAccountRequest, ctx?: Context): Observable<VerifyAccountResponse>;
+  verifyAccount(
+    request: VerifyAccountRequest,
+    ctx?: Context,
+  ): Observable<VerifyAccountResponse>;
 
-  verifyActivationLink(request: VerifyActivationLinkRequest, ctx?: Context): Observable<VerifyActivationLinkResponse>;
+  verifyActivationLink(
+    request: VerifyActivationLinkRequest,
+    ctx?: Context,
+  ): Observable<VerifyActivationLinkResponse>;
 
-  resendVerificationCode(request: ResendVerificationCodeRequest, ctx?: Context): Observable<ResendVerificationCodeResponse>;
+  resendVerificationCode(
+    request: ResendVerificationCodeRequest,
+    ctx?: Context,
+  ): Observable<ResendVerificationCodeResponse>;
 
   update(request: UpdateRequest, ctx?: Context): Observable<UpdateResponse>;
 
@@ -447,22 +470,28 @@ export interface AccountServiceClient<Context extends DataLoaders> {
 
   search(request: SearchRequest, ctx?: Context): Observable<SearchResponse>;
 
-  forgotPassword(request: ForgotPasswordRequest, ctx?: Context): Observable<ForgotPasswordResponse>;
+  forgotPassword(
+    request: ForgotPasswordRequest,
+    ctx?: Context,
+  ): Observable<ForgotPasswordResponse>;
 
-  updatePassword(request: UpdatePasswordRequest, ctx?: Context): Observable<UpdatePasswordResponse>;
+  updatePassword(
+    request: UpdatePasswordRequest,
+    ctx?: Context,
+  ): Observable<UpdatePasswordResponse>;
 
   login(request: LoginRequest, ctx?: Context): Observable<LoginResponse>;
 
   logout(request: LogoutRequest, ctx?: Context): Observable<LogoutResponse>;
 
-  readSession(request: ReadSessionRequest, ctx?: Context): Observable<ReadSessionResponse>;
-
+  readSession(
+    request: ReadSessionRequest,
+    ctx?: Context,
+  ): Observable<ReadSessionResponse>;
 }
 
 interface DataLoaders {
-
   getDataLoader<T>(identifier: string, constructorFn: () => T): T;
-
 }
 
 export const LoginServiceTypes = {
@@ -473,16 +502,16 @@ export const LoginServiceTypes = {
   fromJSON(object: any): LoginServiceTypes {
     switch (object) {
       case 0:
-      case "Password":
+      case 'Password':
         return LoginServiceTypes.Password;
       case 1:
-      case "Facebook":
+      case 'Facebook':
         return LoginServiceTypes.Facebook;
       case 2:
-      case "Github":
+      case 'Github':
         return LoginServiceTypes.Github;
       case 3:
-      case "Google":
+      case 'Google':
         return LoginServiceTypes.Google;
       default:
         throw new global.Error(`Invalid value ${object}`);
@@ -491,18 +520,18 @@ export const LoginServiceTypes = {
   toJSON(object: LoginServiceTypes): string {
     switch (object) {
       case LoginServiceTypes.Password:
-        return "Password";
+        return 'Password';
       case LoginServiceTypes.Facebook:
-        return "Facebook";
+        return 'Facebook';
       case LoginServiceTypes.Github:
-        return "Github";
+        return 'Github';
       case LoginServiceTypes.Google:
-        return "Google";
+        return 'Google';
       default:
-        return "UNKNOWN";
+        return 'UNKNOWN';
     }
   },
-}
+};
 
 export type LoginServiceTypes = 0 | 1 | 2 | 3;
 
@@ -555,7 +584,10 @@ export const PasswordStruct = {
 export const AuthServices = {
   encode(message: AuthServices, writer: Writer = Writer.create()): Writer {
     if (message.password !== undefined && message.password !== undefined) {
-      PasswordStruct.encode(message.password, writer.uint32(10).fork()).ldelim();
+      PasswordStruct.encode(
+        message.password,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     return writer;
   },
@@ -595,7 +627,9 @@ export const AuthServices = {
   },
   toJSON(message: AuthServices): unknown {
     const obj: any = {};
-    obj.password = message.password ? PasswordStruct.toJSON(message.password) : undefined;
+    obj.password = message.password
+      ? PasswordStruct.toJSON(message.password)
+      : undefined;
     return obj;
   },
 };
@@ -650,7 +684,10 @@ export const EmailObject = {
     } else {
       message.primary = false;
     }
-    if (object.verificationCode !== undefined && object.verificationCode !== null) {
+    if (
+      object.verificationCode !== undefined &&
+      object.verificationCode !== null
+    ) {
       message.verificationCode = String(object.verificationCode);
     } else {
       message.verificationCode = '';
@@ -674,7 +711,10 @@ export const EmailObject = {
     } else {
       message.primary = false;
     }
-    if (object.verificationCode !== undefined && object.verificationCode !== null) {
+    if (
+      object.verificationCode !== undefined &&
+      object.verificationCode !== null
+    ) {
       message.verificationCode = object.verificationCode;
     } else {
       message.verificationCode = '';
@@ -875,12 +915,18 @@ export const User = {
     obj.createdAt = message.createdAt || '';
     obj.updatedAt = message.updatedAt || '';
     if (message.emails) {
-      obj.emails = message.emails.map(e => e ? EmailObject.toJSON(e) : undefined);
+      obj.emails = message.emails.map((e) =>
+        e ? EmailObject.toJSON(e) : undefined,
+      );
     } else {
       obj.emails = [];
     }
-    obj.services = message.services ? AuthServices.toJSON(message.services) : undefined;
-    obj.settings = message.settings ? Settings.toJSON(message.settings) : undefined;
+    obj.services = message.services
+      ? AuthServices.toJSON(message.services)
+      : undefined;
+    obj.settings = message.settings
+      ? Settings.toJSON(message.settings)
+      : undefined;
     return obj;
   },
 };
@@ -1031,8 +1077,11 @@ export const CreateRequest = {
     writer.uint32(42).string(message.lastname);
     writer.uint32(48).int32(message.service);
     Object.entries(message.tokens).forEach(([key, value]) => {
-      CreateRequest_TokensEntry.encode({ key: key as any, value }, writer.uint32(58).fork()).ldelim();
-    })
+      CreateRequest_TokensEntry.encode(
+        { key: key as any, value },
+        writer.uint32(58).fork(),
+      ).ldelim();
+    });
     return writer;
   },
   decode(reader: Reader, length?: number): CreateRequest {
@@ -1061,7 +1110,10 @@ export const CreateRequest = {
           message.service = reader.int32() as any;
           break;
         case 7:
-          const entry7 = CreateRequest_TokensEntry.decode(reader, reader.uint32());
+          const entry7 = CreateRequest_TokensEntry.decode(
+            reader,
+            reader.uint32(),
+          );
           if (entry7.value) {
             message.tokens[entry7.key] = entry7.value;
           }
@@ -1109,7 +1161,7 @@ export const CreateRequest = {
     if (object.tokens !== undefined && object.tokens !== null) {
       Object.entries(object.tokens).forEach(([key, value]) => {
         message.tokens[key] = String(value);
-      })
+      });
     }
     return message;
   },
@@ -1151,7 +1203,7 @@ export const CreateRequest = {
         if (value) {
           message.tokens[key] = String(value);
         }
-      })
+      });
     }
     return message;
   },
@@ -1169,14 +1221,19 @@ export const CreateRequest = {
 };
 
 export const CreateRequest_TokensEntry = {
-  encode(message: CreateRequest_TokensEntry, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CreateRequest_TokensEntry,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.key);
     writer.uint32(18).string(message.value);
     return writer;
   },
   decode(reader: Reader, length?: number): CreateRequest_TokensEntry {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseCreateRequest_TokensEntry) as CreateRequest_TokensEntry;
+    const message = Object.create(
+      baseCreateRequest_TokensEntry,
+    ) as CreateRequest_TokensEntry;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1194,7 +1251,9 @@ export const CreateRequest_TokensEntry = {
     return message;
   },
   fromJSON(object: any): CreateRequest_TokensEntry {
-    const message = Object.create(baseCreateRequest_TokensEntry) as CreateRequest_TokensEntry;
+    const message = Object.create(
+      baseCreateRequest_TokensEntry,
+    ) as CreateRequest_TokensEntry;
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
     } else {
@@ -1207,8 +1266,12 @@ export const CreateRequest_TokensEntry = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<CreateRequest_TokensEntry>): CreateRequest_TokensEntry {
-    const message = Object.create(baseCreateRequest_TokensEntry) as CreateRequest_TokensEntry;
+  fromPartial(
+    object: DeepPartial<CreateRequest_TokensEntry>,
+  ): CreateRequest_TokensEntry {
+    const message = Object.create(
+      baseCreateRequest_TokensEntry,
+    ) as CreateRequest_TokensEntry;
     if (object.key !== undefined && object.key !== null) {
       message.key = object.key;
     } else {
@@ -1558,7 +1621,10 @@ export const UpdateResponse = {
 };
 
 export const UpdatePasswordRequest = {
-  encode(message: UpdatePasswordRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: UpdatePasswordRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.userId);
     writer.uint32(18).string(message.oldPassword);
     writer.uint32(26).string(message.newPassword);
@@ -1567,7 +1633,9 @@ export const UpdatePasswordRequest = {
   },
   decode(reader: Reader, length?: number): UpdatePasswordRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseUpdatePasswordRequest) as UpdatePasswordRequest;
+    const message = Object.create(
+      baseUpdatePasswordRequest,
+    ) as UpdatePasswordRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1591,7 +1659,9 @@ export const UpdatePasswordRequest = {
     return message;
   },
   fromJSON(object: any): UpdatePasswordRequest {
-    const message = Object.create(baseUpdatePasswordRequest) as UpdatePasswordRequest;
+    const message = Object.create(
+      baseUpdatePasswordRequest,
+    ) as UpdatePasswordRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
     } else {
@@ -1607,15 +1677,22 @@ export const UpdatePasswordRequest = {
     } else {
       message.newPassword = '';
     }
-    if (object.confirmPassword !== undefined && object.confirmPassword !== null) {
+    if (
+      object.confirmPassword !== undefined &&
+      object.confirmPassword !== null
+    ) {
       message.confirmPassword = String(object.confirmPassword);
     } else {
       message.confirmPassword = '';
     }
     return message;
   },
-  fromPartial(object: DeepPartial<UpdatePasswordRequest>): UpdatePasswordRequest {
-    const message = Object.create(baseUpdatePasswordRequest) as UpdatePasswordRequest;
+  fromPartial(
+    object: DeepPartial<UpdatePasswordRequest>,
+  ): UpdatePasswordRequest {
+    const message = Object.create(
+      baseUpdatePasswordRequest,
+    ) as UpdatePasswordRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = object.userId;
     } else {
@@ -1631,7 +1708,10 @@ export const UpdatePasswordRequest = {
     } else {
       message.newPassword = '';
     }
-    if (object.confirmPassword !== undefined && object.confirmPassword !== null) {
+    if (
+      object.confirmPassword !== undefined &&
+      object.confirmPassword !== null
+    ) {
       message.confirmPassword = object.confirmPassword;
     } else {
       message.confirmPassword = '';
@@ -1649,13 +1729,18 @@ export const UpdatePasswordRequest = {
 };
 
 export const UpdatePasswordResponse = {
-  encode(message: UpdatePasswordResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: UpdatePasswordResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): UpdatePasswordResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseUpdatePasswordResponse) as UpdatePasswordResponse;
+    const message = Object.create(
+      baseUpdatePasswordResponse,
+    ) as UpdatePasswordResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1670,7 +1755,9 @@ export const UpdatePasswordResponse = {
     return message;
   },
   fromJSON(object: any): UpdatePasswordResponse {
-    const message = Object.create(baseUpdatePasswordResponse) as UpdatePasswordResponse;
+    const message = Object.create(
+      baseUpdatePasswordResponse,
+    ) as UpdatePasswordResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -1678,8 +1765,12 @@ export const UpdatePasswordResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<UpdatePasswordResponse>): UpdatePasswordResponse {
-    const message = Object.create(baseUpdatePasswordResponse) as UpdatePasswordResponse;
+  fromPartial(
+    object: DeepPartial<UpdatePasswordResponse>,
+  ): UpdatePasswordResponse {
+    const message = Object.create(
+      baseUpdatePasswordResponse,
+    ) as UpdatePasswordResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -1695,13 +1786,18 @@ export const UpdatePasswordResponse = {
 };
 
 export const ForgotPasswordRequest = {
-  encode(message: ForgotPasswordRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ForgotPasswordRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.email);
     return writer;
   },
   decode(reader: Reader, length?: number): ForgotPasswordRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseForgotPasswordRequest) as ForgotPasswordRequest;
+    const message = Object.create(
+      baseForgotPasswordRequest,
+    ) as ForgotPasswordRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1716,7 +1812,9 @@ export const ForgotPasswordRequest = {
     return message;
   },
   fromJSON(object: any): ForgotPasswordRequest {
-    const message = Object.create(baseForgotPasswordRequest) as ForgotPasswordRequest;
+    const message = Object.create(
+      baseForgotPasswordRequest,
+    ) as ForgotPasswordRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
     } else {
@@ -1724,8 +1822,12 @@ export const ForgotPasswordRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ForgotPasswordRequest>): ForgotPasswordRequest {
-    const message = Object.create(baseForgotPasswordRequest) as ForgotPasswordRequest;
+  fromPartial(
+    object: DeepPartial<ForgotPasswordRequest>,
+  ): ForgotPasswordRequest {
+    const message = Object.create(
+      baseForgotPasswordRequest,
+    ) as ForgotPasswordRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
     } else {
@@ -1741,13 +1843,18 @@ export const ForgotPasswordRequest = {
 };
 
 export const ForgotPasswordResponse = {
-  encode(message: ForgotPasswordResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ForgotPasswordResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): ForgotPasswordResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseForgotPasswordResponse) as ForgotPasswordResponse;
+    const message = Object.create(
+      baseForgotPasswordResponse,
+    ) as ForgotPasswordResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1762,7 +1869,9 @@ export const ForgotPasswordResponse = {
     return message;
   },
   fromJSON(object: any): ForgotPasswordResponse {
-    const message = Object.create(baseForgotPasswordResponse) as ForgotPasswordResponse;
+    const message = Object.create(
+      baseForgotPasswordResponse,
+    ) as ForgotPasswordResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -1770,8 +1879,12 @@ export const ForgotPasswordResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ForgotPasswordResponse>): ForgotPasswordResponse {
-    const message = Object.create(baseForgotPasswordResponse) as ForgotPasswordResponse;
+  fromPartial(
+    object: DeepPartial<ForgotPasswordResponse>,
+  ): ForgotPasswordResponse {
+    const message = Object.create(
+      baseForgotPasswordResponse,
+    ) as ForgotPasswordResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -1924,7 +2037,7 @@ export const SearchResponse = {
   toJSON(message: SearchResponse): unknown {
     const obj: any = {};
     if (message.users) {
-      obj.users = message.users.map(e => e ? User.toJSON(e) : undefined);
+      obj.users = message.users.map((e) => (e ? User.toJSON(e) : undefined));
     } else {
       obj.users = [];
     }
@@ -1933,7 +2046,10 @@ export const SearchResponse = {
 };
 
 export const ReadSessionRequest = {
-  encode(message: ReadSessionRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadSessionRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.sessionId);
     return writer;
   },
@@ -1979,7 +2095,10 @@ export const ReadSessionRequest = {
 };
 
 export const ReadSessionResponse = {
-  encode(message: ReadSessionResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReadSessionResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     if (message.session !== undefined && message.session !== undefined) {
       Session.encode(message.session, writer.uint32(10).fork()).ldelim();
     }
@@ -1987,7 +2106,9 @@ export const ReadSessionResponse = {
   },
   decode(reader: Reader, length?: number): ReadSessionResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseReadSessionResponse) as ReadSessionResponse;
+    const message = Object.create(
+      baseReadSessionResponse,
+    ) as ReadSessionResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2002,7 +2123,9 @@ export const ReadSessionResponse = {
     return message;
   },
   fromJSON(object: any): ReadSessionResponse {
-    const message = Object.create(baseReadSessionResponse) as ReadSessionResponse;
+    const message = Object.create(
+      baseReadSessionResponse,
+    ) as ReadSessionResponse;
     if (object.session !== undefined && object.session !== null) {
       message.session = Session.fromJSON(object.session);
     } else {
@@ -2011,7 +2134,9 @@ export const ReadSessionResponse = {
     return message;
   },
   fromPartial(object: DeepPartial<ReadSessionResponse>): ReadSessionResponse {
-    const message = Object.create(baseReadSessionResponse) as ReadSessionResponse;
+    const message = Object.create(
+      baseReadSessionResponse,
+    ) as ReadSessionResponse;
     if (object.session !== undefined && object.session !== null) {
       message.session = Session.fromPartial(object.session);
     } else {
@@ -2175,7 +2300,9 @@ export const LoginRequest = {
   toJSON(message: LoginRequest): unknown {
     const obj: any = {};
     obj.service = LoginServiceTypes.toJSON(message.service);
-    obj.params = message.params ? LoginTypeParams.toJSON(message.params) : undefined;
+    obj.params = message.params
+      ? LoginTypeParams.toJSON(message.params)
+      : undefined;
     return obj;
   },
 };
@@ -2338,14 +2465,19 @@ export const LogoutResponse = {
 };
 
 export const VerifyAccountRequest = {
-  encode(message: VerifyAccountRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: VerifyAccountRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.email);
     writer.uint32(18).string(message.pincode);
     return writer;
   },
   decode(reader: Reader, length?: number): VerifyAccountRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseVerifyAccountRequest) as VerifyAccountRequest;
+    const message = Object.create(
+      baseVerifyAccountRequest,
+    ) as VerifyAccountRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2363,7 +2495,9 @@ export const VerifyAccountRequest = {
     return message;
   },
   fromJSON(object: any): VerifyAccountRequest {
-    const message = Object.create(baseVerifyAccountRequest) as VerifyAccountRequest;
+    const message = Object.create(
+      baseVerifyAccountRequest,
+    ) as VerifyAccountRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
     } else {
@@ -2377,7 +2511,9 @@ export const VerifyAccountRequest = {
     return message;
   },
   fromPartial(object: DeepPartial<VerifyAccountRequest>): VerifyAccountRequest {
-    const message = Object.create(baseVerifyAccountRequest) as VerifyAccountRequest;
+    const message = Object.create(
+      baseVerifyAccountRequest,
+    ) as VerifyAccountRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
     } else {
@@ -2399,13 +2535,18 @@ export const VerifyAccountRequest = {
 };
 
 export const VerifyAccountResponse = {
-  encode(message: VerifyAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: VerifyAccountResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): VerifyAccountResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseVerifyAccountResponse) as VerifyAccountResponse;
+    const message = Object.create(
+      baseVerifyAccountResponse,
+    ) as VerifyAccountResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2420,7 +2561,9 @@ export const VerifyAccountResponse = {
     return message;
   },
   fromJSON(object: any): VerifyAccountResponse {
-    const message = Object.create(baseVerifyAccountResponse) as VerifyAccountResponse;
+    const message = Object.create(
+      baseVerifyAccountResponse,
+    ) as VerifyAccountResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -2428,8 +2571,12 @@ export const VerifyAccountResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<VerifyAccountResponse>): VerifyAccountResponse {
-    const message = Object.create(baseVerifyAccountResponse) as VerifyAccountResponse;
+  fromPartial(
+    object: DeepPartial<VerifyAccountResponse>,
+  ): VerifyAccountResponse {
+    const message = Object.create(
+      baseVerifyAccountResponse,
+    ) as VerifyAccountResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -2445,13 +2592,18 @@ export const VerifyAccountResponse = {
 };
 
 export const VerifyActivationLinkRequest = {
-  encode(message: VerifyActivationLinkRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: VerifyActivationLinkRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.token);
     return writer;
   },
   decode(reader: Reader, length?: number): VerifyActivationLinkRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseVerifyActivationLinkRequest) as VerifyActivationLinkRequest;
+    const message = Object.create(
+      baseVerifyActivationLinkRequest,
+    ) as VerifyActivationLinkRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2466,7 +2618,9 @@ export const VerifyActivationLinkRequest = {
     return message;
   },
   fromJSON(object: any): VerifyActivationLinkRequest {
-    const message = Object.create(baseVerifyActivationLinkRequest) as VerifyActivationLinkRequest;
+    const message = Object.create(
+      baseVerifyActivationLinkRequest,
+    ) as VerifyActivationLinkRequest;
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
     } else {
@@ -2474,8 +2628,12 @@ export const VerifyActivationLinkRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<VerifyActivationLinkRequest>): VerifyActivationLinkRequest {
-    const message = Object.create(baseVerifyActivationLinkRequest) as VerifyActivationLinkRequest;
+  fromPartial(
+    object: DeepPartial<VerifyActivationLinkRequest>,
+  ): VerifyActivationLinkRequest {
+    const message = Object.create(
+      baseVerifyActivationLinkRequest,
+    ) as VerifyActivationLinkRequest;
     if (object.token !== undefined && object.token !== null) {
       message.token = object.token;
     } else {
@@ -2491,14 +2649,19 @@ export const VerifyActivationLinkRequest = {
 };
 
 export const VerifyActivationLinkResponse = {
-  encode(message: VerifyActivationLinkResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: VerifyActivationLinkResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.email);
     writer.uint32(18).string(message.pincode);
     return writer;
   },
   decode(reader: Reader, length?: number): VerifyActivationLinkResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseVerifyActivationLinkResponse) as VerifyActivationLinkResponse;
+    const message = Object.create(
+      baseVerifyActivationLinkResponse,
+    ) as VerifyActivationLinkResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2516,7 +2679,9 @@ export const VerifyActivationLinkResponse = {
     return message;
   },
   fromJSON(object: any): VerifyActivationLinkResponse {
-    const message = Object.create(baseVerifyActivationLinkResponse) as VerifyActivationLinkResponse;
+    const message = Object.create(
+      baseVerifyActivationLinkResponse,
+    ) as VerifyActivationLinkResponse;
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
     } else {
@@ -2529,8 +2694,12 @@ export const VerifyActivationLinkResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<VerifyActivationLinkResponse>): VerifyActivationLinkResponse {
-    const message = Object.create(baseVerifyActivationLinkResponse) as VerifyActivationLinkResponse;
+  fromPartial(
+    object: DeepPartial<VerifyActivationLinkResponse>,
+  ): VerifyActivationLinkResponse {
+    const message = Object.create(
+      baseVerifyActivationLinkResponse,
+    ) as VerifyActivationLinkResponse;
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
     } else {
@@ -2552,13 +2721,18 @@ export const VerifyActivationLinkResponse = {
 };
 
 export const ResendVerificationCodeRequest = {
-  encode(message: ResendVerificationCodeRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ResendVerificationCodeRequest,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(10).string(message.email);
     return writer;
   },
   decode(reader: Reader, length?: number): ResendVerificationCodeRequest {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseResendVerificationCodeRequest) as ResendVerificationCodeRequest;
+    const message = Object.create(
+      baseResendVerificationCodeRequest,
+    ) as ResendVerificationCodeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2573,7 +2747,9 @@ export const ResendVerificationCodeRequest = {
     return message;
   },
   fromJSON(object: any): ResendVerificationCodeRequest {
-    const message = Object.create(baseResendVerificationCodeRequest) as ResendVerificationCodeRequest;
+    const message = Object.create(
+      baseResendVerificationCodeRequest,
+    ) as ResendVerificationCodeRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
     } else {
@@ -2581,8 +2757,12 @@ export const ResendVerificationCodeRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ResendVerificationCodeRequest>): ResendVerificationCodeRequest {
-    const message = Object.create(baseResendVerificationCodeRequest) as ResendVerificationCodeRequest;
+  fromPartial(
+    object: DeepPartial<ResendVerificationCodeRequest>,
+  ): ResendVerificationCodeRequest {
+    const message = Object.create(
+      baseResendVerificationCodeRequest,
+    ) as ResendVerificationCodeRequest;
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
     } else {
@@ -2598,13 +2778,18 @@ export const ResendVerificationCodeRequest = {
 };
 
 export const ResendVerificationCodeResponse = {
-  encode(message: ResendVerificationCodeResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ResendVerificationCodeResponse,
+    writer: Writer = Writer.create(),
+  ): Writer {
     writer.uint32(8).bool(message.success);
     return writer;
   },
   decode(reader: Reader, length?: number): ResendVerificationCodeResponse {
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = Object.create(baseResendVerificationCodeResponse) as ResendVerificationCodeResponse;
+    const message = Object.create(
+      baseResendVerificationCodeResponse,
+    ) as ResendVerificationCodeResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2619,7 +2804,9 @@ export const ResendVerificationCodeResponse = {
     return message;
   },
   fromJSON(object: any): ResendVerificationCodeResponse {
-    const message = Object.create(baseResendVerificationCodeResponse) as ResendVerificationCodeResponse;
+    const message = Object.create(
+      baseResendVerificationCodeResponse,
+    ) as ResendVerificationCodeResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = Boolean(object.success);
     } else {
@@ -2627,8 +2814,12 @@ export const ResendVerificationCodeResponse = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ResendVerificationCodeResponse>): ResendVerificationCodeResponse {
-    const message = Object.create(baseResendVerificationCodeResponse) as ResendVerificationCodeResponse;
+  fromPartial(
+    object: DeepPartial<ResendVerificationCodeResponse>,
+  ): ResendVerificationCodeResponse {
+    const message = Object.create(
+      baseResendVerificationCodeResponse,
+    ) as ResendVerificationCodeResponse;
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
     } else {
@@ -2645,14 +2836,14 @@ export const ResendVerificationCodeResponse = {
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T[P] extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T[P] extends Date | Function | Uint8Array | undefined
-  ? T[P]
-  : T[P] extends infer U | undefined
-  ? DeepPartial<U>
-  : T[P] extends object
-  ? DeepPartial<T[P]>
-  : T[P]
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : T[P] extends Date | Function | Uint8Array | undefined
+    ? T[P]
+    : T[P] extends infer U | undefined
+    ? DeepPartial<U>
+    : T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P];
 };
