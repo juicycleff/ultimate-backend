@@ -1,6 +1,6 @@
-import {Logger} from '@nestjs/common';
-import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
-import {EmailVerifiedEvent} from '../../impl';
+import { Logger } from '@nestjs/common';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { EmailVerifiedEvent } from '../../impl';
 
 @EventsHandler(EmailVerifiedEvent)
 export class EmailVerifiedHandler implements IEventHandler<EmailVerifiedEvent> {

@@ -1,21 +1,21 @@
 import { Field, InputType, ID, ArgsType } from '@nestjs/graphql';
 import { User } from './user.type';
-import { FilterMongo, PaginationInput } from '@ultimatebackend/contracts/inputs';
+import {
+  FilterMongo,
+  PaginationInput,
+} from '@ultimatebackend/contracts/inputs';
 
 @InputType()
 export class DeleteUserInput {
-
   @Field(() => ID)
   id: string;
 }
 
 @InputType()
-export class UpdateUserDataInput {
-}
+export class UpdateUserDataInput {}
 
 @InputType()
 export class UpdateUserInput {
-
   @Field({ nullable: true })
   firstname?: string;
 

@@ -5,5 +5,5 @@ import { TenantAvailableHandler } from './tenant-available.handler';
 export const TenantQueryHandlers = [
   GetTenantHandler,
   GetTenantsHandler,
-  TenantAvailableHandler
+  TenantAvailableHandler,
 ];

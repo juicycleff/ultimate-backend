@@ -11,7 +11,8 @@ import { CreateCustomerResponse } from '@ultimatebackend/proto-schema/billing';
  * @class
  */
 @CommandHandler(CreateStripeCustomerCommand)
-export class CreateStripeCustomerHandler implements ICommandHandler<CreateStripeCustomerCommand> {
+export class CreateStripeCustomerHandler
+  implements ICommandHandler<CreateStripeCustomerCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -24,12 +25,15 @@ export class CreateStripeCustomerHandler implements ICommandHandler<CreateStripe
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: CreateStripeCustomerCommand): Promise<CreateCustomerResponse> {
+  async execute(
+    command: CreateStripeCustomerCommand,
+  ): Promise<CreateCustomerResponse> {
     this.logger.log(`Async ${command.constructor.name}...`);
     const { input } = command;
 
     try {
-      if (input === null) { // Check to make sure input is not null
+      if (input === null) {
+        // Check to make sure input is not null
         throw new RpcException('Current user input missing'); // Throw an input error
       }
 
@@ -57,5 +61,4 @@ export class CreateStripeCustomerHandler implements ICommandHandler<CreateStripe
       throw new RpcException(error);
     }
   }
-
 }

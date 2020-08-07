@@ -20,7 +20,7 @@ import {
   DeleteProjectCommand,
   UpdateProjectCommand,
   GetProjectQuery,
-  GetProjectsQuery
+  GetProjectsQuery,
 } from './cqrs';
 import { getIdentityFromCtx } from '@ultimatebackend/core';
 
@@ -33,30 +33,55 @@ export class ProjectsController implements ProjectService<any> {
   ) {}
 
   @GrpcMethod('ProjectService')
-  createProject(request: CreateProjectRequest, ctx: any): Promise<CreateProjectResponse> {
+  createProject(
+    request: CreateProjectRequest,
+    ctx: any,
+  ): Promise<CreateProjectResponse> {
     const { user } = getIdentityFromCtx(ctx);
-    return this.commandBus.execute(new CreateProjectCommand(request, user, this.spaceRepository));
+    return this.commandBus.execute(
+      new CreateProjectCommand(request, user, this.spaceRepository),
+    );
   }
 
   @GrpcMethod('ProjectService')
-  deleteProject(request: DeleteProjectRequest, ctx: any): Promise<DeleteProjectResponse> {
+  deleteProject(
+    request: DeleteProjectRequest,
+    ctx: any,
+  ): Promise<DeleteProjectResponse> {
     const { user } = getIdentityFromCtx(ctx);
-    return this.commandBus.execute(new DeleteProjectCommand(request, user, this.spaceRepository));
+    return this.commandBus.execute(
+      new DeleteProjectCommand(request, user, this.spaceRepository),
+    );
   }
 
   @GrpcMethod('ProjectService')
-  findProjects(request: FindProjectsRequest, ctx: any): Promise<FindProjectsResponse> {
-    return this.queryBus.execute(new GetProjectsQuery(this.spaceRepository, request));
+  findProjects(
+    request: FindProjectsRequest,
+    ctx: any,
+  ): Promise<FindProjectsResponse> {
+    return this.queryBus.execute(
+      new GetProjectsQuery(this.spaceRepository, request),
+    );
   }
 
   @GrpcMethod('ProjectService')
-  readProject(request: ReadProjectRequest, ctx: any): Promise<ReadProjectResponse> {
-    return this.queryBus.execute(new GetProjectQuery(request, this.spaceRepository));
+  readProject(
+    request: ReadProjectRequest,
+    ctx: any,
+  ): Promise<ReadProjectResponse> {
+    return this.queryBus.execute(
+      new GetProjectQuery(request, this.spaceRepository),
+    );
   }
 
   @GrpcMethod('ProjectService')
-  updateProject(request: UpdateProjectRequest, ctx: any): Promise<UpdateProjectResponse> {
+  updateProject(
+    request: UpdateProjectRequest,
+    ctx: any,
+  ): Promise<UpdateProjectResponse> {
     const { user } = getIdentityFromCtx(ctx);
-    return this.commandBus.execute(new UpdateProjectCommand(request, user, this.spaceRepository));
+    return this.commandBus.execute(
+      new UpdateProjectCommand(request, user, this.spaceRepository),
+    );
   }
 }

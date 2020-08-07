@@ -1,29 +1,40 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, Logger, NotImplementedException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotImplementedException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Strategy } from 'passport-github';
 import { AccountsService } from '../accounts.service';
-import { ConsulConfig, InjectConfig } from '@nestcloud/config';
-import { LoginServiceTypes, LoginRequest, CreateRequest } from '@ultimatebackend/proto-schema/account';
+import { InjectConfig } from '@nestcloud/config';
+import { EtcdConfig } from '@nestcloud/config/etcd-config';
+import {
+  LoginServiceTypes,
+  LoginRequest,
+  CreateRequest,
+} from '@ultimatebackend/proto-schema/account';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy) {
   logger = new Logger(this.constructor.name);
 
   constructor(
-    @InjectConfig() private readonly config: ConsulConfig,
+    @InjectConfig() private readonly config: EtcdConfig,
     private readonly accountService: AccountsService,
   ) {
     super({
-      clientID: config.get<string>('app.auth.github.clientID'),
-      clientSecret: config.get<string>('app.auth.github.clientSecret'),
-      callbackURL: config.get<string>('app.auth.github.callbackURL'),
+      clientID: config.get<string>('app.auth.strategies.github.clientID'),
+      clientSecret: config.get<string>(
+        'app.auth.strategies.github.clientSecret',
+      ),
+      callbackURL: config.get<string>('app.auth.strategies.github.callbackURL'),
       profileFields: ['id', 'email', 'read:user', 'user:email'],
     });
   }
 
   async validate(accessToken, refreshToken, profile, done): Promise<any> {
     if (profile && profile.emails.length > 0) {
-
       const logCmd: LoginRequest = {
         service: LoginServiceTypes.Github,
         params: {
@@ -48,7 +59,10 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
         username: profile.username,
       };
 
-      const user = await this.accountService.validateOrCreateUser(logCmd, regCmd);
+      const user = await this.accountService.validateOrCreateUser(
+        logCmd,
+        regCmd,
+      );
 
       if (!user) {
         throw new UnauthorizedException();

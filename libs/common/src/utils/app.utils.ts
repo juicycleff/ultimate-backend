@@ -14,5 +14,5 @@ export class AppUtils {
       await app.close();
       process.exit(0);
     });
-  }
+  };
 }

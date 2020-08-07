@@ -7,3 +7,4 @@ export * from './card';
 export * from './access-token';
 export * from './subscription';
 export * from './project';
+export * from './webhook';

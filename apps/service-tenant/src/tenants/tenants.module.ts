@@ -1,9 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TenantsController } from './tenants.controller';
-import { EventStoreSubscriptionType, EventStoreModule } from '@juicycleff/nestjs-event-store';
-import { BillingsRpcClientService, RolesRpcClientService, TenantCreatedEvent, TenantEventHandlers } from '@ultimatebackend/core';
+import {
+  EventStoreSubscriptionType,
+  EventStoreModule,
+} from '@juicycleff/nestjs-event-store';
+import {
+  BillingsRpcClientService,
+  RolesRpcClientService,
+  TenantCreatedEvent,
+  TenantEventHandlers,
+} from '@ultimatebackend/core';
 import { TenantRepository } from '@ultimatebackend/repository';
 import { TenantCommandHandlers, TenantQueryHandlers } from './cqrs';
+import { TenantSagas } from './sagas';
 
 @Module({
   imports: [
@@ -13,6 +22,10 @@ import { TenantCommandHandlers, TenantQueryHandlers } from './cqrs';
         {
           type: EventStoreSubscriptionType.Volatile,
           stream: '$ce-tenant',
+        },
+        {
+          type: EventStoreSubscriptionType.Volatile,
+          stream: '$ce-point',
         },
       ],
       eventHandlers: {
@@ -27,6 +40,7 @@ import { TenantCommandHandlers, TenantQueryHandlers } from './cqrs';
     ...TenantCommandHandlers,
     ...TenantEventHandlers,
     ...TenantQueryHandlers,
+    TenantSagas,
   ],
   controllers: [TenantsController],
 })

@@ -7,19 +7,8 @@ const providers = [ValidatorService, AppLogger];
 
 @Global()
 @Module({
-  imports: [
-    HttpModule,
-    CqrsModule,
-  ],
-  providers: [
-    ...providers,
-    CookieSerializer,
-  ],
-  exports: [
-    CqrsModule,
-    ...providers,
-    HttpModule,
-    CookieSerializer,
-  ],
+  imports: [HttpModule, CqrsModule],
+  providers: [...providers, CookieSerializer],
+  exports: [CqrsModule, ...providers, HttpModule, CookieSerializer],
 })
 export class CoreModule {}

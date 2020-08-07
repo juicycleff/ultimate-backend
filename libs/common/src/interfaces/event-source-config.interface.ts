@@ -4,8 +4,8 @@ export interface IEventSourceConfig {
   protocol?: string;
   gossipSeeds?: IGosipConfig[];
   credentials?: {
-    username?: string,
-    password?: string,
+    username?: string;
+    password?: string;
   };
   poolOptions?: {
     min?: number;

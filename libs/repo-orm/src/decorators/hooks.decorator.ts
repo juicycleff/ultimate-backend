@@ -18,7 +18,11 @@ import { POST_KEY, PRE_KEY } from '../interfaces';
  * @param {...string[]} events a list of events
  * @returns
  */
-export const Before = (...events: DataEvents[]) => (target: any, name: string, descriptor: TypedPropertyDescriptor<any>) => {
+export const Before = (...events: DataEvents[]) => (
+  target: any,
+  name: string,
+  descriptor: TypedPropertyDescriptor<any>,
+) => {
   for (const event of events) {
     const fns = Reflect.getMetadata(`${PRE_KEY}_${event}`, target) || [];
     // you must create new array so you don't push fn into siblings
@@ -45,7 +49,11 @@ export const Before = (...events: DataEvents[]) => (target: any, name: string, d
  * @param {...string[]} events a list of events
  * @returns
  */
-export const After = (...events: DataEvents[]) =>  (target: any, name: string, descriptor: TypedPropertyDescriptor<any>) => {
+export const After = (...events: DataEvents[]) => (
+  target: any,
+  name: string,
+  descriptor: TypedPropertyDescriptor<any>,
+) => {
   for (const event of events) {
     const fns = Reflect.getMetadata(`${POST_KEY}_${event}`, target) || [];
     // you must create new array so you don't push fn into siblings

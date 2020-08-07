@@ -1,14 +1,15 @@
-import { ClassType } from 'type-graphql';
 import { findType } from '../metadata/find-type';
 import { getMetadataStorage } from '../metadata';
 import { ReturnTypeFunc } from '@nestjs/graphql';
+import { ClassType } from '@ultimatebackend/common';
 
 // tslint:disable-next-line:ban-types
-export function Filterable(returnTypeFunc?: ReturnTypeFunc, option?: FilterableOption): Function {
-
+export function Filterable(
+  returnTypeFunc?: ReturnTypeFunc,
+  option?: FilterableOption,
+): Function {
   // tslint:disable-next-line:only-arrow-functions
-  return function(prototype, propertyKey: string) {
-
+  return function (prototype, propertyKey: string) {
     const { getType } = findType({
       metadataKey: 'design:type',
       prototype,

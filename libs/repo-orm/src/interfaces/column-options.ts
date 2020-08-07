@@ -1,9 +1,7 @@
-
 /**
  * Describes all column's options.
  */
 export interface ColumnOptions extends ColumnCommonOptions {
-
   /**
    * Column type. Must be one of the value from the ColumnTypes class.
    */
@@ -18,7 +16,7 @@ export interface ColumnOptions extends ColumnCommonOptions {
    * Column type's length. Used only on some column types.
    * For example type = "string" and length = "100" means that ORM will create a column with type varchar(100).
    */
-  length?: string|number;
+  length?: string | number;
 
   /**
    * Indicates if column's value can be set to NULL.
@@ -39,7 +37,7 @@ export interface ColumnOptions extends ColumnCommonOptions {
    * Array of possible enumerated values.
    */
   // tslint:disable-next-line:ban-types
-  enum?: Array<string|number>|Object;
+  enum?: Array<string | number> | Object;
 
   /**
    * Indicates if this column is an array.
@@ -58,7 +56,6 @@ export interface ColumnOptions extends ColumnCommonOptions {
  * Column options specific to all column types.
  */
 export interface ColumnCommonOptions {
-
   /**
    * Indicates if column is always selected by QueryBuilder and find operations.
    * Default value is "true".
@@ -80,7 +77,7 @@ export interface ColumnCommonOptions {
    * Specifies if this column will use auto increment (sequence, generated identity).
    * Note that in some databases only one column in entity can be marked as generated, and it must be a primary column.
    */
-  generated?: boolean|'increment'|'uuid';
+  generated?: boolean | 'increment' | 'uuid';
 
   /**
    * Specifies if column's value must be unique or not.

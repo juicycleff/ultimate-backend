@@ -17,11 +17,7 @@ import { AdapterProviderModule } from './adapter.provider';
     }),
     RolesModule,
   ],
-  controllers: [
-    AppController,
-  ],
-  providers: [
-    AppService,
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

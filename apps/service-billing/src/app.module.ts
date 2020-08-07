@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongoModule } from '@juicycleff/repo-orm';
-import { CoreModule, MongoConfigService, ServiceRegistryModule } from '@ultimatebackend/core';
+import {
+  CoreModule,
+  MongoConfigService,
+  ServiceRegistryModule,
+} from '@ultimatebackend/core';
 import { StripeModule } from 'nestjs-stripe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

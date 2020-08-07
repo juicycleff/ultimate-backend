@@ -16,7 +16,9 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "You just reached rainsack. Keep looking at the screen, and you will see a green dot"', () => {
-      expect(appController.getHello()).toBe('You just reached rainsack. Keep looking at the screen, and you will see a green dot');
+      expect(appController.getHello()).toBe(
+        'You just reached rainsack. Keep looking at the screen, and you will see a green dot',
+      );
     });
   });
 });

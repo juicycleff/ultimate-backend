@@ -33,7 +33,11 @@ export class MongoDatabaseClient extends EventEmitter {
    * @param [client] Optional instantiated MongoDB connection
    * @memberof DatabaseClient
    */
-  async connect(uri: string, userOpts?: MongoClientOptions, client?: MongoClient | Promise<MongoClient>): Promise<Db> {
+  async connect(
+    uri: string,
+    userOpts?: MongoClientOptions,
+    client?: MongoClient | Promise<MongoClient>,
+  ): Promise<Db> {
     this.uri = uri;
 
     if (client !== undefined) {
@@ -64,17 +68,22 @@ export class MongoDatabaseClient extends EventEmitter {
    * @param userOpts
    * @memberof DatabaseClient
    */
-  private createClient(uri: string, userOpts?: MongoClientOptions): Promise<MongoClient> {
+  private createClient(
+    uri: string,
+    userOpts?: MongoClientOptions,
+  ): Promise<MongoClient> {
     return new Promise<MongoClient>((resolve, reject) => {
       const operation = retry.operation();
       const opts = Object.assign({}, { useNewUrlParser: true }, userOpts);
-      operation.attempt(async attempt => {
+      operation.attempt(async (attempt) => {
         try {
           const client = await MongoClient.connect(uri, opts);
           this.emit('connected', client);
           resolve(client);
         } catch (e) {
-          if (operation.retry(e)) { return; }
+          if (operation.retry(e)) {
+            return;
+          }
           this.emit('error', e);
           reject(e);
         }

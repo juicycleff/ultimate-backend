@@ -1,14 +1,10 @@
-account:
+app:
   port: 9900
+  auth:
+    jwtSettings:
+      secret: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im1hYXNfcHJvZF8yMDIwMDMyNiIsInR5cCI6IkpXVCJ9"
   database:
     name: "srv-account"
-
-memcached:
-  uri: "localhost:11211"
-  retries: 3
-
-jwt:
-  secret: "final-acid-pro"
 
 database:
   mongodb:

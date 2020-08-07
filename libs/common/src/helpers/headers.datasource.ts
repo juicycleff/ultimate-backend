@@ -9,13 +9,15 @@ const unSafeHeaders = [
 
 export class HeadersDatasource extends RemoteGraphQLDataSource {
   willSendRequest({ request, context }) {
-
     if (context.req) {
       if (context.req.headers) {
         const ctxHeaders = context.req.headers;
 
         for (const key in ctxHeaders) {
-          if (ctxHeaders.hasOwnProperty(key) && unSafeHeaders.indexOf(key) === -1) {
+          if (
+            ctxHeaders.hasOwnProperty(key) &&
+            unSafeHeaders.indexOf(key) === -1
+          ) {
             request.http.headers.set(key, ctxHeaders[key]);
           }
         }
@@ -23,7 +25,10 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
 
       if (context.req.tenantInfo) {
         request.tenantInfo = context.req.tenantInfo;
-        request.http.headers.set('x-tenant-info', JSON.stringify(context.req.tenantInfo));
+        request.http.headers.set(
+          'x-tenant-info',
+          JSON.stringify(context.req.tenantInfo),
+        );
       }
     }
   }
@@ -32,7 +37,10 @@ export class HeadersDatasource extends RemoteGraphQLDataSource {
     const body = await super.didReceiveResponse({ response, request, context });
 
     if (context.res) {
-      if (response.headers.get('set-cookie') !== null && response.headers.get('set-cookie') !== undefined) {
+      if (
+        response.headers.get('set-cookie') !== null &&
+        response.headers.get('set-cookie') !== undefined
+      ) {
         context.res.cookie(response.headers.get('set-cookie'));
       }
     }

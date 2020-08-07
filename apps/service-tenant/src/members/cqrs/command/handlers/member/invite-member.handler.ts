@@ -1,18 +1,28 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { TenantMemberEmbed, TenantRepository } from '@ultimatebackend/repository';
-import { MemberInvitedEvent, RolesRpcClientService } from '@ultimatebackend/core';
-import {v1 as uuidv1} from 'uuid';
+import {
+  TenantMemberEmbed,
+  TenantRepository,
+} from '@ultimatebackend/repository';
+import {
+  MemberInvitedEvent,
+  RolesRpcClientService,
+} from '@ultimatebackend/core';
+import { v1 as uuidv1 } from 'uuid';
 import { DateTime } from 'luxon';
 import { ObjectId } from 'mongodb';
 import { InviteMemberCommand } from '../../impl';
 import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
-import { InviteMemberResponse, Member } from '@ultimatebackend/proto-schema/tenant';
+import {
+  InviteMemberResponse,
+  Member,
+} from '@ultimatebackend/proto-schema/tenant';
 import { RpcException } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
 
 @CommandHandler(InviteMemberCommand)
-export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand> {
+export class InviteMemberHandler
+  implements ICommandHandler<InviteMemberCommand> {
   logger = new Logger(this.constructor.name);
 
   constructor(
@@ -27,7 +37,8 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
     const { input, user, tenantId } = command;
 
     try {
-      if (input.email === null || typeof input.email !== 'string' ) { // Check to make sure input is not null
+      if (input.email === null || typeof input.email !== 'string') {
+        // Check to make sure input is not null
         throw new RpcException('Email input field missing'); // Throw an apollo input error
       }
 
@@ -41,7 +52,8 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
                 userId: new ObjectId(user.id),
               },
               {
-                email: user.emails.reduce(pv => pv.primary === true && pv).address,
+                email: user.emails.reduce((pv) => pv.primary === true && pv)
+                  .address,
               },
             ],
           },
@@ -71,11 +83,11 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
       });
 
       if (tenant) {
-        throw new RpcException('Member already invited');  // Throw a conflict exception id tenant exist
+        throw new RpcException('Member already invited'); // Throw a conflict exception id tenant exist
       }
 
       const memberId = uuidv1();
-      const member: TenantMemberEmbed & {token?: string} = {
+      const member: TenantMemberEmbed & { token?: string } = {
         id: memberId,
         email: input.email,
         role: AppRole[input.role],
@@ -96,9 +108,14 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
         },
       });
 
-      this.roleService.roleService.addUserToRole(
-        {role: 'owner', domain: tenant.normalizedName, actor: 'user', userId: user.id.toString() },
-      ).toPromise();
+      await this.roleService.svc
+        .addUserToRole({
+          role: 'owner',
+          domain: tenant.normalizedName,
+          actor: 'user',
+          userId: user.id.toString(),
+        })
+        .toPromise();
 
       member.invitedBy = {
         firstname: user.firstname,
@@ -107,7 +124,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
       };
 
       const payload = {
-        tenantId: tenantId,
+        tenantId,
         memberId,
       };
       member.token = await this.jwtService.sign(payload);
@@ -116,7 +133,7 @@ export class InviteMemberHandler implements ICommandHandler<InviteMemberCommand>
       await this.eventBus.publish(new MemberInvitedEvent(member));
 
       return {
-        member: member as unknown as Member,
+        member: (member as unknown) as Member,
       };
     } catch (error) {
       this.logger.log(error);

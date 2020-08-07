@@ -7,6 +7,10 @@ services:
       dockerfile: apps/service-account/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-account:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-account.default.svc.cluster.local
     ports:
       - 50054:50054
     labels:
@@ -20,6 +24,10 @@ services:
       dockerfile: apps/service-access/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-access:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-access.default.svc.cluster.local
     ports:
     - 50089:50089
     labels:
@@ -33,6 +41,10 @@ services:
       dockerfile: apps/service-billing/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-billing:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-billing.default.svc.cluster.local
     ports:
     - 50067:50067
     labels:
@@ -46,6 +58,10 @@ services:
       dockerfile: apps/service-notification/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-notification:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-notification.default.svc.cluster.local
     ports:
     - 50044:50044
     labels:
@@ -59,6 +75,10 @@ services:
       dockerfile: apps/service-role/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-role:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-role.default.svc.cluster.local
     ports:
     - 50052:50052
     labels:
@@ -74,6 +94,27 @@ services:
     restart: always
     ports:
     - 50053:50053
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-tenant.default.svc.cluster.local
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  services-webhook:
+    build:
+      context: ""
+      dockerfile: apps/service-webhook/Dockerfile
+    image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/service-webhook:${IMAGE_TAG:?err}"
+    restart: always
+    ports:
+    - 50049:50049
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=service-webhook.default.svc.cluster.local
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -85,6 +126,10 @@ services:
       dockerfile: apps/api-admin/Dockerfile
     image: "${DOCKER_REGISTRY}/${DOCKER_REPO:?err}/api-admin:${IMAGE_TAG:?err}"
     restart: always
+    environment:
+      - CONSUL_HOST=consul-cluster.default.svc.cluster.local
+      - NATS_HOST=nats-cluster.default.svc.cluster.local
+      - DISCOVERY_HOST=api-admin.default.svc.cluster.local
     ports:
     - 50020:50020
     labels:
@@ -98,7 +143,7 @@ services:
     ports:
       - '2113:2113'
       - '1113:1113'
-    image: eventstore/eventstore
+    image: eventstore/eventstore:release-5.0.8
     labels:
       kompose.service.type: nodeport
       kompose.service.expose: "true"

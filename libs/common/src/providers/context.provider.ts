@@ -1,8 +1,6 @@
-
 import * as requestContext from 'request-context';
 
 export class ContextProvider {
-
   static get<T>(key: string): T {
     return requestContext.get(ContextProvider._getKeyWithNamespace(key));
   }

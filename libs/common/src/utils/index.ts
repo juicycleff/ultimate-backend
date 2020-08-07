@@ -9,6 +9,7 @@ export * from './crypto.utils';
 export * from './mime-type.util';
 export * from './cors-config.util';
 export * from './magic-code.generator';
+export * from './metadata.utils';
 
 export function reduceByPercent(numb: number, value: number): number {
   const per = 100 - value;
@@ -35,7 +36,15 @@ export function cleanEmptyProperties(
 
     // Recurse into arrays and objects.
     if (Array.isArray(value) || isPlainObject(value)) {
-      value = cleanEmptyProperties(value, { cleanKeys, cleanValues, emptyArrays, emptyObjects, emptyStrings, nullValues, undefinedValues });
+      value = cleanEmptyProperties(value, {
+        cleanKeys,
+        cleanValues,
+        emptyArrays,
+        emptyObjects,
+        emptyStrings,
+        nullValues,
+        undefinedValues,
+      });
     }
 
     // Exclude specific values.

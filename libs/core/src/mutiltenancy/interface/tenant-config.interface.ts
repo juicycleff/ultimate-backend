@@ -15,34 +15,47 @@ export interface TenantInfo {
 }
 
 export type TenantResolver =
-  {
-    resolverType: 'Domain',
-    headerKeys?: {
-      apiKey?: string,
-    },
-    requiresToken?: boolean;
-  } | {
-  resolverType: 'Header',
-  headerKeys?: {
-    tenant: string,
-    apiKey?: string,
-  },
-  requiresToken?: boolean;
-} | {
-  resolverType: 'Query',
-  queryKeys?: {
-    tenant: string,
-    apiKey?: string,
-  },
-  requiresToken?: boolean;
-} | {
-  resolverType: 'Cookie',
-  cookieKeys?: {
-    tenant: string,
-    apiKey?: string,
-  },
-  requiresToken?: boolean;
-};
+  | {
+      resolverType: 'Domain';
+      headerKeys?: {
+        apiKey?: string;
+      };
+      requiresToken?: boolean;
+    }
+  | {
+      resolverType: 'Header';
+      headerKeys?: {
+        tenant: string;
+        apiKey?: string;
+      };
+      requiresToken?: boolean;
+    }
+  | {
+      resolverType: 'Query';
+      queryKeys?: {
+        tenant: string;
+        apiKey?: string;
+      };
+      requiresToken?: boolean;
+    }
+  | {
+      resolverType: 'Cookie';
+      cookieKeys?: {
+        tenant: string;
+        apiKey?: string;
+      };
+      requiresToken?: boolean;
+    }
+  | {
+      resolverType: 'Params';
+      paramKeys?: {
+        tenant: string;
+      };
+      headerKeys?: {
+        apiKey?: string;
+      };
+      requiresToken?: boolean;
+    };
 
 export interface ITenantServiceConfig {
   /**

@@ -1,16 +1,17 @@
 import 'reflect-metadata';
 import { getMetadataStorage } from '../metadata';
 import { InAppRole } from '../interfaces';
-import { bool } from 'aws-sdk/clients/signer';
 
 export const RESOURCE_DEFINITION = '__resource_definition__';
 
 export function Resource(options: {
-  name: string, identify: string, roles: InAppRole[], supportsToken?: bool,
-  action: 'create' | 'read' | 'update' | 'delete',
+  name: string;
+  identify: string;
+  roles: InAppRole[];
+  supportsToken?: boolean;
+  action: 'create' | 'read' | 'update' | 'delete';
 }) {
   return (target, key?: any, descriptor?: any) => {
-
     getMetadataStorage().collectResourcesMetadata({
       name: options.name,
       fieldType: options.name,

@@ -9,7 +9,10 @@ export class BaseModule implements OnModuleInit {
   constructor(private readonly clientService: RolesRpcClientService) {}
 
   private static scanResourcesAndPermissions() {
-    const metadataMap: Map<string, { name: string, resource: IResource[] }> = new Map();
+    const metadataMap: Map<
+      string,
+      { name: string; resource: IResource[] }
+    > = new Map();
     const resources = getMetadataStorage().resources;
     // const permissions = getMetadataStorage().permissions;
 
@@ -21,8 +24,8 @@ export class BaseModule implements OnModuleInit {
         action: r.options.action,
       };
 
-      const metaKey =  r.prototype?.constructor?.name as string;
-      const moduleKey =  metaKey.replace('Resolver', '');
+      const metaKey = r.prototype?.constructor?.name as string;
+      const moduleKey = metaKey.replace('Resolver', '');
 
       if (metadataMap.has(moduleKey)) {
         metadataMap.get(moduleKey).name = metaKey;
@@ -35,15 +38,19 @@ export class BaseModule implements OnModuleInit {
     return metadataMap;
   }
 
-  public async savePermissionsAndResources(metadataMap: Map<string, { name: string, resource: IResource[] }>) {
+  public async savePermissionsAndResources(
+    metadataMap: Map<string, { name: string; resource: IResource[] }>,
+  ) {
     const obj = {};
-    metadataMap.forEach((v, k) => obj[k] = v);
+    metadataMap.forEach((v, k) => (obj[k] = v));
 
     try {
       for (const [kv, v] of metadataMap) {
         for (const r of v.resource) {
           for (const role of r.roles) {
-            await this.clientService.roleService.addPolicy({ params: [role, r.identify, r.action] }).toPromise();
+            await this.clientService.svc
+              .addPolicy({ params: [role, r.identify, r.action] })
+              .toPromise();
           }
         }
       }
@@ -56,7 +63,6 @@ export class BaseModule implements OnModuleInit {
     try {
       const metaData = BaseModule.scanResourcesAndPermissions();
       await this.savePermissionsAndResources(metaData);
-
     } catch (e) {
       Logger.error(e, this.constructor.name);
     }

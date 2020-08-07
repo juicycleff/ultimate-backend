@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { InjectQueue } from '@nestjs/bull';
 import {
-  EmailVerifiedEvent, ForgotPasswordSentEvent,
+  EmailVerifiedEvent,
+  ForgotPasswordSentEvent,
   UserLoggedInEvent,
   UserRegisteredEvent,
   VerificationEmailSentEvent,
@@ -20,76 +21,88 @@ export class AuthSagas {
 
   @Saga()
   userLoggedIn = (events$: Observable<any>): Observable<ICommand> => {
-    return events$
-      .pipe(
-        ofType(UserLoggedInEvent),
-        delay(1000),
-        map( event => {
-          // this.logger.log(JSON.stringify(event.user));
+    return events$.pipe(
+      ofType(UserLoggedInEvent),
+      delay(1000),
+      map((event) => {
+        // this.logger.log(JSON.stringify(event.user));
 
-          // if (event.user) { this.queue.add(QUEUE_PROCESS_IDS.UserLoggedIn, event.user, { removeOnComplete: true, attempts: 3}); }
-          return null;
-        }),
-      );
+        // if (event.user) { this.queue.add(QUEUE_PROCESS_IDS.UserLoggedIn, event.user, { removeOnComplete: true, attempts: 3}); }
+        return null;
+      }),
+    );
   };
 
   @Saga()
   resetPassword = (events$: Observable<any>): Observable<ICommand> => {
-    return events$
-      .pipe(
-        ofType(ForgotPasswordSentEvent),
-        delay(1000),
-        map( event => {
-          this.logger.log(JSON.stringify(event.user));
-          if (event.user) { this.queue.add(QUEUE_PROCESS_IDS.ResetPassword, event.user, { removeOnComplete: true, attempts: 3}); }
-          return null;
-        }),
-      );
+    return events$.pipe(
+      ofType(ForgotPasswordSentEvent),
+      delay(1000),
+      map((event) => {
+        this.logger.log(JSON.stringify(event.user));
+        if (event.user) {
+          this.queue.add(QUEUE_PROCESS_IDS.ResetPassword, event.user, {
+            removeOnComplete: true,
+            attempts: 3,
+          });
+        }
+        return null;
+      }),
+    );
   };
 
   @Saga()
   userRegistered = (events$: Observable<any>): Observable<ICommand> => {
-    return events$
-      .pipe(
-        ofType(UserRegisteredEvent),
-        delay(1000),
-        map( event => {
-          this.logger.log(JSON.stringify(event.user));
-          if (event.user.service === 'social') {
-            this.queue.add(QUEUE_PROCESS_IDS.EmailVerified, event.user, { removeOnComplete: true, attempts: 3});
-          } else {
-            this.queue.add(QUEUE_PROCESS_IDS.UserRegistered, event.user, { removeOnComplete: true, attempts: 3});
-          }
-          return null;
-        }),
-      );
+    return events$.pipe(
+      ofType(UserRegisteredEvent),
+      delay(1000),
+      map((event) => {
+        this.logger.log(JSON.stringify(event.user));
+        if (event.user.service === 'social') {
+          this.queue.add(QUEUE_PROCESS_IDS.EmailVerified, event.user, {
+            removeOnComplete: true,
+            attempts: 3,
+          });
+        } else {
+          this.queue.add(QUEUE_PROCESS_IDS.UserRegistered, event.user, {
+            removeOnComplete: true,
+            attempts: 3,
+          });
+        }
+        return null;
+      }),
+    );
   };
 
   @Saga()
   resendVerificationCode = (events$: Observable<any>): Observable<ICommand> => {
-    return events$
-      .pipe(
-        ofType(VerificationEmailSentEvent),
-        delay(1000),
-        map( event => {
-          this.logger.log(JSON.stringify(event.user));
-          this.queue.add(QUEUE_PROCESS_IDS.SendVerificationCode, event.user, { removeOnComplete: true, attempts: 3});
-          return null;
-        }),
-      );
+    return events$.pipe(
+      ofType(VerificationEmailSentEvent),
+      delay(1000),
+      map((event) => {
+        this.logger.log(JSON.stringify(event.user));
+        this.queue.add(QUEUE_PROCESS_IDS.SendVerificationCode, event.user, {
+          removeOnComplete: true,
+          attempts: 3,
+        });
+        return null;
+      }),
+    );
   };
 
   @Saga()
   emailVerified = (events$: Observable<any>): Observable<ICommand> => {
-    return events$
-      .pipe(
-        ofType(EmailVerifiedEvent),
-        delay(1000),
-        map( event => {
-          this.logger.log(JSON.stringify(event.user));
-          this.queue.add(QUEUE_PROCESS_IDS.EmailVerified, event.user, { removeOnComplete: true, attempts: 3});
-          return null;
-        }),
-      );
-  }
+    return events$.pipe(
+      ofType(EmailVerifiedEvent),
+      delay(1000),
+      map((event) => {
+        this.logger.log(JSON.stringify(event.user));
+        this.queue.add(QUEUE_PROCESS_IDS.EmailVerified, event.user, {
+          removeOnComplete: true,
+          attempts: 3,
+        });
+        return null;
+      }),
+    );
+  };
 }

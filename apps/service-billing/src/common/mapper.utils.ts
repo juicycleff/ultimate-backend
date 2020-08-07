@@ -5,10 +5,11 @@ import {
   InvoiceStatus,
   Plan,
   StripePlan,
-  SubscriptionStatus, TenantSubscription,
+  SubscriptionStatus,
+  TenantSubscription,
 } from '@ultimatebackend/proto-schema/billing';
 
-export function cardToProtoCard(card: ICard): Card {
+export function cardToProtoCard(card: ICard, defaultSourceId: string): Card {
   return {
     brand: card.brand,
     currency: card.currency,
@@ -18,6 +19,9 @@ export function cardToProtoCard(card: ICard): Card {
     id: card.id,
     name: card.name,
     number: card.number,
+    lastFourDigit: card.last4,
+    isDefault: defaultSourceId === card.id,
+    // dynamic_last4: card.dynamic_last4,
     address: {
       city: card.address_city,
       country: card.address_country,
@@ -30,10 +34,13 @@ export function cardToProtoCard(card: ICard): Card {
   };
 }
 
-export function cardSliceToProtoCardSlice(cardList: ICard[]): Card[] {
+export function cardSliceToProtoCardSlice(
+  cardList: ICard[],
+  defaultSourceId: string,
+): Card[] {
   const tCards: Card[] = [];
   for (const c of cardList) {
-    tCards.push(cardToProtoCard(c));
+    tCards.push(cardToProtoCard(c, defaultSourceId));
   }
   return tCards;
 }
@@ -42,7 +49,7 @@ export function invoiceToProtoInvoice(invoice: invoices.IInvoice): Invoice {
   return {
     id: invoice.id,
     status: invoice.status,
-    dueDate: new Date(invoice.due_date),
+    dueDate: new Date(invoice.due_date).toISOString(),
     currency: invoice.currency,
     accountCountry: invoice.account_country,
     accountName: invoice.account_name,
@@ -65,12 +72,14 @@ export function invoiceToProtoInvoice(invoice: invoices.IInvoice): Invoice {
     tax: invoice.tax,
     taxPercent: invoice.tax_percent,
     total: invoice.total,
-    createdAt: new Date(invoice.created),
-    updatedAt: new Date(invoice.created),
+    createdAt: new Date(invoice.created).toISOString(),
+    updatedAt: new Date(invoice.created).toISOString(),
   };
 }
 
-export function invoiceSliceToProtoInvoiceSlice(invoiceList: invoices.IInvoice[]): Invoice[] {
+export function invoiceSliceToProtoInvoiceSlice(
+  invoiceList: invoices.IInvoice[],
+): Invoice[] {
   const tInvoice: Invoice[] = [];
   for (const inv of invoiceList) {
     tInvoice.push(invoiceToProtoInvoice(inv));
@@ -88,7 +97,9 @@ export function planToProtoStripePlan(plan: plans.IPlan): StripePlan {
   };
 }
 
-export function planSliceToProtoStripePlanSlice(planList: plans.IPlan[]): StripePlan[] {
+export function planSliceToProtoStripePlanSlice(
+  planList: plans.IPlan[],
+): StripePlan[] {
   const splans: StripePlan[] = [];
   for (const inv of planList) {
     splans.push(planToProtoStripePlan(inv));
@@ -96,22 +107,37 @@ export function planSliceToProtoStripePlanSlice(planList: plans.IPlan[]): Stripe
   return splans;
 }
 
-export function subsToProtoStripeSubs(sub: subscriptions.ISubscription): TenantSubscription {
+export function subsToProtoStripeSubs(
+  sub: subscriptions.ISubscription,
+): TenantSubscription {
   return {
-    createdAt: new Date(sub.created),
+    createdAt: new Date(sub.created).toISOString(),
     id: sub.id,
     status: sub.status,
     tenantId: sub.metadata.tenantId,
-    updatedAt: new Date(sub.created),
+    updatedAt: new Date(sub.created).toISOString(),
+    canceledAt: new Date(sub.cancel_at).toISOString(),
+    collectionMethod: sub.collection_method,
+    currentPeriodEnd: new Date(sub.current_period_end).toISOString(),
+    currentPeriodStart: new Date(sub.current_period_start).toISOString(),
+    customerEmail: '',
+    customerName: '',
+    endedAt: new Date(sub.ended_at).toISOString(),
+    latestInvoiceId: sub.latest_invoice.toString(),
+    startDate: new Date(sub.start_date).toISOString(),
+    trialEnd: new Date(sub.trial_end).toISOString(),
+    trialStart: new Date(sub.trial_start).toISOString(),
   };
 }
 
-export function subsSliceToProtoStripePlanSubs(subList: subscriptions.ISubscription[]): TenantSubscription[] {
-  const splans: TenantSubscription[] = [];
+export function subsSliceToProtoStripePlanSubs(
+  subList: subscriptions.ISubscription[],
+): TenantSubscription[] {
+  const subs: TenantSubscription[] = [];
   for (const inv of subList) {
-    splans.push(subsToProtoStripeSubs(inv));
+    subs.push(subsToProtoStripeSubs(inv));
   }
-  return splans;
+  return subs;
 }
 
 function invoiceStatusToString(input: InvoiceStatus): string {

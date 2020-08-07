@@ -1,9 +1,11 @@
-
 interface VerificationCodeGeneratorOption {
   type: 'number' | 'string';
 }
 
-export function generateVerificationCode(length: number, options: VerificationCodeGeneratorOption) {
+export function generateVerificationCode(
+  length: number,
+  options: VerificationCodeGeneratorOption,
+) {
   if (isNaN(length)) {
     throw new TypeError('Length must be a number');
   }

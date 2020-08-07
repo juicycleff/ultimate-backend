@@ -1,4 +1,3 @@
-
 export class MimeTypeNames {
   /**
    * @description Used to denote the encoding necessary for files containing JavaScript source code.
@@ -194,7 +193,8 @@ export class MimeTypeNames {
   /**
    * @description KML files (e.g. for Google Earth)
    */
-  public static ApplicationVndGoogleEarthKmlXml = 'application/vnd.google-earth.kml+xml';
+  public static ApplicationVndGoogleEarthKmlXml =
+    'application/vnd.google-earth.kml+xml';
 
   /**
    * @description LaTeX files
@@ -209,7 +209,8 @@ export class MimeTypeNames {
   /**
    * @description Microsoft Excel 2007 files
    */
-  public static ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  public static ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet =
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
   /**
    * @description Microsoft Excel files
@@ -219,7 +220,8 @@ export class MimeTypeNames {
   /**
    * @description Microsoft Powerpoint 2007 files
    */
-  public static ApplicationVndOpenxmlformatsOfficedocumentPresentationmlPresentation = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+  public static ApplicationVndOpenxmlformatsOfficedocumentPresentationmlPresentation =
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 
   /**
    * @description Microsoft Powerpoint files
@@ -229,7 +231,8 @@ export class MimeTypeNames {
   /**
    * @description Microsoft Word 2007 files
    */
-  public static ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlDocument = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  public static ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlDocument =
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
   /**
    * @description Microsoft Word files[15]
@@ -314,22 +317,26 @@ export class MimeTypeNames {
   /**
    * @description OpenDocument Graphics; Registered[14]
    */
-  public static ApplicationVndOasisOpendocumentGraphics = 'application/vnd.oasis.opendocument.graphics';
+  public static ApplicationVndOasisOpendocumentGraphics =
+    'application/vnd.oasis.opendocument.graphics';
 
   /**
    * @description OpenDocument Presentation; Registered[13]
    */
-  public static ApplicationVndOasisOpendocumentPresentation = 'application/vnd.oasis.opendocument.presentation';
+  public static ApplicationVndOasisOpendocumentPresentation =
+    'application/vnd.oasis.opendocument.presentation';
 
   /**
    * @description OpenDocument Spreadsheet; Registered[12]
    */
-  public static ApplicationVndOasisOpendocumentSpreadsheet = 'application/vnd.oasis.opendocument.spreadsheet';
+  public static ApplicationVndOasisOpendocumentSpreadsheet =
+    'application/vnd.oasis.opendocument.spreadsheet';
 
   /**
    * @description OpenDocument Text; Registered[11]
    */
-  public static ApplicationVndOasisOpendocumentText = 'application/vnd.oasis.opendocument.text';
+  public static ApplicationVndOasisOpendocumentText =
+    'application/vnd.oasis.opendocument.text';
 
   /**
    * @description p12 files
@@ -339,7 +346,8 @@ export class MimeTypeNames {
   /**
    * @description p7b and spc files
    */
-  public static ApplicationXPkcs7Certificates = 'application/x-pkcs7-certificates';
+  public static ApplicationXPkcs7Certificates =
+    'application/x-pkcs7-certificates';
 
   /**
    * @description p7c files
@@ -349,7 +357,8 @@ export class MimeTypeNames {
   /**
    * @description p7r files
    */
-  public static ApplicationXPkcs7Certreqresp = 'application/x-pkcs7-certreqresp';
+  public static ApplicationXPkcs7Certreqresp =
+    'application/x-pkcs7-certreqresp';
 
   /**
    * @description p7s files

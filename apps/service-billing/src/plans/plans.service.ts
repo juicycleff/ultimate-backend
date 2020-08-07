@@ -1,4 +1,11 @@
-import { CACHE_MANAGER, CacheStore, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  CacheStore,
+  Inject,
+  Injectable,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
 import * as Stripe from 'stripe';
 import {
@@ -9,7 +16,10 @@ import {
   StripePlan,
 } from '@ultimatebackend/proto-schema/billing';
 import { RpcException } from '@nestjs/microservices';
-import { planSliceToProtoStripePlanSlice, planToProtoStripePlan } from '../common';
+import {
+  planSliceToProtoStripePlanSlice,
+  planToProtoStripePlan,
+} from '../common';
 import { PlanSeed } from './plan.seed';
 import { reduceByPercent } from '@ultimatebackend/common';
 import { PlanRepository } from '@ultimatebackend/repository';
@@ -24,10 +34,14 @@ export class PlansService implements OnModuleInit {
     private readonly planRepository: PlanRepository,
   ) {}
 
-  async readStripePlan(query: ReadStripePlanRequest): Promise<ReadStripePlanResponse> {
+  async readStripePlan(
+    query: ReadStripePlanRequest,
+  ): Promise<ReadStripePlanResponse> {
     const { id } = query;
 
-    if (!id) { throw new RpcException('Missing plan id input'); }
+    if (!id) {
+      throw new RpcException('Missing plan id input');
+    }
 
     try {
       // Check cache to see if data exist
@@ -42,7 +56,7 @@ export class PlansService implements OnModuleInit {
       const plans = await this.stripeClient.plans.retrieve(id);
       const result = planToProtoStripePlan(plans);
 
-      await this.cacheStore.set(cacheKey + id, result, {ttl: 500000});
+      await this.cacheStore.set(cacheKey + id, result, { ttl: 500000 });
       return {
         plan: result,
       };
@@ -52,7 +66,9 @@ export class PlansService implements OnModuleInit {
     }
   }
 
-  async listStripePlan(request: FindStripePlansRequest): Promise<FindStripePlansResponse> {
+  async listStripePlan(
+    request: FindStripePlansRequest,
+  ): Promise<FindStripePlansResponse> {
     const { productId } = request;
 
     if (!productId) {
@@ -92,7 +108,7 @@ export class PlansService implements OnModuleInit {
         const id = 'product-' + plan.normalizedName;
         // let product = await this.stripeClient.products.retrieve(id);
         // if (product) {
-          // continue;
+        // continue;
         // }
         const product = await this.stripeClient.products.create({
           active: true,
@@ -137,7 +153,6 @@ export class PlansService implements OnModuleInit {
             usage_type: usageType,
           });
         } else {
-
           const amount = plan.price.amount;
           const planId = 'plan-free-' + plan.normalizedName;
           const nickname = 'Free Plan';
@@ -154,7 +169,6 @@ export class PlansService implements OnModuleInit {
             usage_type: usageType,
           });
         }
-
       } catch (e) {
         this.logger.error(e);
       }
@@ -162,18 +176,24 @@ export class PlansService implements OnModuleInit {
   }
 
   async seedDatabasePlan() {
+    const hasPlan = await this.planRepository.find({limit: 4, conditions: {}});
+    if (hasPlan && hasPlan.length > 0) { return }
+
     const seeds = new PlanSeed();
 
     await this.seedStripePlan();
     for (const plan of seeds.getSeedData) {
       try {
         const id = 'product-' + plan.normalizedName;
-        const product = await this.planRepository.findOne({ normalizedName: id});
+        const product = await this.planRepository.findOne({
+          normalizedName: id,
+        });
         if (product) {
           continue;
         }
 
-        await this.planRepository.create({...plan, normalizedName: id});
+        // @ts-ignore
+        await this.planRepository.create({ ...plan, normalizedName: id });
       } catch (e) {
         this.logger.error(e);
       }

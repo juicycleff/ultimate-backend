@@ -1,12 +1,10 @@
-import {Logger} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { UserRepository } from '@ultimatebackend/repository';
 import { UserCreatedEvent } from '@ultimatebackend/core';
 import { cleanEmptyProperties } from '@ultimatebackend/common';
 import { UpdateUserCommand } from '../../impl';
 import * as Account from '@ultimatebackend/proto-schema/account';
-import {User} from '@ultimatebackend/proto-schema/account';
-import { plainToClass } from 'class-transformer';
 import { RpcException } from '@nestjs/microservices';
 
 /**
@@ -28,7 +26,6 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
     const { data, id } = command;
 
     try {
-
       const update = cleanEmptyProperties(data);
       const user = await this.userRepository.findOneByIdAndUpdate(id, {
         updates: {
@@ -45,5 +42,4 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       throw new RpcException(error);
     }
   }
-
 }

@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+// import "google/protobuf/timestamp.proto";
+
+package io.ultimatebackend.srv.webhook;
+
+service WebhookService {
+  rpc CreateWebhook(CreateWebhookRequest) returns (CreateWebhookResponse) {}
+  rpc UpdateWebhook(UpdateWebhookRequest) returns (UpdateWebhookResponse) {}
+  rpc DeleteWebhook(DeleteWebhookRequest) returns (DeleteWebhookResponse) {}
+
+  rpc ReadWebhook(ReadWebhookRequest) returns (ReadWebhookResponse) {}
+  rpc FindWebhook(FindWebhookRequest) returns (FindWebhookResponse) {}
+}
+
+enum WebhookRequestType {
+  POST = 0;
+  GET = 1;
+  PUT = 2;
+  DELETE = 3;
+  PATCH = 4;
+}
+
+enum WebhookAuthType {
+  NONE = 0;
+  BASIC = 1;
+  API_KEY = 2;
+  TOKEN = 3;
+  OAUTH_2 = 4;
+}
+
+
+enum ApiKeyField {
+  HEADER = 0;
+  PARAMS = 1;
+}
+
+message Auth {
+  string type = 1;
+  string identifier = 2;
+  string addTo = 3;
+  string key = 4;
+  string value = 5;
+  string token = 6;
+  string username = 7;
+  string password = 8;
+}
+
+
+message Paginate {
+  int32 skip = 1;
+  int32 limit = 2;
+}
+
+message Webhook {
+  string id = 1;
+  string endpoint = 2;
+  string requestType = 3;
+  string createdAt = 6;
+  string updatedAt = 7;
+  string tenantId = 8;
+  Auth auth = 9;
+  bool active = 10;
+  string name = 11;
+  string action = 12;
+}
+
+message CreateWebhookRequest {
+  string name = 1;
+  string endpoint = 2;
+  string requestType = 3;
+  Auth auth = 4;
+}
+
+message CreateWebhookResponse {
+  Webhook webhook = 1;
+}
+
+message UpdateWebhookRequest {
+  string id = 5;
+  string name = 1;
+  string endpoint = 2;
+  string requestType = 3;
+  Auth auth = 4;
+}
+
+message UpdateWebhookResponse {
+  Webhook webhook = 1;
+}
+
+message DeleteWebhookRequest {
+  string id = 1;
+}
+
+message DeleteWebhookResponse {
+  Webhook webhook = 1;
+}
+
+message ReadWebhookRequest {
+  string id = 1;
+}
+
+message ReadWebhookResponse {
+  Webhook webhook = 1;
+}
+
+message FindWebhookRequest {
+  string filter = 1;
+  Paginate paginate = 2;
+}
+
+message FindWebhookResponse {
+  repeated Webhook webhooks = 1;
+}

@@ -1,4 +1,3 @@
-
 export enum PlanPriceInterval {
   MONTH = 'month',
   YEAR = 'year',

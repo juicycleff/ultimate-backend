@@ -6,12 +6,14 @@ import { SendGridModuleOptionsFactory } from '@anchan828/nest-sendgrid/dist/send
 
 @Injectable()
 export class SendgridConfigService implements SendGridModuleOptionsFactory {
-  constructor(
-    @InjectConfig() private readonly config: EtcdConfig,
-  ) {}
+  constructor(@InjectConfig() private readonly config: EtcdConfig) {}
 
-  createSendGridModuleOptions(): Promise<SendGridModuleOptions> | SendGridModuleOptions {
-    const sendgrid = this.config.get<{apiKey: string, sender: string}>('sendgrid');
+  createSendGridModuleOptions():
+    | Promise<SendGridModuleOptions>
+    | SendGridModuleOptions {
+    const sendgrid = this.config.get<{ apiKey: string; sender: string }>(
+      'sendgrid',
+    );
     return {
       apikey: sendgrid.apiKey,
       defaultMailData: {

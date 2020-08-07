@@ -9,7 +9,8 @@ import { RpcException } from '@nestjs/microservices';
 import { subsToProtoStripeSubs } from '../../../../../common';
 
 @CommandHandler(ChangeSubscriptionCommand)
-export class ChangeSubscriptionHandler implements ICommandHandler<ChangeSubscriptionCommand> {
+export class ChangeSubscriptionHandler
+  implements ICommandHandler<ChangeSubscriptionCommand> {
   logger = new Logger(this.constructor.name);
 
   public constructor(
@@ -17,42 +18,62 @@ export class ChangeSubscriptionHandler implements ICommandHandler<ChangeSubscrip
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: ChangeSubscriptionCommand): Promise<ChangeSubscriptionResponse> {
+  async execute(
+    command: ChangeSubscriptionCommand,
+  ): Promise<ChangeSubscriptionResponse> {
     this.logger.log(`Async ${this.constructor.name}...`);
     const { input } = command;
 
     try {
-      if (input.customerId === null ) { // Check to make sure input is not null
+      if (input.customerId === null) {
+        // Check to make sure input is not null
         throw new RpcException('Current customer id missing'); // Throw an input error
       }
 
-      if (input.tenantId === null) { // Check to make sure input is not null
+      if (input.tenantId === null) {
+        // Check to make sure input is not null
         throw new RpcException('Current tenant id missing'); // Throw an input error
       }
 
       const [customer, subscriptions] = await Promise.all([
         this.stripeClient.customers.retrieve(input.customerId),
-        this.stripeClient.subscriptions.list({customer: input.customerId, status: 'active'}),
+        this.stripeClient.subscriptions.list({
+          customer: input.customerId,
+          status: 'active',
+        }),
       ]);
 
-      if (customer === null || subscriptions === null) { // Check to make sure input is not null
+      if (customer === null || subscriptions === null) {
+        // Check to make sure input is not null
         throw new RpcException('No subscription found for this customer'); // Throw an input error
       }
 
       if (subscriptions.data && subscriptions.data.length > 0) {
-        const currentSub = subscriptions.data.reduce(s => s.metadata.tenantId === input.tenantId && s);
+        const currentSub = subscriptions.data.reduce(
+          (s) => s.metadata.tenantId === input.tenantId && s,
+        );
 
         if (currentSub) {
-          if (currentSub.items.data && currentSub.items.data.findIndex(cur => cur.plan.id = input.planId) !== -1) {
+          if (
+            currentSub.items.data &&
+            currentSub.items.data.findIndex(
+              (cur) => (cur.plan.id = input.planId),
+            ) !== -1
+          ) {
             throw new RpcException('This tenant is currently on this plan');
           }
 
           const plan = await this.stripeClient.plans.retrieve(input.planId);
-          const sub = await this.stripeClient.subscriptions.update(currentSub.id, {
-            items: [{
-              plan: plan.id,
-            }],
-          });
+          const sub = await this.stripeClient.subscriptions.update(
+            currentSub.id,
+            {
+              items: [
+                {
+                  plan: plan.id,
+                },
+              ],
+            },
+          );
           await this.eventBus.publish(new SubscriptionCreatedEvent(sub));
 
           return {

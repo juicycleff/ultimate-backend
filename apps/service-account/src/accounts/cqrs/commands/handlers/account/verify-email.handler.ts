@@ -27,16 +27,29 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
   /**
    * @param command {VerifyEmailCommand}
    */
-  async execute(command: VerifyEmailCommand): Promise<Account.VerifyAccountResponse> {
+  async execute(
+    command: VerifyEmailCommand,
+  ): Promise<Account.VerifyAccountResponse> {
     this.logger.log(`Async ${command.constructor.name}...`);
     const { code, email } = command;
 
     try {
-      const user: UserEntity = await this.userRepository.findOne({
-        emails: { $elemMatch: { address: email, primary: true, verificationCode: code } },
-      }, true);
+      const user: UserEntity = await this.userRepository.findOne(
+        {
+          emails: {
+            $elemMatch: {
+              address: email,
+              primary: true,
+              verificationCode: code,
+            },
+          },
+        },
+        true,
+      );
 
-      if (!user) { throw new RpcException('Invalid verification code'); }
+      if (!user) {
+        throw new RpcException('Invalid verification code');
+      }
 
       const updatedUser = await this.userRepository.findOneAndUpdate({
         conditions: {
@@ -52,14 +65,13 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
 
       if (updatedUser) {
         this.eventBus.publish(new EmailVerifiedEvent(updatedUser));
-        return {success: true};
+        return { success: true };
       }
 
-      return {success: false};
+      return { success: false };
     } catch (error) {
       this.logger.log(error);
       throw new RpcException(error);
     }
   }
-
 }

@@ -1,5 +1,3 @@
 import { PaymentMethodCreatedHandler } from './payment-method-created.handler';
 
-export const CardEventHandlers = [
-  PaymentMethodCreatedHandler,
-];
+export const CardEventHandlers = [PaymentMethodCreatedHandler];

@@ -48,7 +48,6 @@ export class BuildTenantInfoHelper {
           key: this.req.headers[headerKeys.apiKey],
         };
       }
-
     } else if (this.options.tenantResolver.resolverType === 'Query') {
       const queryKeys = this.options.tenantResolver.queryKeys;
       tenantId = this.req.query[queryKeys.tenant].toString();
@@ -60,16 +59,39 @@ export class BuildTenantInfoHelper {
       }
     } else if (this.options.tenantResolver.resolverType === 'Cookie') {
       const cookieKeys = this.options.tenantResolver.cookieKeys;
-      tenantId =  this.req.signedCookies[cookieKeys.tenant] || this.req.cookies[cookieKeys.tenant];
+      tenantId =
+        this.req.signedCookies[cookieKeys.tenant] ||
+        this.req.cookies[cookieKeys.tenant];
 
       if (this.options.tenantResolver.requiresToken) {
         accessToken = {
-          key: this.req.signedCookies[cookieKeys.apiKey] || this.req.cookies[cookieKeys.apiKey],
+          key:
+            this.req.signedCookies[cookieKeys.apiKey] ||
+            this.req.cookies[cookieKeys.apiKey],
         };
+      }
+    } else if (this.options.tenantResolver.resolverType === 'Params') {
+      // const paramKeys = this.options.tenantResolver.paramKeys;
+      const headerKeys = this.options.tenantResolver.headerKeys;
+      const path = this.req.path;
+      try {
+        tenantId = path.split('/')[1];
+
+        if (this.options.tenantResolver.requiresToken) {
+          accessToken = {
+            key: this.req.headers[headerKeys.apiKey],
+          };
+        }
+      } catch (e) {
+        // this.logger.error(e);
       }
     }
 
-    return this.makeTenantInfo(tenantId, this.addOptions ? this.options : null, accessToken);
+    return this.makeTenantInfo(
+      tenantId,
+      this.addOptions ? this.options : null,
+      accessToken,
+    );
   }
 
   build(): TenantInfo {

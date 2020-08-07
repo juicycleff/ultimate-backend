@@ -38,7 +38,6 @@ export class AccountMutations {}
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class Account {
-
   @Field(() => ID)
   id: string;
 

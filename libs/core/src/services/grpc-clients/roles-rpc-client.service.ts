@@ -9,14 +9,14 @@ export class RolesRpcClientService {
   @RpcClient({
     service: SERVICE_LIST.role.consulName,
     package: SERVICE_LIST.role.package,
-    protoPath: join(__dirname, SERVICE_LIST.role.protoPath),
+    protoPath: SERVICE_LIST.role.protoPath,
   })
-  private readonly roleClient: GrpcClient;
+  private readonly client: GrpcClient;
 
   @Service(SERVICE_LIST.role.service, {
     service: SERVICE_LIST.role.consulName,
     package: SERVICE_LIST.role.package,
-    protoPath: join(__dirname, SERVICE_LIST.role.protoPath),
+    protoPath: SERVICE_LIST.role.protoPath,
   })
-  public roleService: RoleServiceClient<any>;
+  public svc: RoleServiceClient<any>;
 }

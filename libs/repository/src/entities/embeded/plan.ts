@@ -1,5 +1,4 @@
 export class FeatureEmbed {
-
   name: string;
 
   normalizedName?: string;
@@ -15,11 +14,9 @@ export class FeatureEmbed {
   active?: boolean;
 
   full?: boolean;
-
 }
 
 export enum ActionStatusType {
   SUCCESS,
   FAILED,
 }
-

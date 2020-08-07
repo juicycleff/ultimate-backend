@@ -1,7 +1,7 @@
-import { ClassType } from 'type-graphql';
 import { ObjectType, GraphQLISODateTime, Field, ID } from '@nestjs/graphql';
 import { Filterable } from '@ultimatebackend/core/decorators/filterable';
 import { CursorScaler } from '@ultimatebackend/core/scalers';
+import { ClassType } from '@ultimatebackend/common';
 
 @ObjectType({ isAbstract: true })
 export abstract class Node {

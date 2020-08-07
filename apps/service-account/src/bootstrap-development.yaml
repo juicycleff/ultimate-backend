@@ -1,18 +1,16 @@
 consul:
-  host: ${{CONSUL_HOST}}
+  host: localhost
   port: 8500
 config:
   key: ultimatebackend/config/${{ service.name }}
 nats:
-  url: nats://${{NATS_HOST}}:4222
-mqtt:
-  port: 1883
-  host: ${{MQTT_HOST}}
-  username: ${{MQTT_USER}}
-  password: ${{MQTT_PASS}}
-  protocol: "tcp"
+  url: nats://localhost:4222
+redis:
+  host: localhost
+  port: 6379
+  password: ""
 service:
-  discoveryHost: ${{CONSUL_HOST}}
+  discoveryHost: localhost
   healthCheck:
     timeout: 1s
     interval: 10s

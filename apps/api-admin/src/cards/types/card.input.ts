@@ -3,7 +3,6 @@ import { AddressInput } from '@ultimatebackend/contracts';
 
 @InputType()
 export class CardInput {
-
   @Field()
   name: string;
 
@@ -27,7 +26,7 @@ export class CardInput {
 }
 
 @InputType()
-export class CreateCardInput  extends CardInput {}
+export class CreateCardInput extends CardInput {}
 
 @InputType()
 export class UpdateCardInput {

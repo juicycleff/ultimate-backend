@@ -1,6 +1,12 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
-import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/repo-orm';
+import {
+  BaseMongoRepository,
+  Before,
+  MongoEntityRepository,
+  InjectClient,
+  InjectDb,
+} from '@juicycleff/repo-orm';
 import { merge } from 'lodash';
 import { TenantEntity } from '../entities';
 
@@ -9,15 +15,15 @@ import { TenantEntity } from '../entities';
   name: 'tenant',
   indexes: [
     {
-      fields: { 'members.email' : 1, 'normalizedName' : 1 },
+      fields: { 'members.email': 1, normalizedName: 1 },
       options: { unique: true, sparse: true },
     },
     {
-      fields: { 'members.userId' : 1, 'normalizedName' : 1 },
+      fields: { 'members.userId': 1, normalizedName: 1 },
       options: { unique: true, sparse: true },
     },
     {
-      fields: { normalizedName : 1 },
+      fields: { normalizedName: 1 },
       options: { unique: true },
     },
   ],

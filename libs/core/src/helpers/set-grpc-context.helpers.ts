@@ -23,10 +23,12 @@ export function setRpcContext(ctx: GqlContext, inApp?: boolean): Metadata {
   return meta;
 }
 
-export function getIdentityFromCtx(meta: Metadata): {user: UserEntity, tenant: TenantEntity, tenantInfo: TenantInfo, inApp} {
+export function getIdentityFromCtx(
+  meta: Metadata,
+): { user: UserEntity; tenant: TenantEntity; tenantInfo: TenantInfo; inApp } {
   const gmap = meta.getMap();
   const tempUser = gmap.user;
-  const tempInApp = gmap.inApp;
+  const tempInApp = gmap.inapp;
   const tempTenantInfo = gmap['x-tenant-info'];
   const tempTenant = gmap?.tenant;
 

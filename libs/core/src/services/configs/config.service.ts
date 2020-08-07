@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 import { IAwsConfigInterface } from '@ultimatebackend/common/interfaces';
 
 export class ConfigService {
-
   constructor() {
     const nodeEnv = this.nodeEnv;
     dotenv.config({

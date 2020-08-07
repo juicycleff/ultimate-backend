@@ -3,10 +3,6 @@ app:
   database:
     name: "srv-project"
 
-memcached:
-  uri: "localhost:11211"
-  retries: 3
-
 database:
   mongodb:
     uri: mongodb://localhost:27017/

@@ -1,5 +1,4 @@
 export class SocialAuth {
-
   userId: string = null;
 
   accessToken?: string = null;
@@ -8,6 +7,5 @@ export class SocialAuth {
 }
 
 export class LocalAuth {
-
   hashed: string = null;
 }

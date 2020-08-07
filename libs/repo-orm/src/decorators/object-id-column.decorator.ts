@@ -7,8 +7,7 @@ import { COLUMN_KEY, ColumnOptions } from '../interfaces';
  */
 
 export function ObjectIdColumn(options?: ColumnOptions): Function {
-  return function(object: Object, propertyName: string) {
-
+  return function (object: Object, propertyName: string) {
     // if column options are not given then create a new empty options
     if (!options) {
       options = {} as ColumnOptions;

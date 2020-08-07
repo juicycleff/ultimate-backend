@@ -4,7 +4,10 @@ import { TenantEntity, UserEntity } from '@ultimatebackend/repository';
 import { GqlContext } from '../';
 
 export const CurrentIdentity = createParamDecorator(
-  (data: unknown, context: ExecutionContext): { user?: UserEntity, tenant?: TenantEntity } => {
+  (
+    data: unknown,
+    context: ExecutionContext,
+  ): { user?: UserEntity; tenant?: TenantEntity } => {
     const ctx: GqlContext = GqlExecutionContext.create(context).getContext();
     return {
       user: ctx.getUser(),

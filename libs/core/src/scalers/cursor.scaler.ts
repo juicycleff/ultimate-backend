@@ -2,9 +2,11 @@ import { Scalar, CustomScalar } from '@nestjs/graphql';
 import { Kind, ValueNode } from 'graphql';
 import { fromCursor, toCursor } from '@ultimatebackend/common/utils';
 
+export type GqlCursor = string;
+
 @Scalar('Cursor')
-export class CursorScaler implements CustomScalar<string, string> {
-  description = 'Cursor scalar type';
+export class CursorScaler implements CustomScalar<string, GqlCursor> {
+  description = 'Cursor scalar type that serializes string to and from base64';
 
   parseValue(value: string): string {
     return fromCursor(value);

@@ -1,5 +1,9 @@
 import { Db, ObjectID, MongoClient, IndexOptions } from 'mongodb';
-import { CollectionProps, EntityProps, IndexDefinition } from '../../../interfaces';
+import {
+  CollectionProps,
+  EntityProps,
+  IndexDefinition,
+} from '../../../interfaces';
 
 export interface MongoCollectionProps extends CollectionProps {
   indexes?: MongoIndexDefinition[];

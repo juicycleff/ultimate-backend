@@ -1,11 +1,7 @@
-account:
+app:
   port: 9900
   database:
     name: "srv-role"
-
-memcached:
-  uri: "localhost:11211"
-  retries: 3
 
 database:
   mongodb:

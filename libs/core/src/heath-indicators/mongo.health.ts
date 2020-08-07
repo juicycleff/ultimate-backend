@@ -1,7 +1,10 @@
 import { Injectable, Scope } from '@nestjs/common';
 import {
-  ConnectionNotFoundError, TimeoutError as PromiseTimeoutError,
-  HealthIndicatorResult, TimeoutError, HealthIndicator,
+  ConnectionNotFoundError,
+  TimeoutError as PromiseTimeoutError,
+  HealthIndicatorResult,
+  TimeoutError,
+  HealthIndicator,
 } from '@nestjs/terminus';
 import { MongoClient } from 'mongodb';
 import { ModuleRef } from '@nestjs/core';
@@ -22,9 +25,7 @@ export interface MongoPingCheckSettings {
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class MongoHealthIndicator extends HealthIndicator {
-  constructor(
-    private moduleRef: ModuleRef,
-    ) {
+  constructor(private moduleRef: ModuleRef) {
     super();
     this.checkDependantPackages();
   }
@@ -39,22 +40,19 @@ export class MongoHealthIndicator extends HealthIndicator {
    * Returns the connection of the current DI context
    */
   private getContextConnection(): any | null {
-
     try {
-      return this.moduleRef.get(
-        getClientToken(),
-        {
-          strict: false,
-        },
-      );
+      return this.moduleRef.get(getClientToken(), {
+        strict: false,
+      });
     } catch (err) {
       return null;
     }
   }
 
   private async pingDb(connection: MongoClient, timeout: number) {
-    const promise =
-      connection.isConnected() ? Promise.resolve() : Promise.reject();
+    const promise = connection.isConnected()
+      ? Promise.resolve()
+      : Promise.reject();
     return await promiseTimeout(timeout, promise);
   }
 
@@ -65,7 +63,8 @@ export class MongoHealthIndicator extends HealthIndicator {
     let isHealthy = false;
     this.checkDependantPackages();
 
-    const connection: MongoClient = options.connection || this.getContextConnection();
+    const connection: MongoClient =
+      options.connection || this.getContextConnection();
     const timeout = options.timeout || 1000;
 
     if (!connection) {
@@ -99,5 +98,4 @@ export class MongoHealthIndicator extends HealthIndicator {
       );
     }
   }
-
 }

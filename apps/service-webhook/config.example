@@ -1,0 +1,27 @@
+app:
+  port: 9907
+  database:
+    name: "srv-webhook"
+
+database:
+  mongodb:
+    uri: mongodb://localhost:27017/
+    name: srv-webhook
+    options: ""
+
+  eventstore:
+    poolMax:
+    poolMin:
+    streamProtocol: "http"
+    hostname: "localhost"
+    httpPort: 2113
+    httpPotocol: "http"
+    tcpPassword: "changeit"
+    tcpUsername: "admin"
+    tcpPort: 1113
+    tcpProtocol: tcp
+
+  redis:
+    host: "localhost"
+    port: "6379"
+    password: ""

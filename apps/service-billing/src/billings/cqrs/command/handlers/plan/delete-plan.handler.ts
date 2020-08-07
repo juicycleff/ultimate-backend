@@ -18,5 +18,4 @@ export class DeletePlanHandler implements ICommandHandler<DeletePlanCommand> {
     // TODO: Tobe implemented
     throw new RpcException('Not implemented');
   }
-
 }

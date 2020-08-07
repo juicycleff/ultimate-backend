@@ -1,10 +1,16 @@
 consul:
-  host: ${{CONSUL_HOST}}
+  host: localhost
   port: 8500
 config:
   key: ultimatebackend/config/${{ service.name }}
+nats:
+  url: nats://localhost:4222
+redis:
+  host: localhost
+  port: 6379
+  password: ""
 service:
-  discoveryHost: ${{CONSUL_HOST}}
+  discoveryHost: localhost
   healthCheck:
     timeout: 1s
     interval: 10s

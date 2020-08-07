@@ -9,14 +9,14 @@ export class TenantsRpcClientService {
   @RpcClient({
     service: SERVICE_LIST.tenant.consulName,
     package: SERVICE_LIST.tenant.package,
-    protoPath: join(__dirname, SERVICE_LIST.tenant.protoPath),
+    protoPath: SERVICE_LIST.tenant.protoPath,
   })
-  private readonly tenantClient: GrpcClient;
+  private readonly client: GrpcClient;
 
   @Service(SERVICE_LIST.tenant.service, {
     service: SERVICE_LIST.tenant.consulName,
     package: SERVICE_LIST.tenant.package,
-    protoPath: join(__dirname, SERVICE_LIST.tenant.protoPath),
+    protoPath: SERVICE_LIST.tenant.protoPath,
   })
-  public tenantService: TenantServiceClient<any>;
+  public svc: TenantServiceClient<any>;
 }

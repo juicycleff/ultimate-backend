@@ -1,6 +1,15 @@
-import { AggregationCursor, Collection, CollectionAggregationOptions, Cursor, DeleteWriteOpResultObject, ObjectID } from 'mongodb';
+import {
+  AggregationCursor,
+  Collection,
+  CollectionAggregationOptions,
+  Cursor,
+  DeleteWriteOpResultObject,
+  ObjectID,
+  UpdateWriteOpResult,
+} from 'mongodb';
 import { CacheStore } from '@nestjs/common';
 import * as moment from 'moment';
+// const { performance } = require('perf_hooks');
 import { MongoCollectionProps, MongoDBSource } from '../interfaces';
 import { DataEvents } from '../../../enums';
 import {
@@ -13,6 +22,7 @@ import {
   PRE_KEY,
   TenantData,
   UpdateByIdRequest,
+  UpdateOneRequest,
   UpdateRequest,
 } from '../../../interfaces';
 import { cleanEmptyProperties, NotFoundError } from '@ultimatebackend/common';
@@ -20,7 +30,7 @@ import { DateTime } from 'luxon';
 import { merge } from 'lodash';
 
 // that class only can be extended
-export class BaseMongoRepository <DOC, DTO = DOC> {
+export class BaseMongoRepository<DOC, DTO = DOC> {
   collection: Promise<Collection<DOC>>;
   readonly options: MongoCollectionProps;
   readonly tenant: TenantData;
@@ -34,8 +44,17 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @param tenantData
    * @memberof BaseMongoRepository
    */
-  constructor(public dbSource: MongoDBSource, cacheStore?: CacheStore, opts?: MongoCollectionProps, tenantData?: TenantData) {
-    this.options = Object.assign({}, opts, Reflect.getMetadata(COLLECTION_KEY, this));
+  constructor(
+    public dbSource: MongoDBSource,
+    cacheStore?: CacheStore,
+    opts?: MongoCollectionProps,
+    tenantData?: TenantData,
+  ) {
+    this.options = Object.assign(
+      {},
+      opts,
+      Reflect.getMetadata(COLLECTION_KEY, this),
+    );
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');
     }
@@ -60,7 +79,10 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   async findById(id: string): Promise<DOC> {
-    const condition = { _id: new ObjectID(id), tenantId: this.tenant?.tenantId };
+    const condition = {
+      _id: new ObjectID(id),
+      tenantId: this.tenant?.tenantId,
+    };
     const cleanConditions = cleanEmptyProperties(condition);
 
     const cacheKey = JSON.stringify(cleanConditions);
@@ -84,7 +106,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async findManyById(ids: string[]): Promise<DOC[]> {
     const collection = await this.collection;
-    const query = { _id: { $in: ids.map(id => new ObjectID(id)) } };
+    const query = { _id: { $in: ids.map((id) => new ObjectID(id)) } };
 
     const cacheKey = JSON.stringify(query);
     const cachedResult = await this.retrieveFromCache(cacheKey);
@@ -96,7 +118,13 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
 
     const results: DOC[] = [];
     for (const result of found) {
-      results.push(await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], this.toggleId(result, false)));
+      results.push(
+        await this.invokeEvents(
+          POST_KEY,
+          ['FIND', 'FIND_MANY'],
+          this.toggleId(result, false),
+        ),
+      );
     }
 
     await this.saveToCache(cacheKey, results);
@@ -114,14 +142,21 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
   async findOne(conditions: object, noCache = false): Promise<DOC> {
     const collection = await this.collection;
 
-    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...conditions,
+      tenantId: this.tenant?.tenantId,
+    });
     const prunedConditions = this.toggleId(cleanConditions, true) as any;
 
     const cacheKey = JSON.stringify(prunedConditions);
 
     if (noCache === false) {
       const cachedResult = await this.retrieveFromCache(cacheKey);
-      if (cachedResult !== null && cachedResult !== undefined && !Array.isArray(cachedResult)) {
+      if (
+        cachedResult !== null &&
+        cachedResult !== undefined &&
+        !Array.isArray(cachedResult)
+      ) {
         return cachedResult;
       }
     }
@@ -129,9 +164,13 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     let document = await collection.findOne(prunedConditions);
     if (document) {
       document = this.toggleId(document, false) as any;
-      document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
+      document = await this.invokeEvents(
+        POST_KEY,
+        ['FIND', 'FIND_ONE'],
+        document,
+      );
       // @ts-ignore
-      document = this.convertDateToString(document)
+      document = this.convertDateToString(document);
       if (noCache === false) {
         await this.saveToCache(cacheKey, document);
       }
@@ -147,8 +186,12 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @param pipeline
    * @param options
    */
-  async aggregate(pipeline?: object[], options?: CollectionAggregationOptions)
-    : Promise<AggregationCursor<DOC> | AggregationCursor<DOC[]> | AggregationCursor<any>> {
+  async aggregate(
+    pipeline?: object[],
+    options?: CollectionAggregationOptions,
+  ): Promise<
+    AggregationCursor<DOC> | AggregationCursor<DOC[]> | AggregationCursor<any>
+  > {
     const collection = await this.collection;
 
     const cacheKey = JSON.stringify(pipeline);
@@ -172,7 +215,10 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
   async find(req: FindRequest = { conditions: {} }): Promise<DOC[]> {
     const collection = await this.collection;
 
-    const cleanConditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...req.conditions });
+    const cleanConditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...req.conditions,
+    });
     const conditions = this.toggleId(cleanConditions as any, true) as any;
 
     const cacheKey = JSON.stringify(conditions) + JSON.stringify(req);
@@ -233,16 +279,25 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @returns {Promise<T[]>}
    * @memberof BaseMongoRepository
    */
-  async findCursor(req: CursorPaginationRequest = { conditions: {}, orderField: 'id', order: 1 }): Promise<CursorResponse<DOC>> {
+  async findCursor(
+    req: CursorPaginationRequest = {
+      conditions: {},
+      orderField: 'id',
+      order: 1,
+    },
+  ): Promise<CursorResponse<DOC>> {
     const collection = await this.collection;
 
-    const {args, order, orderField} = req;
+    const { args, order, orderField } = req;
     let [endCursor, startCursor] = [null, null];
 
-    let cleanConditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...req?.conditions });
+    let cleanConditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...req?.conditions,
+    });
     cleanConditions = this.toggleId(cleanConditions as any, true) as any;
 
-    const cacheKey = JSON.stringify({cleanConditions, ...req.args });
+    const cacheKey = JSON.stringify({ cleanConditions, ...req.args });
     const cachedResult = await this.retrieveFromCache(cacheKey);
     if (cachedResult) {
       // @ts-ignore
@@ -258,21 +313,37 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     if (orderField === 'id') {
       const [count, docs] = await Promise.all([
         await collection.estimatedDocumentCount(cleanConditions, {}),
-        await this.limitQueryWithId(collection, cleanConditions, order, args?.before, args?.after),
+        await this.limitQueryWithId(
+          collection,
+          cleanConditions,
+          order,
+          args?.before,
+          args?.after,
+        ),
       ]);
       newDocuments = docs; // await this.limitQueryWithId(collection, cleanConditions, order, args?.before, args?.after);
       countCursor = count;
     } else {
       const [count, docs] = await Promise.all([
         await collection.estimatedDocumentCount(cleanConditions, {}),
-        await this.limitQuery(collection, cleanConditions, orderField, order, args?.before, args?.after),
+        await this.limitQuery(
+          collection,
+          cleanConditions,
+          orderField,
+          order,
+          args?.before,
+          args?.after,
+        ),
       ]);
       newDocuments = docs; // await this.limitQueryWithId(collection, cleanConditions, order, args?.before, args?.after);
       countCursor = count;
     }
 
     const pageInfo = await this.applyPagination(
-      newDocuments, args?.first, args?.last, countCursor,
+      newDocuments,
+      args?.first,
+      args?.last,
+      countCursor,
     );
 
     newDocuments = await pageInfo.query.toArray();
@@ -282,7 +353,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     // const t1 = Date.now();
     // console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
 
-    const edges: CursorEdge<DOC>[] = [];
+    const edges: Array<CursorEdge<DOC>> = [];
     for (let i = 0; i < newDocuments.length; i += 2) {
       const nextCount = i + 1;
 
@@ -290,7 +361,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
       // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
 
       correctNode = this.convertDateToString(curValue);
-      edges.push({ cursor: curValue.id.toString(), node: correctNode});
+      edges.push({ cursor: curValue.id.toString(), node: correctNode });
       list.push(correctNode);
 
       if (nextCount <= newDocuments.length - 1) {
@@ -298,7 +369,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
         // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
 
         correctNode = this.convertDateToString(curValue);
-        edges.push({ cursor: curValue.id.toString(), node: correctNode});
+        edges.push({ cursor: curValue.id.toString(), node: correctNode });
         list.push(correctNode);
       }
     }
@@ -337,17 +408,25 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
-    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
+    const eventResult: unknown = await this.invokeEvents(
+      PRE_KEY,
+      ['SAVE', 'CREATE'],
+      document,
+    );
 
-    const tenantFix = {tenantId: this.tenant?.tenantId};
+    const tenantFix = { tenantId: this.tenant?.tenantId };
     // @ts-ignore
-    const cleanDoc = {...eventResult, ...cleanEmptyProperties(tenantFix)};
+    const cleanDoc = { ...eventResult, ...cleanEmptyProperties(tenantFix) };
     const res = await collection.insertOne(cleanDoc);
 
     let newDocument = res.ops[0];
     // @ts-ignore
     newDocument = this.toggleId(newDocument, false);
-    newDocument = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocument);
+    newDocument = await this.invokeEvents(
+      POST_KEY,
+      ['SAVE', 'CREATE'],
+      newDocument,
+    );
     newDocument = this.convertDateToString(newDocument);
     // @ts-ignore
     return newDocument;
@@ -364,13 +443,17 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     const collection = await this.collection;
 
     // @ts-ignore
-    const id = new ObjectID(document.id);  // flip/flop ids
+    const id = new ObjectID(document.id); // flip/flop ids
 
     const updates = await this.invokeEvents(PRE_KEY, ['SAVE'], document);
     delete updates.id;
     delete updates._id;
     const query = { _id: id };
-    const res = await collection.updateOne(query as object, { $set: updates }, { upsert: true });
+    const res = await collection.updateOne(
+      query as object,
+      { $set: updates },
+      { upsert: true },
+    );
     let newDocument = await collection.findOne(query as object);
 
     // project new items
@@ -398,10 +481,10 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
   async createMany(documents: Partial<DTO[]> | DTO[]): Promise<DOC[]> {
     const collection = await this.collection;
 
-    const tenantFix = {tenantId: this.tenant?.tenantId};
+    const tenantFix = { tenantId: this.tenant?.tenantId };
     const cleanDocs = [];
-    documents.map(value => {
-      cleanDocs.push({...value, ...cleanEmptyProperties(tenantFix)});
+    documents.map((value) => {
+      cleanDocs.push({ ...value, ...cleanEmptyProperties(tenantFix) });
     });
 
     // @ts-ignore
@@ -428,9 +511,15 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  async findOneByIdAndUpdate(id: string | ObjectID, req: UpdateByIdRequest): Promise<DOC> {
+  async findOneByIdAndUpdate(
+    id: string | ObjectID,
+    req: UpdateByIdRequest,
+  ): Promise<DOC> {
     const entId = typeof id === 'string' ? new ObjectID(id) : id;
-    const conditions = cleanEmptyProperties({ _id: entId, tenantId: this.tenant?.tenantId });
+    const conditions = cleanEmptyProperties({
+      _id: entId,
+      tenantId: this.tenant?.tenantId,
+    });
     return this.findOneAndUpdate({
       conditions,
       updates: req.updates,
@@ -446,11 +535,20 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  async findManyAndUpdate(req: UpdateRequest): Promise<{ ok: number; n: number; nModified: number }> {
+  async findManyAndUpdate(
+    req: UpdateRequest,
+  ): Promise<{ ok: number; n: number; nModified: number }> {
     const collection = await this.collection;
-    const updates = await this.invokeEvents(PRE_KEY, ['UPDATE', 'UPDATE_ONE'], req.updates);
+    const updates = await this.invokeEvents(
+      PRE_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      req.updates,
+    );
 
-    const conditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...req.conditions });
+    const conditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...req.conditions,
+    });
     const res = await collection.updateMany(conditions, updates, {
       upsert: req.upsert,
     });
@@ -467,9 +565,16 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async findOneAndUpdate(req: UpdateRequest): Promise<DOC> {
     const collection = await this.collection;
-    const updates = await this.invokeEvents(PRE_KEY, ['UPDATE', 'UPDATE_ONE'], req.updates);
+    const updates = await this.invokeEvents(
+      PRE_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      req.updates,
+    );
 
-    const conditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...req.conditions });
+    const conditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...req.conditions,
+    });
     const res = await collection.findOneAndUpdate(conditions, updates, {
       upsert: req.upsert,
       returnOriginal: false,
@@ -477,9 +582,35 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
 
     let document = res.value as any;
     document = this.toggleId(document, false);
-    document = await this.invokeEvents(POST_KEY, ['UPDATE', 'UPDATE_ONE'], document);
+    document = await this.invokeEvents(
+      POST_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      document,
+    );
     document = this.convertDateToString(document);
     return document;
+  }
+
+  /**
+   * update with new values
+   *
+   * @param {UpdateRequest} req
+   * @returns {Promise<DOC>}
+   * @memberof BaseMongoRepository
+   */
+  async updateOne(req: UpdateOneRequest): Promise<UpdateWriteOpResult> {
+    const collection = await this.collection;
+    const updates = await this.invokeEvents(
+      PRE_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      req.updates,
+    );
+
+    const conditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...req.conditions,
+    });
+    return await collection.updateOne(conditions, updates);
   }
 
   /**
@@ -491,7 +622,10 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async deleteOneById(id: string): Promise<DeleteWriteOpResultObject> {
     const entId = typeof id === 'string' ? new ObjectID(id) : id;
-    const conditions = cleanEmptyProperties({ _id: entId, tenantId: this.tenant?.tenantId });
+    const conditions = cleanEmptyProperties({
+      _id: entId,
+      tenantId: this.tenant?.tenantId,
+    });
     return this.deleteOne(conditions);
   }
 
@@ -504,7 +638,10 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async deleteOne(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
-    let cleanConditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...conditions });
+    let cleanConditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...conditions,
+    });
     cleanConditions = this.toggleId(cleanConditions, true) as any;
 
     await this.invokeEvents(PRE_KEY, ['DELETE', 'DELETE_ONE'], conditions);
@@ -527,11 +664,22 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    */
   async deleteMany(conditions: any): Promise<DeleteWriteOpResultObject> {
     const collection = await this.collection;
-    const cleanConditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...conditions });
+    const cleanConditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...conditions,
+    });
 
-    await this.invokeEvents(PRE_KEY, ['DELETE_ONE', 'DELETE_MANY'], cleanConditions);
+    await this.invokeEvents(
+      PRE_KEY,
+      ['DELETE_ONE', 'DELETE_MANY'],
+      cleanConditions,
+    );
     const deleteResult = await collection.deleteMany(cleanConditions);
-    await this.invokeEvents(POST_KEY, ['DELETE_ONE', 'DELETE_MANY'], deleteResult);
+    await this.invokeEvents(
+      POST_KEY,
+      ['DELETE_ONE', 'DELETE_MANY'],
+      deleteResult,
+    );
 
     return deleteResult;
   }
@@ -544,9 +692,12 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   public async exist(conditions: any): Promise<boolean> {
-    const cleanConditions = cleanEmptyProperties({ tenantId: this.tenant?.tenantId, ...conditions });
+    const cleanConditions = cleanEmptyProperties({
+      tenantId: this.tenant?.tenantId,
+      ...conditions,
+    });
     const collection = await this.collection;
-    return await collection.find(cleanConditions).count() > 0;
+    return (await collection.find(cleanConditions).count()) > 0;
   }
 
   /**
@@ -569,7 +720,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
             } else if (typeof doc?.id === 'object') {
               doc._id = new ObjectID(doc?.id.$eq);
             } else {
-              doc._id =  doc?.id;
+              doc._id = doc?.id;
             }
             delete doc.id;
           } else {
@@ -589,7 +740,7 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
         } else if (typeof document?.id === 'object') {
           document._id = new ObjectID(document?.id.$eq);
         } else {
-          document._id =  document?.id;
+          document._id = document?.id;
         }
         delete document.id;
       } else {
@@ -611,48 +762,59 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
   private getCollection(): Promise<Collection<DOC>> {
     return new Promise<Collection<DOC>>(async (resolve, reject) => {
       const db = await this.dbSource.db;
-      db.collection(this.options.name, { strict: true }, async (err, collection) => {
-        let ourCollection = collection;
-        if (err) {
-          try {
-            ourCollection = await db.createCollection(this.options.name, {
-              size: this.options.size,
-              capped: this.options.capped,
-              max: this.options.max,
-            });
-          } catch (createErr) {
-            reject(createErr);
-          }
-        }
-
-        // assert indexes
-        if (this.options.indexes) {
-          for (const indexDefinition of this.options.indexes) {
+      db.collection(
+        this.options.name,
+        { strict: true },
+        async (err, collection) => {
+          let ourCollection = collection;
+          if (err) {
             try {
-              await ourCollection.createIndex(indexDefinition.fields, indexDefinition.options);
-            } catch (indexErr) {
-              if (
-                indexDefinition.overwrite &&
-                indexDefinition.options.name &&
-                indexErr.name === 'MongoError' &&
-                (indexErr.codeName === 'IndexKeySpecsConflict' || indexErr.codeName === 'IndexOptionsConflict')
-              ) {
-                // drop index and recreate
-                try {
-                  await ourCollection.dropIndex(indexDefinition.options.name);
-                  await ourCollection.createIndex(indexDefinition.fields, indexDefinition.options);
-                } catch (recreateErr) {
-                  reject(recreateErr);
+              ourCollection = await db.createCollection(this.options.name, {
+                size: this.options.size,
+                capped: this.options.capped,
+                max: this.options.max,
+              });
+            } catch (createErr) {
+              reject(createErr);
+            }
+          }
+
+          // assert indexes
+          if (this.options.indexes) {
+            for (const indexDefinition of this.options.indexes) {
+              try {
+                await ourCollection.createIndex(
+                  indexDefinition.fields,
+                  indexDefinition.options,
+                );
+              } catch (indexErr) {
+                if (
+                  indexDefinition.overwrite &&
+                  indexDefinition.options.name &&
+                  indexErr.name === 'MongoError' &&
+                  (indexErr.codeName === 'IndexKeySpecsConflict' ||
+                    indexErr.codeName === 'IndexOptionsConflict')
+                ) {
+                  // drop index and recreate
+                  try {
+                    await ourCollection.dropIndex(indexDefinition.options.name);
+                    await ourCollection.createIndex(
+                      indexDefinition.fields,
+                      indexDefinition.options,
+                    );
+                  } catch (recreateErr) {
+                    reject(recreateErr);
+                  }
+                } else {
+                  reject(indexErr);
                 }
-              } else {
-                reject(indexErr);
               }
             }
           }
-        }
 
-        resolve(ourCollection);
-      });
+          resolve(ourCollection);
+        },
+      );
     });
   }
 
@@ -666,7 +828,11 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  private async invokeEvents(type: string, fns: DataEvents[], document: any | any[]): Promise<any> {
+  private async invokeEvents(
+    type: string,
+    fns: DataEvents[],
+    document: any | any[],
+  ): Promise<any> {
     const test = Reflect.getMetadata('entity', this) || [];
     if (Array.isArray(document)) {
       const docs: any[] = [];
@@ -722,14 +888,16 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     };
   }
 
-  private async saveToCache(key: string, data: DOC | any): Promise<DOC|any> {
+  private async saveToCache(key: string, data: DOC | any): Promise<DOC | any> {
     if (this.cacheStore) {
       const cacheKey = `${this.options.name}/${key}`;
       await this.cacheStore.set<DOC>(cacheKey, data);
     }
   }
 
-  private async retrieveFromCache(key: string): Promise<DOC | any | DOC[] | CursorResponse<DOC> > {
+  private async retrieveFromCache(
+    key: string,
+  ): Promise<DOC | any | DOC[] | CursorResponse<DOC>> {
     if (this.cacheStore) {
       const cacheKey = `${this.options.name}/${key}`;
       const cacheData = await this.cacheStore.get<DOC>(cacheKey);
@@ -740,9 +908,17 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     }
   }
 
-  async applyPagination(query: Cursor<DOC>, first, last, count: number)
-    : Promise<{hasNextPage: boolean, hasPreviousPage: boolean, count: number, query: Cursor<DOC>}> {
-
+  async applyPagination(
+    query: Cursor<DOC>,
+    first,
+    last,
+    count: number,
+  ): Promise<{
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    count: number;
+    query: Cursor<DOC>;
+  }> {
     if (first || last) {
       // const max = await query.clone().hasNext();
       // count = await query.clone().count();
@@ -780,17 +956,23 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     };
   }
 
-  async limitQueryWithId(query: Collection, condition = {}, order, before, after): Promise<Cursor<DOC>> {
-    let filter: {_id?: any} = {};
+  async limitQueryWithId(
+    query: Collection,
+    condition = {},
+    order,
+    before,
+    after,
+  ): Promise<Cursor<DOC>> {
+    let filter: { _id?: any } = {};
 
     if (before !== null && before !== undefined) {
-      filter = { _id: {}};
+      filter = { _id: {} };
       const op = order === 1 ? '$lt' : '$gt';
       filter._id[op] = new ObjectID(before);
     }
 
     if (after !== null && after !== undefined) {
-      filter = { _id: {}};
+      filter = { _id: {} };
       const op = order === 1 ? '$gt' : '$lt';
       filter._id[op] = new ObjectID(after);
     }
@@ -799,44 +981,53 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     return query.find(cond).sort([['_id', order]]);
   }
 
-  async limitQuery(query: Collection, condition = {}, field, order, before, after): Promise<Cursor<DOC>> {
+  async limitQuery(
+    query: Collection,
+    condition = {},
+    field,
+    order,
+    before,
+    after,
+  ): Promise<Cursor<DOC>> {
     let filter = {};
     const limits = {};
     const ors = [];
     if (before) {
       const op = order === 1 ? '$lt' : '$gt';
-      const beforeObject = await query.findOne({
-        _id: new ObjectID(before),
-      }, {
-        fields: {
-          [field]: 1,
-        },
-      });
-      limits[op] = beforeObject[field];
-      ors.push(
+      const beforeObject = await query.findOne(
         {
-          [field]: beforeObject[field],
-          _id: { [op]: new ObjectID(before) },
+          _id: new ObjectID(before),
+        },
+        {
+          fields: {
+            [field]: 1,
+          },
         },
       );
+      limits[op] = beforeObject[field];
+      ors.push({
+        [field]: beforeObject[field],
+        _id: { [op]: new ObjectID(before) },
+      });
     }
 
     if (after) {
       const op = order === 1 ? '$gt' : '$lt';
-      const afterObject = await query.findOne({
-        _id: new ObjectID(after),
-      }, {
-        fields: {
-          [field]: 1,
-        },
-      });
-      limits[op] = afterObject[field];
-      ors.push(
+      const afterObject = await query.findOne(
         {
-          [field]: afterObject[field],
-          _id: { [op]: new ObjectID(after) },
+          _id: new ObjectID(after),
+        },
+        {
+          fields: {
+            [field]: 1,
+          },
         },
       );
+      limits[op] = afterObject[field];
+      ors.push({
+        [field]: afterObject[field],
+        _id: { [op]: new ObjectID(after) },
+      });
     }
 
     if (before || after) {
@@ -851,14 +1042,21 @@ export class BaseMongoRepository <DOC, DTO = DOC> {
     }
 
     const cond = merge(filter, condition);
-    return query.find(cond).sort([[field, order], ['_id', order]]);
+    return query.find(cond).sort([
+      [field, order],
+      ['_id', order],
+    ]);
   }
 
   private convertDateToString(curValue) {
     return {
       ...curValue,
-      updatedAt: curValue?.updatedAt && moment(curValue?.updatedAt).format('YYYY-MM-DDTHH:mm:ss.SSSSSSSSSZZ'),
-      createdAt: curValue?.createdAt && moment(curValue?.createdAt).format('YYYY-MM-DDTHH:mm:ss.SSSSSSSSSZZ'),
+      updatedAt:
+        curValue?.updatedAt &&
+        moment(curValue?.updatedAt).format('YYYY-MM-DDTHH:mm:ss.SSSSSSSSSZZ'),
+      createdAt:
+        curValue?.createdAt &&
+        moment(curValue?.createdAt).format('YYYY-MM-DDTHH:mm:ss.SSSSSSSSSZZ'),
     };
   }
 }

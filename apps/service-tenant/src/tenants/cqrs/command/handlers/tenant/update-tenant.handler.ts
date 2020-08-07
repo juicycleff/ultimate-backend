@@ -1,17 +1,24 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { TenantRepository } from '@ultimatebackend/repository';
-import { BillingsRpcClientService, TenantUpdatedEvent } from '@ultimatebackend/core';
+import {
+  BillingsRpcClientService,
+  TenantUpdatedEvent,
+} from '@ultimatebackend/core';
 import { cleanEmptyProperties } from '@ultimatebackend/common';
 import { UpdateTenantCommand } from '../../impl';
 import { RpcException } from '@nestjs/microservices';
-import { Tenant, UpdateTenantResponse } from '@ultimatebackend/proto-schema/tenant';
+import {
+  Tenant,
+  UpdateTenantResponse,
+} from '@ultimatebackend/proto-schema/tenant';
 
 /**
  * @class
  */
 @CommandHandler(UpdateTenantCommand)
-export class UpdateTenantHandler implements ICommandHandler<UpdateTenantCommand> {
+export class UpdateTenantHandler
+  implements ICommandHandler<UpdateTenantCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -31,14 +38,14 @@ export class UpdateTenantHandler implements ICommandHandler<UpdateTenantCommand>
     const { input, user } = command;
 
     try {
-
       /*  Check to make sure input is null and throw an error */
-      if (input.data === null || input.id === null ) {
+      if (input.data === null || input.id === null) {
         throw new RpcException('Tenant id is missing');
       }
 
       /*  Check if tenant exist with normalized name */
-      const tenantExist = await this.tenantRepository.exist({ _id: input.id,
+      const tenantExist = await this.tenantRepository.exist({
+        _id: input.id,
         members: {
           $elemMatch: {
             id: user.id,
@@ -82,12 +89,11 @@ export class UpdateTenantHandler implements ICommandHandler<UpdateTenantCommand>
       /*  Publish to the event store of our newly created tenant */
       await this.eventBus.publish(new TenantUpdatedEvent(tenant));
       return {
-        tenant: tenant as unknown as Tenant,
+        tenant: (tenant as unknown) as Tenant,
       };
     } catch (error) {
       this.logger.error(error);
       throw new RpcException(error);
     }
   }
-
 }

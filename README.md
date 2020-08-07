@@ -49,7 +49,7 @@ Software features
 * ✅ Service Discovery (Default on Consul), supports ectd, Kubernetes  
 * ✅ [React SSR Starter Kit](https://github.com/juicycleff/ultimate-backend-dashboard)
 * ❌ (WiP) Documentation  
-* ❌ (WiP) Webhooks  
+* ✅ (WiP) Webhooks  
 * ❌ (WiP) Support for language translation  
 * ❌ (WiP) GraphQL dataloaders
   
@@ -57,7 +57,7 @@ Software features
   
   |                |Required                          |Optional                         |
 |----------------|-------------------------------|-----------------------------|
-|`Store and cache`|[Event Store (Event Source Store)](https://eventstore.org), [Memcached (cache)](https://memcached.org/), [Redis (Queue)](https://redis.io/) and [MongoDB (Database)](https://www.mongodb.com/)            |[ArangoDB (Database)](https://www.arangodb.com/)            |
+|`Store and cache`|[Event Store (Event Source Store)](https://eventstore.org), [Redis (Queue & cache)](https://redis.io/) and [MongoDB (Database)](https://www.mongodb.com/)            |[ArangoDB (Database)](https://www.arangodb.com/)            |
 |`Stack and frameworks` |[NestJS (Server Framework)](https://nestjs.com), [NodeJS (System runtime)](https://nodejs.org), [Typescript](https://www.typescriptlang.org), [Express JS](https://expressjs.com), [Fastify](https://www.fastify.io), [GRPC](https://grpc.io/), [NestCloud](https://nestcloud.org/) and [Apollo GraphQL](https://www.apollographql.com)                |none            |
 |`Deployment and containerization`          |[Docker](https://www.docker.com/) |[Kubernetes](https://kubernetes.io/), [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/), GitLab CI ||
 |`Service Registry`          |[Consul](https://consul.io/)|[Kubernetes](https://kubernetes.io/) and [etcd](https://etcd.io/)|
@@ -137,12 +137,10 @@ You should start the microservices in any other. Example
   
 ```bash
   
-# Generate protobuf typescript definitions and please fix the path for timestamps import (You should do this only when you update the protobuf files)  
+# Generate protobuf typescript definitions and please fix the path for timestamps import (You should do this only when you update the protobuf files)
+# and also build the proto-scheme lib (You should do this only when you update the protobuf files)
 # in `lib/proto-schem`  
-$ sh ./gen-ts.sh  
-  
-# Now build the proto-scheme lib (You should do this only when you update the protobuf files)  
-$ nest build proto-schema  
+$ yarn setup:local
   
 # Start the account service  
 $ npx nest start service-account  

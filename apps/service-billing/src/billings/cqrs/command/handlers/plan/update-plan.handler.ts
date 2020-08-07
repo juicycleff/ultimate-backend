@@ -19,5 +19,4 @@ export class UpdatePlanHandler implements ICommandHandler<UpdatePlanCommand> {
     // TODO: Tobe implemented
     throw new RpcException('Not implemented');
   }
-
 }

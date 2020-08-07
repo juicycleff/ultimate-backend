@@ -12,6 +12,9 @@ export class CreateTenantInput {
 
   @Field({ nullable: true })
   couponId?: string;
+
+  @Field({ nullable: true })
+  cardId?: string;
 }
 
 @InputType()
@@ -34,7 +37,7 @@ export class UpdateTenantInput {
   @Field()
   id: string;
 
-  @Field(() => UpdateTenantPayloadInput, {nullable: true})
+  @Field(() => UpdateTenantPayloadInput, { nullable: true })
   data: UpdateTenantPayloadInput;
 }
 
@@ -69,7 +72,6 @@ export class RemoveTenantAccessTokenInput {
 
 @ArgsType()
 export class TenantMutationArgs {
-
   @Field(() => CreateTenantInput, { nullable: true })
   create?: CreateTenantInput;
 

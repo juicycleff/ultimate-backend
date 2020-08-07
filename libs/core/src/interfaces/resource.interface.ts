@@ -8,4 +8,10 @@ export class IResource {
   action: 'create' | 'read' | 'update' | 'delete';
 }
 
-export type InAppRole = 'admin' | 'owner' | 'member' | 'developer' | 'guest' | 'customer';
+export type InAppRole =
+  | 'admin'
+  | 'owner'
+  | 'member'
+  | 'developer'
+  | 'guest'
+  | 'customer';

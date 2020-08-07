@@ -1,7 +1,13 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { merge } from 'lodash';
-import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/repo-orm';
+import {
+  BaseMongoRepository,
+  Before,
+  MongoEntityRepository,
+  InjectClient,
+  InjectDb,
+} from '@juicycleff/repo-orm';
 import { PlanEntity } from '../entities';
 
 @Injectable()
@@ -11,6 +17,10 @@ import { PlanEntity } from '../entities';
     {
       fields: { normalizedName: 1 },
       options: { unique: true },
+    },
+    {
+      fields: { normalizedName: 1, active: 1, free: 1 },
+      options: { unique: false, background: true, sparse: true },
     },
   ],
 })

@@ -1,5 +1,5 @@
-import {Logger} from '@nestjs/common';
-import {EventsHandler, IEventHandler} from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { PlanCreatedEvent } from '../../impl';
 
 @EventsHandler(PlanCreatedEvent)

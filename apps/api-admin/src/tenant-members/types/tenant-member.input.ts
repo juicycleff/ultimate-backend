@@ -3,7 +3,6 @@ import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
 
 @InputType()
 export class InviteMemberInput {
-
   @Field({ nullable: true })
   email?: string;
 
@@ -16,7 +15,6 @@ export class InviteMemberInput {
 
 @InputType()
 export class UpdateMemberInput {
-
   @Field(() => ID, { nullable: true })
   id: string;
 
@@ -35,13 +33,13 @@ export class DeleteMemberInput {
 
 @InputType()
 export class MemberFilterInput {
-  @Field(() => InvitationStatus, {nullable: true})
+  @Field(() => InvitationStatus, { nullable: true })
   status: InvitationStatus;
 
-  @Field(() => AppRole, {nullable: true})
+  @Field(() => AppRole, { nullable: true })
   role: AppRole;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   tenantId: string;
 }
 

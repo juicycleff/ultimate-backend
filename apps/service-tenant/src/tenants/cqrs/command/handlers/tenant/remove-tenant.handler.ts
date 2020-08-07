@@ -5,13 +5,17 @@ import { TenantRepository } from '@ultimatebackend/repository';
 import { TenantRemovedEvent } from '@ultimatebackend/core';
 import { ConflictError } from '@ultimatebackend/common';
 import { RemoveTenantCommand } from '../../impl';
-import { DeleteTenantResponse, Tenant } from '@ultimatebackend/proto-schema/tenant';
+import {
+  DeleteTenantResponse,
+  Tenant,
+} from '@ultimatebackend/proto-schema/tenant';
 
 /**
  * @class
  */
 @CommandHandler(RemoveTenantCommand)
-export class RemoveTenantHandler implements ICommandHandler<RemoveTenantCommand> {
+export class RemoveTenantHandler
+  implements ICommandHandler<RemoveTenantCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -30,26 +34,27 @@ export class RemoveTenantHandler implements ICommandHandler<RemoveTenantCommand>
 
     // TODO implement tenant delete correctly
     try {
-      if (input.id === null) { // Check to make sure input is not null
+      if (input.id === null) {
+        // Check to make sure input is not null
         throw new UserInputError('Tenant id is missing'); // Throw an apollo input error
       }
 
-      const tenantExist = await this.tenantRepository.exist({ _id: input.id }); // Check if tenant exist with normalized name
+      const tenantExist = await this.tenantRepository.exist({ id: input.id }); // Check if tenant exist with normalized name
       if (!tenantExist) {
-        throw new ConflictError('Tenant by id does not exist');  // Throw a conflict exception id tenant exist
+        throw new ConflictError('Tenant by id does not exist'); // Throw a conflict exception id tenant exist
       }
 
       const tenant = await this.tenantRepository.findOne({
-        _id: input.id,
+        id: input.id,
       });
 
       await this.tenantRepository.deleteOne({
-        _id: input.id,
+        id: input.id,
       });
 
       await this.eventBus.publish(new TenantRemovedEvent(tenant));
       return {
-        tenant: tenant as unknown as Tenant,
+        tenant: (tenant as unknown) as Tenant,
       };
     } catch (error) {
       this.logger.error(error);

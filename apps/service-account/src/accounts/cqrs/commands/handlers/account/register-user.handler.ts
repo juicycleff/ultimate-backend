@@ -1,14 +1,23 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { AuthServicesTypes, UserEntity, UserRepository } from '@ultimatebackend/repository';
+import {
+  AuthServicesTypes,
+  UserEntity,
+  UserRepository,
+} from '@ultimatebackend/repository';
 import { generateVerificationCode } from '@ultimatebackend/common/utils/verification-code-generator';
-import { CreateResponse, LoginServiceTypes } from '@ultimatebackend/proto-schema/account';
+import {
+  CreateResponse,
+  LoginServiceTypes,
+} from '@ultimatebackend/proto-schema/account';
 import { RegisterUserCommand } from '../../impl';
 import { UserRegisteredEvent } from '@ultimatebackend/core/cqrs';
 import { RpcException } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
-import { BillingsRpcClientService, RolesRpcClientService } from '@ultimatebackend/core';
-import { generateHashedPassword } from '@ultimatebackend/common';
+import {
+  BillingsRpcClientService,
+  RolesRpcClientService,
+} from '@ultimatebackend/core';
 
 /**
  * @implements {ICommandHandler<RegisterUserCommand>}
@@ -16,7 +25,8 @@ import { generateHashedPassword } from '@ultimatebackend/common';
  * @class
  */
 @CommandHandler(RegisterUserCommand)
-export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand> {
+export class RegisterUserHandler
+  implements ICommandHandler<RegisterUserCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -51,7 +61,9 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
       });
 
       if (userExist) {
-        throw new RpcException('Email is not available, please try another email');
+        throw new RpcException(
+          'Email is not available, please try another email',
+        );
       }
 
       let activationLink: string = null;
@@ -83,16 +95,17 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
         user = {
           firstname: cmd.firstname,
           lastname: cmd.lastname,
-          emails: [{
-            address: cmd.email,
-            primary: true,
-            verified: true,
-            verificationCode: null,
-          }],
+          emails: [
+            {
+              address: cmd.email,
+              primary: true,
+              verified: true,
+              verificationCode: null,
+            },
+          ],
           services,
         };
       } else {
-
         /** Standard password registration */
         /** Generate verification pin code for our user */
         const pincode = generateVerificationCode(6, { type: 'string' });
@@ -102,12 +115,14 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
         user = {
           firstname: cmd.firstname,
           lastname: cmd.lastname,
-          emails: [{
-            address: cmd.email,
-            primary: true,
-            verified: false,
-            verificationCode: pincode,
-          }],
+          emails: [
+            {
+              address: cmd.email,
+              primary: true,
+              verified: false,
+              verificationCode: pincode,
+            },
+          ],
           services: {
             password: {
               hashed: cmd.password,
@@ -119,7 +134,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
          *  This token expires after 1h
          */
         const payload = { email: cmd.email, pincode };
-        const jwtCode = this.jwtService.sign(payload, {expiresIn: '1h'});
+        const jwtCode = this.jwtService.sign(payload, { expiresIn: '1h' });
         activationLink = `${jwtCode}`;
       }
 
@@ -127,19 +142,31 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
       const result = await this.userRepository.create(user);
 
       const [, customer] = await Promise.all([
-        this.roleClient.roleService.addUserToRole({
-          domain: '*', userId: result.id.toString(), actor: 'user', role: 'customer',
-        }).toPromise(),
-        this.billingClient.billing.createCustomer({
-          currency: '',
-          number: '',
-          name: `${result.firstname} ${result.lastname}`,
-          email: result.emails.reduce(previousValue => previousValue.primary === true && previousValue).address,
-        }).toPromise(),
+        this.roleClient.svc
+          .addUserToRole({
+            domain: '*',
+            userId: result.id.toString(),
+            actor: 'user',
+            role: 'customer',
+          })
+          .toPromise(),
+        this.billingClient.svc
+          .createCustomer({
+            currency: '',
+            number: '',
+            name: `${result.firstname} ${result.lastname}`,
+            email: result.emails.reduce(
+              (previousValue) =>
+                previousValue.primary === true && previousValue,
+            ).address,
+          })
+          .toPromise(),
       ]);
 
-      const newUser: UserEntity & {activationLink?: string, service?: 'social' | 'local' }
-      = await this.userRepository.findOneByIdAndUpdate(result.id.toString(), {
+      const newUser: UserEntity & {
+        activationLink?: string;
+        service?: 'social' | 'local';
+      } = await this.userRepository.findOneByIdAndUpdate(result.id.toString(), {
         updates: {
           $set: { 'settings.stripeId': customer.customer.id },
         },
@@ -153,11 +180,10 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand>
       /** Publish user created event */
       this.eventBus.publish(new UserRegisteredEvent(newUser));
 
-      return {activationLink};
+      return { activationLink };
     } catch (error) {
       this.logger.log(error);
       throw new RpcException(error);
     }
   }
-
 }

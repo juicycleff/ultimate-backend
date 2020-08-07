@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 
-const secret =
-  'djfhsejhfgsehgfhsegfsegufyuewgfuyzweyufywefguyegfu9843hffh';
+const secret = 'djfhsejhfgsehgfhsegfsegufyuewgfuyzweyufywefguyegfu9843hffh';
 
 export const SkeletonsDecrypt = (token: string) => {
   try {
@@ -19,7 +18,10 @@ export const SkeletonsDecrypt = (token: string) => {
 
 export const SkeletonsEncrypt = (value: string): string => {
   try {
-    return jwt.sign( { exp: Math.floor(Date.now() / 1000) + 60 * 60, key: value }, secret);
+    return jwt.sign(
+      { exp: Math.floor(Date.now() / 1000) + 60 * 60, key: value },
+      secret,
+    );
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.log(e);

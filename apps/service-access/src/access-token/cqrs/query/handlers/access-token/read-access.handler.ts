@@ -1,10 +1,11 @@
 import { CACHE_MANAGER, CacheStore, Inject, Logger } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
-import { Access, ReadAccessResponse } from '@ultimatebackend/proto-schema/access';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { ReadAccessResponse } from '@ultimatebackend/proto-schema/access';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcException } from '@nestjs/microservices';
 import { ReadAccessQuery } from '../../impl';
 import { AccessTokenRepository } from '@ultimatebackend/repository';
+import { mapAccessTokenEntityToProto } from '../../../../utitlity';
 
 @QueryHandler(ReadAccessQuery)
 export class ReadAccessHandler implements IQueryHandler<ReadAccessQuery> {
@@ -29,13 +30,16 @@ export class ReadAccessHandler implements IQueryHandler<ReadAccessQuery> {
         throw new RpcException('Tenant required');
       }
 
-      const accessToken = await this.tokenRepository.findOne({ _id: input.id, tenantId: input.tenantId});
+      const accessToken = await this.tokenRepository.findOne({
+        _id: input.id,
+        tenantId: input.tenantId,
+      });
       if (!accessToken) {
         throw new RpcException('Accesss token by id not found');
       }
 
       return {
-        accessToken: accessToken as unknown as Access,
+        accessToken: mapAccessTokenEntityToProto(accessToken),
       };
     } catch (e) {
       this.logger.error(e);

@@ -1,5 +1,3 @@
 import { GetUserHandler } from './get-user.handler';
 
-export const AccountQueryHandlers = [
-  GetUserHandler,
-];
+export const AccountQueryHandlers = [GetUserHandler];

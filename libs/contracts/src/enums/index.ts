@@ -2,9 +2,17 @@ import { registerEnumType } from '@nestjs/graphql';
 import { AppRole, InvitationStatus } from './tenant.enum';
 import { ServiceTypes } from './auth.enum';
 import { RoleActions } from './roles.enum';
-import { PointType } from './point.enum';
-import { SignalType } from './signal.enum';
-import { InvoiceStatus, PlanPriceInterval, SubscriptionStatus } from './billing.enum';
+import {
+  InvoiceStatus,
+  PlanPriceInterval,
+  SubscriptionStatus,
+} from './billing.enum';
+import {
+  WebhookApiKeyFieldEnum,
+  WebhookCrudEnum,
+  WebhookAuthEnum,
+  WebhookHttpVerbEnum,
+} from './webhook.enum';
 
 export {
   AppRole,
@@ -13,8 +21,10 @@ export {
   ServiceTypes,
   PlanPriceInterval,
   SubscriptionStatus,
-  PointType,
-  SignalType,
+  WebhookApiKeyFieldEnum,
+  WebhookCrudEnum,
+  WebhookAuthEnum,
+  WebhookHttpVerbEnum,
 };
 
 registerEnumType(AppRole, {
@@ -52,12 +62,23 @@ registerEnumType(InvoiceStatus, {
   description: 'Invoice status enum',
 });
 
-registerEnumType(PointType, {
-  name: 'PointType',
-  description: 'Point type enum',
+registerEnumType(WebhookHttpVerbEnum, {
+  name: 'WebhookHttpVerbEnum',
+  description:
+    'The name tells it all. All available HTTP verbs for a webhook request',
 });
 
-registerEnumType(SignalType, {
-  name: 'SignalType',
-  description: 'Signal type enum',
+registerEnumType(WebhookAuthEnum, {
+  name: 'WebhookAuthEnum',
+  description: 'webhook auth types',
+});
+
+registerEnumType(WebhookCrudEnum, {
+  name: 'WebhookCrudEnum',
+  description: 'Webhook filter resource enums',
+});
+
+registerEnumType(WebhookApiKeyFieldEnum, {
+  name: 'WebhookApiKeyFieldEnum',
+  description: 'Webhook filter resource enums',
 });

@@ -7,16 +7,15 @@ services:
       dockerfile: apps/service-account/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-account:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50054:50054
     labels:
@@ -30,16 +29,15 @@ services:
       dockerfile: apps/service-access/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-access:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50089:50089
     labels:
@@ -53,16 +51,15 @@ services:
       dockerfile: apps/service-billing/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-billing:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50067:50067
     labels:
@@ -76,16 +73,15 @@ services:
       dockerfile: apps/service-notification/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-notification:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50044:50044
     labels:
@@ -99,16 +95,15 @@ services:
       dockerfile: apps/service-role/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-role:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50052:50052
     labels:
@@ -122,18 +117,39 @@ services:
       dockerfile: apps/service-tenant/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "service-tenant:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - DISCOVERY_HOST=localhost
     ports:
       - 50053:50053
+    labels:
+      kompose.service.type: clusterip
+      kompose.image-pull-secret: "gitlabregcrednew"
+      kompose.image-pull-policy: "Always"
+
+  service-webhook:
+    build:
+      context: .
+      dockerfile: apps/service-webhook/Dockerfile
+      args:
+        NODE_ENV: development
+    image: "service-webhook:latest"
+    restart: always
+    depends_on:
+      - consul
+      - redis
+    environment:
+      - CONSUL_HOST=consul
+      - NATS_HOST=nats
+      - DISCOVERY_HOST=localhost
+    ports:
+      - 50049:50049
     labels:
       kompose.service.type: clusterip
       kompose.image-pull-secret: "gitlabregcrednew"
@@ -145,16 +161,16 @@ services:
       dockerfile: apps/api-admin/Dockerfile
       args:
         NODE_ENV: development
-    depends_on:
-      - consul
     image: "api-admin:latest"
     restart: always
+    depends_on:
+      - consul
+      - redis
     environment:
       - CONSUL_HOST=consul
       - NATS_HOST=nats
-      - MQTT_HOST=mqtt
-      - MQTT_USER=""
-      - MQTT_PASS=""
+      - REDIS_HOST=nats
+      - DISCOVERY_HOST=localhost
     ports:
       - 50020:50020
     labels:
@@ -181,28 +197,7 @@ services:
     ports:
       - "2113:2113"
       - "1113:1113"
-    image: eventstore/eventstore
-    labels:
-      kompose.service.type: nodeport
-      kompose.service.expose: "true"
-      kompose.image-pull-policy: "Always"
-
-  mqtt:
-    container_name: mqtt
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    image: eclipse-mosquitto
-    labels:
-      kompose.service.type: nodeport
-      kompose.service.expose: "true"
-      kompose.image-pull-policy: "Always"
-
-  memcached:
-    container_name: memcached
-    image: launcher.gcr.io/google/memcached1
-    ports:
-      - "11211:11211"
+    image: eventstore/eventstore:release-5.0.8
     labels:
       kompose.service.type: nodeport
       kompose.service.expose: "true"

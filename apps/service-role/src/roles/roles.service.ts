@@ -13,7 +13,11 @@ export class RolesService implements OnModuleInit {
       if (res.actions.read.length > 0) {
         for (const a of res.actions.read) {
           try {
-            const check = await this.userEnforcer.hasPolicy(a, res.name, 'read');
+            const check = await this.userEnforcer.hasPolicy(
+              a,
+              res.name,
+              'read',
+            );
             if (!check) {
               await this.userEnforcer.addPolicy(a, res.name, 'read');
             }
@@ -26,7 +30,11 @@ export class RolesService implements OnModuleInit {
       if (res.actions.create.length > 0) {
         for (const a of res.actions.create) {
           try {
-            const check = await this.userEnforcer.hasPolicy(a, res.name, 'create');
+            const check = await this.userEnforcer.hasPolicy(
+              a,
+              res.name,
+              'create',
+            );
             if (!check) {
               await this.userEnforcer.addPolicy(a, res.name, 'create');
             }
@@ -39,7 +47,11 @@ export class RolesService implements OnModuleInit {
       if (res.actions.delete.length > 0) {
         for (const a of res.actions.delete) {
           try {
-            const check = await this.userEnforcer.hasPolicy(a, res.name, 'delete');
+            const check = await this.userEnforcer.hasPolicy(
+              a,
+              res.name,
+              'delete',
+            );
             if (!check) {
               await this.userEnforcer.checkPermission(a, res.name, 'delete');
             }
@@ -52,7 +64,11 @@ export class RolesService implements OnModuleInit {
       if (res.actions.update.length > 0) {
         for (const a of res.actions.update) {
           try {
-            const check = await this.userEnforcer.hasPolicy(a, res.name, 'update');
+            const check = await this.userEnforcer.hasPolicy(
+              a,
+              res.name,
+              'update',
+            );
             if (!check) {
               await this.userEnforcer.addPolicy(a, res.name, 'update');
             }

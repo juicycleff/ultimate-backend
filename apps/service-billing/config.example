@@ -3,10 +3,6 @@ billing:
   database:
     name: "srv-billing"
 
-memcached:
-  uri: "localhost:11211"
-  retries: 3
-
 stripe:
   apiKey: "*******_6776"
 

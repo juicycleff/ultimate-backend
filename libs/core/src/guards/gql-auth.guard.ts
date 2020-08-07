@@ -1,8 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
-import { AccessTokenRpcClientService, RolesRpcClientService, TenantsRpcClientService } from '../services';
-import { IResource } from '../interfaces';
+import { GqlContext, IResource } from '../interfaces';
 import { RESOURCE_DEFINITION } from '../decorators';
 import { UnauthorizedError } from '@ultimatebackend/common';
 import { Metadata } from 'grpc';
@@ -14,21 +18,19 @@ import { Metadata } from 'grpc';
  * @implements {CanActivate}
  */
 @Injectable()
-export class GqlAuthGuard  implements CanActivate {
+export class GqlAuthGuard implements CanActivate {
   logger = new Logger(this.constructor.name);
   tenantCache = new Map<string, object>();
 
-  constructor(
-    private readonly reflector: Reflector,
-    public readonly access: AccessTokenRpcClientService,
-    private readonly tenantSvc: TenantsRpcClientService,
-    public readonly role: RolesRpcClientService,
-  ) {}
+  constructor(private readonly reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = GqlExecutionContext.create(context).getContext();
+    const ctx: GqlContext = GqlExecutionContext.create(context).getContext();
     const { req, connection } = ctx;
-    const resource = this.reflector.get<IResource>(RESOURCE_DEFINITION, context.getHandler());
+    const resource = this.reflector.get<IResource>(
+      RESOURCE_DEFINITION,
+      context.getHandler(),
+    );
 
     try {
       if (connection?.context) {
@@ -39,19 +41,34 @@ export class GqlAuthGuard  implements CanActivate {
           const user = connection?.context?.user;
 
           const curTenant = tenantId || '*';
-          const resp = await this.role.roleService.hasRights({
-            act: resource.action, auth: 'user', dom: curTenant, res: resource.identify, sub: user.id,
-          }).toPromise();
+          const resp = await ctx?.rpc?.role?.svc
+            .hasRights({
+              act: resource.action,
+              auth: 'user',
+              dom: curTenant,
+              res: resource.identify,
+              sub: user.id,
+            })
+            .toPromise();
 
           if (resp.access === false) {
             throw new UnauthorizedError('Not authorized to read tenant');
           }
 
           return resp.access;
-        } else if (tenantId && tenantKey && resource && resource.supportsToken) {
-          const resp = await this.access.accessToken.hasRights({
-            tenantId, scope: `${resource.action}_${resource.identify}`, token: tenantKey,
-          }).toPromise();
+        } else if (
+          tenantId &&
+          tenantKey &&
+          resource &&
+          resource.supportsToken
+        ) {
+          const resp = await ctx?.rpc?.accessToken?.svc
+            .hasRights({
+              tenantId,
+              scope: `${resource.action}_${resource.identify}`,
+              token: tenantKey,
+            })
+            .toPromise();
           if (resp.access === false) {
             throw new UnauthorizedError('Not authorized to read tenant');
           }
@@ -63,24 +80,35 @@ export class GqlAuthGuard  implements CanActivate {
         // http
         if (ctx.isAuthenticated() && ctx.getUser() && resource) {
           const user = ctx.getUser();
+          // @ts-ignore
           const tenantInfo = req.tenantInfo;
 
           const curTenant = tenantInfo?.tenantId || '*';
 
           // await this.canAccessTenant(curTenant, user, req);
 
-          const resp = await this.role.roleService.hasRights({
-            act: resource.action, auth: 'user', dom: curTenant, res: resource.identify, sub: user.id,
-          }).toPromise();
-
+          const resp = await ctx?.rpc?.role?.svc
+            .hasRights({
+              act: resource.action,
+              auth: 'user',
+              dom: curTenant,
+              res: resource.identify,
+              sub: user.id?.toString(),
+            })
+            .toPromise();
           return resp.access;
+          // @ts-ignore
         } else if (req.tenantInfo && resource && resource.supportsToken) {
-
+          // @ts-ignore
           const tenantInfo = req.tenantInfo;
 
-          const resp = await this.access.accessToken.hasRights({
-            tenantId: tenantInfo?.tenantId, scope: `${resource.action}_${resource.identify}`, token: tenantInfo?.accessToken?.key,
-          }).toPromise();
+          const resp = await ctx?.rpc?.accessToken?.svc
+            .hasRights({
+              tenantId: tenantInfo?.tenantId,
+              scope: `${resource.action}_${resource.identify}`,
+              token: tenantInfo?.accessToken?.key,
+            })
+            .toPromise();
 
           return resp.access;
         }
@@ -93,21 +121,28 @@ export class GqlAuthGuard  implements CanActivate {
     }
   }
 
-  async canAccessTenant(curTenant, user, req) {
+  async canAccessTenant(ctx, curTenant, user, req) {
     try {
       const meta = new Metadata();
       meta.set('headers', JSON.stringify(req.headers));
       meta.set('inApp', 'true');
 
-      const tenantResp = await this.tenantSvc.tenantService.readTenant({
-        filter: JSON.stringify({normalizedName: { _EQ: curTenant}}),
-      }, meta).toPromise();
+      const tenantResp = await ctx?.rpc?.tenant?.svc
+        .readTenant(
+          {
+            filter: JSON.stringify({ normalizedName: { _EQ: curTenant } }),
+          },
+          meta,
+        )
+        .toPromise();
       if (!this.tenantCache.has(curTenant)) {
         this.tenantCache.set(curTenant, tenantResp.tenant);
       }
       this.logger.log(this.tenantCache);
 
-      const canAccessTenant = tenantResp.tenant.members.find(value => value.userId === user.id);
+      const canAccessTenant = tenantResp.tenant.members.find(
+        (value) => value.userId === user.id,
+      );
       /* if (!canAccessTenant || !tenantResp) {
         throw new UnauthorizedError('Not authorized to read tenant');
       } */

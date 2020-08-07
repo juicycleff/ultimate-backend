@@ -1,5 +1,5 @@
 import { Logger, CACHE_MANAGER, Inject, CacheStore } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcException } from '@nestjs/microservices';
 import { Plan, ReadPlanResponse } from '@ultimatebackend/proto-schema/billing';
 import { PlanRepository } from '@ultimatebackend/repository';
@@ -18,13 +18,15 @@ export class GetPlanHandler implements IQueryHandler<GetPlanQuery> {
     this.logger.log(`Async ${query.constructor.name}...`);
     const { input } = query;
 
-    if (!input.id) { throw new RpcException('Missing plan id input'); }
+    if (!input.id) {
+      throw new RpcException('Missing plan id input');
+    }
 
     try {
-     const plan = await this.planRepository.findOne({ id: input.id }, true);
-     return {
-       plan: plan as unknown as Plan,
-     };
+      const plan = await this.planRepository.findOne({ id: input.id }, true);
+      return {
+        plan: (plan as unknown) as Plan,
+      };
     } catch (e) {
       this.logger.error(e);
       throw new RpcException(e);

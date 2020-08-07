@@ -25,7 +25,11 @@ const logicalOperators = {
   _AND: ' OR ',
 };
 
-export function arangoQueryBuilder(query: object, docName?: string, grouped?: boolean) {
+export function arangoQueryBuilder(
+  query: object,
+  docName?: string,
+  grouped?: boolean,
+) {
   const doc = docName;
   const group = grouped;
 
@@ -35,7 +39,6 @@ export function arangoQueryBuilder(query: object, docName?: string, grouped?: bo
   let str = '';
 
   for (let prop in query) {
-
     if (query.hasOwnProperty(prop)) {
       const val = query[prop];
       let op = operators.$eq;
@@ -91,7 +94,7 @@ export function arangoQueryBuilder(query: object, docName?: string, grouped?: bo
       str = '(' + aql.join(logicalOperators.AND) + ')';
     }
   } else {
-    str =  aql.join(logicalOperators.AND);
+    str = aql.join(logicalOperators.AND);
   }
 
   if (returnOrStr) {

@@ -4,11 +4,15 @@ import { TenantRepository } from '@ultimatebackend/repository';
 import { MemberUpdatedEvent } from '@ultimatebackend/core';
 import { UpdateMemberCommand } from '../../impl';
 import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
-import { Member, UpdateMemberResponse } from '@ultimatebackend/proto-schema/tenant';
+import {
+  Member,
+  UpdateMemberResponse,
+} from '@ultimatebackend/proto-schema/tenant';
 import { RpcException } from '@nestjs/microservices';
 
 @CommandHandler(UpdateMemberCommand)
-export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand> {
+export class UpdateMemberHandler
+  implements ICommandHandler<UpdateMemberCommand> {
   logger = new Logger(this.constructor.name);
 
   constructor(
@@ -21,15 +25,18 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
     const { input, user, tenantId } = command;
 
     try {
-      if (!input.role || !input.id || !input.status) { // Check to make sure input is not null
+      if (!input.role || !input.id || !input.status) {
+        // Check to make sure input is not null
         throw new RpcException('Required input fields missing'); // Throw an apollo input error
       }
 
-      if (!user) { // Check to make sure input is not null
+      if (!user) {
+        // Check to make sure input is not null
         throw new RpcException('Current user not found'); // Throw an apollo input error
       }
 
-      if (tenantId === null) { // Check to make sure input is not null
+      if (tenantId === null) {
+        // Check to make sure input is not null
         throw new RpcException('Tenant not found');
       }
 
@@ -37,21 +44,28 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
         normalizeNamed: tenantId,
       });
 
-      if (tenant === null) { // Check to make sure input is not null
+      if (tenant === null) {
+        // Check to make sure input is not null
         throw new RpcException('Tenant not found');
       }
 
-      const memberRights = tenant.members.reduce(previousValue => previousValue.id === input.id && previousValue);
-      const currentUserRights = tenant.members.reduce(previousValue => previousValue.userId === user.id && previousValue);
+      const memberRights = tenant.members.reduce(
+        (previousValue) => previousValue.id === input.id && previousValue,
+      );
+      const currentUserRights = tenant.members.reduce(
+        (previousValue) => previousValue.userId === user.id && previousValue,
+      );
       if (!memberRights || !currentUserRights) {
-        throw new RpcException('Member not found');  // Throw a conflict exception id tenant exist
+        throw new RpcException('Member not found'); // Throw a conflict exception id tenant exist
       }
 
-      if (memberRights.role === AppRole.OWNER && currentUserRights.role === AppRole.OWNER && memberRights.userId === tenant.createdBy.toString()) {
-        throw new RpcException('You are not authorized to remove this member');
-      } else if (
-        currentUserRights.status !== InvitationStatus.ACCEPTED
+      if (
+        memberRights.role === AppRole.OWNER &&
+        currentUserRights.role === AppRole.OWNER &&
+        memberRights.userId === tenant.createdBy.toString()
       ) {
+        throw new RpcException('You are not authorized to remove this member');
+      } else if (currentUserRights.status !== InvitationStatus.ACCEPTED) {
         throw new RpcException('You are not authorized to remove this member');
       }
 
@@ -71,16 +85,17 @@ export class UpdateMemberHandler implements ICommandHandler<UpdateMemberCommand>
         },
       });
 
-      const member = updatedTenant.members.reduce(previousValue => previousValue.id === input.id && previousValue);
+      const member = updatedTenant.members.reduce(
+        (previousValue) => previousValue.id === input.id && previousValue,
+      );
 
       await this.eventBus.publish(new MemberUpdatedEvent(member));
       return {
-        member: member as unknown as Member,
+        member: (member as unknown) as Member,
       };
     } catch (error) {
       this.logger.log(error);
       throw new RpcException(error);
     }
   }
-
 }

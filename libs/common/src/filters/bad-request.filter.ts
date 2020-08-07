@@ -1,4 +1,10 @@
-import { ExceptionFilter, Catch, ArgumentsHost, BadRequestException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  BadRequestException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
 import { Response } from 'express';
@@ -6,7 +12,6 @@ import * as _ from 'lodash';
 
 @Catch(BadRequestException)
 export class HttpExceptionFilter implements ExceptionFilter {
-
   constructor(public reflector: Reflector) {}
 
   catch(exception: BadRequestException, host: ArgumentsHost) {
@@ -23,18 +28,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     r.statusCode = statusCode;
 
-    response
-      .status(statusCode)
-      .json(r);
+    response.status(statusCode).json(r);
   }
 
   private _validationFilter(validationErrors: ValidationError[]) {
     for (const validationError of validationErrors) {
-      for (const [constraintKey, constraint] of Object.entries(validationError.constraints)) {
+      for (const [constraintKey, constraint] of Object.entries(
+        validationError.constraints,
+      )) {
         // convert default messages
         if (!constraint) {
           // convert error message to error.fields.{key} syntax for i18n translation
-          validationError.constraints[constraintKey] = 'error.fields.' + _.snakeCase(constraintKey);
+          validationError.constraints[constraintKey] =
+            'error.fields.' + _.snakeCase(constraintKey);
         }
       }
       if (!_.isEmpty(validationError.children)) {

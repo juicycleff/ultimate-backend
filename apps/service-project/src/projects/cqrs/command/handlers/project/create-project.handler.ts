@@ -4,17 +4,19 @@ import { ProjectRepository } from '@ultimatebackend/repository';
 import { ProjectCreatedEvent } from '@ultimatebackend/core';
 import { CreateProjectCommand } from '../../impl';
 import { RpcException } from '@nestjs/microservices';
-import { CreateProjectResponse, Project } from '@ultimatebackend/proto-schema/project';
+import {
+  CreateProjectResponse,
+  Project,
+} from '@ultimatebackend/proto-schema/project';
 import { ObjectId } from 'mongodb';
 
 @CommandHandler(CreateProjectCommand)
-export class CreateProjectHandler implements ICommandHandler<CreateProjectCommand> {
+export class CreateProjectHandler
+  implements ICommandHandler<CreateProjectCommand> {
   logger = new Logger(this.constructor.name);
   projectRepository: ProjectRepository;
 
-  public constructor(
-    private readonly eventBus: EventBus,
-  ) {}
+  public constructor(private readonly eventBus: EventBus) {}
 
   async execute(command: CreateProjectCommand): Promise<CreateProjectResponse> {
     this.logger = new Logger(this.constructor.name);
@@ -23,7 +25,8 @@ export class CreateProjectHandler implements ICommandHandler<CreateProjectComman
     this.projectRepository = projectRepository;
 
     try {
-      if (input === null || input.name === null ) { // Check to make sure input is not null
+      if (input === null || input.name === null) {
+        // Check to make sure input is not null
         throw new RpcException('Project input name missing'); // Throw an apollo input error
       }
 

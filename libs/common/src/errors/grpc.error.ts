@@ -1,4 +1,4 @@
-import { ServiceError as GrpcServiceError } from "grpc";
+import { ServiceError as GrpcServiceError } from 'grpc';
 
 // Copied from apollo-server-errors
 export class ServiceError extends Error implements GrpcServiceError {
@@ -21,8 +21,8 @@ export class ServiceError extends Error implements GrpcServiceError {
     super(message);
     if (extensions) {
       Object.keys(extensions)
-        .filter(keyName => keyName !== 'message' && keyName !== 'extensions')
-        .forEach(key => {
+        .filter((keyName) => keyName !== 'message' && keyName !== 'extensions')
+        .forEach((key) => {
           this[key] = extensions[key];
         });
     }
@@ -31,7 +31,8 @@ export class ServiceError extends Error implements GrpcServiceError {
       Object.defineProperty(this, 'name', { value: 'ServiceError' });
     }
 
-    const userProvidedExtensions = (extensions && extensions.extensions) || null;
+    const userProvidedExtensions =
+      (extensions && extensions.extensions) || null;
 
     this.extensions = { ...extensions, ...userProvidedExtensions, code };
   }

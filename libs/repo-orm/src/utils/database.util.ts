@@ -4,7 +4,9 @@ import { DEFAULT_DATABASE_CONNECTION_NAME } from '../constants';
  * Get a token for the Map object for the given container name
  * @param containerName The unique name for the container
  */
-export function getContainerToken(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getContainerToken(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}Container`;
 }
 
@@ -12,7 +14,9 @@ export function getContainerToken(containerName: string = DEFAULT_DATABASE_CONNE
  * Get a token for the Map object for the given container name
  * @param containerName The unique name for the container
  */
-export function getContainerTenantConfig(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getContainerTenantConfig(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}TenantConfig`;
 }
 
@@ -20,7 +24,9 @@ export function getContainerTenantConfig(containerName: string = DEFAULT_DATABAS
  * Get a token for the database object for the given connection name
  * @param containerName The unique name for the container
  */
-export function getClientToken(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getClientToken(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}Client`;
 }
 
@@ -28,7 +34,9 @@ export function getClientToken(containerName: string = DEFAULT_DATABASE_CONNECTI
  * Get a token for the MongoClient object for the given connection name
  * @param containerName The unique name for the container
  */
-export function getReactiveClientToken(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getReactiveClientToken(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}ReactiveClient`;
 }
 
@@ -36,7 +44,9 @@ export function getReactiveClientToken(containerName: string = DEFAULT_DATABASE_
  * @description Get a token for the current tenant name for the given connection name
  * @param containerName The unique name for the container
  */
-export function getCurrentTenantToken(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getCurrentTenantToken(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}CurrentTenant`;
 }
 
@@ -44,7 +54,9 @@ export function getCurrentTenantToken(containerName: string = DEFAULT_DATABASE_C
  * Get a token for the Db object for the given connection name
  * @param containerName The unique name for the container
  */
-export function getDbToken(containerName: string = DEFAULT_DATABASE_CONNECTION_NAME) {
+export function getDbToken(
+  containerName: string = DEFAULT_DATABASE_CONNECTION_NAME,
+) {
   return `${containerName}Db`;
 }
 

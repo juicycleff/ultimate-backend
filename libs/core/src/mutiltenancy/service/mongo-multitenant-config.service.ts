@@ -14,7 +14,6 @@ import { TenantEntity } from '@ultimatebackend/repository';
 
 @Injectable({ scope: Scope.REQUEST })
 export class MongoMultiTenantConfigService implements MongoOptionsFactory {
-
   /**
    * @description All this params are injected
    * @param request
@@ -42,9 +41,9 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
       tenant = JSON.parse(gmap['x-tenant'] as string);
     }
 
-    const uriWithName = database.mongodb.uri.endsWith('/') ?
-      `${database.mongodb.uri}${database.mongodb.name}${database.mongodb.options}` :
-      `${database.mongodb.uri}/${database.mongodb.name}${database.mongodb.options}`;
+    const uriWithName = database.mongodb.uri.endsWith('/')
+      ? `${database.mongodb.uri}${database.mongodb.name}${database.mongodb.options}`
+      : `${database.mongodb.uri}/${database.mongodb.name}${database.mongodb.options}`;
     /**
      * This block of code is the default config if for some reason, the req object is empty
      */
@@ -68,13 +67,19 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
      */
     let uri = database.mongodb.uri; // Set database Url
     const appConString = this.resolveMongoUriString(
-      database.mongodb.uri, tenantInfo.tenantId, database.mongodb.options);
+      database.mongodb.uri,
+      tenantInfo.tenantId,
+      database.mongodb.options,
+    );
     let databaseName = database.mongodb.name;
 
     /**
      * Applying the right connection string for DatabaseIsolation database strategy
      */
-    if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DatabaseIsolation) {
+    if (
+      tenantInfo.config.databaseStrategy ===
+      TenantDatabaseStrategy.DatabaseIsolation
+    ) {
       databaseName = 'tenant-' + tenantInfo.tenantId;
       if (tenant && tenant?.settings?.database?.host) {
         uri = tenant?.settings?.database?.host;
@@ -91,7 +96,7 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
         databaseName = 'tenant-' + tenantInfo.tenantId;
         uri = tenant?.settings?.database?.host || appConString;
       } else {
-        databaseName =  database.mongodb.name;
+        databaseName = database.mongodb.name;
         uri = uriWithName;
       }
     }
@@ -99,9 +104,16 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
     /**
      * Applying the right connection string for DataIsolation database strategy
      */
-    if (tenantInfo.config.databaseStrategy === TenantDatabaseStrategy.DataIsolation) {
+    if (
+      tenantInfo.config.databaseStrategy ===
+      TenantDatabaseStrategy.DataIsolation
+    ) {
       databaseName = database.mongodb.name;
-      uri = this.resolveMongoUriString(database.mongodb.uri, database.mongodb.name, database.mongodb.options);
+      uri = this.resolveMongoUriString(
+        database.mongodb.uri,
+        database.mongodb.name,
+        database.mongodb.options,
+      );
     }
 
     /**
@@ -124,12 +136,28 @@ export class MongoMultiTenantConfigService implements MongoOptionsFactory {
    * @param databaseName
    * @param replicaName
    */
-  private resolveMongoUriString(uri: string, databaseName: string, replicaName: string = null): string {
-    if (uri === null || databaseName === null) { throw new RpcException('A missing database uri and name in a multi tenant service'); }
-    if (uri === undefined || databaseName === undefined) { throw new RpcException('A missing database uri and a name in multi tenant service'); }
+  private resolveMongoUriString(
+    uri: string,
+    databaseName: string,
+    replicaName: string = null,
+  ): string {
+    if (uri === null || databaseName === null) {
+      throw new RpcException(
+        'A missing database uri and name in a multi tenant service',
+      );
+    }
+    if (uri === undefined || databaseName === undefined) {
+      throw new RpcException(
+        'A missing database uri and a name in multi tenant service',
+      );
+    }
 
-    return uri.endsWith('/') ?
-      `${uri}${databaseName}${replicaName ? '?replicaSet=' + replicaName : ''}` :
-      `${uri}/${databaseName}${replicaName ? '?replicaSet=' + replicaName : ''}`;
+    return uri.endsWith('/')
+      ? `${uri}${databaseName}${
+          replicaName ? '?replicaSet=' + replicaName : ''
+        }`
+      : `${uri}/${databaseName}${
+          replicaName ? '?replicaSet=' + replicaName : ''
+        }`;
   }
 }

@@ -17,11 +17,14 @@ export class AccountsService {
    * @memberOf AccountsService
    * @param input
    */
-  private async loginCmd(input: Account.LoginRequest): Promise<Account.LoginResponse> {
-
+  private async loginCmd(
+    input: Account.LoginRequest,
+  ): Promise<Account.LoginResponse> {
     // @ts-ignore
     try {
-      const response = await this.accountRpcClient.accountService.login(input, null).toPromise();
+      const response = await this.accountRpcClient.svc
+        .login(input, null)
+        .toPromise();
       this.logger.log(response);
       return response;
     } catch (e) {
@@ -37,11 +40,14 @@ export class AccountsService {
    * @memberOf AccountsService
    * @param input
    */
-  private async createUser(input: Account.CreateRequest): Promise<Account.CreateResponse> {
-
+  private async createUser(
+    input: Account.CreateRequest,
+  ): Promise<Account.CreateResponse> {
     // @ts-ignore
     try {
-      const response = await this.accountRpcClient.accountService.create(input, null).toPromise();
+      const response = await this.accountRpcClient.svc
+        .create(input, null)
+        .toPromise();
       this.logger.log(response);
       return response;
     } catch (e) {
@@ -57,7 +63,9 @@ export class AccountsService {
    * @memberOf AccountsService
    * @param input
    */
-  public async validateUser(input: Account.LoginRequest): Promise<Account.User> {
+  public async validateUser(
+    input: Account.LoginRequest,
+  ): Promise<Account.User> {
     try {
       const result = await this.loginCmd(input);
       return result.user;
@@ -75,15 +83,24 @@ export class AccountsService {
    * @param logCmd
    * @param regCmd
    */
-  public async validateOrCreateUser(logCmd: Account.LoginRequest, regCmd: Account.CreateRequest): Promise<Account.User> {
+  public async validateOrCreateUser(
+    logCmd: Account.LoginRequest,
+    regCmd: Account.CreateRequest,
+  ): Promise<Account.User> {
     let user = null;
-    await this.loginCmd(logCmd).then(value => {
-      if (value) { user = value.user; }
-    }).catch(reason => {
-      this.logger.error(reason);
-    });
+    await this.loginCmd(logCmd)
+      .then((value) => {
+        if (value) {
+          user = value.user;
+        }
+      })
+      .catch((reason) => {
+        this.logger.error(reason);
+      });
 
-    if (user) { return user; }
+    if (user) {
+      return user;
+    }
 
     try {
       await this.createUser(regCmd);

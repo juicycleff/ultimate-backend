@@ -37,8 +37,14 @@ export class ArangoDatabaseClient extends EventEmitter {
    * @param db
    * @memberof DatabaseClient
    */
-  async connect(name: string = ARANGO_DEFAULTS.DATABASE, options: ArangoClientOption, db?: Database): Promise<Database> {
-    if (typeof options === 'string' || Array.isArray(options)) { throw Error('Options must not be a string'); }
+  async connect(
+    name: string = ARANGO_DEFAULTS.DATABASE,
+    options: ArangoClientOption,
+    db?: Database,
+  ): Promise<Database> {
+    if (typeof options === 'string' || Array.isArray(options)) {
+      throw Error('Options must not be a string');
+    }
 
     this.name = name;
     this.url = options.url || ARANGO_DEFAULTS.URL;
@@ -72,10 +78,13 @@ export class ArangoDatabaseClient extends EventEmitter {
    * @param name
    * @param option
    */
-  private createDatabase(name: string, option: ArangoConfig): Promise<Database> {
+  private createDatabase(
+    name: string,
+    option: ArangoConfig,
+  ): Promise<Database> {
     return new Promise<Database>((resolve, reject) => {
       const operation = retry.operation();
-      operation.attempt(async attempt => {
+      operation.attempt(async (attempt) => {
         try {
           const db = new Database(option);
           db.useDatabase(name);
@@ -93,7 +102,9 @@ export class ArangoDatabaseClient extends EventEmitter {
           }
           resolve(db);
         } catch (e) {
-          if (operation.retry(e)) { return; }
+          if (operation.retry(e)) {
+            return;
+          }
           this.emit('error', e);
           reject(e);
         }

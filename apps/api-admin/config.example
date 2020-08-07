@@ -1,29 +1,30 @@
 app:
   port: 9900
+  caching:
+    ttl: 5
+    max: 1000
   auth:
-    facebook:
-      clientID: 'gfgfggfgfgfgf'
-      clientSecret: 'fgfgfgfgf'
-      fbGraphVersion: 'v3.0'
-      callbackURL: 'https://142fa311.ngrok.io/account/facebook/callback'
-    github:
-      clientID: 'gfgfgfgfgfgf'
-      clientSecret: 'gfgfgfgfgfgfgfg'
-      fbGraphVersion: 'v3.0'
-      callbackURL: 'https://142fa311.ngrok.io/account/github/callback'
-    google:
-      clientID: 'fgffgfgfg'
-      clientSecret: 'fgfgfgfgfggf'
-      fbGraphVersion: 'v3.0'
-      callbackURL: 'https://142fa311.ngrok.io/account/google/callback'
+    enableJwtAuth: false,
+    enableSessionAuth: false,
+    jwtSettings:
+      secret: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im1hYXNfcHJvZF8yMDIwMDMyNiIsInR5cCI6IkpXVCJ9"
 
-memcached:
-  uri: "localhost:11211"
-  retries: 10
-  retry: 1000
-
-jwt:
-  secret: "final-acid-pro"
+    strategies:
+      facebook:
+        clientID: 'gfgfggfgfgfgf'
+        clientSecret: 'fgfgfgfgf'
+        fbGraphVersion: 'v3.0'
+        callbackURL: 'https://142fa311.ngrok.io/account/facebook/callback'
+      github:
+        clientID: 'gfgfgfgfgfgf'
+        clientSecret: 'gfgfgfgfgfgfgfg'
+        fbGraphVersion: 'v3.0'
+        callbackURL: 'https://142fa311.ngrok.io/account/github/callback'
+      google:
+        clientID: 'fgffgfgfg'
+        clientSecret: 'fgfgfgfgfggf'
+        fbGraphVersion: 'v3.0'
+        callbackURL: 'https://142fa311.ngrok.io/account/google/callback'
 
 database:
   mongodb:

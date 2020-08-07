@@ -19,19 +19,18 @@ export class ProfileMutations {}
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class User extends Node {
-
   @Field()
   firstname: string;
 
   @Field()
   lastname: string;
 
-  @Field(() => [String!], {defaultValue: []})
+  @Field(() => [String!], { defaultValue: [] })
   roles: string[];
 
   @Field()
   primaryEmail: string;
 
   @Field(() => [EmailObject!])
-  emails: EmailObject[];
+  emails: EmailObject;
 }

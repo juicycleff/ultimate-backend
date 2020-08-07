@@ -1,4 +1,4 @@
-import {randomBytes} from 'crypto';
+import { randomBytes } from 'crypto';
 
 async function generateUniqueByte() {
   const buffer = await randomBytes(12);

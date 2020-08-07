@@ -1,15 +1,18 @@
 import { GraphQLScalarType } from 'graphql';
 import { ValidatorOptions } from 'class-validator';
 
-import {
-  ClassType,
-  TypeResolver,
-} from './interfaces';
+import { ClassType, TypeResolver } from './interfaces';
 
-export interface RecursiveArray<TValue> extends Array<RecursiveArray<TValue> | TValue> {}
+export interface RecursiveArray<TValue>
+  extends Array<RecursiveArray<TValue> | TValue> {}
 
 // tslint:disable-next-line:ban-types
-export type TypeValue = ClassType | GraphQLScalarType | Function | object | symbol;
+export type TypeValue =
+  | ClassType
+  | GraphQLScalarType
+  | Function
+  | object
+  | symbol;
 export type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
 
 export type TypeValueThunk = (type?: void) => TypeValue;

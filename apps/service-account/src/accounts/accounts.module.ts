@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import { UserRepository } from '@ultimatebackend/repository';
-import { EventStoreSubscriptionType, EventStoreModule } from '@juicycleff/nestjs-event-store';
+import {
+  EventStoreSubscriptionType,
+  EventStoreModule,
+} from '@juicycleff/nestjs-event-store';
 import {
   AccountEventHandlers,
-  BillingEventHandlers, BillingsRpcClientService,
-  EmailVerifiedEvent, JwtConfigService, RolesRpcClientService,
+  BillingEventHandlers,
+  BillingsRpcClientService,
+  EmailVerifiedEvent,
+  JwtConfigService,
+  RolesRpcClientService,
   StripeUserCreatedEvent,
   UserLoggedInEvent,
   UserRegisteredEvent,

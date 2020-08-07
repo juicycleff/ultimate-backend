@@ -1,21 +1,33 @@
 import { CACHE_MANAGER, CacheStore, Inject, Injectable } from '@nestjs/common';
 import { Db, MongoClient } from 'mongodb';
 import { merge } from 'lodash';
-import { BaseMongoRepository, Before, MongoEntityRepository, InjectClient, InjectDb } from '@juicycleff/repo-orm';
+import {
+  BaseMongoRepository,
+  Before,
+  MongoEntityRepository,
+  InjectClient,
+  InjectDb,
+} from '@juicycleff/repo-orm';
 import { OfferEntity } from '../entities';
 import { AccessTokenEntity } from '../';
 
 @Injectable()
 @MongoEntityRepository({
-  name: 'access-token',
+  name: 'webhook',
   indexes: [
     {
       fields: { token: 1 },
       options: { unique: true },
     },
+    {
+      fields: { tenantId: 1, token: 1 },
+      options: { unique: false, background: true },
+    },
   ],
 })
-export class AccessTokenRepository extends BaseMongoRepository<AccessTokenEntity> {
+export class AccessTokenRepository extends BaseMongoRepository<
+  AccessTokenEntity
+> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
     @InjectDb() private readonly db: Db,

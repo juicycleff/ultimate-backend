@@ -1,10 +1,11 @@
 import { CACHE_MANAGER, CacheStore, Inject, Logger } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
-import { Access, FindAccessResponse, ReadAccessResponse } from '@ultimatebackend/proto-schema/access';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { FindAccessResponse } from '@ultimatebackend/proto-schema/access';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcException } from '@nestjs/microservices';
 import { FindAccessQuery } from '../../impl';
 import { AccessTokenRepository } from '@ultimatebackend/repository';
+import { mapAccessEntityArrToProto } from '../../../../utitlity';
 
 @QueryHandler(FindAccessQuery)
 export class FindAccessHandler implements IQueryHandler<FindAccessQuery> {
@@ -21,18 +22,21 @@ export class FindAccessHandler implements IQueryHandler<FindAccessQuery> {
     const { input } = query;
 
     try {
-
       if (!input.tenantId) {
         throw new RpcException('Tenant required');
       }
 
-      const accessToken = await this.tokenRepository.find({ conditions:{ tenantId: input.tenantId} });
-      if (!accessToken) {
-        throw new RpcException('Accesss token by id not found');
+      let filter = {};
+      if (input.filter) {
+        filter = JSON.parse(input.filter);
       }
 
+      const accessTokens = await this.tokenRepository.find({
+        conditions: { ...filter, tenantId: input.tenantId },
+      });
+
       return {
-        accessToken: accessToken as unknown as Access[],
+        accessToken: mapAccessEntityArrToProto(accessTokens),
       };
     } catch (e) {
       this.logger.error(e);

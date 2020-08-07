@@ -1,6 +1,9 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { TenantRepository } from '@ultimatebackend/repository';
-import { AcceptMemberInvitationResponse, Member } from '@ultimatebackend/proto-schema/tenant';
+import {
+  AcceptMemberInvitationResponse,
+  Member,
+} from '@ultimatebackend/proto-schema/tenant';
 import { AcceptInvitationCommand } from '../../impl';
 import { RolesRpcClientService } from '@ultimatebackend/core';
 import { JwtService } from '@nestjs/jwt';
@@ -9,7 +12,8 @@ import { InvitationStatus } from '@ultimatebackend/contracts';
 import { Logger } from '@nestjs/common';
 
 @CommandHandler(AcceptInvitationCommand)
-export class AcceptInvitationHandler implements ICommandHandler<AcceptInvitationCommand> {
+export class AcceptInvitationHandler
+  implements ICommandHandler<AcceptInvitationCommand> {
   logger = new Logger(this.constructor.name);
 
   constructor(
@@ -19,17 +23,21 @@ export class AcceptInvitationHandler implements ICommandHandler<AcceptInvitation
     private readonly jwtService: JwtService,
   ) {}
 
-  async execute(command: AcceptInvitationCommand): Promise<AcceptMemberInvitationResponse> {
+  async execute(
+    command: AcceptInvitationCommand,
+  ): Promise<AcceptMemberInvitationResponse> {
     this.logger.log(`'Async '${command.constructor.name}...`);
     const { input, user } = command;
 
     try {
       // @ts-ignore
       const payload: {
-        tenantId: string,
-        memberId: string,
+        tenantId: string;
+        memberId: string;
       } = await this.jwtService.decode(input.token);
-      if (!payload) { throw new RpcException('Invalid invitation token'); }
+      if (!payload) {
+        throw new RpcException('Invalid invitation token');
+      }
 
       const tenant = await this.tenantRepository.findOneAndUpdate({
         conditions: {
@@ -48,15 +56,25 @@ export class AcceptInvitationHandler implements ICommandHandler<AcceptInvitation
         },
       });
 
-      if (!tenant) { throw new RpcException('Invitation for tenant not found'); }
-      const member = tenant.members.reduce(previousValue => previousValue.id === payload.memberId && previousValue);
+      if (!tenant) {
+        throw new RpcException('Invitation for tenant not found');
+      }
+      const member = tenant.members.reduce(
+        (previousValue) =>
+          previousValue.id === payload.memberId && previousValue,
+      );
 
-      await this.roleService.roleService.addUserToRole(
-        {role: member.role, domain: tenant.normalizedName, actor: 'user', userId: user.id.toString() },
-      ).toPromise();
+      await this.roleService.svc
+        .addUserToRole({
+          role: member.role,
+          domain: tenant.normalizedName,
+          actor: 'user',
+          userId: user.id.toString(),
+        })
+        .toPromise();
 
       return {
-        member: member as unknown as Member,
+        member: (member as unknown) as Member,
       };
     } catch (e) {
       this.logger.error(e);

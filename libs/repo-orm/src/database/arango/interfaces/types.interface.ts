@@ -21,54 +21,60 @@ export interface ArangoDBSource {
   db: Promise<Database> | Database;
 }
 
-export type ArangoIndexDefinition = {
-  type: 'hash',
-  fields: string[],
-  opts: {
-    name?: string,
-    unique: boolean,
-    sparse?: boolean,
-    deduplicate?: boolean,
-  },
-} | {
-  type: 'geo',
-  fields: string[],
-  opts: {
-    name?: string,
-    geoJson?: boolean,
-  },
-} | {
-  type: 'skiplist',
-  fields: string[],
-  opts: {
-    unique: boolean,
-    name?: string,
-    sparse?: boolean,
-    deduplicate?: boolean,
-  },
-} | {
-  type: 'persistent',
-  opts: {
-    name?: string,
-    unique: boolean,
-    sparse?: boolean,
-  },
-  fields: string[],
-} | {
-  type: 'ttl',
-  expireAfter: number,
-  fields: string[],
-  opts: {
-    name?: string,
-  },
-} | {
-  type: 'fulltext',
-  minLength?: number,
-  fields: string[],
-  opts: {
-    name?: string,
-  },
-};
+export type ArangoIndexDefinition =
+  | {
+      type: 'hash';
+      fields: string[];
+      opts: {
+        name?: string;
+        unique: boolean;
+        sparse?: boolean;
+        deduplicate?: boolean;
+      };
+    }
+  | {
+      type: 'geo';
+      fields: string[];
+      opts: {
+        name?: string;
+        geoJson?: boolean;
+      };
+    }
+  | {
+      type: 'skiplist';
+      fields: string[];
+      opts: {
+        unique: boolean;
+        name?: string;
+        sparse?: boolean;
+        deduplicate?: boolean;
+      };
+    }
+  | {
+      type: 'persistent';
+      opts: {
+        name?: string;
+        unique: boolean;
+        sparse?: boolean;
+      };
+      fields: string[];
+    }
+  | {
+      type: 'ttl';
+      expireAfter: number;
+      fields: string[];
+      opts: {
+        name?: string;
+      };
+    }
+  | {
+      type: 'fulltext';
+      minLength?: number;
+      fields: string[];
+      opts: {
+        name?: string;
+      };
+    };
 
 export interface ArangoClientOption {
   url: string | string[];

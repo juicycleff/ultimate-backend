@@ -9,7 +9,9 @@ import { COLLECTION_KEY, ENTITY_KEY } from '../../../interfaces';
  * @param {CollectionProps} props
  * @returns
  */
-export const MongoEntityRepository = (props: MongoCollectionProps) =>  (target: any) => {
+export const MongoEntityRepository = (props: MongoCollectionProps) => (
+  target: any,
+) => {
   Reflect.defineMetadata(COLLECTION_KEY, props, target.prototype);
 };
 
@@ -20,6 +22,6 @@ export const MongoEntityRepository = (props: MongoCollectionProps) =>  (target: 
  * @param {CollectionProps} props
  * @returns
  */
-export const MongoEntity = (props?: MongoEntityProps) =>  (target: any) => {
+export const MongoEntity = (props?: MongoEntityProps) => (target: any) => {
   Reflect.defineMetadata(ENTITY_KEY, props, target.prototype);
 };

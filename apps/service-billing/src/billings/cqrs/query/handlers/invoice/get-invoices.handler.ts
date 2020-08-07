@@ -1,10 +1,13 @@
 import { CACHE_MANAGER, CacheStore, Inject, Logger } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import * as Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
 import { GetInvoicesQuery } from '../../impl';
 import { BadRequestError } from '@ultimatebackend/common';
-import { FindInvoicesResponse, Invoice } from '@ultimatebackend/proto-schema/billing';
+import {
+  FindInvoicesResponse,
+  Invoice,
+} from '@ultimatebackend/proto-schema/billing';
 import { invoiceSliceToProtoInvoiceSlice } from '../../../../../common';
 import { RpcException } from '@nestjs/microservices';
 
@@ -21,8 +24,8 @@ export class GetInvoicesHandler implements IQueryHandler<GetInvoicesQuery> {
     this.logger.log(`Async ${query.constructor.name}...`);
     const { customerId } = query;
     try {
-
-      if (customerId === null) { // Check to make sure input is not null
+      if (customerId === null) {
+        // Check to make sure input is not null
         throw new RpcException('Current user missing'); // Throw an input error
       }
 
@@ -42,12 +45,12 @@ export class GetInvoicesHandler implements IQueryHandler<GetInvoicesQuery> {
 
       if (invoices.data && invoices.data.length > 0) {
         const lists = invoiceSliceToProtoInvoiceSlice(invoices.data);
-        await this.cacheStore.set(cacheKey, lists, {ttl: 200});
+        await this.cacheStore.set(cacheKey, lists, { ttl: 200 });
         return {
           invoices: lists,
         };
       } else {
-        return {invoices: []};
+        return { invoices: [] };
       }
     } catch (e) {
       this.logger.error(e);

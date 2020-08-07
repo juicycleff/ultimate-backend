@@ -48,7 +48,11 @@ export class PriceInput {
   @Field(() => Int, { nullable: true })
   trialDays?: number;
 
-  @Field(() => Int, { nullable: true, description: 'The interval cunt for the field interval, eg. for interval MONTH, you can pass 3'})
+  @Field(() => Int, {
+    nullable: true,
+    description:
+      'The interval cunt for the field interval, eg. for interval MONTH, you can pass 3',
+  })
   intervalCount?: number;
 
   @Field(() => PlanPriceInterval)
@@ -66,7 +70,6 @@ export class KeyValuePairInput {
 
 @InputType()
 export class FeatureInput {
-
   @Field()
   name: string;
 

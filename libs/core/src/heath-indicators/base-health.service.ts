@@ -1,4 +1,10 @@
-import { DNSHealthIndicator, MicroserviceHealthIndicator, TerminusEndpoint, TerminusModuleOptions, TerminusOptionsFactory } from '@nestjs/terminus';
+import {
+  DNSHealthIndicator,
+  MicroserviceHealthIndicator,
+  TerminusEndpoint,
+  TerminusModuleOptions,
+  TerminusOptionsFactory,
+} from '@nestjs/terminus';
 import { Injectable, Logger } from '@nestjs/common';
 import { MongoHealthIndicator } from '../';
 import { Transport } from '@nestjs/microservices';
@@ -25,19 +31,19 @@ export class BaseHealthService implements TerminusOptionsFactory {
 
   async createTerminusOptions(): Promise<TerminusModuleOptions> {
     try {
-
       const healths = [];
 
       for (const s of this.options.services) {
-        const res = async () => this.ms.pingCheck('tcp', {
-          options: {
-            host: s.host,
-            port: s.port,
-            name: s.name,
-          },
-          // @ts-ignore
-          transport: s.transport || Transport.TCP,
-        });
+        const res = async () =>
+          this.ms.pingCheck('tcp', {
+            options: {
+              host: s.host,
+              port: s.port,
+              name: s.name,
+            },
+            // @ts-ignore
+            transport: s.transport || Transport.TCP,
+          });
         healths.push(res);
       }
 

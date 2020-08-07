@@ -3,9 +3,8 @@ import { Entity } from '@juicycleff/repo-orm';
 import { ObjectID } from 'mongodb';
 import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
 
-@Entity({name: 'tenant-member'})
+@Entity({ name: 'tenant-member' })
 export class TenantMemberEmbed {
-
   id!: string | ObjectID;
 
   email: string;
@@ -24,7 +23,6 @@ export class TenantMemberEmbed {
 }
 
 export class BillingSettingEmbed {
-
   currentPlan?: string;
 
   currentSubscription?: string;

@@ -1,6 +1,12 @@
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
-const whitelist = ['/example\.com$/', 'http://localhost:3000', 'http://localhost:4000', 'http://localhost:80', 'http://localhost:8080'];
+const whitelist = [
+  '/example.com$/',
+  'http://localhost:3000',
+  'http://localhost:4000',
+  'http://localhost:80',
+  'http://localhost:8080',
+];
 
 export const corsOptions: CorsOptions = {
   origin: true,

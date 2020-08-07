@@ -1,4 +1,4 @@
-const baseUrl = '../../libs/proto-schema/';
+const baseUrl = process.cwd() + '/dist/libs/proto-schema/';
 
 export const SERVICE_LIST = {
   role: {
@@ -13,11 +13,11 @@ export const SERVICE_LIST = {
     service: 'AccessService',
     protoPath: baseUrl + 'proto/access.proto',
   },
-  project: {
-    package: 'io.ultimatebackend.srv.project',
-    consulName: 'io.ultimatebackend.srv.project',
-    service: 'ProjectService',
-    protoPath: baseUrl + 'proto/project.proto',
+  webhook: {
+    package: 'io.ultimatebackend.srv.webhook',
+    consulName: 'io.ultimatebackend.srv.webhook',
+    service: 'WebhookService',
+    protoPath: baseUrl + 'proto/webhook.proto',
   },
   billing: {
     package: 'io.ultimatebackend.srv.billing',
@@ -36,6 +36,12 @@ export const SERVICE_LIST = {
     consulName: 'io.ultimatebackend.srv.account',
     service: 'AccountService',
     protoPath: baseUrl + 'proto/account.proto',
+  },
+  project: {
+    package: 'io.ultimatebackend.srv.project',
+    consulName: 'io.ultimatebackend.srv.project',
+    service: 'ProjectService',
+    protoPath: baseUrl + 'proto/project.proto',
   },
   admin: {
     consulName: 'io.ultimatebackend.api.admin',

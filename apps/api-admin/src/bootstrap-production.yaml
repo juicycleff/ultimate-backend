@@ -5,14 +5,12 @@ config:
   key: ultimatebackend/config/${{ service.name }}
 nats:
   url: nats://${{NATS_HOST}}:4222
-mqtt:
-  port: 1883
-  host: ${{MQTT_HOST}}
-  username: ${{MQTT_USER}}
-  password: ${{MQTT_PASS}}
-  protocol: "tcp"
+redis:
+  host: ${{REDIS_HOST}}
+  port: 6379
+  password: ""
 service:
-  discoveryHost: ${{CONSUL_HOST}}
+  discoveryHost: ${{DISCOVERY_HOST}}
   healthCheck:
     timeout: 1s
     interval: 10s
@@ -47,3 +45,13 @@ logger:
       zippedArchive: true
       maxSize: 20m
       maxFiles: 14d
+app:
+  auth:
+    sessionKey: "session.app"
+    domain: ""
+    resave: true
+    rolling: true
+    saveUninitialized: false
+    cookieMaxAge: "200H" # THIS SHOULD BE IN DURATION FORMAT 2S, 2H, 2M
+    secure: false
+    sessionSecret: "DKPp4JJyGdr3cPyHxxYJKb4m83AJLcNCjnt77GZG9Bh8PuBDNQBkj9BskcwvLQNB3zJhE5zkPkQjrEmzJzrsE74eAF8V4aZVMVkHFTEdGGAw6qpDkCKjNtDFd95"

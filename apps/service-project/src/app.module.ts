@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CoreModule, ServiceRegistryModule } from '@ultimatebackend/core/modules';
+import {
+  CoreModule,
+  ServiceRegistryModule,
+} from '@ultimatebackend/core/modules';
 import { MongoModule } from '@juicycleff/repo-orm/database';
 import { MongoMultiTenantConfigService } from '@ultimatebackend/core/mutiltenancy';
 import { AppController } from './app.controller';

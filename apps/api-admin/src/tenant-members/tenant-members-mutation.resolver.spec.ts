@@ -9,7 +9,9 @@ describe('TenantMembersMutationResolver', () => {
       providers: [TenantMembersMutationResolver],
     }).compile();
 
-    resolver = module.get<TenantMembersMutationResolver>(TenantMembersMutationResolver);
+    resolver = module.get<TenantMembersMutationResolver>(
+      TenantMembersMutationResolver,
+    );
   });
 
   it('should be defined', () => {

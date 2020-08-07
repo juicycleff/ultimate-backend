@@ -6,7 +6,10 @@ import {
   RegisterUserCommand,
   ResendVerificationEmailCommand,
   LoginUserCommand,
-  GetUserQuery, ForgotPasswordCommand, UpdateUserPasswordCommand, UpdateUserCommand,
+  GetUserQuery,
+  ForgotPasswordCommand,
+  UpdateUserPasswordCommand,
+  UpdateUserCommand,
 } from './cqrs';
 
 import {
@@ -14,7 +17,9 @@ import {
   CreateRequest,
   CreateResponse,
   DeleteRequest,
-  DeleteResponse, ForgotPasswordRequest, ForgotPasswordResponse,
+  DeleteResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
   LoginRequest,
   LoginResponse,
   LogoutRequest,
@@ -72,7 +77,9 @@ export class AccountsController implements AccountService<any> {
     if (!request.query) {
       throw new RpcException('Missing query params');
     }
-    const user = await this.queryBus.execute(new GetUserQuery(JSON.parse(request.query))) as User;
+    const user = (await this.queryBus.execute(
+      new GetUserQuery(JSON.parse(request.query)),
+    )) as User;
     // @ts-ignore
     return {
       user,
@@ -80,7 +87,10 @@ export class AccountsController implements AccountService<any> {
   }
 
   @GrpcMethod('AccountService')
-  async readSession(request: ReadSessionRequest, ctx: any): Promise<ReadSessionResponse> {
+  async readSession(
+    request: ReadSessionRequest,
+    ctx: any,
+  ): Promise<ReadSessionResponse> {
     return undefined;
   }
 
@@ -90,8 +100,13 @@ export class AccountsController implements AccountService<any> {
   }
 
   @GrpcMethod('AccountService')
-  async resendVerificationCode(request: ResendVerificationCodeRequest, ctx: any): Promise<ResendVerificationCodeResponse> {
-    return await this.commandBus.execute(new ResendVerificationEmailCommand(request.email));
+  async resendVerificationCode(
+    request: ResendVerificationCodeRequest,
+    ctx: any,
+  ): Promise<ResendVerificationCodeResponse> {
+    return await this.commandBus.execute(
+      new ResendVerificationEmailCommand(request.email),
+    );
   }
 
   @GrpcMethod('AccountService')
@@ -100,19 +115,32 @@ export class AccountsController implements AccountService<any> {
   }
 
   @GrpcMethod('AccountService')
-  async updatePassword(request: UpdatePasswordRequest, ctx: any): Promise<UpdatePasswordResponse> {
-    return await this.commandBus.execute(new UpdateUserPasswordCommand(request));
+  async updatePassword(
+    request: UpdatePasswordRequest,
+    ctx: any,
+  ): Promise<UpdatePasswordResponse> {
+    return await this.commandBus.execute(
+      new UpdateUserPasswordCommand(request),
+    );
   }
 
   @GrpcMethod('AccountService')
-  async verifyAccount(request: VerifyAccountRequest, ctx: any): Promise<VerifyAccountResponse> {
-    return await this.commandBus.execute(new VerifyEmailCommand(request.pincode, request.email));
+  async verifyAccount(
+    request: VerifyAccountRequest,
+    ctx: any,
+  ): Promise<VerifyAccountResponse> {
+    return await this.commandBus.execute(
+      new VerifyEmailCommand(request.pincode, request.email),
+    );
   }
 
   @GrpcMethod('AccountService')
-  async verifyActivationLink(request: VerifyActivationLinkRequest, ctx: any): Promise<VerifyActivationLinkResponse> {
+  async verifyActivationLink(
+    request: VerifyActivationLinkRequest,
+    ctx: any,
+  ): Promise<VerifyActivationLinkResponse> {
     try {
-      const decoded = await this.jwtService.decode(request.token) as any;
+      const decoded = (await this.jwtService.decode(request.token)) as any;
       return {
         email: decoded.email,
         pincode: decoded.pincode,
@@ -123,7 +151,10 @@ export class AccountsController implements AccountService<any> {
   }
 
   @GrpcMethod('AccountService')
-  async forgotPassword(request: ForgotPasswordRequest, ctx: any): Promise<ForgotPasswordResponse> {
+  async forgotPassword(
+    request: ForgotPasswordRequest,
+    ctx: any,
+  ): Promise<ForgotPasswordResponse> {
     return await this.commandBus.execute(new ForgotPasswordCommand(request));
   }
 }

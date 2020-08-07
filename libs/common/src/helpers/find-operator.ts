@@ -3,7 +3,8 @@
 /**
  * List of types that FindOperator can be.
  */
-export type FindOperatorType = 'not'
+export type FindOperatorType =
+  | 'not'
   | 'lessThan'
   | 'lessThanOrEqual'
   | 'moreThan'
@@ -20,7 +21,6 @@ export type FindOperatorType = 'not'
  * Find Operator used in Find Conditions.
  */
 export class FindOperator<T> {
-
   // -------------------------------------------------------------------------
   // Private Properties
   // -------------------------------------------------------------------------
@@ -33,7 +33,7 @@ export class FindOperator<T> {
   /**
    * Parameter value.
    */
-  private _value: T|FindOperator<T>;
+  private _value: T | FindOperator<T>;
 
   /**
    * Indicates if parameter is used or not for this operator.
@@ -49,7 +49,12 @@ export class FindOperator<T> {
   // Constructor
   // -------------------------------------------------------------------------
 
-  constructor(type: FindOperatorType, value: T|FindOperator<T>, useParameter: boolean = true, multipleParameters: boolean = false) {
+  constructor(
+    type: FindOperatorType,
+    value: T | FindOperator<T>,
+    useParameter: boolean = true,
+    multipleParameters: boolean = false,
+  ) {
     this._type = type;
     this._value = value;
     this._useParameter = useParameter;
@@ -94,5 +99,4 @@ export class FindOperator<T> {
 
     return this._value;
   }
-
 }

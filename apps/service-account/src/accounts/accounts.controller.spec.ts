@@ -8,10 +8,7 @@ describe('Accounts Controller', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        CqrsModule,
-        CacheModule.register(),
-      ],
+      imports: [CqrsModule, CacheModule.register()],
       controllers: [AccountsController],
     }).compile();
 

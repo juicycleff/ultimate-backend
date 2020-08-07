@@ -15,6 +15,11 @@ export interface UpdateRequest extends UpdateByIdRequest {
   conditions: any;
 }
 
+export interface UpdateOneRequest {
+  updates: any;
+  conditions: any;
+}
+
 export interface FindRequest {
   conditions: any;
   limit?: number;
@@ -37,8 +42,8 @@ export interface PageInfoOffsets {
 }
 
 export type Offsets = PageInfoOffsets & {
-  skip: number,
-  limit: number,
+  skip: number;
+  limit: number;
 };
 
 /**
@@ -115,10 +120,10 @@ export class CursorResponse<T> {
 
 export type PageInfoOptions<T> = PageInfoOffsets & {
   edges: Array<{
-    cursor: string,
-    node: T,
-  }>,
-  totalCount: number,
+    cursor: string;
+    node: T;
+  }>;
+  totalCount: number;
 };
 
 export interface OffsetOptions {

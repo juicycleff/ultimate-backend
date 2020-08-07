@@ -10,7 +10,6 @@ export class BooleanPayload {
 
 @ObjectType()
 export class Price {
-
   @Filterable()
   @Field({ nullable: true })
   amount: number;
@@ -34,7 +33,6 @@ export class Price {
 
 @ObjectType()
 export class KeyValuePair {
-
   @Filterable()
   @Field()
   key: string;
@@ -46,7 +44,6 @@ export class KeyValuePair {
 
 @ObjectType()
 export class Feature {
-
   @Field()
   name: string;
 

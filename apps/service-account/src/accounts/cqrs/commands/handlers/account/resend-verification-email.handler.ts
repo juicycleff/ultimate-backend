@@ -5,7 +5,7 @@ import { ResendVerificationEmailCommand } from '../../impl';
 import { VerificationEmailSentEvent } from '@ultimatebackend/core/cqrs';
 import { generateVerificationCode } from '@ultimatebackend/common/utils/verification-code-generator';
 import { RpcException } from '@nestjs/microservices';
-import {ResendVerificationCodeResponse} from '@ultimatebackend/proto-schema/account';
+import { ResendVerificationCodeResponse } from '@ultimatebackend/proto-schema/account';
 import { JwtService } from '@nestjs/jwt';
 
 /**
@@ -14,7 +14,8 @@ import { JwtService } from '@nestjs/jwt';
  * @class
  */
 @CommandHandler(ResendVerificationEmailCommand)
-export class ResendVerificationEmailHandler implements ICommandHandler<ResendVerificationEmailCommand> {
+export class ResendVerificationEmailHandler
+  implements ICommandHandler<ResendVerificationEmailCommand> {
   logger = new Logger(this.constructor.name);
   constructor(
     private readonly userRepository: UserRepository,
@@ -27,19 +28,28 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
    * @param command
    * @return {ResendVerificationCodeResponse}
    */
-  async execute(command: ResendVerificationEmailCommand): Promise<ResendVerificationCodeResponse> {
+  async execute(
+    command: ResendVerificationEmailCommand,
+  ): Promise<ResendVerificationCodeResponse> {
     this.logger.log(`Async ${command.constructor.name}...`);
     const { email } = command;
 
     try {
-      const user: UserEntity = await this.userRepository.findOne({
-        emails: { $elemMatch: { address: email, primary: true } },
-      }, true);
+      const user: UserEntity = await this.userRepository.findOne(
+        {
+          emails: { $elemMatch: { address: email, primary: true } },
+        },
+        true,
+      );
 
-      if (!user) { throw new RpcException('No user with email address found'); }
+      if (!user) {
+        throw new RpcException('No user with email address found');
+      }
 
       // Check if user is verified.
-      const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+      const userEmail = user.emails.reduce(
+        (previousValue) => previousValue.primary === true && previousValue,
+      );
       if (userEmail.verified) {
         throw new RpcException('Email already verified');
       }
@@ -48,7 +58,9 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
       const pincode = generateVerificationCode(6, { type: 'string' });
 
       /** Update the user replacing old pin code with the new pin code. */
-      const updatedUser: UserEntity & {activationLink?: string} = await this.userRepository.findOneAndUpdate({
+      const updatedUser: UserEntity & {
+        activationLink?: string;
+      } = await this.userRepository.findOneAndUpdate({
         conditions: {
           'emails.address': email,
         },
@@ -63,7 +75,7 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
        *  This token expires after 1h.
        */
       const payload = { email, pincode };
-      const jwtCode = this.jwtService.sign(payload, {expiresIn: '1h'});
+      const jwtCode = this.jwtService.sign(payload, { expiresIn: '1h' });
       const activationLink = `${jwtCode}`;
 
       /** Publish user created event if user was updated */
@@ -76,16 +88,14 @@ export class ResendVerificationEmailHandler implements ICommandHandler<ResendVer
         this.eventBus.publish(new VerificationEmailSentEvent(updatedUser));
 
         /** Returns request successful completion status */
-        return {success: true};
+        return { success: true };
       }
 
       /** Returns request successful completion status */
-      return {success: false};
-
+      return { success: false };
     } catch (error) {
       this.logger.log(error);
       throw new RpcException(error);
     }
   }
-
 }

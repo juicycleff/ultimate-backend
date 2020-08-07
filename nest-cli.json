@@ -157,6 +157,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/service-project/tsconfig.app.json"
       }
+    },
+    "service-webhook": {
+      "type": "application",
+      "root": "apps/service-webhook",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-webhook/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-webhook/tsconfig.app.json"
+      }
     }
   }
 }

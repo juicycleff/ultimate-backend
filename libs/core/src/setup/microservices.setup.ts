@@ -2,6 +2,7 @@ import { INestApplication, Logger } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
 import { NestCloud } from '@nestcloud/core';
 import { join } from 'path';
+import { AppUtils } from '@ultimatebackend/common';
 
 interface MicroserviceSetupOptions {
   enableMqtt?: boolean;
@@ -9,15 +10,20 @@ interface MicroserviceSetupOptions {
   hostname?: string;
 }
 
-export async function microserviceSetup(app: INestApplication, protoPath: string, options?: MicroserviceSetupOptions) {
-  const {hostname = '0.0.0.0', enableMqtt, enableNats} = options;
+export async function microserviceSetup(
+  app: INestApplication,
+  protoPath: string,
+  options?: MicroserviceSetupOptions,
+) {
+  const { hostname = '0.0.0.0', enableMqtt, enableNats } = options;
 
+  AppUtils.killAppWithGrace(app);
   app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
       url: `${hostname}:${NestCloud.global.boot.get('service.port')}`,
       package: NestCloud.global.boot.get('service.name'),
-      protoPath: join(__dirname, `../../libs/proto-schema/${protoPath}`),
+      protoPath: join(process.cwd(), `/dist/libs/proto-schema/${protoPath}`),
     },
   });
 
@@ -25,11 +31,10 @@ export async function microserviceSetup(app: INestApplication, protoPath: string
     app.connectMicroservice({
       transport: Transport.MQTT,
       options: {
-        port: parseInt(NestCloud.global.boot.get('mqtt.port'), 10),
-        hostname: NestCloud.global.boot.get('mqtt.hostname'),
-        username: NestCloud.global.boot.get('mqtt.username'),
-        password: NestCloud.global.boot.get('mqtt.password'),
-        clientId: NestCloud.global.boot.get('service.name') + Math.random().toString(16).substr(2, 8),
+        url: NestCloud.global.boot.get('mqtt.url'),
+        clientId:
+          NestCloud.global.boot.get('service.name') +
+          Math.random().toString(16).substr(2, 8),
       },
     });
   }
@@ -39,14 +44,24 @@ export async function microserviceSetup(app: INestApplication, protoPath: string
       transport: Transport.NATS,
       options: {
         url: NestCloud.global.boot.get('nats.url'),
-        queue: 'ultimatebackend_srv_queue',
+        queue: 'd4_srv_queue',
       },
     });
   }
 
   await app.startAllMicroservicesAsync();
-  Logger.log(`GRPC ${NestCloud.global.boot.get('service.name')} running on port: ${NestCloud.global.boot.get('service.port')}`, 'Bootstrap');
+  Logger.log(
+    `GRPC ${NestCloud.global.boot.get(
+      'service.name',
+    )} running on port: ${NestCloud.global.boot.get('service.port')}`,
+    'Bootstrap',
+  );
 
   await app.listen(null);
-  Logger.log(`REST ${NestCloud.global.boot.get('service.name')} running on: ${await app.getUrl()}`, 'Bootstrap');
+  Logger.log(
+    `REST ${NestCloud.global.boot.get(
+      'service.name',
+    )} running on: ${await app.getUrl()}`,
+    'Bootstrap',
+  );
 }

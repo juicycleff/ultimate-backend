@@ -1,6 +1,4 @@
-
 export class TenantAccessEmbed {
-
   key: string;
 
   secret: string;

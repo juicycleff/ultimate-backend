@@ -1,0 +1,30 @@
+consul:
+  host: ${{CONSUL_HOST}}
+  port: 8500
+config:
+  key: ultimatebackend/config/${{ service.name }}
+nats:
+  url: nats://${{NATS_HOST}}:4222
+redis:
+  host: ${{REDIS_HOST}}
+  port: 6379
+  password: ""
+service:
+  discoveryHost: ${{DISCOVERY_HOST}}
+  healthCheck:
+    timeout: 1s
+    interval: 10s
+    tcp: ${{ service.discoveryHost }}:${{ service.port }}
+  maxRetry: 5
+  retryInterval: 5000
+  name: io.ultimatebackend.srv.webhook
+  port: 50049
+loadbalance:
+  ruleCls: RandomRule
+logger:
+  level: info
+  transports:
+    - transport: console
+      colorize: true
+      datePattern: YYYY-MM-DD h:mm:ss
+      label: ${{ service.name }}

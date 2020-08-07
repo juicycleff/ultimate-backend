@@ -36,7 +36,11 @@ import {
   ReadPlanRequest,
   ReadPlanResponse,
   ReadStripePlanRequest,
-  ReadStripePlanResponse, ReadSubscriptionRequest, ReadSubscriptionResponse,
+  ReadStripePlanResponse,
+  ReadSubscriptionRequest,
+  ReadSubscriptionResponse,
+  SetDefaultCardRequest,
+  SetDefaultCardResponse,
 } from '@ultimatebackend/proto-schema/billing';
 import { GrpcMethod } from '@nestjs/microservices';
 import { CardsService } from '../cards/cards.service';
@@ -51,7 +55,10 @@ import {
 import { GetPlanQuery, GetPlansQuery } from './cqrs/query/impl/plan';
 import { PlansService } from '../plans/plans.service';
 import { GetInvoicesQuery } from './cqrs/query/impl/invoice';
-import { GetSubscriptionQuery, GetSubscriptionsQuery } from './cqrs/query/impl/subscription';
+import {
+  GetSubscriptionQuery,
+  GetSubscriptionsQuery,
+} from './cqrs/query/impl/subscription';
 
 @Controller('billings')
 export class BillingsController implements BillingService<any> {
@@ -63,108 +70,190 @@ export class BillingsController implements BillingService<any> {
   ) {}
 
   @GrpcMethod('BillingService')
-  async cancelSubscription(request: CancelSubscriptionRequest, ctx: any): Promise<CancelSubscriptionResponse> {
-    return await this.commandBus.execute(new CancelSubscriptionCommand(request));
+  async cancelSubscription(
+    request: CancelSubscriptionRequest,
+    ctx: any,
+  ): Promise<CancelSubscriptionResponse> {
+    return await this.commandBus.execute(
+      new CancelSubscriptionCommand(request),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async changeSubscription(request: ChangeSubscriptionRequest, ctx: any): Promise<ChangeSubscriptionResponse> {
-    return await this.commandBus.execute(new ChangeSubscriptionCommand(request));
+  async changeSubscription(
+    request: ChangeSubscriptionRequest,
+    ctx: any,
+  ): Promise<ChangeSubscriptionResponse> {
+    return await this.commandBus.execute(
+      new ChangeSubscriptionCommand(request),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async createCard(request: CreateCardRequest, ctx: any): Promise<CreateCardResponse> {
+  async createCard(
+    request: CreateCardRequest,
+    ctx: any,
+  ): Promise<CreateCardResponse> {
     const { user } = getIdentityFromCtx(ctx);
     return await this.cardsService.create(request, user?.settings?.stripeId);
   }
 
   @GrpcMethod('BillingService')
-  async createCustomer(request: CreateCustomerRequest, ctx: any): Promise<CreateCustomerResponse> {
-    return await this.commandBus.execute(new CreateStripeCustomerCommand(request));
+  async createCustomer(
+    request: CreateCustomerRequest,
+    ctx: any,
+  ): Promise<CreateCustomerResponse> {
+    return await this.commandBus.execute(
+      new CreateStripeCustomerCommand(request),
+    );
   }
 
   @GrpcMethod('BillingService')
-  createPlan(request: CreatePlanRequest, ctx: any): Promise<CreatePlanResponse> {
+  createPlan(
+    request: CreatePlanRequest,
+    ctx: any,
+  ): Promise<CreatePlanResponse> {
     return undefined;
   }
 
   @GrpcMethod('BillingService')
-  async createSubscription(request: CreateSubscriptionRequest, ctx: any): Promise<CreateSubscriptionResponse> {
-    return await this.commandBus.execute(new CreateSubscriptionCommand(request));
+  async createSubscription(
+    request: CreateSubscriptionRequest,
+    ctx: any,
+  ): Promise<CreateSubscriptionResponse> {
+    return await this.commandBus.execute(
+      new CreateSubscriptionCommand(request),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async deleteCard(request: DeleteCardRequest, ctx: any): Promise<DeleteCardResponse> {
+  async deleteCard(
+    request: DeleteCardRequest,
+    ctx: any,
+  ): Promise<DeleteCardResponse> {
     const { user } = getIdentityFromCtx(ctx);
     return await this.cardsService.delete(request, user?.settings?.stripeId);
   }
 
   @GrpcMethod('BillingService')
-  deleteCustomer(request: DeleteCustomerRequest, ctx: any): Promise<DeleteCustomerResponse> {
+  deleteCustomer(
+    request: DeleteCustomerRequest,
+    ctx: any,
+  ): Promise<DeleteCustomerResponse> {
     return undefined;
   }
 
   @GrpcMethod('BillingService')
-  async findCards(request: FindCardsRequest, ctx: any): Promise<FindCardsResponse> {
+  async findCards(
+    request: FindCardsRequest,
+    ctx: any,
+  ): Promise<FindCardsResponse> {
     const { user } = getIdentityFromCtx(ctx);
     return await this.cardsService.list(request, user?.settings?.stripeId);
   }
 
   @GrpcMethod('BillingService')
-  async findInvoices(request: FindInvoicesRequest, ctx: any): Promise<FindInvoicesResponse> {
+  async findInvoices(
+    request: FindInvoicesRequest,
+    ctx: any,
+  ): Promise<FindInvoicesResponse> {
     const { user } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new GetInvoicesQuery(request, user?.settings?.stripeId));
+    return await this.queryBus.execute(
+      new GetInvoicesQuery(request, user?.settings?.stripeId),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async findPlans(request: FindPlansRequest, ctx: any): Promise<FindPlansResponse> {
+  async findPlans(
+    request: FindPlansRequest,
+    ctx: any,
+  ): Promise<FindPlansResponse> {
     return await this.queryBus.execute(new GetPlansQuery(request));
   }
 
   @GrpcMethod('BillingService')
-  async findStripePlans(request: FindStripePlansRequest, ctx: any): Promise<FindStripePlansResponse> {
+  async findStripePlans(
+    request: FindStripePlansRequest,
+    ctx: any,
+  ): Promise<FindStripePlansResponse> {
     return await this.plansService.listStripePlan(request);
   }
 
   @GrpcMethod('BillingService')
-  async findSubscriptions(request: FindSubscriptionsRequest, ctx: any): Promise<FindSubscriptionsResponse> {
+  async findSubscriptions(
+    request: FindSubscriptionsRequest,
+    ctx: any,
+  ): Promise<FindSubscriptionsResponse> {
     const { user, tenant } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new GetSubscriptionsQuery(request, {
-      customerId: user?.settings?.stripeId,
-      tenantId: tenant?.id.toString(),
-    }));
+    return await this.queryBus.execute(
+      new GetSubscriptionsQuery(request, {
+        customerId: user?.settings?.stripeId,
+        tenantId: request?.tenantId ?? tenant?.id.toString(),
+      }),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async readCard(request: ReadCardRequest, ctx: any): Promise<ReadCardResponse> {
+  async readCard(
+    request: ReadCardRequest,
+    ctx: any,
+  ): Promise<ReadCardResponse> {
     const { user } = getIdentityFromCtx(ctx);
     return await this.cardsService.read(request, user?.settings?.stripeId);
   }
 
   @GrpcMethod('BillingService')
-  readCustomer(request: ReadCustomerRequest, ctx: any): Promise<ReadCustomerResponse> {
+  readCustomer(
+    request: ReadCustomerRequest,
+    ctx: any,
+  ): Promise<ReadCustomerResponse> {
     return undefined;
   }
 
   @GrpcMethod('BillingService')
-  async readInvoice(request: ReadInvoiceRequest, ctx: any): Promise<ReadInvoiceResponse> {
+  async readInvoice(
+    request: ReadInvoiceRequest,
+    ctx: any,
+  ): Promise<ReadInvoiceResponse> {
     const { user } = getIdentityFromCtx(ctx);
-    return await this.queryBus.execute(new GetInvoicesQuery(request, user?.settings?.stripeId));
+    return await this.queryBus.execute(
+      new GetInvoicesQuery(request, user?.settings?.stripeId),
+    );
   }
 
   @GrpcMethod('BillingService')
-  async readPlan(request: ReadPlanRequest, ctx: any): Promise<ReadPlanResponse> {
+  async readPlan(
+    request: ReadPlanRequest,
+    ctx: any,
+  ): Promise<ReadPlanResponse> {
     return await this.queryBus.execute(new GetPlanQuery(request));
   }
 
   @GrpcMethod('BillingService')
-  async readStripePlan(request: ReadStripePlanRequest, ctx: any): Promise<ReadStripePlanResponse> {
+  async readStripePlan(
+    request: ReadStripePlanRequest,
+    ctx: any,
+  ): Promise<ReadStripePlanResponse> {
     return await this.plansService.readStripePlan(request);
   }
 
   @GrpcMethod('BillingService')
-  async readSubscription(request: ReadSubscriptionRequest, ctx: any): Promise<ReadSubscriptionResponse> {
+  async readSubscription(
+    request: ReadSubscriptionRequest,
+    ctx: any,
+  ): Promise<ReadSubscriptionResponse> {
     return await this.queryBus.execute(new GetSubscriptionQuery(request));
   }
 
+  @GrpcMethod('BillingService')
+  async setDefaultCard(
+    request: SetDefaultCardRequest,
+    ctx: any,
+  ): Promise<SetDefaultCardResponse> {
+    const { user } = getIdentityFromCtx(ctx);
+    return await this.cardsService.setDefaultCard(
+      request,
+      user?.settings?.stripeId,
+    );
+  }
 }

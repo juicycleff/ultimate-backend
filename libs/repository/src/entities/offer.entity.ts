@@ -1,10 +1,9 @@
 import { Entity } from '@juicycleff/repo-orm';
 import { ObjectID } from 'bson';
-import {BaseEntity} from './base-entity';
+import { BaseEntity } from './base-entity';
 
-@Entity({name: 'offer'})
+@Entity({ name: 'offer' })
 export class OfferEntity extends BaseEntity<any> {
-
   name: string;
 
   description: string;
@@ -24,5 +23,4 @@ export class OfferEntity extends BaseEntity<any> {
   discountEndDate?: Date | string;
 
   plans?: ObjectID[];
-
 }

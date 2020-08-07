@@ -24,6 +24,9 @@ export class Card {
   @Field({ nullable: true })
   currency?: string;
 
+  @Field({ nullable: true })
+  isDefault?: boolean;
+
   @Field(() => Address, { nullable: true })
   address?: Address;
 

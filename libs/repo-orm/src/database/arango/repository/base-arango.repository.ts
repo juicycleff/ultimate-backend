@@ -1,6 +1,10 @@
 import { DocumentCollection, EdgeCollection } from 'arangojs';
 import { CacheStore, Logger } from '@nestjs/common';
-import { ArangoCollectionProps, ArangoDBSource, ArangoIndexDefinition } from '../interfaces';
+import {
+  ArangoCollectionProps,
+  ArangoDBSource,
+  ArangoIndexDefinition,
+} from '../interfaces';
 import { DataEvents } from '../../../enums';
 import {
   COLLECTION_KEY,
@@ -19,7 +23,7 @@ import { QueryOptions } from 'arangojs/lib/cjs/database';
 import { arangoQueryBuilder } from '../../../utils';
 
 // that class only can be extended
-export class BaseArangoRepository <DOC, DTO = DOC> {
+export class BaseArangoRepository<DOC, DTO = DOC> {
   // @ts-ignore
   collection: Promise<DocumentCollection<DOC> | EdgeCollection<DOC>>;
   readonly options: ArangoCollectionProps;
@@ -35,8 +39,17 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @param tenantData
    * @memberof BaseMongoRepository
    */
-  constructor(public dbSource: ArangoDBSource, cacheStore?: CacheStore, opts?: ArangoCollectionProps, tenantData?: TenantData) {
-    this.options = Object.assign({}, opts, Reflect.getMetadata(COLLECTION_KEY, this));
+  constructor(
+    public dbSource: ArangoDBSource,
+    cacheStore?: CacheStore,
+    opts?: ArangoCollectionProps,
+    tenantData?: TenantData,
+  ) {
+    this.options = Object.assign(
+      {},
+      opts,
+      Reflect.getMetadata(COLLECTION_KEY, this),
+    );
     if (!this.options.name) {
       throw new Error('No name was provided for this collection');
     }
@@ -73,7 +86,7 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   async findManyById(ids: string[]): Promise<DOC[]> {
-    const query = { _id: { $in: ids.map(id => id) } };
+    const query = { _id: { $in: ids.map((id) => id) } };
 
     const cacheKey = JSON.stringify(query);
     const cachedResult = await this.retrieveFromCache(cacheKey);
@@ -85,7 +98,13 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
 
     const results: DOC[] = [];
     for (const result of found) {
-      results.push(await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], this.toggleId(result, false)));
+      results.push(
+        await this.invokeEvents(
+          POST_KEY,
+          ['FIND', 'FIND_MANY'],
+          this.toggleId(result, false),
+        ),
+      );
     }
 
     await this.saveToCache(cacheKey, results);
@@ -100,7 +119,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   async findOne(conditions: object): Promise<DOC> {
-    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...conditions,
+      tenantId: this.tenant?.tenantId,
+    });
     const prunedConditions = this.toggleId(cleanConditions, true) as any;
 
     const cacheKey = JSON.stringify(prunedConditions);
@@ -109,10 +131,16 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
       return cachedResult;
     }
 
-    let document = await this.runFindQuery(prunedConditions, { toObject: true });
+    let document = await this.runFindQuery(prunedConditions, {
+      toObject: true,
+    });
     if (document) {
       document = this.toggleId(document, false) as any;
-      document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_ONE'], document);
+      document = await this.invokeEvents(
+        POST_KEY,
+        ['FIND', 'FIND_ONE'],
+        document,
+      );
       await this.saveToCache(cacheKey, document);
       return document;
     }
@@ -133,7 +161,7 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     // const cacheKey = JSON.stringify(q);
     // const cachedResult = await this.retrieveFromCache(cacheKey);
     // if (cachedResult) {
-      // return cachedResult as any;
+    // return cachedResult as any;
     // }
 
     let result;
@@ -157,7 +185,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
   async find(req: FindRequest = { conditions: {} }): Promise<DOC[]> {
     const collection = await this.collection;
 
-    const cleanConditions = cleanEmptyProperties({ ...req.conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...req.conditions,
+      tenantId: this.tenant?.tenantId,
+    });
     const conditions = this.toggleId(cleanConditions as any, true) as any;
 
     const cacheKey = JSON.stringify(conditions) + JSON.stringify(req);
@@ -189,7 +220,11 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
 
     for (let document of newDocuments) {
       document = this.toggleId(document, false) as any;
-      document = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], document);
+      document = await this.invokeEvents(
+        POST_KEY,
+        ['FIND', 'FIND_MANY'],
+        document,
+      );
       results.push(document);
     }
 
@@ -207,15 +242,32 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  async create(document: Partial<DTO> | DTO, opts?: InsertOptions): Promise<DOC> {
+  async create(
+    document: Partial<DTO> | DTO,
+    opts?: InsertOptions,
+  ): Promise<DOC> {
     const collection = await this.collection;
-    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
-    // @ts-ignore
-    const cleanDoc = cleanEmptyProperties({ ...eventResult, tenantId: this.tenant?.tenantId });
-    let newDocument = await collection.save(cleanDoc, { ...opts, returnNew: true});
+    const eventResult: unknown = await this.invokeEvents(
+      PRE_KEY,
+      ['SAVE', 'CREATE'],
+      document,
+    );
+    const cleanDoc = cleanEmptyProperties({
+      // @ts-ignore
+      ...eventResult,
+      tenantId: this.tenant?.tenantId,
+    });
+    let newDocument = await collection.save(cleanDoc, {
+      ...opts,
+      returnNew: true,
+    });
     // @ts-ignore
     newDocument = this.toggleId(newDocument, false);
-    newDocument = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocument);
+    newDocument = await this.invokeEvents(
+      POST_KEY,
+      ['SAVE', 'CREATE'],
+      newDocument,
+    );
     // @ts-ignore
     return newDocument;
   }
@@ -230,16 +282,36 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  // tslint:disable-next-line:variable-name
-  async createEdge(document: Partial<DTO> | DTO, _from: string, _to: string, opts?: InsertOptions): Promise<DOC> {
-    const collection = await this.collection as EdgeCollection;
-    const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
-    // @ts-ignore
-    const cleanDoc = cleanEmptyProperties({ ...eventResult, tenantId: this.tenant?.tenantId });
-    let newDocument = await collection.save(cleanDoc, _from, _to, { ...opts, returnNew: true});
+  async createEdge(
+    document: Partial<DTO> | DTO,
+    // tslint:disable-next-line:variable-name
+    _from: string,
+    // tslint:disable-next-line:variable-name
+    _to: string,
+    opts?: InsertOptions,
+  ): Promise<DOC> {
+    const collection = (await this.collection) as EdgeCollection;
+    const eventResult: unknown = await this.invokeEvents(
+      PRE_KEY,
+      ['SAVE', 'CREATE'],
+      document,
+    );
+    const cleanDoc = cleanEmptyProperties({
+      // @ts-ignore
+      ...eventResult,
+      tenantId: this.tenant?.tenantId,
+    });
+    let newDocument = await collection.save(cleanDoc, _from, _to, {
+      ...opts,
+      returnNew: true,
+    });
     // @ts-ignore
     newDocument = this.toggleId(newDocument, false);
-    newDocument = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocument);
+    newDocument = await this.invokeEvents(
+      POST_KEY,
+      ['SAVE', 'CREATE'],
+      newDocument,
+    );
     // @ts-ignore
     return newDocument;
   }
@@ -256,13 +328,17 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     const collection = await this.collection;
 
     // @ts-ignore
-    const id = document.id;  // flip/flop ids
+    const id = document.id; // flip/flop ids
 
     const updates = await this.invokeEvents(PRE_KEY, ['SAVE'], document);
     delete updates.id;
     delete updates._id;
     const query = { _id: id };
-    let newDocument = await collection.update(query, updates, { ...options, overwrite: true, returnNew: true });
+    let newDocument = await collection.update(query, updates, {
+      ...options,
+      overwrite: true,
+      returnNew: true,
+    });
 
     // project new items
     if (newDocument) {
@@ -286,20 +362,37 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @param documents
    * @param opts
    */
-  async createMany(documents: Partial<DTO[]> | DTO[], opts?: InsertOptions): Promise<DOC[]> {
+  async createMany(
+    documents: Partial<DTO[]> | DTO[],
+    opts?: InsertOptions,
+  ): Promise<DOC[]> {
     const collection = await this.collection;
 
     const unSavedDocs = [];
     for (const document of documents) {
-      const eventResult: unknown = await this.invokeEvents(PRE_KEY, ['SAVE', 'CREATE'], document);
-      // @ts-ignore
-      const cleanDoc = cleanEmptyProperties({ ...eventResult, tenantId: this.tenant?.tenantId });
+      const eventResult: unknown = await this.invokeEvents(
+        PRE_KEY,
+        ['SAVE', 'CREATE'],
+        document,
+      );
+      const cleanDoc = cleanEmptyProperties({
+        // @ts-ignore
+        ...eventResult,
+        tenantId: this.tenant?.tenantId,
+      });
       unSavedDocs.push(cleanDoc);
     }
 
-    let newDocuments = await collection.save(unSavedDocs, { ...opts, returnNew: true });
+    let newDocuments = await collection.save(unSavedDocs, {
+      ...opts,
+      returnNew: true,
+    });
     newDocuments = this.toggleId(newDocuments, false);
-    newDocuments = await this.invokeEvents(POST_KEY, ['SAVE', 'CREATE'], newDocuments);
+    newDocuments = await this.invokeEvents(
+      POST_KEY,
+      ['SAVE', 'CREATE'],
+      newDocuments,
+    );
 
     return newDocuments;
   }
@@ -313,7 +406,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   async findOneByIdAndUpdate(id: string, req: UpdateByIdRequest): Promise<DOC> {
-    const conditions = cleanEmptyProperties({ _id: id, tenantId: this.tenant?.tenantId });
+    const conditions = cleanEmptyProperties({
+      _id: id,
+      tenantId: this.tenant?.tenantId,
+    });
     return this.findOneAndUpdate({
       conditions,
       updates: req.updates,
@@ -330,14 +426,25 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    */
   async findOneAndUpdate(req: UpdateRequest): Promise<DOC> {
     const collection = await this.collection;
-    const updates = await this.invokeEvents(PRE_KEY, ['UPDATE', 'UPDATE_ONE'], req.updates);
+    const updates = await this.invokeEvents(
+      PRE_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      req.updates,
+    );
 
-    const conditions = cleanEmptyProperties({ ...req.conditions, tenantId: this.tenant?.tenantId });
+    const conditions = cleanEmptyProperties({
+      ...req.conditions,
+      tenantId: this.tenant?.tenantId,
+    });
     const res = await collection.updateByExample(conditions, updates);
 
     let document = res.value as any;
     document = this.toggleId(document, false);
-    document = await this.invokeEvents(POST_KEY, ['UPDATE', 'UPDATE_ONE'], document);
+    document = await this.invokeEvents(
+      POST_KEY,
+      ['UPDATE', 'UPDATE_ONE'],
+      document,
+    );
     return document;
   }
 
@@ -350,7 +457,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    */
   async deleteOneById(id: string): Promise<DOC> {
     const collection = await this.collection;
-    const conditions = cleanEmptyProperties({ _id: id, tenantId: this.tenant?.tenantId });
+    const conditions = cleanEmptyProperties({
+      _id: id,
+      tenantId: this.tenant?.tenantId,
+    });
     return await collection.removeByExample(conditions);
   }
 
@@ -363,7 +473,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    */
   async deleteOne(conditions: any): Promise<DOC> {
     const collection = await this.collection;
-    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...conditions,
+      tenantId: this.tenant?.tenantId,
+    });
 
     await this.invokeEvents(PRE_KEY, ['DELETE', 'DELETE_ONE'], conditions);
     const deleteResult = await collection.removeByExample(cleanConditions);
@@ -381,11 +494,22 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    */
   async deleteMany(conditions: any): Promise<DOC[]> {
     const collection = await this.collection;
-    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...conditions,
+      tenantId: this.tenant?.tenantId,
+    });
 
-    await this.invokeEvents(PRE_KEY, ['DELETE_ONE', 'DELETE_MANY'], cleanConditions);
+    await this.invokeEvents(
+      PRE_KEY,
+      ['DELETE_ONE', 'DELETE_MANY'],
+      cleanConditions,
+    );
     const deleteResult = await collection.removeByExample(cleanConditions);
-    await this.invokeEvents(POST_KEY, ['DELETE_ONE', 'DELETE_MANY'], deleteResult);
+    await this.invokeEvents(
+      POST_KEY,
+      ['DELETE_ONE', 'DELETE_MANY'],
+      deleteResult,
+    );
 
     return deleteResult;
   }
@@ -398,7 +522,10 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @memberof BaseMongoRepository
    */
   public async exist(conditions: any): Promise<boolean> {
-    const cleanConditions = cleanEmptyProperties({ ...conditions, tenantId: this.tenant?.tenantId });
+    const cleanConditions = cleanEmptyProperties({
+      ...conditions,
+      tenantId: this.tenant?.tenantId,
+    });
     const collection = await this.collection;
 
     return await collection.exists();
@@ -463,94 +590,121 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @returns {Promise<Collection<DOC>>}
    * @memberof BaseMongoRepository
    */
-  // @ts-ignore
-  private getCollection(): Promise<DocumentCollection<DOC> | EdgeCollection<DOC>> {
+  private getCollection(): Promise<
     // @ts-ignore
-    return new Promise<DocumentCollection<DOC> | EdgeCollection<DOC>>(async (resolve, reject) => {
-      const db = await this.dbSource.db;
+    DocumentCollection<DOC> | EdgeCollection<DOC>
+  > {
+    // @ts-ignore
+    return new Promise<DocumentCollection<DOC> | EdgeCollection<DOC>>(
+      async (resolve, reject) => {
+        const db = await this.dbSource.db;
 
-      if (! this.options.edgeType) {
-        const ourCollection = await db.collection(this.options.name);
-        const exists = await ourCollection.exists();
+        if (!this.options.edgeType) {
+          const ourCollection = await db.collection(this.options.name);
+          const exists = await ourCollection.exists();
 
-        if (!exists) {
-          this.logger.log( 'create document collection => ' + this.options.name);
-          await ourCollection.create();
-        }
+          if (!exists) {
+            this.logger.log(
+              'create document collection => ' + this.options.name,
+            );
+            await ourCollection.create();
+          }
 
-        if (this.options.indexes) {
-          for (const indexDefinition of this.options.indexes) {
-            try {
-              await this.ensureIndex(indexDefinition, ourCollection);
-            } catch (indexErr) {
-              if (
-                this.options.overwrite &&
-                this.options.name &&
-                indexErr.name === 'MongoError' &&
-                (indexErr.codeName === 'IndexKeySpecsConflict' || indexErr.codeName === 'IndexOptionsConflict')
-              ) {
-                // drop index and recreate
-                try {
-                  await ourCollection.dropIndex(indexDefinition.opts.name);
-                  await this.ensureIndex(indexDefinition, ourCollection);
-                } catch (recreateErr) {
-                  reject(recreateErr);
+          if (this.options.indexes) {
+            for (const indexDefinition of this.options.indexes) {
+              try {
+                await this.ensureIndex(indexDefinition, ourCollection);
+              } catch (indexErr) {
+                if (
+                  this.options.overwrite &&
+                  this.options.name &&
+                  indexErr.name === 'MongoError' &&
+                  (indexErr.codeName === 'IndexKeySpecsConflict' ||
+                    indexErr.codeName === 'IndexOptionsConflict')
+                ) {
+                  // drop index and recreate
+                  try {
+                    await ourCollection.dropIndex(indexDefinition.opts.name);
+                    await this.ensureIndex(indexDefinition, ourCollection);
+                  } catch (recreateErr) {
+                    reject(recreateErr);
+                  }
+                } else {
+                  reject(indexErr);
                 }
-              } else {
-                reject(indexErr);
+              }
+            }
+          }
+        } else {
+          const ourCollection = await db.edgeCollection(this.options.name);
+          const exists = await ourCollection.exists();
+
+          if (!exists) {
+            this.logger.log(
+              'create document edge collection => ' + this.options.name,
+            );
+            await ourCollection.create();
+          }
+
+          if (this.options.indexes) {
+            for (const indexDefinition of this.options.indexes) {
+              try {
+                await this.ensureIndex(indexDefinition, ourCollection);
+              } catch (indexErr) {
+                if (
+                  this.options.overwrite &&
+                  this.options.name &&
+                  indexErr.name === 'MongoError' &&
+                  (indexErr.codeName === 'IndexKeySpecsConflict' ||
+                    indexErr.codeName === 'IndexOptionsConflict')
+                ) {
+                  // drop index and recreate
+                  try {
+                    await ourCollection.dropIndex(indexDefinition.opts.name);
+                    await this.ensureIndex(indexDefinition, ourCollection);
+                  } catch (recreateErr) {
+                    reject(recreateErr);
+                  }
+                } else {
+                  reject(indexErr);
+                }
               }
             }
           }
         }
-
-      } else {
-        const ourCollection = await db.edgeCollection(this.options.name);
-        const exists = await ourCollection.exists();
-
-        if (!exists) {
-          this.logger.log( 'create document edge collection => ' + this.options.name);
-          await ourCollection.create();
-        }
-
-        if (this.options.indexes) {
-          for (const indexDefinition of this.options.indexes) {
-            try {
-              await this.ensureIndex(indexDefinition, ourCollection);
-            } catch (indexErr) {
-              if (
-                this.options.overwrite &&
-                this.options.name &&
-                indexErr.name === 'MongoError' &&
-                (indexErr.codeName === 'IndexKeySpecsConflict' || indexErr.codeName === 'IndexOptionsConflict')
-              ) {
-                // drop index and recreate
-                try {
-                  await ourCollection.dropIndex(indexDefinition.opts.name);
-                  await this.ensureIndex(indexDefinition, ourCollection);
-                } catch (recreateErr) {
-                  reject(recreateErr);
-                }
-              } else {
-                reject(indexErr);
-              }
-            }
-          }
-        }
-      }
-    });
+      },
+    );
   }
 
-  async ensureIndex(indexDefinition: ArangoIndexDefinition, ourCollection: DocumentCollection | EdgeCollection) {
+  async ensureIndex(
+    indexDefinition: ArangoIndexDefinition,
+    ourCollection: DocumentCollection | EdgeCollection,
+  ) {
     if (indexDefinition.type === 'hash') {
-      await ourCollection.createHashIndex(indexDefinition.fields, indexDefinition.opts);
+      await ourCollection.createHashIndex(
+        indexDefinition.fields,
+        indexDefinition.opts,
+      );
     } else if (indexDefinition.type === 'fulltext') {
-      await ourCollection.createFulltextIndex(indexDefinition.fields, indexDefinition.minLength);
+      await ourCollection.createFulltextIndex(
+        indexDefinition.fields,
+        indexDefinition.minLength,
+      );
     } else if (indexDefinition.type === 'geo') {
-      await ourCollection.createGeoIndex(indexDefinition.fields, indexDefinition.opts);
+      await ourCollection.createGeoIndex(
+        indexDefinition.fields,
+        indexDefinition.opts,
+      );
     } else if (indexDefinition.type === 'persistent') {
-      await ourCollection.createPersistentIndex(indexDefinition.fields, indexDefinition.opts);
+      await ourCollection.createPersistentIndex(
+        indexDefinition.fields,
+        indexDefinition.opts,
+      );
     } else if (indexDefinition.type === 'skiplist') {
-      await ourCollection.createSkipList(indexDefinition.fields, indexDefinition.opts);
+      await ourCollection.createSkipList(
+        indexDefinition.fields,
+        indexDefinition.opts,
+      );
     } else if (indexDefinition.type === 'ttl') {
       throw new Error('Not implemented');
     }
@@ -566,7 +720,11 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  private async invokeEvents(type: string, fns: DataEvents[], document: any | any[]): Promise<any> {
+  private async invokeEvents(
+    type: string,
+    fns: DataEvents[],
+    document: any | any[],
+  ): Promise<any> {
     const test = Reflect.getMetadata('entity', this) || [];
     if (Array.isArray(document)) {
       const docs: any[] = [];
@@ -622,17 +780,22 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     };
   }
 
-  private async saveToCache(key: string, data: DOC | any): Promise<DOC|any> {
+  private async saveToCache(key: string, data: DOC | any): Promise<DOC | any> {
     if (this.cacheStore) {
       const cacheKey = `${this.options.name}/${key}`;
       await this.cacheStore.set<DOC>(cacheKey, data);
     }
   }
 
-  private async runFindQuery(conditions: any, options?: QueryArgsOptions): Promise<DOC | any | DOC[]> {
+  private async runFindQuery(
+    conditions: any,
+    options?: QueryArgsOptions,
+  ): Promise<DOC | any | DOC[]> {
     const db = await this.dbSource.db;
 
-    const query = this.parseFindQuery(arangoQueryBuilder(conditions, this.options.name, true));
+    const query = this.parseFindQuery(
+      arangoQueryBuilder(conditions, this.options.name, true),
+    );
     const cursor = await db.query(query, {
       count: options.count,
       batchSize: options.limit || 50,
@@ -640,15 +803,18 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     });
 
     if (options.toObject) {
-      return await cursor.next() as DOC;
+      return (await cursor.next()) as DOC;
     } else {
       if (await cursor.hasNext()) {
-        return await cursor.nextBatch() as DOC[];
+        return (await cursor.nextBatch()) as DOC[];
       }
     }
   }
 
-  private async runOneQuery(conditions: any, options?: QueryArgsOptions): Promise<DOC | any | DOC[]> {
+  private async runOneQuery(
+    conditions: any,
+    options?: QueryArgsOptions,
+  ): Promise<DOC | any | DOC[]> {
     const db = await this.dbSource.db;
     const query = this.parseOneQuery(conditions);
 
@@ -659,15 +825,18 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     });
 
     if (options.toObject) {
-      return await cursor.next() as DOC;
+      return (await cursor.next()) as DOC;
     } else {
       if (await cursor.hasNext()) {
-        return await cursor.nextBatch() as DOC[];
+        return (await cursor.nextBatch()) as DOC[];
       }
     }
   }
 
-  private async runManyByIdQuery(ids: any, options?: QueryArgsOptions): Promise<DOC | any | DOC[]> {
+  private async runManyByIdQuery(
+    ids: any,
+    options?: QueryArgsOptions,
+  ): Promise<DOC | any | DOC[]> {
     const db = await this.dbSource.db;
     const query = this.parseFindQuery(`doc._id IN ${ids}`);
 
@@ -678,16 +847,15 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
     });
 
     if (options.toObject) {
-      return await cursor.next() as DOC;
+      return (await cursor.next()) as DOC;
     } else {
       if (await cursor.hasNext()) {
-        return await cursor.nextBatch() as DOC[];
+        return (await cursor.nextBatch()) as DOC[];
       }
     }
   }
 
   private parseFindQuery(query?: string): AqlQuery {
-
     if (query) {
       return {
         query: `
@@ -713,7 +881,6 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
   }
 
   private parseOneQuery(query: string): AqlQuery {
-
     if (!query) {
       return null;
     }
@@ -722,7 +889,6 @@ export class BaseArangoRepository <DOC, DTO = DOC> {
   }
 
   private parseDeleteQuery(query: string): AqlQuery {
-
     if (!query) {
       return null;
     }

@@ -10,10 +10,12 @@ import { AppModule } from './app.module';
 import { SERVICE_NAME } from './constants';
 
 async function bootstrap() {
-  const app = NestCloud.create(await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  ));
+  const app = NestCloud.create(
+    await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(),
+    ),
+  );
 
   const port = await getPort();
   await app.listen(NestCloud.global.boot.get('service.port', port));

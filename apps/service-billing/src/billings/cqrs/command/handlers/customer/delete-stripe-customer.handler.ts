@@ -7,7 +7,8 @@ import * as Stripe from 'stripe';
 import { RpcException } from '@nestjs/microservices';
 
 @CommandHandler(DeleteStripeCustomerCommand)
-export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripeCustomerCommand> {
+export class DeleteStripeCustomerHandler
+  implements ICommandHandler<DeleteStripeCustomerCommand> {
   logger = new Logger(this.constructor.name);
 
   public constructor(
@@ -20,12 +21,14 @@ export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripe
     const { id } = command;
 
     try {
-      if (id === null) { // Check to make sure input is not null
+      if (id === null) {
+        // Check to make sure input is not null
         throw new RpcException('Customer id is missing'); // Throw an input error
       }
 
       const customer = await this.stripeClient.customers.retrieve(id);
-      if (!customer) { // Check to make sure input is not null
+      if (!customer) {
+        // Check to make sure input is not null
         throw new RpcException('Customer is not found'); // Throw an input error
       }
 
@@ -43,5 +46,4 @@ export class DeleteStripeCustomerHandler implements ICommandHandler<DeleteStripe
       throw new RpcException(error);
     }
   }
-
 }

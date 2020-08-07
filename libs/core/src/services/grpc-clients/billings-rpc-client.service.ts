@@ -9,14 +9,14 @@ export class BillingsRpcClientService {
   @RpcClient({
     service: SERVICE_LIST.billing.consulName,
     package: SERVICE_LIST.billing.package,
-    protoPath: join(__dirname, SERVICE_LIST.billing.protoPath),
+    protoPath: SERVICE_LIST.billing.protoPath,
   })
   private readonly client: GrpcClient;
 
   @Service(SERVICE_LIST.billing.service, {
     service: SERVICE_LIST.billing.consulName,
     package: SERVICE_LIST.billing.package,
-    protoPath: join(__dirname, SERVICE_LIST.billing.protoPath),
+    protoPath: SERVICE_LIST.billing.protoPath,
   })
-  public billing: BillingServiceClient<any>;
+  public svc: BillingServiceClient<any>;
 }

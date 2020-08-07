@@ -1,4 +1,6 @@
-const keywords = 'FOR FILTER LET LIMIT INSERT UPSERT COLLECT REMOVE UPDATE RETURN'.split(' ');
+const keywords = 'FOR FILTER LET LIMIT INSERT UPSERT COLLECT REMOVE UPDATE RETURN'.split(
+  ' ',
+);
 const regexPhrase = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'g');
 const TAB = '   ';
 const NEWLINE = '\n';

@@ -1,4 +1,4 @@
-import {IQuery} from '@nestjs/cqrs';
+import { IQuery } from '@nestjs/cqrs';
 import { FindInvoicesRequest } from '@ultimatebackend/proto-schema/billing';
 
 export class GetInvoicesQuery implements IQuery {

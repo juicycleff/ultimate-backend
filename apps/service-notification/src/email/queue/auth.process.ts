@@ -9,22 +9,35 @@ import { Logger } from '@nestjs/common';
 import { TenantMemberEmbed, UserEntity } from '@ultimatebackend/repository';
 import { EmailService } from '../email.service';
 import { SkeletonsEncrypt } from '@ultimatebackend/common/utils';
-import { DASHBOARD_APP_LINK, QUEUE_PROCESS_IDS, SENDGRID_TEMPLATE_IDS } from '../email.constants';
-import { SendGridActivation, SendGridInvitation, SendGridResetPassword, SendGridWelcome } from '../interfaces';
+import {
+  DASHBOARD_APP_LINK,
+  QUEUE_PROCESS_IDS,
+  SENDGRID_TEMPLATE_IDS,
+} from '../email.constants';
+import {
+  SendGridActivation,
+  SendGridInvitation,
+  SendGridResetPassword,
+  SendGridWelcome,
+} from '../interfaces';
 
 @Processor('notification_queue')
 export class AuthProcess {
   private readonly logger = new Logger(this.constructor.name);
-  constructor(
-    private readonly service: EmailService,
-  ) {}
+  constructor(private readonly service: EmailService) {}
 
   @Process(QUEUE_PROCESS_IDS.UserRegistered)
-  async processUserRegister(job: Job<UserEntity & {activationLink?: string}>) {
-    if (!job.data) { return; }
+  async processUserRegister(
+    job: Job<UserEntity & { activationLink?: string }>,
+  ) {
+    if (!job.data) {
+      return;
+    }
 
     const user = job.data;
-    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+    const userEmail = user.emails.reduce(
+      (previousValue) => previousValue.primary === true && previousValue,
+    );
 
     const dynamicTemplateData: SendGridActivation = {
       name: `${user.firstname} ${user.lastname}`,
@@ -40,11 +53,17 @@ export class AuthProcess {
   }
 
   @Process(QUEUE_PROCESS_IDS.SendVerificationCode)
-  async sendVerificationCode(job: Job<UserEntity & {activationLink?: string}>) {
-    if (job.data === null) { return; }
+  async sendVerificationCode(
+    job: Job<UserEntity & { activationLink?: string }>,
+  ) {
+    if (job.data === null) {
+      return;
+    }
 
     const user = job.data;
-    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+    const userEmail = user.emails.reduce(
+      (previousValue) => previousValue.primary === true && previousValue,
+    );
 
     const dynamicTemplateData: SendGridActivation = {
       name: `${user.firstname} ${user.lastname}`,
@@ -64,11 +83,15 @@ export class AuthProcess {
   }
 
   @Process(QUEUE_PROCESS_IDS.ResetPassword)
-  async resetPassword(job: Job<UserEntity & {resetPasswordLink?: string}>) {
-    if (job.data === null) { return; }
+  async resetPassword(job: Job<UserEntity & { resetPasswordLink?: string }>) {
+    if (job.data === null) {
+      return;
+    }
 
     const user = job.data;
-    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+    const userEmail = user.emails.reduce(
+      (previousValue) => previousValue.primary === true && previousValue,
+    );
 
     const dynamicTemplateData: SendGridResetPassword = {
       reset_link: `${DASHBOARD_APP_LINK}/confirm-password-reset?token=${user.resetPasswordLink}`,
@@ -87,10 +110,14 @@ export class AuthProcess {
 
   @Process(QUEUE_PROCESS_IDS.UserLoggedIn)
   async processUserLogged(job: Job<UserEntity>) {
-    if (!job.data) { return; }
+    if (!job.data) {
+      return;
+    }
 
     const user = job.data;
-    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+    const userEmail = user.emails.reduce(
+      (previousValue) => previousValue.primary === true && previousValue,
+    );
 
     await this.service.sendEmail({
       to: userEmail.address,
@@ -101,10 +128,14 @@ export class AuthProcess {
 
   @Process(QUEUE_PROCESS_IDS.EmailVerified)
   async processEmailVerified(job: Job<UserEntity>) {
-    if (!job.data) { return; }
+    if (!job.data) {
+      return;
+    }
 
     const user = job.data;
-    const userEmail = user.emails.reduce(previousValue => previousValue.primary === true && previousValue);
+    const userEmail = user.emails.reduce(
+      (previousValue) => previousValue.primary === true && previousValue,
+    );
 
     const dynamicTemplateData: SendGridWelcome = {
       first_name: `${user.firstname}`,
@@ -120,8 +151,10 @@ export class AuthProcess {
   }
 
   @Process(QUEUE_PROCESS_IDS.Invitation)
-  async processInviteMember(job: Job<TenantMemberEmbed & {token?: string}>) {
-    if (!job.data) { return; }
+  async processInviteMember(job: Job<TenantMemberEmbed & { token?: string }>) {
+    if (!job.data) {
+      return;
+    }
 
     const member = job.data;
 

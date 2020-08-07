@@ -1,20 +1,31 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { TenantMemberEmbed, TenantRepository } from '@ultimatebackend/repository';
-import { BillingsRpcClientService, RolesRpcClientService, TenantCreatedEvent } from '@ultimatebackend/core';
+import {
+  TenantMemberEmbed,
+  TenantRepository,
+} from '@ultimatebackend/repository';
+import {
+  BillingsRpcClientService,
+  RolesRpcClientService,
+  TenantCreatedEvent,
+} from '@ultimatebackend/core';
 import * as slugify from '@sindresorhus/slugify';
 import { ObjectID } from 'mongodb';
 import { DateTime } from 'luxon';
 import { CreateTenantCommand } from '../../impl';
 import { AppRole, InvitationStatus } from '@ultimatebackend/contracts';
 import { RpcException } from '@nestjs/microservices';
-import { CreateTenantResponse, Tenant } from '@ultimatebackend/proto-schema/tenant';
+import {
+  CreateTenantResponse,
+  Tenant,
+} from '@ultimatebackend/proto-schema/tenant';
 
 /**
  * @class
  */
 @CommandHandler(CreateTenantCommand)
-export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand> {
+export class CreateTenantHandler
+  implements ICommandHandler<CreateTenantCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -37,12 +48,12 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
 
     try {
       /*  Check to make sure logged in user is not null */
-      if (!user || user.id === null ) {
+      if (!user || user.id === null) {
         throw new RpcException('User not logged in');
       }
 
       /*  Check to make sure input is null and throw an apollo input error */
-      if (input.name === null || typeof input.name !== 'string' ) {
+      if (input.name === null || typeof input.name !== 'string') {
         throw new RpcException('Tenant name is missing');
       }
 
@@ -62,23 +73,27 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
 
       /*  Check if tenant exist with normalized name */
       const tenantWithFreePlanExist = await this.tenantRepository.exist({
-        currentPlan: 'product-free',
+        'billing.currentPlan': 'plan-free-basic',
         members: {
           $elemMatch: {
-            id: user.id,
+            userId: new ObjectID(user.id.toString()),
           },
         },
       });
 
-      if (tenantWithFreePlanExist && input.planId === 'product-free') {
-        throw new RpcException('You can only have one free tenant, please upgrade your plan');
+      if (tenantWithFreePlanExist && input.planId === 'plan-free-basic') {
+        throw new RpcException(
+          'You can only have one free tenant, please upgrade your plan',
+        );
       }
 
       /*  Initialize tenant owner */
       const tenantMember: TenantMemberEmbed = {
         id: new ObjectID(),
         userId: new ObjectID(user.id),
-        email: user.emails.reduce(previousValue => previousValue.primary === true && previousValue).address,
+        email: user.emails.reduce(
+          (previousValue) => previousValue.primary === true && previousValue,
+        ).address,
         role: AppRole.OWNER,
         status: InvitationStatus.ACCEPTED,
         invitedBy: null,
@@ -87,12 +102,15 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
       };
 
       /** Subscribe the tenant but name */
-      const subsRes = await this.billingService.billing.createSubscription({
-        planId: input.planId,
-        tenantId: normalizedName,
-        customerId: user.settings.stripeId,
-        couponId: input.couponId,
-      }).toPromise();
+      const subsRes = await this.billingService.svc
+        .createSubscription({
+          planId: input.planId,
+          tenantId: normalizedName,
+          customerId: user.settings.stripeId,
+          couponId: input.couponId,
+          cardId: input.cardId,
+        })
+        .toPromise();
 
       /*  Create our new tenant */
       const tenant = await this.tenantRepository.create({
@@ -100,28 +118,29 @@ export class CreateTenantHandler implements ICommandHandler<CreateTenantCommand>
         normalizedName,
         createdBy: new ObjectID(user.id),
         members: [tenantMember],
-        settings: {
-          enableTheme: true,
-        },
         billing: {
           currentPlan: input.planId,
           currentSubscription: subsRes.subscription.id,
         },
       });
 
-      await this.roleService.roleService.addUserToRole(
-        {role: 'owner', domain: tenant.normalizedName, actor: 'user', userId: user.id.toString() },
-       ).toPromise();
+      await this.roleService.svc
+        .addUserToRole({
+          role: 'owner',
+          domain: tenant.normalizedName,
+          actor: 'user',
+          userId: user.id.toString(),
+        })
+        .toPromise();
 
       /*  Publish to the event store of our newly created tenant */
       await this.eventBus.publish(new TenantCreatedEvent(tenant));
       return {
-        tenant: tenant as unknown as Tenant,
+        tenant: (tenant as unknown) as Tenant,
       };
     } catch (error) {
       this.logger.error(error);
       throw new RpcException(error);
     }
   }
-
 }

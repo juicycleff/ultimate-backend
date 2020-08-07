@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CookieSerializer } from '@ultimatebackend/common';
-import { CoreModule, RolesRpcClientService, ServiceRegistryModule } from '@ultimatebackend/core';
+import {
+  CoreModule,
+  RolesRpcClientService,
+  ServiceRegistryModule,
+} from '@ultimatebackend/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RolesModule } from './roles/roles.module';
@@ -17,9 +21,11 @@ import { TenantMembersModule } from './tenant-members/tenant-members.module';
 import { GqlConfigService } from './gql-config.service';
 import { AccessTokenModule } from './access-token/access-token.module';
 import { GlobalClientModule } from './common/global-client.module';
+import { SeedModule } from './seed.module';
 
 @Module({
   imports: [
+    SeedModule,
     ServiceRegistryModule,
     GraphQLModule.forRootAsync({
       useClass: GqlConfigService,

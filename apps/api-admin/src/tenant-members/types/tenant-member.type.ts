@@ -7,11 +7,10 @@ import { User } from '../../users/types';
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class Member extends Node {
-
   @Field()
   email: string;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   userId: string;
 
   @Filterable()

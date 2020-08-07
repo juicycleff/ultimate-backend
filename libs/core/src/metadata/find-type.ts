@@ -3,7 +3,10 @@ import { TypeOptions } from 'class-transformer';
 import { TypeValueThunk } from '../metadata/storage';
 import { ReturnTypeFunc } from '@ultimatebackend/contracts/helpers';
 
-export type MetadataKey = 'design:type' | 'design:paramtypes' | 'design:returntype';
+export type MetadataKey =
+  | 'design:type'
+  | 'design:paramtypes'
+  | 'design:returntype';
 export const allowedTypes: Function[] = [String, Number, Date, Boolean];
 export const bannedTypes: Function[] = [Promise, Array, Object, Function];
 
@@ -44,7 +47,8 @@ export function findType({
 
   if (
     !returnTypeFunc &&
-    (!metadataDesignType || (metadataDesignType && bannedTypes.includes(metadataDesignType)))
+    (!metadataDesignType ||
+      (metadataDesignType && bannedTypes.includes(metadataDesignType)))
   ) {
     // throw new NoExplicitTypeError(prototype.constructor.name, propertyKey, parameterIndex);
   }
@@ -55,7 +59,11 @@ export function findType({
       typeOptions: options,
     };
   } else {
-    throw new CannotDetermineTypeError(prototype.constructor.name, propertyKey, parameterIndex);
+    throw new CannotDetermineTypeError(
+      prototype.constructor.name,
+      propertyKey,
+      parameterIndex,
+    );
   }
 }
 

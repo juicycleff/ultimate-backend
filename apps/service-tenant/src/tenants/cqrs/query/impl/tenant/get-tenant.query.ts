@@ -1,4 +1,4 @@
-import {IQuery} from '@nestjs/cqrs';
+import { IQuery } from '@nestjs/cqrs';
 import { UserEntity } from '@ultimatebackend/repository';
 import { ReadTenantRequest } from '@ultimatebackend/proto-schema/tenant';
 

@@ -1,10 +1,13 @@
 import { Logger } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { mongoParser } from '@juicycleff/repo-orm';
 import { ProjectRepository } from '@ultimatebackend/repository';
 import { GetProjectsQuery } from '../../impl';
 import { RpcException } from '@nestjs/microservices';
-import { FindProjectsResponse, Project } from '@ultimatebackend/proto-schema/project';
+import {
+  FindProjectsResponse,
+  Project,
+} from '@ultimatebackend/proto-schema/project';
 
 @QueryHandler(GetProjectsQuery)
 export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
@@ -18,7 +21,6 @@ export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
     this.projectRepository = projectRepository;
 
     try {
-
       if (input.filter) {
         const where = JSON.parse(input.filter);
         const filter = mongoParser(where);
@@ -29,13 +31,13 @@ export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
         });
 
         return {
-          projects: projectFil as unknown as Project[],
+          projects: (projectFil as unknown) as Project[],
         };
       }
 
       const projects = await this.projectRepository.find();
       return {
-        projects: projects as unknown as Project[],
+        projects: (projects as unknown) as Project[],
       };
     } catch (e) {
       this.logger.error(e);

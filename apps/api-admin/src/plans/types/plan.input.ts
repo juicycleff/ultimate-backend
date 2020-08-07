@@ -3,7 +3,6 @@ import { FeatureInput, PriceInput } from '@ultimatebackend/contracts';
 
 @InputType()
 export class CreateUpdatePlanInput {
-
   @Field()
   name: string;
 
@@ -40,7 +39,6 @@ export class DeletePlanInput {
 
 @ArgsType()
 export class PlanMutationInput {
-
   @Field(() => CreateUpdatePlanInput, { nullable: true })
   create: CreateUpdatePlanInput;
 
@@ -53,7 +51,6 @@ export class PlanMutationInput {
 
 @InputType()
 export class PlanFilterInput {
-
   @Field({ nullable: true })
   shippable: boolean;
 

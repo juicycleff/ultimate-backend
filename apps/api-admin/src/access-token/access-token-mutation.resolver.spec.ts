@@ -9,7 +9,9 @@ describe('AccessTokenMutationResolver', () => {
       providers: [AccessTokenMutationResolver],
     }).compile();
 
-    resolver = module.get<AccessTokenMutationResolver>(AccessTokenMutationResolver);
+    resolver = module.get<AccessTokenMutationResolver>(
+      AccessTokenMutationResolver,
+    );
   });
 
   it('should be defined', () => {

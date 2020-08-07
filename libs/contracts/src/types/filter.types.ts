@@ -3,7 +3,6 @@ import { Field, InputType, GraphQLISODateTime } from '@nestjs/graphql';
 
 @InputType()
 export class OtherComparisonFilter {
-
   @Field({ nullable: true })
   _EQ?: string;
 
@@ -25,7 +24,6 @@ export class OtherComparisonFilter {
 
 @InputType()
 export class StringComparisonFilter {
-
   @Field({ nullable: true })
   _EQ?: string;
 
@@ -47,17 +45,15 @@ export class StringComparisonFilter {
 
 @InputType()
 export class EnumComparisonFilter<T> {
-
-  @Field( { nullable: true })
+  @Field({ nullable: true })
   _EQ?: string;
 
-  @Field( { nullable: true })
-  _NE?: string ;
+  @Field({ nullable: true })
+  _NE?: string;
 }
 
 @InputType()
 export class DateComparisonFilter {
-
   @Field(() => GraphQLISODateTime, { nullable: true })
   _EQ?: Date;
 
@@ -79,7 +75,6 @@ export class DateComparisonFilter {
 
 @InputType()
 export class ArrayComparisonFilter {
-
   @Field({ nullable: true })
   _ALL?: string;
 

@@ -7,10 +7,6 @@ sendgrid:
   apiKey: "SG.*****************************************************"
   sender: "ultimatebackend <no-reply@ultimatebackend.io>"
 
-memcached:
-  uri: "localhost:11211"
-  retries: 3
-
 database:
   mongodb:
     uri: mongodb://localhost:27017/

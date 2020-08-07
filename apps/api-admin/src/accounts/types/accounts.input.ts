@@ -3,16 +3,25 @@ import { ServiceTypes } from '@ultimatebackend/contracts';
 
 @InputType()
 export class LoginParamsInput {
-  @Field({ description: 'Access token for social (Service: Twitter, Github, Email)', nullable: true })
+  @Field({
+    description: 'Access token for social (Service: Twitter, Github, Email)',
+    nullable: true,
+  })
   accessToken?: string;
 
-  @Field({ description: 'Access token for social (Service: Twitter, Github, Email)', nullable: true })
+  @Field({
+    description: 'Access token for social (Service: Twitter, Github, Email)',
+    nullable: true,
+  })
   accessTokenSecret?: string;
 
   @Field({ description: 'User password (Service: Password)', nullable: true })
   password?: string;
 
-  @Field({ description: 'Primary email of the user (Service: Password)', nullable: true })
+  @Field({
+    description: 'Primary email of the user (Service: Password)',
+    nullable: true,
+  })
   email?: string;
 }
 

@@ -1,8 +1,8 @@
-import {Logger} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { UserEntity, UserRepository } from '@ultimatebackend/repository';
 import { UserPasswordUpdatedEvent } from '@ultimatebackend/core';
-import {UpdatePasswordResponse} from '@ultimatebackend/proto-schema/account';
+import { UpdatePasswordResponse } from '@ultimatebackend/proto-schema/account';
 import { RpcException } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -18,7 +18,8 @@ import { UpdateUserPasswordCommand } from '../../impl';
  * @class
  */
 @CommandHandler(UpdateUserPasswordCommand)
-export class UpdateUserPasswordHandler implements ICommandHandler<UpdateUserPasswordCommand> {
+export class UpdateUserPasswordHandler
+  implements ICommandHandler<UpdateUserPasswordCommand> {
   logger = new Logger(this.constructor.name);
 
   /**
@@ -33,7 +34,9 @@ export class UpdateUserPasswordHandler implements ICommandHandler<UpdateUserPass
     private readonly jwtService: JwtService,
   ) {}
 
-  async execute(command: UpdateUserPasswordCommand): Promise<UpdatePasswordResponse> {
+  async execute(
+    command: UpdateUserPasswordCommand,
+  ): Promise<UpdatePasswordResponse> {
     this.logger.log(`Async ${command.constructor.name}...`);
     const { cmd } = command;
 
@@ -46,7 +49,10 @@ export class UpdateUserPasswordHandler implements ICommandHandler<UpdateUserPass
         throw new RpcException('Your passwords do not match');
       }
 
-      const user: UserEntity = await this.userRepository.findOne(condition, true);
+      const user: UserEntity = await this.userRepository.findOne(
+        condition,
+        true,
+      );
       if (!user) {
         throw new RpcException('Your password reset request has failed');
       }
@@ -57,11 +63,18 @@ export class UpdateUserPasswordHandler implements ICommandHandler<UpdateUserPass
         }
       }
 
-      const newUser = await this.userRepository.findOneByIdAndUpdate(cmd.userId, {
-        updates: {
-          $set: { 'services.password.hashed': generateHashedPassword(cmd.newPassword) },
+      const newUser = await this.userRepository.findOneByIdAndUpdate(
+        cmd.userId,
+        {
+          updates: {
+            $set: {
+              'services.password.hashed': generateHashedPassword(
+                cmd.newPassword,
+              ),
+            },
+          },
         },
-      });
+      );
 
       this.eventBus.publish(new UserPasswordUpdatedEvent(newUser));
       return {
@@ -72,5 +85,4 @@ export class UpdateUserPasswordHandler implements ICommandHandler<UpdateUserPass
       throw new RpcException(error);
     }
   }
-
 }

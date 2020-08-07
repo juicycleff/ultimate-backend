@@ -1,4 +1,4 @@
-import {IQuery} from '@nestjs/cqrs';
+import { IQuery } from '@nestjs/cqrs';
 import { ProjectRepository } from '@ultimatebackend/repository';
 import { FindProjectsRequest } from '@ultimatebackend/proto-schema/project';
 

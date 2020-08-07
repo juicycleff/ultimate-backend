@@ -1,11 +1,16 @@
-import { Directive, ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
+import {
+  Directive,
+  ObjectType,
+  Field,
+  GraphQLISODateTime,
+  Int,
+} from '@nestjs/graphql';
 import { Node } from '@ultimatebackend/contracts';
 import { InvoiceStatus } from '@ultimatebackend/contracts/enums/billing.enum';
 
 @Directive(`@key(fields: "id")`)
 @ObjectType()
 export class Invoice extends Node {
-
   @Field({ nullable: true })
   accountCountry?: string;
 

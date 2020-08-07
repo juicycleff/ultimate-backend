@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CoreModule, MongoConfigService, ServiceRegistryModule } from '@ultimatebackend/core';
+import {
+  CoreModule,
+  MongoConfigService,
+  ServiceRegistryModule,
+} from '@ultimatebackend/core';
 import { NestCasbinModule } from 'nestjs-casbin';
 import { AccessTokenModule } from './access-token/access-token.module';
 import { MongoModule } from '@juicycleff/repo-orm';

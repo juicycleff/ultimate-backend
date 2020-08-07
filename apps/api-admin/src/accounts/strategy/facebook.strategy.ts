@@ -1,32 +1,42 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, Logger, NotImplementedException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotImplementedException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Strategy } from 'passport-facebook';
 import { AccountsService } from '../accounts.service';
-import { ConsulConfig, InjectConfig } from '@nestcloud/config';
-import { LoginServiceTypes, LoginRequest, CreateRequest } from '@ultimatebackend/proto-schema/account';
+import { InjectConfig } from '@nestcloud/config';
+import { EtcdConfig } from '@nestcloud/config/etcd-config';
+import {
+  LoginServiceTypes,
+  LoginRequest,
+  CreateRequest,
+} from '@ultimatebackend/proto-schema/account';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy) {
   logger = new Logger(this.constructor.name);
 
   constructor(
-    @InjectConfig() private readonly config: ConsulConfig,
+    @InjectConfig() private readonly config: EtcdConfig,
     private readonly accountService: AccountsService,
   ) {
     super({
-      clientID: config.get<string>('app.auth.facebook.clientID'),
-      clientSecret: config.get<string>('app.auth.facebook.clientSecret'),
-      callbackURL: config.get<string>('app.auth.facebook.callbackURL'),
+      clientID: config.get<string>('app.auth.strategies.facebook.clientID'),
+      clientSecret: config.get<string>(
+        'app.auth.strategies.facebook.clientSecret',
+      ),
+      callbackURL: config.get<string>(
+        'app.auth.strategies.facebook.callbackURL',
+      ),
       profileFields: ['id', 'email', 'first_name', 'last_name'],
     });
   }
 
   async validate(accessToken, refreshToken, profile, done): Promise<any> {
-    this.logger.log('accessToken', accessToken);
-    console.log('profile', profile);
-
     if (profile && profile.emails.length > 0) {
-
       const logCmd: LoginRequest = {
         service: LoginServiceTypes.Facebook,
         params: {
@@ -50,7 +60,10 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
         username: undefined,
       };
 
-      const user = await this.accountService.validateOrCreateUser(logCmd, regCmd);
+      const user = await this.accountService.validateOrCreateUser(
+        logCmd,
+        regCmd,
+      );
 
       if (!user) {
         throw new UnauthorizedException();

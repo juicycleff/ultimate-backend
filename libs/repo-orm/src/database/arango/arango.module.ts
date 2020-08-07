@@ -1,6 +1,9 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { ArangoCoreModule } from './arango-core.module';
-import { createArangoProviders, createArangoEdgeProviders } from './arango.provider';
+import {
+  createArangoProviders,
+  createArangoEdgeProviders,
+} from './arango.provider';
 import { ArangoClientOption, ArangoModuleAsyncOptions } from './interfaces';
 
 /**
@@ -17,9 +20,7 @@ export class ArangoModule {
     const { uri, dbName, options, connectionName } = option;
     return {
       module: ArangoModule,
-      imports: [
-        ArangoCoreModule.forRoot(uri, dbName, options, connectionName),
-      ],
+      imports: [ArangoCoreModule.forRoot(uri, dbName, options, connectionName)],
     };
   }
 
@@ -47,7 +48,8 @@ export class ArangoModule {
     connectionName?: string,
     edge?: boolean,
   ): DynamicModule {
-    const providers = edge ? createArangoEdgeProviders(connectionName, collections)
+    const providers = edge
+      ? createArangoEdgeProviders(connectionName, collections)
       : createArangoProviders(connectionName, collections);
     return {
       module: ArangoModule,

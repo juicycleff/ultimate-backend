@@ -1,30 +1,77 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AccessToken, AccessTokenMutations } from './types';
-import { AccessTokenRpcClientService, GqlContext, Resource, setRpcContext } from '@ultimatebackend/core';
+import {
+  AccessToken,
+  AccessTokenFilterArgs,
+  AccessTokenMutations,
+  ReadAccessTokenInput,
+} from './types';
+import {
+  GqlAuthGuard,
+  GqlContext,
+  Resource,
+  setRpcContext,
+} from '@ultimatebackend/core';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => AccessToken)
 export class AccessTokenResolver {
-  constructor(private readonly service: AccessTokenRpcClientService) {}
-
-  @Resource({ name: 'access_token', identify: 'access_token', roles: ['owner', 'admin', 'developer'], action: 'read' })
-  @Query(() => [AccessToken])
+  @UseGuards(GqlAuthGuard)
+  @Resource({
+    name: 'access_token',
+    identify: 'access_token',
+    roles: ['owner', 'admin', 'developer'],
+    action: 'read',
+  })
+  @Query(() => [AccessToken], { nullable: true })
   async accessTokens(
-    @Context() ctx: GqlContext): Promise<AccessToken[]> {
-    const res = await this.service.accessToken.findAccess({ id: null, tenantId: null }, setRpcContext(ctx)).toPromise();
-    return res.accessToken as AccessToken[];
+    @Args() input: AccessTokenFilterArgs,
+    @Context() ctx: GqlContext,
+  ): Promise<AccessToken[]> {
+    let t;
+    let r;
+    if (input?.where) {
+      const { tenantId, ...rest } = input?.where;
+      t = tenantId;
+      r = rest;
+    }
+
+    const res = await ctx?.rpc?.accessToken?.svc
+      .findAccess(
+        {
+          filter: JSON.stringify(r),
+          tenantId: t,
+        },
+        setRpcContext(ctx),
+      )
+      .toPromise();
+    return (res.accessToken as unknown) as AccessToken[];
   }
 
-  @Resource({ name: 'access_token', identify: 'access_token', roles: ['owner', 'admin', 'developer'], action: 'read' })
-  @Query(() => AccessToken)
-  async accessToken(@Args('id') id: string, @Context() ctx: GqlContext): Promise<AccessToken> {
-    const res = await this.service.accessToken.readAccess(
-      {
-        id, tenantId: null,
-      }, setRpcContext(ctx)).toPromise();
-    return res.accessToken as AccessToken;
+  @UseGuards(GqlAuthGuard)
+  @Resource({
+    name: 'access_token',
+    identify: 'access_token',
+    roles: ['owner', 'admin', 'developer'],
+    action: 'read',
+  })
+  @Query(() => AccessToken, { nullable: true })
+  async accessToken(
+    @Args('input') input: ReadAccessTokenInput,
+    @Context() ctx: GqlContext,
+  ): Promise<AccessToken> {
+    const res = await ctx?.rpc?.accessToken?.svc
+      .readAccess(
+        {
+          id: input?.id,
+          tenantId: input?.tenantId,
+        },
+        setRpcContext(ctx),
+      )
+      .toPromise();
+    return (res.accessToken as unknown) as AccessToken;
   }
 
-  @Mutation(() => AccessTokenMutations, {nullable: true, name: 'accessToken'})
+  @Mutation(() => AccessTokenMutations, { nullable: true, name: 'accessToken' })
   async accessTokenMutation() {
     return {};
   }

@@ -1,8 +1,18 @@
 import { ModuleRef } from '@nestjs/core';
-import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Provider } from '@nestjs/common';
+import {
+  DynamicModule,
+  Global,
+  Inject,
+  Module,
+  OnModuleDestroy,
+  Provider,
+} from '@nestjs/common';
 import { MongoClient, MongoClientOptions } from 'mongodb';
 import * as hash from 'object-hash';
-import { DEFAULT_MONGO_CLIENT_OPTIONS, MONGO_MODULE_OPTIONS } from '../../database';
+import {
+  DEFAULT_MONGO_CLIENT_OPTIONS,
+  MONGO_MODULE_OPTIONS,
+} from '../../database';
 
 import {
   getClientToken,
@@ -11,8 +21,15 @@ import {
   getCurrentTenantToken,
   getDbToken,
 } from '../../utils';
-import { DEFAULT_DATABASE_CONTAINER_NAME, DATABASE_CONTAINER_NAME } from '../../constants';
-import { MongoModuleAsyncOptions, MongoModuleOptions, MongoOptionsFactory } from './interfaces';
+import {
+  DEFAULT_DATABASE_CONTAINER_NAME,
+  DATABASE_CONTAINER_NAME,
+} from '../../constants';
+import {
+  MongoModuleAsyncOptions,
+  MongoModuleOptions,
+  MongoOptionsFactory,
+} from './interfaces';
 
 @Global()
 @Module({})
@@ -28,7 +45,6 @@ export class MongoCoreModule implements OnModuleDestroy {
     clientOptions: MongoClientOptions = DEFAULT_MONGO_CLIENT_OPTIONS,
     containerName: string = DEFAULT_DATABASE_CONTAINER_NAME,
   ): DynamicModule {
-
     const containerNameProvider = {
       provide: DATABASE_CONTAINER_NAME,
       useValue: containerName,
@@ -149,11 +165,11 @@ export class MongoCoreModule implements OnModuleDestroy {
   async onModuleDestroy() {
     const clientsMap: Map<any, MongoClient> = this.moduleRef.get<
       Map<any, MongoClient>
-      >(getContainerToken(this.containerName));
+    >(getContainerToken(this.containerName));
 
     if (clientsMap) {
       await Promise.all(
-        [...clientsMap.values()].map(connection => connection.close()),
+        [...clientsMap.values()].map((connection) => connection.close()),
       );
     }
   }

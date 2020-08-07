@@ -9,14 +9,14 @@ export class AccountsRpcClientService {
   @RpcClient({
     service: SERVICE_LIST.account.consulName,
     package: SERVICE_LIST.account.package,
-    protoPath: join(__dirname, SERVICE_LIST.account.protoPath),
+    protoPath: SERVICE_LIST.account.protoPath,
   })
-  private readonly accountClient: GrpcClient;
+  private readonly client: GrpcClient;
 
   @Service(SERVICE_LIST.account.service, {
     service: SERVICE_LIST.account.consulName,
     package: SERVICE_LIST.account.package,
-    protoPath: join(__dirname, SERVICE_LIST.account.protoPath),
+    protoPath: SERVICE_LIST.account.protoPath,
   })
-  public accountService: AccountServiceClient<any>;
+  public svc: AccountServiceClient<any>;
 }

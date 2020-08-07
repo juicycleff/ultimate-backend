@@ -1,6 +1,13 @@
 import * as moment from 'moment';
 
-export type ArgType = 'OPERATOR' | 'COMPUTED' | 'PRIMITIVE' | 'ARRAY' | 'NESTED' | 'FLAT' | 'DATE';
+export type ArgType =
+  | 'OPERATOR'
+  | 'COMPUTED'
+  | 'PRIMITIVE'
+  | 'ARRAY'
+  | 'NESTED'
+  | 'FLAT'
+  | 'DATE';
 
 export type Resolver = (parent: any) => any;
 
@@ -56,7 +63,11 @@ export const isOperator = (key: string, keywords: object): boolean => {
 };
 
 export const isPrimitive = (val): boolean => {
-  if (primitives.includes(typeof val)) { return true; } else { return false; }
+  if (primitives.includes(typeof val)) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const isValidDate = (val): boolean => {
@@ -67,8 +78,14 @@ export const isComputable = (key: string, resolvers: object): boolean => {
   return Object.keys(resolvers).includes(key);
 };
 
-export const isNested = (value, keywords: object, resolvers: object): boolean => {
-  if (typeof value !== 'object') { return false; }
+export const isNested = (
+  value,
+  keywords: object,
+  resolvers: object,
+): boolean => {
+  if (typeof value !== 'object') {
+    return false;
+  }
   let nested = false;
   for (const key in value) {
     if (
@@ -139,7 +156,10 @@ const parseNested = (
 
     // OPERATOR
     if (isOperator(k, keywords)) {
-      result = { ...result, [key]: buildFilters(val, key, keywords, resolvers) };
+      result = {
+        ...result,
+        [key]: buildFilters(val, key, keywords, resolvers),
+      };
       return result;
     }
 
@@ -148,7 +168,10 @@ const parseNested = (
 
     // subval is COMPUTABLE VALUE
     if (isComputable(subkey, resolvers)) {
-      result = { ...result, ...buildFilters(subval, subkey, keywords, resolvers) };
+      result = {
+        ...result,
+        ...buildFilters(subval, subkey, keywords, resolvers),
+      };
       isFinal = true;
     } else if (isPrimitive(subval)) {
       result[subkey] = buildFilters(subval, null, keywords, resolvers);
@@ -164,7 +187,9 @@ const parseNested = (
         }
       }
     }
-    if (!isFinal) { parseNested(keywords, resolvers, subkey, subval, result); }
+    if (!isFinal) {
+      parseNested(keywords, resolvers, subkey, subval, result);
+    }
   }
   return result;
 };
@@ -194,7 +219,9 @@ export const buildFilters = (
 
   // tslint:disable-next-line:forin
   for (const key in args) {
-    if (!filters) { filters = {}; }
+    if (!filters) {
+      filters = {};
+    }
     const val = args[key];
     const t = argType(keywords, resolvers, key, val);
 
@@ -208,14 +235,16 @@ export const buildFilters = (
     } else if (t === 'OPERATOR') {
       const keyword = keywords[key];
       if (Array.isArray(val)) {
-        filters[keyword] = val.map(v => buildFilters(v, null, keywords, resolvers));
+        filters[keyword] = val.map((v) =>
+          buildFilters(v, null, keywords, resolvers),
+        );
       } else {
         filters[keyword] = buildFilters(val, null, keywords, resolvers);
       }
     } else if (t === 'NESTED' || t === 'FLAT') {
       filters = { ...filters, ...parseNested(keywords, resolvers, key, val) };
     } else if (t === 'ARRAY') {
-      filters[key] = val.map(v => buildFilters(v, null, keywords, resolvers));
+      filters[key] = val.map((v) => buildFilters(v, null, keywords, resolvers));
     } else {
       filters[key] = buildFilters(val, null, keywords, resolvers);
     }
@@ -231,8 +260,11 @@ function GraphqlMongoParser(
   const keywords: Keywords = merge
     ? { ...defaultKeywords, ...customKeywords }
     : customKeywords;
-  const resolvers: Resolvers = merge ? { ...defaultValues, ...customResolvers } : customResolvers;
-  return (args: object): object => buildFilters(args, null, keywords, resolvers);
+  const resolvers: Resolvers = merge
+    ? { ...defaultValues, ...customResolvers }
+    : customResolvers;
+  return (args: object): object =>
+    buildFilters(args, null, keywords, resolvers);
 }
 
 export const mongoParser = GraphqlMongoParser();

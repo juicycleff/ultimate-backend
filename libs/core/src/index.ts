@@ -10,3 +10,4 @@ export * from './constants';
 export * from './setup';
 export * from './helpers';
 export * from './interceptors';
+export * from './graphql';

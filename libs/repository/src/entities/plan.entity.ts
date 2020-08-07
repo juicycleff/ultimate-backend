@@ -1,10 +1,9 @@
 import { Entity } from '@juicycleff/repo-orm';
-import {BaseEntity} from './base-entity';
+import { BaseEntity } from './base-entity';
 import { PriceEmbed, FeatureEmbed } from './embeded';
 
-@Entity({name: 'plan'})
+@Entity({ name: 'plan' })
 export class PlanEntity extends BaseEntity<any> {
-
   name: string;
 
   normalizedName!: string;
@@ -20,5 +19,4 @@ export class PlanEntity extends BaseEntity<any> {
   free: boolean = false;
 
   stripeId?: string = null;
-
 }

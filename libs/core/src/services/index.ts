@@ -9,3 +9,4 @@ export * from './grpc-clients';
 export * from './configs/eventstore-config.service';
 export * from './configs/cache-store-config.service';
 export * from './configs/jwt-config.service';
+export * from './configs/mqtt-client-config';

@@ -1,31 +1,65 @@
 import { Injectable } from '@nestjs/common';
 import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
-import { MemcachedCache } from 'apollo-server-cache-memcached';
-import { ConsulDatabaseConfig, corsApollOptions } from '@ultimatebackend/common';
+import { RedisCache } from 'apollo-server-cache-redis';
+import { corsApollOptions } from '@ultimatebackend/common';
 import { buildContext } from 'graphql-passport';
 import { ConsulConfig, InjectConfig } from '@nestcloud/config';
-import { IMemcachedOptions } from '@nestcloud/memcached';
+import {
+  AccessTokenRpcClientService,
+  AccountsRpcClientService,
+  BillingsRpcClientService,
+  GqlContext,
+  RolesRpcClientService,
+  TenantsRpcClientService,
+  WebhooksRpcClientService,
+} from '@ultimatebackend/core';
+import { RedisOptions } from 'ioredis';
 
 @Injectable()
 export class GqlConfigService implements GqlOptionsFactory {
   constructor(
     @InjectConfig() private readonly config: ConsulConfig,
+    private readonly tenant: TenantsRpcClientService,
+    private readonly account: AccountsRpcClientService,
+    private readonly accessToken: AccessTokenRpcClientService,
+    private readonly role: RolesRpcClientService,
+    private readonly billing: BillingsRpcClientService,
+    private readonly webhook: WebhooksRpcClientService,
   ) {}
 
   createGqlOptions(): Promise<GqlModuleOptions> | GqlModuleOptions {
-    /* Get memcached config from consul */
-    const memcachedOptions = this.config.get<IMemcachedOptions>('memcached');
+    /* Get redis config from consul */
+    const redisOptions = this.config.get<RedisOptions>('database.redis');
+    console.log(redisOptions);
 
-    /* nitialize cache */
-    const cache = new MemcachedCache(
-      memcachedOptions.uri,
-      { retries: memcachedOptions.retries, retry: memcachedOptions.retry },
-    );
+    /* initialize cache */
+    const cache = new RedisCache(redisOptions);
     return {
       autoSchemaFile: true,
       path: 'graph',
       cors: corsApollOptions,
-      context: ({ req, res }) => buildContext({ req, res }),
+      context: ({ req, res, payload, connection }): GqlContext => {
+        const bc = buildContext({ req, res });
+
+        return {
+          // @ts-ignore
+          payload,
+          connection,
+          ...bc,
+          req: {
+            ...req,
+            ...bc.req,
+          },
+          rpc: {
+            accessToken: this.accessToken,
+            account: this.account,
+            billing: this.billing,
+            role: this.role,
+            webhook: this.webhook,
+            tenant: this.tenant,
+          },
+        };
+      },
       cache,
 
       /**

@@ -19,9 +19,7 @@ export class MongoModule {
     const { uri, dbName, options, connectionName } = option;
     return {
       module: MongoModule,
-      imports: [
-        MongoCoreModule.forRoot(uri, dbName, options, connectionName),
-      ],
+      imports: [MongoCoreModule.forRoot(uri, dbName, options, connectionName)],
     };
   }
 

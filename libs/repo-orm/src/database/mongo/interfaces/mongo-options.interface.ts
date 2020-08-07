@@ -19,7 +19,8 @@ export interface MongoOptionsFactory {
  * Options available when creating the module asynchrously.  You should use only one of the
  * useExisting, useClass, or useFactory options for creation.
  */
-export interface MongoModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+export interface MongoModuleAsyncOptions
+  extends Pick<ModuleMetadata, 'imports'> {
   /** A unique name for the container.  If not specified, a default one will be used. */
   containerName?: string;
 
@@ -34,7 +35,9 @@ export interface MongoModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'>
   /**
    * A factory function that will populate the module options, such as URI and database name.
    */
-  useFactory?: (...args: any[]) => Promise<MongoModuleOptions> | MongoModuleOptions;
+  useFactory?: (
+    ...args: any[]
+  ) => Promise<MongoModuleOptions> | MongoModuleOptions;
 
   /**
    * Inject any dependencies required by the Mongo module, such as a configuration service

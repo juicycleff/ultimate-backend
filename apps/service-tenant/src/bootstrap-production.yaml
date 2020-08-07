@@ -3,8 +3,14 @@ consul:
   port: 8500
 config:
   key: ultimatebackend/config/${{ service.name }}
+nats:
+  url: nats://${{NATS_HOST}}:4222
+redis:
+  host: ${{REDIS_HOST}}
+  port: 6379
+  password: ""
 service:
-  discoveryHost: ${{CONSUL_HOST}}
+  discoveryHost: ${{DISCOVERY_HOST}}
   healthCheck:
     timeout: 1s
     interval: 10s

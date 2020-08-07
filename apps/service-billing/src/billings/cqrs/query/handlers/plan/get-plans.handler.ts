@@ -1,5 +1,5 @@
 import { CACHE_MANAGER, CacheStore, Inject, Logger } from '@nestjs/common';
-import {IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PlanRepository } from '@ultimatebackend/repository';
 import { FindPlansResponse, Plan } from '@ultimatebackend/proto-schema/billing';
 import { RpcException } from '@nestjs/microservices';
@@ -18,7 +18,7 @@ export class GetPlansHandler implements IQueryHandler<GetPlansQuery> {
     this.logger.log(`Async ${query.constructor.name}...`);
 
     try {
-      const plans = await this.planRepository.find() as unknown as Plan[];
+      const plans = ((await this.planRepository.find()) as unknown) as Plan[];
       return {
         plans,
       };

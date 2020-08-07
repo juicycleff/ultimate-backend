@@ -1,4 +1,3 @@
-
 export interface IRoleAccess {
   sub: string;
   dom: string;

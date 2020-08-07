@@ -3,7 +3,6 @@ import { RoleActions } from '@ultimatebackend/contracts/enums/roles.enum';
 
 @InputType()
 export class CreateRoleInput {
-
   @Field()
   name: string;
 
@@ -19,14 +18,12 @@ export class CreateRoleInput {
 
 @InputType()
 export class RemoveRoleInput {
-
   @Field(() => ID)
   id: string;
 }
 
 @ArgsType()
 export class RoleMutationArgs {
-
   @Field(() => CreateRoleInput, { nullable: true })
   create?: CreateRoleInput;
 

@@ -1,7 +1,9 @@
 import * as bcrypt from 'bcryptjs';
 import { Base64 } from 'js-base64';
 
-export const generateHashedPassword: (password: string) => string = password => {
+export const generateHashedPassword: (password: string) => string = (
+  password,
+) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 };
 
