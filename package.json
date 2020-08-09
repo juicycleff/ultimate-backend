@@ -35,7 +35,7 @@
     "@anchan828/nest-sendgrid": "^0.3.16",
     "@godaddy/terminus": "^4.4.1",
     "@grpc/proto-loader": "^0.5.5",
-    "@juicycleff/nestjs-event-store": "^3.1.16",
+    "@juicycleff/nestjs-event-store": "^3.1.18",
     "@konfy/graphql-mongo-query": "^2.0.6",
     "@moonwalker/graphql-nats-subscriptions": "^0.1.7",
     "@nestcloud/boot": "^0.6.11",
