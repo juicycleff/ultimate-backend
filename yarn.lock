@@ -1235,10 +1235,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@juicycleff/nestjs-event-store@^3.1.16":
-  version "3.1.17"
-  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.1.16.tgz#5739e616c93e4c19e8c57b39ae2a93aa6809e7b5"
-  integrity sha512-qoex4VDxfarX1x+xmJpwPjVdBo9ZBYeoo8cvaQg3J3WDvLO+tKzebnna+Nu+2N2ZmMY1vP5siCpGFvQQ9toFkA==
+"@juicycleff/nestjs-event-store@^3.1.18":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.1.18.tgz#4d9eaadf32f2233f859cc632aed6325fe6a09125"
+  integrity sha512-JVIEo8sUlv6PJhe/Jy7hWdCybvM4Gjm0ZiMg3A8Ctw5Ws3LzNkwgG5ddCDV1qnYJYzi+b0vAkjvztE4tvVNUuQ==
   dependencies:
     "@nestjs/common" "^7.4.2"
     "@nestjs/core" "^7.4.2"
