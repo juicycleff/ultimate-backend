@@ -10,6 +10,7 @@ import { ProjectsController } from './projects.controller';
 @Module({
   imports: [
     EventStoreModule.registerFeature({
+      type: 'event-store',
       featureStreamName: '$ce-project',
       subscriptions: [
         {

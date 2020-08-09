@@ -17,6 +17,7 @@ export class EventstoreConfigService implements EventStoreOptionsFactory {
     const database = this.config.get<ConsulDatabaseConfig>('database');
 
     return {
+      type: 'event-store',
       tcpEndpoint: {
         host: database?.eventstore?.hostname,
         port: database?.eventstore?.tcpPort,

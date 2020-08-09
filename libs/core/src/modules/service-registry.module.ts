@@ -52,6 +52,7 @@ import { TerminusModule } from '@nestjs/terminus';
       useClass: CacheStoreConfigService,
     }),
     EventStoreModule.registerAsync({
+      type: 'event-store',
       useClass: EventstoreConfigService,
     }),
     TerminusModule.forRootAsync({

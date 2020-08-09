@@ -21,7 +21,7 @@
     "setup:consul": "sh scripts/register.sh",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint-md": "remark .",
-    "test": "snyk test && jest",
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage --token a5ea7c309f7543a3b7cfc662c1c88d67 --language typescript",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -35,7 +35,7 @@
     "@anchan828/nest-sendgrid": "^0.3.16",
     "@godaddy/terminus": "^4.4.1",
     "@grpc/proto-loader": "^0.5.5",
-    "@juicycleff/nestjs-event-store": "^3.0.5",
+    "@juicycleff/nestjs-event-store": "^3.1.16",
     "@konfy/graphql-mongo-query": "^2.0.6",
     "@moonwalker/graphql-nats-subscriptions": "^0.1.7",
     "@nestcloud/boot": "^0.6.11",
@@ -124,6 +124,7 @@
     "nestjs-eventstore": "^1.4.14",
     "nestjs-stripe": "^0.2.1",
     "node-eventstore-client": "^0.2.16",
+    "node-nats-streaming": "^0.3.2",
     "object-path": "^0.11.4",
     "parse-iso-duration": "^1.1.0",
     "passport": "^0.4.1",
@@ -236,7 +237,7 @@
   "snyk": true,
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format"
+      "pre-commit": "yarn format && yarn test && yarn test:e2e"
     }
   }
 }
