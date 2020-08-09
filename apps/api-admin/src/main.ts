@@ -23,9 +23,11 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   app.use(bloodTearsMiddleware);
   AppUtils.killAppWithGrace(app);
-  authSetup(app, true);
 
   /** Authentication middleware for multi support */
+  authSetup(app, true);
+
+  /** Multitenant middleware for multitenancy database strategy support */
   app.use(
     enableMultiTenancy({
       enabled: true,

@@ -11,6 +11,7 @@ import { WebhookRepository } from '@ultimatebackend/repository';
 @Module({
   imports: [
     EventStoreModule.registerFeature({
+      type: 'event-store',
       featureStreamName: '$ce-webhook',
       subscriptions: [
         {

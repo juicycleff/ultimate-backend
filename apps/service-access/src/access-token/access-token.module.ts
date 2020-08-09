@@ -11,6 +11,7 @@ import { AccessTokenCommandHandlers } from './cqrs/commands/handlers/access-toke
 @Module({
   imports: [
     EventStoreModule.registerFeature({
+      type: 'event-store',
       featureStreamName: '$ce-webhook',
       subscriptions: [
         {

@@ -26,6 +26,7 @@ import { JwtModule } from '@nestjs/jwt';
       useClass: JwtConfigService,
     }),
     EventStoreModule.registerFeature({
+      type: 'event-store',
       featureStreamName: '$ce-account',
       subscriptions: [
         {

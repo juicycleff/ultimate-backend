@@ -19,6 +19,7 @@ import { BullConfigService } from '../configs/bull-config.service';
 @Module({
   imports: [
     EventStoreModule.registerFeature({
+      type: 'event-store',
       featureStreamName: '$ce-account',
       subscriptions: [
         {

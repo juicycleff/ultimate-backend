@@ -18,6 +18,7 @@ import { TenantSagas } from './sagas';
   imports: [
     EventStoreModule.registerFeature({
       featureStreamName: '$ce-tenant',
+      type: 'event-store',
       subscriptions: [
         {
           type: EventStoreSubscriptionType.Volatile,

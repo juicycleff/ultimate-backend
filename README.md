@@ -3,7 +3,8 @@ ULTIMATE BACKEND
 </h1>  
     
 <p align="center">  
-  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern.  
+  <bold>(WIP)</bold>: This is an enterprise scale advanced microservice pattern with GraphQL API and GRPC Microservices, based on Domain (DDD) using the command query responsibility segregation (CQRS) design pattern.
+  Want to ask <a target="_blank" href="https://join.slack.com/t/ultimate-backend/shared_invite/zt-gd6kuuh2-B665Di4cRLqzVqXvhbmrHg">Rex Isaac Raphael</a> questions, join the slack channel :)
 </p>  
     <p align="center">  
 </p>  
@@ -21,7 +22,7 @@ ULTIMATE BACKEND
 ## Description  
   
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns  
-to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below.
+to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below. With support for both [Event Store](https://eventstore.org) and [NATS Streaming](https://nats.io) for event streaming and Kafka comming soon.
   
 > **Note:** Seeing alot of clone of the project which is good, but please if you can 🌟 the project as it also motivates me in improving the project. Also the docker azure CI setups is broken and will be fixed soon.
 > 
@@ -57,7 +58,7 @@ Software features
   
   |                |Required                          |Optional                         |
 |----------------|-------------------------------|-----------------------------|
-|`Store and cache`|[Event Store (Event Source Store)](https://eventstore.org), [Redis (Queue & cache)](https://redis.io/) and [MongoDB (Database)](https://www.mongodb.com/)            |[ArangoDB (Database)](https://www.arangodb.com/)            |
+|`Store and cache`|[Event Store (Event Source Store)](https://eventstore.org), [Redis (Queue & cache)](https://redis.io/) and [MongoDB (Database)](https://www.mongodb.com/)            |[ArangoDB (Database)](https://www.arangodb.com/), [NATS Streaming (Event Source Store)](https://nats.io)            |
 |`Stack and frameworks` |[NestJS (Server Framework)](https://nestjs.com), [NodeJS (System runtime)](https://nodejs.org), [Typescript](https://www.typescriptlang.org), [Express JS](https://expressjs.com), [Fastify](https://www.fastify.io), [GRPC](https://grpc.io/), [NestCloud](https://nestcloud.org/) and [Apollo GraphQL](https://www.apollographql.com)                |none            |
 |`Deployment and containerization`          |[Docker](https://www.docker.com/) |[Kubernetes](https://kubernetes.io/), [Azure Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/), GitLab CI ||
 |`Service Registry`          |[Consul](https://consul.io/)|[Kubernetes](https://kubernetes.io/) and [etcd](https://etcd.io/)|
