@@ -114,7 +114,7 @@
     "ip-address": "^6.3.0",
     "js-base64": "^3.4.4",
     "json-stable-stringify": "^1.0.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "luxon": "^1.24.1",
     "mongodb": "^3.6.0",
     "mqtt": "^4.1.0",
