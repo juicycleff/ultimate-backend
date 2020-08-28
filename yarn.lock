@@ -1235,13 +1235,17 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@juicycleff/nestjs-event-store@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.0.5.tgz#e4f2f887e60122a6ea0173af37d4246369f4f94e"
-  integrity sha512-RxqpnTdcga147O1XBm627XzZysshf36TM98pIZM13Vy3cl5k6b/6lzEwoXzA3YRT8xszmskQ0RmVQVXAI45GNA==
+"@juicycleff/nestjs-event-store@^3.1.18":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.1.18.tgz#4d9eaadf32f2233f859cc632aed6325fe6a09125"
+  integrity sha512-JVIEo8sUlv6PJhe/Jy7hWdCybvM4Gjm0ZiMg3A8Ctw5Ws3LzNkwgG5ddCDV1qnYJYzi+b0vAkjvztE4tvVNUuQ==
   dependencies:
+    "@nestjs/common" "^7.4.2"
+    "@nestjs/core" "^7.4.2"
+    "@nestjs/cqrs" "^7.0.0"
     axios "^0.19.2"
-    node-eventstore-client "^0.2.16"
+    protobufjs "^6.10.1"
+    uuid "^8.3.0"
 
 "@konfy/graphql-mongo-query@^2.0.6":
   version "2.0.6"
@@ -1578,6 +1582,11 @@
   resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-0.0.5.tgz#0c3462de4125eea0e85e3a520f0de4e7e8dcfa40"
   integrity sha512-QjZCSMHHy8IW4UUTS49QJQ0NrA8MHv6XevNrPLJwh4n3lN7wY9aSRwd1+cBIUDBXEHRKngcYdPtC4oG0fimw+A==
 
+"@nestjs/mapped-types@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-0.1.0.tgz#248435b4af4305bf6d1214d228c84926be56125a"
+  integrity sha512-FfQsZK5K1OvvGqjPHCJtrNTLlKLg7bLuphtCRTFb5K2P98JTfslauMbT7bS8huOoK/86HMNmNoHR/EVLAd4FzA==
+
 "@nestjs/microservices@^7.3.2":
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/@nestjs/microservices/-/microservices-7.3.2.tgz#44bd001a1e80377fbb3f7065960f3598b00ef68d"
@@ -1625,13 +1634,13 @@
     "@angular-devkit/schematics" "9.1.7"
     fs-extra "9.0.0"
 
-"@nestjs/swagger@^4.5.12":
-  version "4.5.12"
-  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.5.12.tgz#e8aa65fbb0033007ece1d494b002f47ff472c20b"
-  integrity sha512-MVJ9JbCiIo5g6V3tjDPNHjoCjVO1J351dHkMj7/yjIHQi5CCB3AzZoA/BQEipUSjsX34ungfZIxRXt2Im4FF7A==
+"@nestjs/swagger@^4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.6.0.tgz#42db9e5199bb67be7d09f85c87fb7593915f426b"
+  integrity sha512-B7DBMm+MTBfttGvtdb9quEbP9lgi5w3OFs30v/if0ZHE0Fl1B+t1FP8rnmR0xk5wfp7Wd/9LVl9ll/hvIheJ4w==
   dependencies:
-    "@nestjs/mapped-types" "0.0.5"
-    lodash "4.17.15"
+    "@nestjs/mapped-types" "0.1.0"
+    lodash "4.17.20"
     path-to-regexp "3.2.0"
 
 "@nestjs/terminus@^7.0.1":
@@ -6620,6 +6629,11 @@ google-libphonenumber@^3.2.8:
   resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.10.tgz#021a314652747d736a39e2e60dc670f0431425ad"
   integrity sha512-TsckE9O8QgqaIeaOXPjcJa4/kX3BzFdO1oCbMfmUpRZckml4xJhjJVxaT9Mdt/VrZZkT9lX44eHAEWfJK1tHtw==
 
+google-protobuf@^3.11.2:
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.13.0.tgz#909c5983d75dd6101ed57c79e0528d000cdc3251"
+  integrity sha512-ZIf3qfLFayVrPvAjeKKxO5FRF1/NwRxt6Dko+fWEMuHwHbZx8/fcaAao9b0wCM6kr8qeg2te8XTpyuvKuD9aKw==
+
 google-protobuf@^3.6.1, google-protobuf@latest:
   version "3.12.2"
   resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.12.2.tgz#50ce9f9b6281235724eb243d6a83e969a2176e53"
@@ -8777,15 +8791,20 @@ lodash.xorby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.xorby/-/lodash.xorby-4.7.0.tgz#9c19a6f9f063a6eb53dd03c1b6871799801463d7"
   integrity sha1-nBmm+fBjputT3QPBtocXmYAUY9c=
 
-lodash@4.17.15, lodash@^4.14.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.4:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
-
 lodash@4.17.19, lodash@^4.17.19:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
+
+lodash@4.17.20:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+
+lodash@^4.14.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.4:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 log-driver@^1.x:
   version "1.2.7"
@@ -9619,7 +9638,7 @@ nats@^1.0.1:
     nuid "^1.1.4"
     ts-nkeys "^1.0.16"
 
-nats@^1.4.12:
+nats@^1.4.12, nats@^1.4.9:
   version "1.4.12"
   resolved "https://registry.yarnpkg.com/nats/-/nats-1.4.12.tgz#11a988d5041d95dfb1b6ac1e37c0cfb57b171579"
   integrity sha512-Jf4qesEF0Ay0D4AMw3OZnKMRTQm+6oZ5q8/m4gpy5bTmiDiK6wCXbZpzEslmezGpE93LV3RojNEG6dpK/mysLQ==
@@ -9820,6 +9839,15 @@ node-modules-regexp@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
+
+node-nats-streaming@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/node-nats-streaming/-/node-nats-streaming-0.3.2.tgz#a6d1b77eae837495856893f573e3d78184b39833"
+  integrity sha512-exeT+FwGYW3UbBSzu8a7ykwWoY6R/vjQLr1RoZ1gnoJ9F66WVvpMZQWCZzLxlf9XRpJTTygcp6P1+WRw9h07Sg==
+  dependencies:
+    google-protobuf "^3.11.2"
+    nats "^1.4.9"
+    nuid "^1.1.4"
 
 node-notifier@^7.0.0:
   version "7.0.1"
@@ -10810,10 +10838,10 @@ protobufjs@^5.0.3:
     glob "^7.0.5"
     yargs "^3.10.0"
 
-protobufjs@^6.8.6, protobufjs@^6.8.8:
-  version "6.9.0"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.9.0.tgz#c08b2bf636682598e6fabbf0edb0b1256ff090bd"
-  integrity sha512-LlGVfEWDXoI/STstRDdZZKb/qusoAWUnmLg9R8OLSO473mBLWHowx8clbX5/+mKDEI+v7GzjoK9tRPZMMcoTrg==
+protobufjs@^6.10.1, protobufjs@~6.10.1:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.10.1.tgz#e6a484dd8f04b29629e9053344e3970cccf13cd2"
+  integrity sha512-pb8kTchL+1Ceg4lFd5XUpK8PdWacbvV5SK2ULH2ebrYtl4GjJmS24m6CKME67jzV53tbJxHlnNOSqQHbTsR9JQ==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -10829,10 +10857,10 @@ protobufjs@^6.8.6, protobufjs@^6.8.8:
     "@types/node" "^13.7.0"
     long "^4.0.0"
 
-protobufjs@~6.10.1:
-  version "6.10.1"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.10.1.tgz#e6a484dd8f04b29629e9053344e3970cccf13cd2"
-  integrity sha512-pb8kTchL+1Ceg4lFd5XUpK8PdWacbvV5SK2ULH2ebrYtl4GjJmS24m6CKME67jzV53tbJxHlnNOSqQHbTsR9JQ==
+protobufjs@^6.8.6, protobufjs@^6.8.8:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.9.0.tgz#c08b2bf636682598e6fabbf0edb0b1256ff090bd"
+  integrity sha512-LlGVfEWDXoI/STstRDdZZKb/qusoAWUnmLg9R8OLSO473mBLWHowx8clbX5/+mKDEI+v7GzjoK9tRPZMMcoTrg==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"

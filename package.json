@@ -67,7 +67,7 @@
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.4.2",
     "@nestjs/platform-fastify": "^7.4.2",
-    "@nestjs/swagger": "^4.5.12",
+    "@nestjs/swagger": "^4.6.0",
     "@nestjs/terminus": "^7.0.1",
     "@sindresorhus/slugify": "^1.1.0",
     "apollo-datasource": "^0.7.2",
