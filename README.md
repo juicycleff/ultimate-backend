@@ -140,7 +140,9 @@ You should start the microservices in any other. Example
   
 # Generate protobuf typescript definitions and please fix the path for timestamps import (You should do this only when you update the protobuf files)
 # and also build the proto-scheme lib (You should do this only when you update the protobuf files)
-# in `lib/proto-schem`  
+# in `lib/proto-schem`
+# Also adds configuration(config.example files) to consul K/V registry (consul need to be running)
+# You need jq and yq programs to use it   
 $ yarn setup:local
   
 # Start the account service  
