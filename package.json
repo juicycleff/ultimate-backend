@@ -125,7 +125,7 @@
     "nestjs-stripe": "^0.2.1",
     "node-eventstore-client": "^0.2.16",
     "node-nats-streaming": "^0.3.2",
-    "object-path": "^0.11.4",
+    "object-path": "^0.11.5",
     "parse-iso-duration": "^1.1.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
