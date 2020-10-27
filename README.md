@@ -127,7 +127,7 @@ mongod
 If you have docker installed  
 ```bash  
 docker run -d -p 27017:27017 mongo  
-docker run -d -p 1113:1113 -p 2113:2113 eventstore/eventstore  
+docker run -d -p 1113:1113 -p 2113:2113 eventstore/eventstore --insecure # insecure flag specifies no certificate required - suitable for devmode 
 docker run -d -p 6379:6379 redis  
 ```  
   
