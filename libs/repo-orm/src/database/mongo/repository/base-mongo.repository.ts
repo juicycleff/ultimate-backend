@@ -542,7 +542,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const updates = await this.invokeEvents(
       PRE_KEY,
       ['UPDATE', 'UPDATE_ONE'],
-      req.updates,
+      { $set: { ...req.updates } },
     );
 
     const conditions = cleanEmptyProperties({
@@ -568,7 +568,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const updates = await this.invokeEvents(
       PRE_KEY,
       ['UPDATE', 'UPDATE_ONE'],
-      req.updates,
+      { $set: { ...req.updates } },
     );
 
     const conditions = cleanEmptyProperties({
@@ -603,7 +603,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const updates = await this.invokeEvents(
       PRE_KEY,
       ['UPDATE', 'UPDATE_ONE'],
-      req.updates,
+      { $set: { ...req.updates } },
     );
 
     const conditions = cleanEmptyProperties({
