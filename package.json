@@ -109,7 +109,7 @@
     "graphql-tools": "^6.0.16",
     "graphql-type-json": "^0.3.2",
     "groq-js": "^0.1.7",
-    "grpc": "^1.24.3",
+    "grpc": "^1.24.4",
     "ioredis": "^4.17.3",
     "ip-address": "^6.3.0",
     "js-base64": "^3.4.4",
