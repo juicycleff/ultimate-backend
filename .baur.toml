@@ -1,0 +1,17 @@
+
+# Version of baur configuration format
+config_version = 4
+
+[Database]
+
+  # Connection string to the PostgreSQL database, see https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING
+  postgresql_url = "postgres://postgres:root@localhost:5432/baur?sslmode=disable&connect_timeout=5"
+
+# Application discovery settings
+[Discover]
+
+  # List of directories containing applications, example: ['go/code', 'shop/']
+  application_dirs = ["apps"]
+
+  # Descend at most SearchDepth levels to find application configs
+  search_depth = 1
