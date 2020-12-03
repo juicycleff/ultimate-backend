@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "projects": {
+    "api-admin": {
+      "root": "apps/api-admin",
+      "sourceRoot": "apps/api-admin/src",
+      "projectType": "application",
+      "prefix": "api-admin",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/api-admin",
+            "main": "apps/api-admin/src/main.ts",
+            "tsConfig": "apps/api-admin/tsconfig.app.json",
+            "assets": ["apps/api-admin/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api-admin/src/environments/environment.ts",
+                  "with": "apps/api-admin/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api-admin:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api-admin/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/api-admin/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "api-admin"
+}
