@@ -5,7 +5,7 @@ name = "api-admin"
 [Build]
 
   # Command to build the application, valid variables: $ROOT, $APPNAME
-  command = "make dist"
+  command = "cd ../../ && nx build api-admin --prod"
 
   # Repository relative paths to baur include files that the build inherits.
   # Valid variables: $ROOT

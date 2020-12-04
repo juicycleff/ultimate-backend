@@ -14,7 +14,9 @@
             "outputPath": "dist/apps/api-admin",
             "main": "apps/api-admin/src/main.ts",
             "tsConfig": "apps/api-admin/tsconfig.app.json",
-            "assets": ["apps/api-admin/src/assets"]
+            "assets": [
+              "apps/api-admin/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -39,13 +41,131 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/api-admin/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/api-admin/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/api-admin/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "external-swine-orm": {
+      "root": "libs/external/swine-orm",
+      "sourceRoot": "libs/external/swine-orm/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/external/swine-orm/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/external/swine-orm/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/external/swine-orm",
+            "tsConfig": "libs/external/swine-orm/tsconfig.lib.json",
+            "packageJson": "libs/external/swine-orm/package.json",
+            "main": "libs/external/swine-orm/src/index.ts",
+            "assets": [
+              "libs/external/swine-orm/*.md"
+            ]
+          }
+        }
+      }
+    },
+    "external-swine-service": {
+      "root": "libs/external/swine-service",
+      "sourceRoot": "libs/external/swine-service/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/external/swine-service/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/external/swine-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/external/swine-service",
+            "tsConfig": "libs/external/swine-service/tsconfig.lib.json",
+            "packageJson": "libs/external/swine-service/package.json",
+            "main": "libs/external/swine-service/src/index.ts",
+            "assets": [
+              "libs/external/swine-service/*.md"
+            ]
+          }
+        }
+      }
+    },
+    "shared-proto-schema": {
+      "root": "libs/shared/proto-schema",
+      "sourceRoot": "libs/shared/proto-schema/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/proto-schema/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/proto-schema/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "tenant-proto-schema": {
+      "root": "libs/tenant/proto-schema",
+      "sourceRoot": "libs/tenant/proto-schema/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/tenant/proto-schema/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/tenant/proto-schema/jest.config.js",
             "passWithNoTests": true
           }
         }

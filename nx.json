@@ -33,6 +33,18 @@
   "projects": {
     "api-admin": {
       "tags": []
+    },
+    "external-swine-orm": {
+      "tags": []
+    },
+    "external-swine-service": {
+      "tags": []
+    },
+    "shared-proto-schema": {
+      "tags": []
+    },
+    "tenant-proto-schema": {
+      "tags": []
     }
   }
 }

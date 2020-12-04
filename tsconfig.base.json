@@ -10,12 +10,33 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ultimate-backend/external/swine-orm": [
+        "libs/external/swine-orm/src/index.ts"
+      ],
+      "@ultimate-backend/external/swine-service": [
+        "libs/external/swine-service/src/index.ts"
+      ],
+      "@ultimate-backend/shared/proto-schema": [
+        "libs/shared/proto-schema/src/index.ts"
+      ],
+      "@ultimate-backend/tenant/proto-schema": [
+        "libs/tenant/proto-schema/src/index.ts"
+      ]
+    }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

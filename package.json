@@ -17,6 +17,7 @@
     "affected:lint": "nx affected:lint",
     "affected:dep-graph": "nx affected:dep-graph",
     "affected": "nx affected",
+    "ub:app": "nx workspace-schematic ub-schematic",
     "format": "nx format:write",
     "format:write": "nx format:write",
     "format:check": "nx format:check",
@@ -30,6 +31,7 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "es6-promise": "^4.2.8",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0"
@@ -43,6 +45,7 @@
     "@nrwl/nest": "10.4.4",
     "@nrwl/node": "10.4.4",
     "@nrwl/nx-cloud": "latest",
+    "@nrwl/nx-plugin": "^10.4.4",
     "@nrwl/tao": "10.4.4",
     "@nrwl/workspace": "10.4.4",
     "@types/jest": "26.0.8",

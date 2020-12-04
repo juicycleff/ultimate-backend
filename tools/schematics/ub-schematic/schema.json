@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "ub-schematic",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the UB app?"
+    },
+    "kind": {
+      "type": "string",
+      "description": "Provide the ub app type",
+      "enum": [
+        "api",
+        "svc",
+        "faas"
+      ],
+      "x-prompt": {
+        "message": "Which type of ultimate backend app would you like to generate?",
+        "type": "list",
+        "items": [
+          {
+            "value": "api",
+            "label": "API"
+          },
+          {
+            "value": "svc",
+            "label": "Service"
+          },
+          {
+            "value": "faas",
+            "label": "FaaS"
+          }
+        ]
+      }
+    },
+    "transport": {
+      "type": "string",
+      "description": "What kind of service to service communication",
+      "x-prompt": {
+        "message": "What transport protocol for service to service communication?",
+        "type": "list",
+        "items": [
+          {
+            "value": "rest",
+            "label": "REST"
+          },
+          {
+            "value": "grpc",
+            "label": "GRPC"
+          }
+        ]
+      }
+    },
+    "message": {
+      "type": "string",
+      "description": "Provide message broker",
+      "x-prompt": {
+        "message": "Select your message broker?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "nats",
+            "label": "NATS"
+          },
+          {
+            "value": "kafka",
+            "label": "Kafka"
+          }
+        ]
+      }
+    }
+  },
+  "required": ["name", "kind"]
+}
