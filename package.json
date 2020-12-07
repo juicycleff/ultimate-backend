@@ -106,7 +106,7 @@
     "graphql-passport": "^0.6.3",
     "graphql-query-complexity": "^0.6.0",
     "graphql-relay": "^0.6.0",
-    "graphql-tools": "^6.0.16",
+    "graphql-tools": "^6.1.0",
     "graphql-type-json": "^0.3.2",
     "groq-js": "^0.1.7",
     "grpc": "^1.24.3",
