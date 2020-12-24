@@ -75,7 +75,7 @@
     "apollo-server-cache-redis": "^1.2.2",
     "apollo-server-express": "^2.16.1",
     "arangojs": "^6.14.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "base64-url": "^2.3.3",
     "bcryptjs": "^2.4.3",
     "brakes": "^3.0.0",
