@@ -121,7 +121,7 @@
     "nats": "^1.4.12",
     "nestjs-casbin": "^2.0.8",
     "nestjs-casbin-mongodb": "^1.2.5",
-    "nestjs-eventstore": "^1.4.14",
+    "nestjs-eventstore": "^2.0.1",
     "nestjs-stripe": "^0.2.1",
     "node-eventstore-client": "^0.2.16",
     "node-nats-streaming": "^0.3.2",

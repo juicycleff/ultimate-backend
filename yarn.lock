@@ -1235,13 +1235,17 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@juicycleff/nestjs-event-store@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.0.5.tgz#e4f2f887e60122a6ea0173af37d4246369f4f94e"
-  integrity sha512-RxqpnTdcga147O1XBm627XzZysshf36TM98pIZM13Vy3cl5k6b/6lzEwoXzA3YRT8xszmskQ0RmVQVXAI45GNA==
+"@juicycleff/nestjs-event-store@^3.1.18":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@juicycleff/nestjs-event-store/-/nestjs-event-store-3.1.18.tgz#4d9eaadf32f2233f859cc632aed6325fe6a09125"
+  integrity sha512-JVIEo8sUlv6PJhe/Jy7hWdCybvM4Gjm0ZiMg3A8Ctw5Ws3LzNkwgG5ddCDV1qnYJYzi+b0vAkjvztE4tvVNUuQ==
   dependencies:
+    "@nestjs/common" "^7.4.2"
+    "@nestjs/core" "^7.4.2"
+    "@nestjs/cqrs" "^7.0.0"
     axios "^0.19.2"
-    node-eventstore-client "^0.2.16"
+    protobufjs "^6.10.1"
+    uuid "^8.3.0"
 
 "@konfy/graphql-mongo-query@^2.0.6":
   version "2.0.6"
@@ -1478,16 +1482,6 @@
     webpack "4.43.0"
     webpack-node-externals "1.7.2"
 
-"@nestjs/common@^6.8.5":
-  version "6.11.11"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.11.11.tgz#701da2462a15cc94d55ec863ddd9f2fb0bbd7136"
-  integrity sha512-K4wuK/V2M82AsoudtY0UYV+M1nYDSSb10t8AkMwFiP+AWMuxCJNtE8qLc9jUe2aTKMbhBiQUfsbZFmg/MRinPg==
-  dependencies:
-    axios "0.19.2"
-    cli-color "2.0.0"
-    tslib "1.11.1"
-    uuid "7.0.1"
-
 "@nestjs/common@^7.4.2":
   version "7.4.2"
   resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-7.4.2.tgz#f1ceff01a7b2c77094726944f55d907a2196bfe1"
@@ -1510,19 +1504,6 @@
     lodash.set "4.3.2"
     uuid "8.1.0"
 
-"@nestjs/core@^6.8.5":
-  version "6.11.11"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.11.11.tgz#2b97a3e9c2a853f5693ed84daf81c1ee3b2782b4"
-  integrity sha512-ewUy2rjiRWi6SziI5gXZnlat7PfnVklL3tusnU1qqtUm74cPY1Zre+zDCJ27P/+B7sFJHbkFfpi0qQP2pQv9jQ==
-  dependencies:
-    "@nuxtjs/opencollective" "0.2.2"
-    fast-safe-stringify "2.0.7"
-    iterare "1.2.0"
-    object-hash "2.0.3"
-    path-to-regexp "3.2.0"
-    tslib "1.11.1"
-    uuid "7.0.1"
-
 "@nestjs/core@^7.4.2":
   version "7.4.2"
   resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-7.4.2.tgz#a2a0640eea658dfbd6de8e3079fffc5a0878ff5a"
@@ -1535,11 +1516,6 @@
     path-to-regexp "3.2.0"
     tslib "2.0.0"
     uuid "8.3.0"
-
-"@nestjs/cqrs@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/cqrs/-/cqrs-6.1.0.tgz#84529cfcdffa43624e251b1a71d61591fd4c3cad"
-  integrity sha512-J1csaa2LdodZtwXOoYNcnqvFzk+G3RAR+G0N8k1/dlP7GvDJT3OakS2YXPiOSl7fEMOD40eS4+9sQMs8xqiegw==
 
 "@nestjs/cqrs@^7.0.0":
   version "7.0.0"
@@ -6620,6 +6596,11 @@ google-libphonenumber@^3.2.8:
   resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.10.tgz#021a314652747d736a39e2e60dc670f0431425ad"
   integrity sha512-TsckE9O8QgqaIeaOXPjcJa4/kX3BzFdO1oCbMfmUpRZckml4xJhjJVxaT9Mdt/VrZZkT9lX44eHAEWfJK1tHtw==
 
+google-protobuf@^3.11.2:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.14.0.tgz#20373d22046e63831a5110e11a84f713cc43651e"
+  integrity sha512-bwa8dBuMpOxg7COyqkW6muQuvNnWgVN8TX/epDRGW5m0jcrmq2QJyCyiV8ZE2/6LaIIqJtiv9bYokFhfpy/o6w==
+
 google-protobuf@^3.6.1, google-protobuf@latest:
   version "3.12.2"
   resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.12.2.tgz#50ce9f9b6281235724eb243d6a83e969a2176e53"
@@ -7811,11 +7792,6 @@ iterall@^1.1.1, iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.3.0.tgz#afcb08492e2915cbd8a0884eb93a8c94d0d72fea"
   integrity sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==
-
-iterare@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/iterare/-/iterare-1.2.0.tgz#7427f5ed45986e4b73e2fea903579f1117f3dd15"
-  integrity sha512-RxMV9p/UzdK0Iplnd8mVgRvNdXlsTOiuDrqMRnDi3wIhbT+JP4xDquAX9ay13R3CH72NBzQ91KWe0+C168QAyQ==
 
 iterare@1.2.1:
   version "1.2.1"
@@ -9619,7 +9595,7 @@ nats@^1.0.1:
     nuid "^1.1.4"
     ts-nkeys "^1.0.16"
 
-nats@^1.4.12:
+nats@^1.4.12, nats@^1.4.9:
   version "1.4.12"
   resolved "https://registry.yarnpkg.com/nats/-/nats-1.4.12.tgz#11a988d5041d95dfb1b6ac1e37c0cfb57b171579"
   integrity sha512-Jf4qesEF0Ay0D4AMw3OZnKMRTQm+6oZ5q8/m4gpy5bTmiDiK6wCXbZpzEslmezGpE93LV3RojNEG6dpK/mysLQ==
@@ -9680,17 +9656,17 @@ nestjs-casbin@^2.0.8:
     mongodb "^3.5.5"
     uuid "^7.0.2"
 
-nestjs-eventstore@^1.4.14:
-  version "1.4.14"
-  resolved "https://registry.yarnpkg.com/nestjs-eventstore/-/nestjs-eventstore-1.4.14.tgz#84572027b0be9f6ea38bdb862c9dcbbaf9534d5f"
-  integrity sha512-P4O7ObTAxR3myKhF5Aj28Unjo+gCsobxdZ7S5K7MF8nV1BR1OYaLpi1cdHOYCKjQi4gqItX0ieLKp2oSefxf0g==
+nestjs-eventstore@^2.0.1:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/nestjs-eventstore/-/nestjs-eventstore-2.0.4.tgz#ee7719da5c39b77940c7977b8f285800e069493f"
+  integrity sha512-P6F9ohUzFB0kuBzCkTlpK05mGiwFhbaKucoURdfnwV+cZLYRliXYcOlEGAIeorjJby36kjSEhsDEra7NRmctMw==
   dependencies:
-    "@nestjs/common" "^6.8.5"
-    "@nestjs/core" "^6.8.5"
-    "@nestjs/cqrs" "^6.1.0"
-    node-eventstore-client "^0.2.13"
+    "@nestjs/common" "^7.4.2"
+    "@nestjs/core" "^7.4.2"
+    "@nestjs/cqrs" "^7.0.0"
+    node-eventstore-client "^0.2.16"
     reflect-metadata "^0.1.12"
-    rxjs "^6.3.3"
+    rxjs "^6.6.2"
 
 nestjs-stripe@^0.2.1:
   version "0.2.1"
@@ -9757,7 +9733,7 @@ node-eventstore-client2@^0.2.12:
     strict-event-emitter-types "^1.2.0"
     uuid "^3.0.1"
 
-node-eventstore-client@^0.2.13, node-eventstore-client@^0.2.16:
+node-eventstore-client@^0.2.16:
   version "0.2.16"
   resolved "https://registry.yarnpkg.com/node-eventstore-client/-/node-eventstore-client-0.2.16.tgz#c87f61ed2a26345829f4704a199129bdaf53686a"
   integrity sha512-zXVsiTZydefWzgKQz0M18tmk0X1tA7ZooVThp369Ugo4pUjEYyNI/Xgd6Q3RFrciYLOkb5dCRbMYOoJIPxspJQ==
@@ -9820,6 +9796,15 @@ node-modules-regexp@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
+
+node-nats-streaming@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/node-nats-streaming/-/node-nats-streaming-0.3.2.tgz#a6d1b77eae837495856893f573e3d78184b39833"
+  integrity sha512-exeT+FwGYW3UbBSzu8a7ykwWoY6R/vjQLr1RoZ1gnoJ9F66WVvpMZQWCZzLxlf9XRpJTTygcp6P1+WRw9h07Sg==
+  dependencies:
+    google-protobuf "^3.11.2"
+    nats "^1.4.9"
+    nuid "^1.1.4"
 
 node-notifier@^7.0.0:
   version "7.0.1"
@@ -10810,6 +10795,25 @@ protobufjs@^5.0.3:
     glob "^7.0.5"
     yargs "^3.10.0"
 
+protobufjs@^6.10.1:
+  version "6.10.2"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.10.2.tgz#b9cb6bd8ec8f87514592ba3fdfd28e93f33a469b"
+  integrity sha512-27yj+04uF6ya9l+qfpH187aqEzfCF4+Uit0I9ZBQVqK09hk/SQzKa2MUqUpXaVa7LOFRg1TSSr3lVxGOk6c0SQ==
+  dependencies:
+    "@protobufjs/aspromise" "^1.1.2"
+    "@protobufjs/base64" "^1.1.2"
+    "@protobufjs/codegen" "^2.0.4"
+    "@protobufjs/eventemitter" "^1.1.0"
+    "@protobufjs/fetch" "^1.1.0"
+    "@protobufjs/float" "^1.0.2"
+    "@protobufjs/inquire" "^1.1.0"
+    "@protobufjs/path" "^1.1.2"
+    "@protobufjs/pool" "^1.1.0"
+    "@protobufjs/utf8" "^1.1.0"
+    "@types/long" "^4.0.1"
+    "@types/node" "^13.7.0"
+    long "^4.0.0"
+
 protobufjs@^6.8.6, protobufjs@^6.8.8:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.9.0.tgz#c08b2bf636682598e6fabbf0edb0b1256ff090bd"
@@ -11745,7 +11749,7 @@ rxjs@6.5.4:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^6.3.3, rxjs@^6.4.0, rxjs@^6.5.3:
+rxjs@^6.4.0, rxjs@^6.5.3:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.5.tgz#c5c884e3094c8cfee31bf27eb87e54ccfc87f9ec"
   integrity sha512-WfQI+1gohdf0Dai/Bbmk5L5ItH5tYqm3ki2c5GdWhKjalzjg93N3avFjVStyZZz+A2Em+ZxKH5bNghw9UeylGQ==
@@ -13914,11 +13918,6 @@ uuid-apikey@^1.4.6:
     commander "^3.0.2"
     encode32 "^1.1.0"
     uuid "^3.3.3"
-
-uuid@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.1.tgz#95ed6ff3d8c881cbf85f0f05cc3915ef994818ef"
-  integrity sha512-yqjRXZzSJm9Dbl84H2VDHpM3zMjzSJQ+hn6C4zqd5ilW+7P4ZmLEEqwho9LjP+tGuZlF4xrHQXT0h9QZUS/pWA==
 
 uuid@8.1.0, uuid@^8.0.0:
   version "8.1.0"
