@@ -19,12 +19,7 @@
       "runner": "@nrwl/nx-cloud",
       "options": {
         "accessToken": "MDVhYjA4NTUtZDY0YS00MzhlLWI1YTgtNjE2MjVmYWNmNGQxfHJlYWQtd3JpdGU=",
-        "cacheableOperations": [
-          "build",
-          "test",
-          "lint",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
@@ -34,9 +29,6 @@
     "api-admin": {
       "tags": []
     },
-    "external-swine-orm": {
-      "tags": []
-    },
     "external-swine-service": {
       "tags": []
     },
@@ -44,6 +36,12 @@
       "tags": []
     },
     "tenant-proto-schema": {
+      "tags": []
+    },
+    "svc-tenant": {
+      "tags": []
+    },
+    "external-swine-grpc": {
       "tags": []
     }
   }

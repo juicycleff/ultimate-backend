@@ -15,6 +15,18 @@
               { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
             ]
           }
+        ],
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "semi": ["error", "always"],
+        "sort-imports": [
+          "error",
+          {
+            "ignoreCase": false,
+            "ignoreDeclarationSort": true,
+            "ignoreMemberSort": true,
+            "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+            "allowSeparatedGroups": true
+          }
         ]
       }
     },

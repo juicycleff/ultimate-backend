@@ -6,6 +6,12 @@ export enum UBkind {
   faas,
 }
 
+export enum UBLanguages {
+  typescript,
+  golang,
+  rustlang,
+}
+
 export enum UBTransport {
   grpc,
   rest,
@@ -15,6 +21,7 @@ export enum UBTransport {
 export interface Schema {
   interactive: boolean;
   name: string;
+  language: UBLanguages;
   kind: UBkind;
   transport: UBTransport;
   tags?: string;

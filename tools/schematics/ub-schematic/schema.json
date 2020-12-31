@@ -12,14 +12,33 @@
       },
       "x-prompt": "What name would you like to use for the UB app?"
     },
+    "language": {
+      "type": "string",
+      "description": "Provide the ub programming language",
+      "enum": ["typescript", "golang", "rustlang"],
+      "x-prompt": {
+        "message": "Select ultimate backend app language?",
+        "type": "list",
+        "items": [
+          {
+            "value": "typescript",
+            "label": "Typescript"
+          },
+          {
+            "value": "golang",
+            "label": "Go Lang"
+          },
+          {
+            "value": "rustlang",
+            "label": "Rust Lang"
+          }
+        ]
+      }
+    },
     "kind": {
       "type": "string",
       "description": "Provide the ub app type",
-      "enum": [
-        "api",
-        "svc",
-        "faas"
-      ],
+      "enum": ["api", "svc", "faas"],
       "x-prompt": {
         "message": "Which type of ultimate backend app would you like to generate?",
         "type": "list",

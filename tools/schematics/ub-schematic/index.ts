@@ -10,7 +10,7 @@ import {
   externalSchematic,
 } from '@angular-devkit/schematics';
 import { getProjectConfig } from '@nrwl/workspace';
-import {Schema} from "./schema";
+import { Schema } from './schema';
 
 function generateNestApplication(schema: any): Rule {
   return externalSchematic('@nrwl/node', 'application', schema);
@@ -30,14 +30,14 @@ function generateServiceStructure(schema: any): Rule {
 
 export default function (schema: Schema): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    let pipeline = [generateNestApplication(schema), generateServiceStructure(schema)];
+    let pipeline = [
+      generateNestApplication(schema),
+      generateServiceStructure(schema),
+    ];
 
-    console.log('schema', schema);
-    /* return chain([])(
+    return chain(pipeline)(
       tree,
       context
-    ); */
-
-    return chain([]);
+    );
   };
 }
