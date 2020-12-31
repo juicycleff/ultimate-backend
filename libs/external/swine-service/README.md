@@ -1,5 +1,5 @@
 # swine-service
-
+This is just a simple service registry for Ultimate Backend.
 This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
