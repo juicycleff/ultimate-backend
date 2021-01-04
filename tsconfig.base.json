@@ -16,8 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ultimate-backend/external/swine-service": [
-        "libs/external/swine-service/src/index.ts"
+      "@ultimate-backend/external/cloud": [
+        "libs/external/cloud/src/index.ts"
       ],
       "@ultimate-backend/shared/proto-schema": [
         "libs/shared/proto-schema/src/index.ts"
@@ -25,8 +25,8 @@
       "@ultimate-backend/tenant/proto-schema": [
         "libs/tenant/proto-schema/src/index.ts"
       ],
-      "@ultimate-backend/external/swine-grpc": [
-        "libs/external/swine-grpc/src/index.ts"
+      "@ultimate-backend/external/grpc": [
+        "libs/external/grpc/src/index.ts"
       ]
     }
   },

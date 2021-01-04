@@ -51,33 +51,33 @@
         }
       }
     },
-    "external-swine-service": {
-      "root": "libs/external/swine-service",
-      "sourceRoot": "libs/external/swine-service/src",
+    "external-cloud": {
+      "root": "libs/external/cloud",
+      "sourceRoot": "libs/external/cloud/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/external/swine-service/**/*.ts"]
+            "lintFilePatterns": ["libs/external/cloud/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/external/swine-service/jest.config.js",
+            "jestConfig": "libs/external/cloud/jest.config.js",
             "passWithNoTests": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
-            "outputPath": "dist/libs/external/swine-service",
-            "tsConfig": "libs/external/swine-service/tsconfig.lib.json",
-            "packageJson": "libs/external/swine-service/package.json",
-            "main": "libs/external/swine-service/src/index.ts",
-            "assets": ["libs/external/swine-service/*.md"]
+            "outputPath": "dist/libs/external/cloud",
+            "tsConfig": "libs/external/cloud/tsconfig.lib.json",
+            "packageJson": "libs/external/cloud/package.json",
+            "main": "libs/external/cloud/src/index.ts",
+            "assets": ["libs/external/cloud/*.md"]
           }
         }
       }
@@ -174,33 +174,33 @@
         }
       }
     },
-    "external-swine-grpc": {
-      "root": "libs/external/swine-grpc",
-      "sourceRoot": "libs/external/swine-grpc/src",
+    "external-grpc": {
+      "root": "libs/external/grpc",
+      "sourceRoot": "libs/external/grpc/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/external/swine-grpc/**/*.ts"]
+            "lintFilePatterns": ["libs/external/grpc/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/external/swine-grpc/jest.config.js",
+            "jestConfig": "libs/external/grpc/jest.config.js",
             "passWithNoTests": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
-            "outputPath": "dist/libs/external/swine-grpc",
-            "tsConfig": "libs/external/swine-grpc/tsconfig.lib.json",
-            "packageJson": "libs/external/swine-grpc/package.json",
-            "main": "libs/external/swine-grpc/src/index.ts",
-            "assets": ["libs/external/swine-grpc/*.md"]
+            "outputPath": "dist/libs/external/grpc",
+            "tsConfig": "libs/external/grpc/tsconfig.lib.json",
+            "packageJson": "libs/external/grpc/package.json",
+            "main": "libs/external/grpc/src/index.ts",
+            "assets": ["libs/external/grpc/*.md"]
           }
         }
       }

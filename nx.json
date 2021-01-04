@@ -29,7 +29,7 @@
     "api-admin": {
       "tags": []
     },
-    "external-swine-service": {
+    "external-cloud": {
       "tags": []
     },
     "shared-proto-schema": {
@@ -41,7 +41,7 @@
     "svc-tenant": {
       "tags": []
     },
-    "external-swine-grpc": {
+    "external-grpc": {
       "tags": []
     }
   }
