@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UbCloudModule } from '@ultimate-backend/external/cloud';
+import { UbCloudModule } from '@ultimate-backend/cloud';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { UbCloudModule } from '@ultimate-backend/external/cloud';
           name: 'svc-tenant',
           port: 3000,
           address: 'localhost',
-          id: 'tester',
+          id: 'my-esther',
         }
       }
     })

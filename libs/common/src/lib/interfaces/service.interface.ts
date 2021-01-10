@@ -8,6 +8,16 @@ export interface Check {
   deregistercriticalserviceafter?: string;
 }
 
+export interface ServiceNode {
+  name: string;
+  id?: string;
+  tags?: string[];
+  address?: string;
+  port?: number;
+  check?: Check;
+  region?: string;
+}
+
 export interface Service {
   name: string;
   id?: string;
@@ -15,4 +25,6 @@ export interface Service {
   address?: string;
   port?: number;
   check?: Check;
+  nodes?: Array<ServiceNode>;
+  region?: string;
 }

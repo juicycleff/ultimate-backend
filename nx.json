@@ -29,9 +29,6 @@
     "api-admin": {
       "tags": []
     },
-    "external-cloud": {
-      "tags": []
-    },
     "shared-proto-schema": {
       "tags": []
     },
@@ -41,7 +38,19 @@
     "svc-tenant": {
       "tags": []
     },
-    "external-grpc": {
+    "core": {
+      "tags": []
+    },
+    "common": {
+      "tags": []
+    },
+    "cloud": {
+      "tags": []
+    },
+    "grpc": {
+      "tags": []
+    },
+    "loadbalancer": {
       "tags": []
     }
   }

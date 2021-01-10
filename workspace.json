@@ -51,37 +51,6 @@
         }
       }
     },
-    "external-cloud": {
-      "root": "libs/external/cloud",
-      "sourceRoot": "libs/external/cloud/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/external/cloud/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/external/cloud/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "build": {
-          "builder": "@nrwl/node:package",
-          "options": {
-            "outputPath": "dist/libs/external/cloud",
-            "tsConfig": "libs/external/cloud/tsconfig.lib.json",
-            "packageJson": "libs/external/cloud/package.json",
-            "main": "libs/external/cloud/src/index.ts",
-            "assets": ["libs/external/cloud/*.md"]
-          }
-        }
-      }
-    },
     "shared-proto-schema": {
       "root": "libs/shared/proto-schema",
       "sourceRoot": "libs/shared/proto-schema/src",
@@ -174,33 +143,147 @@
         }
       }
     },
-    "external-grpc": {
-      "root": "libs/external/grpc",
-      "sourceRoot": "libs/external/grpc/src",
+    "core": {
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/external/grpc/**/*.ts"]
+            "lintFilePatterns": ["libs/core/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/external/grpc/jest.config.js",
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "common": {
+      "root": "libs/common",
+      "sourceRoot": "libs/common/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/common/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/common/jest.config.js",
             "passWithNoTests": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
-            "outputPath": "dist/libs/external/grpc",
-            "tsConfig": "libs/external/grpc/tsconfig.lib.json",
-            "packageJson": "libs/external/grpc/package.json",
-            "main": "libs/external/grpc/src/index.ts",
-            "assets": ["libs/external/grpc/*.md"]
+            "outputPath": "dist/libs/common",
+            "tsConfig": "libs/common/tsconfig.lib.json",
+            "packageJson": "libs/common/package.json",
+            "main": "libs/common/src/index.ts",
+            "assets": ["libs/common/*.md"]
+          }
+        }
+      }
+    },
+    "cloud": {
+      "root": "libs/cloud",
+      "sourceRoot": "libs/cloud/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/cloud/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/cloud/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/cloud",
+            "tsConfig": "libs/cloud/tsconfig.lib.json",
+            "packageJson": "libs/cloud/package.json",
+            "main": "libs/cloud/src/index.ts",
+            "assets": ["libs/cloud/*.md"]
+          }
+        }
+      }
+    },
+    "grpc": {
+      "root": "libs/grpc",
+      "sourceRoot": "libs/grpc/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/grpc/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/grpc/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/grpc",
+            "tsConfig": "libs/grpc/tsconfig.lib.json",
+            "packageJson": "libs/grpc/package.json",
+            "main": "libs/grpc/src/index.ts",
+            "assets": ["libs/grpc/*.md"]
+          }
+        }
+      }
+    },
+    "loadbalancer": {
+      "root": "libs/loadbalancer",
+      "sourceRoot": "libs/loadbalancer/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/loadbalancer/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/loadbalancer/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/loadbalancer",
+            "tsConfig": "libs/loadbalancer/tsconfig.lib.json",
+            "packageJson": "libs/loadbalancer/package.json",
+            "main": "libs/loadbalancer/src/index.ts",
+            "assets": ["libs/loadbalancer/*.md"]
           }
         }
       }
