@@ -1,0 +1,7 @@
+{
+  "name": "@ultimate-backend/loadbalancer",
+  "version": "0.0.1",
+  "dependencies": {
+    "loadbalance": "^1.0.0"
+  }
+}
