@@ -7,7 +7,7 @@ const newService: NewService.Service = {
   id: 'consul-service',
   port: 9000,
   check: undefined,
-  name: "service",
+  name: 'service',
   tags: ['svc=cluster'],
 };
 const consulDiscoveryOptions: ConsulDiscoveryOptions = {
@@ -23,7 +23,7 @@ describe('ConsulRegistration', () => {
     expect(result.getHost()).toEqual(newService.address);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({address: null}, consulDiscoveryOptions);
+    result = new ConsulRegistration({ address: null }, consulDiscoveryOptions);
     expect(result.getHost()).toEqual('');
   });
 
@@ -32,7 +32,7 @@ describe('ConsulRegistration', () => {
     expect(result.getPort()).toEqual(newService.port);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({port: null}, consulDiscoveryOptions);
+    result = new ConsulRegistration({ port: null }, consulDiscoveryOptions);
     expect(result.getPort()).toEqual(0);
   });
 
@@ -41,7 +41,7 @@ describe('ConsulRegistration', () => {
     expect(result.getScheme()).toEqual(consulDiscoveryOptions.scheme);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration(newService, {scheme: null});
+    result = new ConsulRegistration(newService, { scheme: null });
     expect(result.getScheme()).toEqual('http');
   });
 
@@ -52,7 +52,9 @@ describe('ConsulRegistration', () => {
 
   it('can get registration uri', async () => {
     const result = new ConsulRegistration(newService, consulDiscoveryOptions);
-    expect(result.getUri()).toEqual(`${consulDiscoveryOptions.scheme}://${newService.address}:${newService.port}`);
+    expect(result.getUri()).toEqual(
+      `${consulDiscoveryOptions.scheme}://${newService.address}:${newService.port}`
+    );
   });
 
   it('can get registration service', async () => {
@@ -65,7 +67,7 @@ describe('ConsulRegistration', () => {
     expect(result.getInstanceId()).toEqual(newService.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({id: null}, consulDiscoveryOptions);
+    result = new ConsulRegistration({ id: null }, consulDiscoveryOptions);
     expect(result.getInstanceId()).toEqual('');
   });
 
@@ -81,7 +83,7 @@ describe('ConsulRegistration', () => {
     expect(result.getMetadata()).toEqual(m);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({tags: null}, consulDiscoveryOptions);
+    result = new ConsulRegistration({ tags: null }, consulDiscoveryOptions);
     expect(result.getMetadata()).toEqual(new Map());
   });
 });

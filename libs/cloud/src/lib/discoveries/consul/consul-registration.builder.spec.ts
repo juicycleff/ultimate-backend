@@ -42,11 +42,12 @@ describe('ConsulRegistrationBuilder', () => {
       .discoveryOptions({
         healthCheckCriticalTimeout: '3000',
         healthCheckUrl: '/',
-      }).
-      heartbeatOptions({
+      })
+      .heartbeatOptions({
         enabled: true,
         ttlInSeconds: 6000,
-      }).build();
+      })
+      .build();
     expect(t).toBeDefined();
   });
 

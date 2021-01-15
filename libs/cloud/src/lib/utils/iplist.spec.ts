@@ -8,7 +8,7 @@ const service: NewService.Service = {
   id: 'consul-service',
   port: 9000,
   check: undefined,
-  name: "service",
+  name: 'service',
   tags: ['svc=cluster'],
 };
 
@@ -21,7 +21,7 @@ const discovery: ConsulDiscoveryOptions = {
 
 const heartbeat: HeartbeatOptions = {
   ttlInSeconds: 9000,
-  enabled: true
+  enabled: true,
 };
 
 describe('Cloud Utils', () => {
@@ -39,7 +39,7 @@ describe('Cloud Utils', () => {
     result = validateOptions({
       ...result,
       discovery: null,
-      heartbeat: null
+      heartbeat: null,
     }) as ConsulRegistryProviderOptions;
 
     expect(result.heartbeat).toEqual({
