@@ -51,8 +51,6 @@ describe('Cloud Utils', () => {
       failFast: true,
     });
 
-
-
     result = validateOptions({
       ...result,
       discoverer: null,
