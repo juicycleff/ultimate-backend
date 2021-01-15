@@ -3,7 +3,9 @@ import * as Consul from 'consul';
 import * as retry from 'retry';
 import { Deferred, IReactiveClient } from '@ultimate-backend/common';
 
-export class ConsulClient extends EventEmitter implements IReactiveClient<Consul.Consul>{
+export class ConsulClient
+  extends EventEmitter
+  implements IReactiveClient<Consul.Consul> {
   client: Promise<Consul.Consul>;
   deferredClient: Deferred<Consul.Consul>;
   private opts?: Consul.ConsulOptions;
@@ -27,7 +29,7 @@ export class ConsulClient extends EventEmitter implements IReactiveClient<Consul
    */
   async connect(
     opts: Consul.ConsulOptions,
-    client?: Consul.Consul | Promise<Consul.Consul>,
+    client?: Consul.Consul | Promise<Consul.Consul>
   ): Promise<Consul.Consul> {
     this.opts = opts;
 
@@ -58,7 +60,7 @@ export class ConsulClient extends EventEmitter implements IReactiveClient<Consul
    */
   createClient(
     opts?: Consul.ConsulOptions,
-    client?: Consul.Consul | Promise<Consul.Consul>,
+    client?: Consul.Consul | Promise<Consul.Consul>
   ): Promise<Consul.Consul> {
     return new Promise<Consul.Consul>((resolve, reject) => {
       const operation = retry.operation();

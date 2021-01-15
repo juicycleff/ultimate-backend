@@ -1,8 +1,8 @@
 import * as Consul from 'consul';
 import _ from 'lodash';
-import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 import { DefaultServiceInstance } from '../../registry';
 import { KubernetesOptions } from './interfaces';
+import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 
 export class KubernetesDiscoveryClient implements DiscoveryClient {
   readonly consulClient: Consul.Consul;
@@ -23,7 +23,9 @@ export class KubernetesDiscoveryClient implements DiscoveryClient {
     return this.addInstancesToList(serviceId);
   }
 
-  private async addInstancesToList(serviceId: string): Promise<ServiceInstance[]> {
+  private async addInstancesToList(
+    serviceId: string
+  ): Promise<ServiceInstance[]> {
     const token = this.consulOptions.aclToken;
 
     let serviceOptions: Consul.Health.ServiceOptions = {
@@ -35,7 +37,9 @@ export class KubernetesDiscoveryClient implements DiscoveryClient {
       serviceOptions = { ...serviceOptions, token: token };
     }
 
-    const healthServices: any[] = await this.consulClient.health.service(serviceOptions);
+    const healthServices: any[] = await this.consulClient.health.service(
+      serviceOptions
+    );
 
     return healthServices.map((healthService) => {
       const host = this.findHost(healthService);
@@ -51,7 +55,7 @@ export class KubernetesDiscoveryClient implements DiscoveryClient {
         host,
         healthService.Service.Port,
         secure,
-        metadata,
+        metadata
       );
     });
   }
@@ -75,7 +79,9 @@ export class KubernetesDiscoveryClient implements DiscoveryClient {
 
   async getAllInstances(): Promise<ServiceInstance[]> {
     const services = await this.getServices();
-    const allServices = await Promise.all(services.map((serviceId) => this.addInstancesToList(serviceId)));
+    const allServices = await Promise.all(
+      services.map((serviceId) => this.addInstancesToList(serviceId))
+    );
 
     return _.flatten(allServices);
   }

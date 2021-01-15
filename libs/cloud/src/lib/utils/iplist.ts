@@ -10,13 +10,14 @@ export class IpUtils {
   }
 }
 
-
-export function validateOptions(options: RegistryConfiguration): RegistryConfiguration {
+export function validateOptions(
+  options: RegistryConfiguration
+): RegistryConfiguration {
   if (options.heartbeat == null) {
     options.heartbeat = {
       ttlInSeconds: 30,
-      enabled: true
-    }
+      enabled: true,
+    };
   }
 
   if (options.discoverer === 'consul') {
@@ -24,14 +25,14 @@ export function validateOptions(options: RegistryConfiguration): RegistryConfigu
       options.client = {
         port: 8500,
         host: 'localhost',
-      }
+      };
     }
 
     if (options.discovery == null) {
       options.discovery = {
         scheme: 'http',
         failFast: true,
-      }
+      };
     }
   }
 

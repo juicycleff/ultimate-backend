@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/core',
     '<rootDir>/libs/common',
     '<rootDir>/libs/loadbalancer',
+    '<rootDir>/apps/svc-migration',
   ],
 };

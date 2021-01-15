@@ -15,7 +15,7 @@ export class UBCloudCoreModule {
   static forRoot(options: UBCloudOptions): DynamicModule {
     const registryOption = validateOptions(options.registry);
 
-    const sharedProviders =  [];
+    const sharedProviders = [];
     let mainClient;
 
     if (registryOption.discoverer === 'consul') {
@@ -25,7 +25,7 @@ export class UBCloudCoreModule {
 
     const clientProvider = {
       provide: C_REGISTRY_CLIENT,
-      useValue: mainClient
+      useValue: mainClient,
     };
     const configProvider = {
       provide: C_REGISTRY_CONFIG,
@@ -45,6 +45,6 @@ export class UBCloudCoreModule {
   }
 
   static forRootAsync(options: UBCloudAsyncOptions): DynamicModule {
-    return null
+    return null;
   }
 }

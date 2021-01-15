@@ -1,6 +1,6 @@
 import { Deferred } from '../utils';
 
-export interface IReactiveClient <C> {
+export interface IReactiveClient<C> {
   client: Promise<C>;
   deferredClient: Deferred<C>;
 

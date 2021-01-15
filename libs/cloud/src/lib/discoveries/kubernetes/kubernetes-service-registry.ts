@@ -2,7 +2,11 @@ import { ServiceRegistration } from '../../index';
 import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { KubernetesRegistration } from './kubernetes-registration';
 
-export class KubernetesServiceRegistry implements ServiceRegistration<KubernetesRegistration>, OnModuleInit, OnModuleDestroy {
+export class KubernetesServiceRegistry
+  implements
+    ServiceRegistration<KubernetesRegistration>,
+    OnModuleInit,
+    OnModuleDestroy {
   close(): void {
     // TODO: handle close
   }
@@ -27,8 +31,10 @@ export class KubernetesServiceRegistry implements ServiceRegistration<Kubernetes
     return Promise.resolve(undefined);
   }
 
-  setStatus(registration: KubernetesRegistration, status: string): Promise<void> {
+  setStatus(
+    registration: KubernetesRegistration,
+    status: string
+  ): Promise<void> {
     return Promise.resolve(undefined);
   }
-
 }

@@ -1,10 +1,13 @@
 import * as NewService from './consul-interfaces';
 import { Registration } from '../../interfaces';
 import { ConsulDiscoveryOptions } from './interfaces';
-import { ConsulUtils } from './utils/consul-utils';
+import { ConsulUtils } from './utils';
 
 export class ConsulRegistration implements Registration {
-  constructor(private newService: NewService.Service, private consulDiscoveryOptions: ConsulDiscoveryOptions) {}
+  constructor(
+    private newService: NewService.Service,
+    private consulDiscoveryOptions: ConsulDiscoveryOptions
+  ) {}
 
   getService(): NewService.Service {
     return this.newService;

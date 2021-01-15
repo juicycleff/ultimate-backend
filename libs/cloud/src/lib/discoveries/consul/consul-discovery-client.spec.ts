@@ -1,10 +1,9 @@
-import {ConsulDiscoveryClient} from './consul-discovery-client';
+import { ConsulDiscoveryClient } from './consul-discovery-client';
 import { ServiceInstance } from '@ultimate-backend/cloud';
 
 jest.mock('./consul-discovery-client');
 
 describe('ConsulDiscoveryClient', () => {
-
   let client = new ConsulDiscoveryClient({
     host: 'test-host',
     port: 8350,

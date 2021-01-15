@@ -1,4 +1,9 @@
-import { DiscoveryOptions, HeartbeatOptions, Registration, ServiceRegistration } from '../index';
+import {
+  DiscoveryOptions,
+  HeartbeatOptions,
+  Registration,
+  ServiceRegistration,
+} from '../index';
 
 export interface ServiceRegistryBuilder {
   heartbeatOptions(options: HeartbeatOptions): ServiceRegistryBuilder;

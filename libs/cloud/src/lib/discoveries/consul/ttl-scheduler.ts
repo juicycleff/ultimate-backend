@@ -26,8 +26,10 @@ class ConsulHeartbeatTask {
 export class TtlScheduler {
   logger = new Logger('TtlScheduler');
 
-  constructor(private heartbeatOptions: HeartbeatOptions, private consulClient: Consul.Consul) {
-  }
+  constructor(
+    private heartbeatOptions: HeartbeatOptions,
+    private consulClient: Consul.Consul
+  ) {}
 
   /**
    * add a service to the checks loop

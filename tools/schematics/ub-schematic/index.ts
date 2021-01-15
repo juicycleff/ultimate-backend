@@ -35,9 +35,6 @@ export default function (schema: Schema): Rule {
       generateServiceStructure(schema),
     ];
 
-    return chain(pipeline)(
-      tree,
-      context
-    );
+    return chain(pipeline)(tree, context);
   };
 }

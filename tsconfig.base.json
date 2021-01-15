@@ -16,12 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ultimate-backend/shared/proto-schema": [
-        "libs/shared/proto-schema/src/index.ts"
-      ],
-      "@ultimate-backend/tenant/proto-schema": [
-        "libs/tenant/proto-schema/src/index.ts"
-      ],
       "@ultimate-backend/core": ["libs/core/src/index.ts"],
       "@ultimate-backend/common": ["libs/common/src/index.ts"],
       "@ultimate-backend/cloud": ["libs/cloud/src/index.ts"],

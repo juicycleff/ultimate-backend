@@ -2,12 +2,12 @@ import { ConsulRegistryProviderOptions } from '../../../interfaces';
 import * as Consul from 'consul';
 import { ConsulDiscoveryClient } from '../consul-discovery-client';
 
-export function initConsulProviders(options: ConsulRegistryProviderOptions):
-  {
-    client: Consul.Consul,
-    discoveryClient: ConsulDiscoveryClient
-  } {
-
+export function initConsulProviders(
+  options: ConsulRegistryProviderOptions
+): {
+  client: Consul.Consul;
+  discoveryClient: ConsulDiscoveryClient;
+} {
   const client = Consul({
     host: options.client.host,
     port: `${options.client.port}`,
@@ -20,5 +20,5 @@ export function initConsulProviders(options: ConsulRegistryProviderOptions):
   return {
     client,
     discoveryClient,
-  }
+  };
 }

@@ -1,6 +1,6 @@
 import { Registration } from '../../interfaces';
 
-export class KubernetesRegistration implements Registration {
+export class EtcdRegistration implements Registration {
   getHost(): string {
     return '';
   }

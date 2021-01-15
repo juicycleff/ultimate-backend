@@ -1,25 +1,17 @@
 import * as Consul from 'consul';
 import _ from 'lodash';
-import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 import { DefaultServiceInstance } from '../../registry';
-import { ConsulUtils } from './utils';
-import { ConsulOptions } from './interfaces';
-import { ConsulClient } from './consul.client';
+import { EtcdOptions } from './interfaces';
+import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 
-export class ConsulDiscoveryClient implements DiscoveryClient {
-  consul: ConsulClient;
-
-  constructor(private consulOptions: ConsulOptions) {
-    this.consul = new ConsulClient();
-    this.init();
-  }
-
-  async init() {
-    await this.consul.connect({
-      host: this.consulOptions.host,
-      port: `${this.consulOptions.port}`,
+export class EtcdDiscoveryClient implements DiscoveryClient {
+  readonly consulClient: Consul.Consul;
+  constructor(private consulOptions: EtcdOptions) {
+    this.consulClient = Consul({
+      host: consulOptions.host,
+      port: `${consulOptions.port}`,
       promisify: true,
-      secure: this.consulOptions.secure,
+      secure: consulOptions.secure,
     });
   }
 
@@ -45,9 +37,9 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
       serviceOptions = { ...serviceOptions, token: token };
     }
 
-    const healthServices: any[] = await (
-      await this.consul.client
-    ).health.service(serviceOptions);
+    const healthServices: any[] = await this.consulClient.health.service(
+      serviceOptions
+    );
 
     return healthServices.map((healthService) => {
       const host = this.findHost(healthService);
@@ -82,7 +74,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   }
 
   private getMetadata(tags: string[]): Map<string, string> {
-    return ConsulUtils.getMetadata(tags);
+    return null; // ConsulUtils.getMetadata(tags);
   }
 
   async getAllInstances(): Promise<ServiceInstance[]> {
@@ -99,11 +91,11 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
 
     let services;
     if (token) {
-      services = await (await this.consul.client).catalog.services({
+      services = await this.consulClient.catalog.services({
         token: token,
       });
     } else {
-      services = await (await this.consul.client).catalog.services();
+      services = await this.consulClient.catalog.services();
     }
 
     return Object.keys(services);

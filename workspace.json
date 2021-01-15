@@ -13,7 +13,7 @@
           "options": {
             "outputPath": "dist/apps/api-admin",
             "main": "apps/api-admin/src/main.ts",
-            "tsConfig": "apps/api-admin/tsconfig.app.json",
+            "tsconfig": "apps/api-admin/tsconfig.app.json",
             "assets": ["apps/api-admin/src/assets"]
           },
           "configurations": {
@@ -46,98 +46,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/api-admin/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-proto-schema": {
-      "root": "libs/shared/proto-schema",
-      "sourceRoot": "libs/shared/proto-schema/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/proto-schema/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/shared/proto-schema/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "tenant-proto-schema": {
-      "root": "libs/tenant/proto-schema",
-      "sourceRoot": "libs/tenant/proto-schema/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/tenant/proto-schema/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/tenant/proto-schema/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "svc-tenant": {
-      "root": "apps/svc-tenant",
-      "sourceRoot": "apps/svc-tenant/src",
-      "projectType": "application",
-      "prefix": "svc-tenant",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/svc-tenant",
-            "main": "apps/svc-tenant/src/main.ts",
-            "tsConfig": "apps/svc-tenant/tsconfig.app.json",
-            "assets": ["apps/svc-tenant/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/svc-tenant/src/environments/environment.ts",
-                  "with": "apps/svc-tenant/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "svc-tenant:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/svc-tenant/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/svc-tenant/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -187,7 +95,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/common",
-            "tsConfig": "libs/common/tsconfig.lib.json",
+            "tsconfig": "libs/common/tsconfig.lib.json",
             "packageJson": "libs/common/package.json",
             "main": "libs/common/src/index.ts",
             "assets": ["libs/common/*.md"]
@@ -211,14 +119,15 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/cloud/jest.config.js",
-            "passWithNoTests": true
+            "passWithNoTests": true,
+            "codeCoverage": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/cloud",
-            "tsConfig": "libs/cloud/tsconfig.lib.json",
+            "tsconfig": "libs/cloud/tsconfig.lib.json",
             "packageJson": "libs/cloud/package.json",
             "main": "libs/cloud/src/index.ts",
             "assets": ["libs/cloud/*.md"]
@@ -249,7 +158,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/grpc",
-            "tsConfig": "libs/grpc/tsconfig.lib.json",
+            "tsconfig": "libs/grpc/tsconfig.lib.json",
             "packageJson": "libs/grpc/package.json",
             "main": "libs/grpc/src/index.ts",
             "assets": ["libs/grpc/*.md"]
@@ -280,7 +189,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/loadbalancer",
-            "tsConfig": "libs/loadbalancer/tsconfig.lib.json",
+            "tsconfig": "libs/loadbalancer/tsconfig.lib.json",
             "packageJson": "libs/loadbalancer/package.json",
             "main": "libs/loadbalancer/src/index.ts",
             "assets": ["libs/loadbalancer/*.md"]

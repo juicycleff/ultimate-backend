@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { HeartbeatOptions, Registration, RegistrationBuilder } from '../../interfaces';
+import { HeartbeatOptions, RegistrationBuilder } from '../../interfaces';
 import { IpUtils } from '../../utils';
 import * as NewService from './consul-interfaces';
 import { ConsulDiscoveryOptions } from './interfaces';
@@ -58,7 +58,8 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
 
     if (this._port == null) throw Error('port is required');
 
-    if (this._discoveryOptions == null) throw Error('ConsulDiscoveryOptions is required.');
+    if (this._discoveryOptions == null)
+      throw Error('discoveryOptions is required.');
 
     const scheme = this._discoveryOptions?.scheme;
     const isSecure = scheme == 'https';
@@ -86,14 +87,15 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
   private createCheck(): NewService.Check {
     let check: NewService.Check = {};
 
-    if (this._discoveryOptions?.healthCheckCriticalTimeout != null) {
+    if (this._discoveryOptions?.healthCheckCriticalTimeout !== null) {
       check = {
         ...check,
-        deregistercriticalserviceafter: this._discoveryOptions.healthCheckCriticalTimeout,
+        deregistercriticalserviceafter: this._discoveryOptions
+          .healthCheckCriticalTimeout,
       };
     }
 
-    if (this._discoveryOptions?.healthCheckUrl != null) {
+    if (this._discoveryOptions?.healthCheckUrl !== null) {
       check = {
         ...check,
         http: this._discoveryOptions.healthCheckUrl,

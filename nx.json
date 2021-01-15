@@ -29,15 +29,6 @@
     "api-admin": {
       "tags": []
     },
-    "shared-proto-schema": {
-      "tags": []
-    },
-    "tenant-proto-schema": {
-      "tags": []
-    },
-    "svc-tenant": {
-      "tags": []
-    },
     "core": {
       "tags": []
     },

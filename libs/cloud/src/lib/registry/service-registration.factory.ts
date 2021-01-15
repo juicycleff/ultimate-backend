@@ -8,7 +8,7 @@ export class ServiceRegistrationFactory {
 
   private constructor(
     private registration: Registration,
-    private serviceRegistration: ServiceRegistration<Registration>,
+    private serviceRegistration: ServiceRegistration<Registration>
   ) {}
 
   async register(): Promise<void> {
@@ -32,14 +32,22 @@ export class ServiceRegistrationFactory {
    */
   static getInstance(
     registration: Registration,
-    serviceRegistration: ServiceRegistration<Registration>,
+    serviceRegistration: ServiceRegistration<Registration>
   ): ServiceRegistrationFactory {
-    if (registration == null) throw Error('an instance of Registration is required');
-    if (serviceRegistration == null) throw Error('an instance of ServiceRegistration is required');
+    if (registration == null)
+      throw Error('an instance of Registration is required');
+    if (serviceRegistration == null)
+      throw Error('an instance of ServiceRegistration is required');
 
     if (this.INSTANCE == null) {
-      Logger.log(`initializing ServiceRegistrationFactory factory.`, 'ServiceRegistrationFactory');
-      this.INSTANCE = new ServiceRegistrationFactory(registration, serviceRegistration);
+      Logger.log(
+        `initializing ServiceRegistrationFactory factory.`,
+        'ServiceRegistrationFactory'
+      );
+      this.INSTANCE = new ServiceRegistrationFactory(
+        registration,
+        serviceRegistration
+      );
     }
 
     return this.INSTANCE;

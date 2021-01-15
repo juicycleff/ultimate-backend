@@ -1,1 +1,1 @@
-export * from './iplist'
+export * from './iplist';

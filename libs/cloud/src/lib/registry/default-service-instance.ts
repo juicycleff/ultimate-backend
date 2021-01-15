@@ -15,7 +15,7 @@ export class DefaultServiceInstance implements ServiceInstance {
     private host: string,
     private port: number,
     private secure: boolean,
-    private metadata?: Map<string, string>,
+    private metadata?: Map<string, string>
   ) {}
 
   getInstanceId(): string {
