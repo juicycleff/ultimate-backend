@@ -11,5 +11,7 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  collectCoverage: true,
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coverageDirectory: '../../coverage/libs/common',
 };

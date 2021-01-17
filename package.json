@@ -26,7 +26,7 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@mikro-orm/core": "^4.3.3",
     "@mikro-orm/mongodb": "^4.3.3",
@@ -56,7 +56,7 @@
     "@nrwl/nx-cloud": "latest",
     "@nrwl/nx-plugin": "^11.1.5",
     "@nrwl/tao": "^11.1.5",
-    "@nrwl/workspace": "^11.1.5",
+    "@nrwl/workspace": "11.1.2-beta.1",
     "@types/jest": "^26.0.20",
     "@types/node": "~8.9.4",
     "@typescript-eslint/eslint-plugin": "^4.13.0",

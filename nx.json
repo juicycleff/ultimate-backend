@@ -21,12 +21,12 @@
     }
   },
   "projects": {
-    "api-admin": { "tags": [] },
     "core": { "tags": [] },
     "common": { "tags": [] },
     "cloud": { "tags": [] },
     "grpc": { "tags": [] },
     "loadbalancer": { "tags": [] },
-    "permissions": { "tags": [] }
+    "permissions": { "tags": [] },
+    "cli": { "tags": [] }
   }
 }

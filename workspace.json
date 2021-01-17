@@ -1,56 +1,6 @@
 {
   "version": 1,
   "projects": {
-    "api-admin": {
-      "root": "apps/api-admin",
-      "sourceRoot": "apps/api-admin/src",
-      "projectType": "application",
-      "prefix": "api-admin",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/api-admin",
-            "main": "apps/api-admin/src/main.ts",
-            "tsconfig": "apps/api-admin/tsconfig.app.json",
-            "assets": ["apps/api-admin/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api-admin/src/environments/environment.ts",
-                  "with": "apps/api-admin/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api-admin:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api-admin/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/api-admin/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "core": {
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
@@ -95,7 +45,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/common",
-            "tsconfig": "libs/common/tsconfig.lib.json",
+            "tsConfig": "libs/common/tsconfig.lib.json",
             "packageJson": "libs/common/package.json",
             "main": "libs/common/src/index.ts",
             "assets": ["libs/common/*.md"]
@@ -127,7 +77,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/cloud",
-            "tsconfig": "libs/cloud/tsconfig.lib.json",
+            "tsConfig": "libs/cloud/tsconfig.lib.json",
             "packageJson": "libs/cloud/package.json",
             "main": "libs/cloud/src/index.ts",
             "assets": ["libs/cloud/*.md"]
@@ -158,7 +108,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/grpc",
-            "tsconfig": "libs/grpc/tsconfig.lib.json",
+            "tsConfig": "libs/grpc/tsconfig.lib.json",
             "packageJson": "libs/grpc/package.json",
             "main": "libs/grpc/src/index.ts",
             "assets": ["libs/grpc/*.md"]
@@ -189,7 +139,7 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/loadbalancer",
-            "tsconfig": "libs/loadbalancer/tsconfig.lib.json",
+            "tsConfig": "libs/loadbalancer/tsconfig.lib.json",
             "packageJson": "libs/loadbalancer/package.json",
             "main": "libs/loadbalancer/src/index.ts",
             "assets": ["libs/loadbalancer/*.md"]
@@ -220,10 +170,42 @@
           "builder": "@nrwl/node:package",
           "options": {
             "outputPath": "dist/libs/permissions",
-            "tsconfig": "libs/cloud/tsconfig.lib.json",
+            "tsConfig": "libs/permissions/tsconfig.lib.json",
             "packageJson": "libs/permissions/package.json",
             "main": "libs/permissions/src/index.ts",
             "assets": ["libs/permissions/*.md"]
+          }
+        }
+      }
+    },
+    "cli": {
+      "root": "libs/cli",
+      "sourceRoot": "libs/cli/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/cli/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/cli"],
+          "options": {
+            "jestConfig": "libs/cli/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/cli",
+            "tsConfig": "libs/cli/tsconfig.lib.json",
+            "packageJson": "libs/cli/package.json",
+            "main": "libs/cli/src/index.ts",
+            "assets": ["libs/cli/*.md"]
           }
         }
       }
@@ -232,5 +214,5 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "api-admin"
+  "defaultProject": "cli"
 }
