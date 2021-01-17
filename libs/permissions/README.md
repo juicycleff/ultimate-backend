@@ -1,6 +1,6 @@
 # permissions
 
-This library was generated with [Nx](https://nx.dev).
+Permission module for [ultimate-backend](https://xraph.com/projects/ultimate-backend).
 
 ## Running unit tests
 
