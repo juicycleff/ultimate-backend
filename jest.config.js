@@ -1,3 +1,5 @@
+import 'jest-ts-auto-mock';
+
 module.exports = {
   projects: [
     '<rootDir>/apps/api-admin',
@@ -9,5 +11,6 @@ module.exports = {
     '<rootDir>/libs/common',
     '<rootDir>/libs/loadbalancer',
     '<rootDir>/apps/svc-migration',
+    '<rootDir>/libs/permissions',
   ],
 };

@@ -196,6 +196,37 @@
           }
         }
       }
+    },
+    "permissions": {
+      "root": "libs/permissions",
+      "sourceRoot": "libs/permissions/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/permissions/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/permissions"],
+          "options": {
+            "jestConfig": "libs/permissions/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/permissions",
+            "tsconfig": "libs/cloud/tsconfig.lib.json",
+            "packageJson": "libs/permissions/package.json",
+            "main": "libs/permissions/src/index.ts",
+            "assets": ["libs/permissions/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

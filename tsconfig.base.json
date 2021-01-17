@@ -20,8 +20,15 @@
       "@ultimate-backend/common": ["libs/common/src/index.ts"],
       "@ultimate-backend/cloud": ["libs/cloud/src/index.ts"],
       "@ultimate-backend/grpc": ["libs/grpc/src/index.ts"],
-      "@ultimate-backend/loadbalancer": ["libs/loadbalancer/src/index.ts"]
-    }
+      "@ultimate-backend/loadbalancer": ["libs/loadbalancer/src/index.ts"],
+      "@ultimate-backend/permissions": ["libs/permissions/src/index.ts"]
+    },
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      }
+    ]
   },
   "exclude": ["node_modules", "tmp"]
 }
