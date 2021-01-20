@@ -35,7 +35,8 @@
       "extends": ["plugin:@nrwl/nx/typescript"],
       "parserOptions": { "project": "./tsconfig.*?.json" },
       "rules": {
-        "@typescript-eslint/ban-types": "off"
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/no-var-requires": "off"
       }
     },
     {

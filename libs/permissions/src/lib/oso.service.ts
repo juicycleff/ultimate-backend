@@ -3,18 +3,19 @@ import { Oso } from 'oso';
 import { PERMISSION_MODULE_OPTIONS } from './permissions.constants';
 import { PermissionsModuleOptions } from './interfaces';
 import { TypeMetadataStorage } from './storages';
-import { LoggerUtils } from './logger.utils';
 import { Class } from 'oso/dist/src/types';
+import { LoggerUtil } from '@ultimate-backend/common';
 
 @Injectable()
 export class OsoService extends Oso implements OnModuleInit {
-  logger: LoggerUtils;
+  logger: LoggerUtil;
 
   constructor(
-    @Inject(PERMISSION_MODULE_OPTIONS) private readonly options: PermissionsModuleOptions
+    @Inject(PERMISSION_MODULE_OPTIONS)
+    private readonly options: PermissionsModuleOptions
   ) {
     super(options.oso);
-    this.logger = new LoggerUtils('OsoService', options.debug);
+    this.logger = new LoggerUtil('OsoService', options.debug);
   }
 
   private async setup() {

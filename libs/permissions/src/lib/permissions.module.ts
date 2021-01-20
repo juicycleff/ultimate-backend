@@ -1,10 +1,12 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { PermissionsCoreModule } from './permissions-core.module';
-import { PermissionsModuleAsyncOptions, PermissionsModuleOptions } from './interfaces';
+import {
+  PermissionsModuleAsyncOptions,
+  PermissionsModuleOptions,
+} from './interfaces';
 
 @Module({})
 export class PermissionsModule {
-
   /**
    * create a permissions module
    * @param options {PermissionsModuleOptions}

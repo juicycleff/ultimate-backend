@@ -5,8 +5,7 @@ import { PermissionsModuleOptions } from './interfaces';
 @Injectable()
 export class PermissionsService {
   constructor(
-    @Inject(PERMISSION_MODULE_OPTIONS) private readonly options: PermissionsModuleOptions) {
-  }
-
-
+    @Inject(PERMISSION_MODULE_OPTIONS)
+    private readonly options: PermissionsModuleOptions
+  ) {}
 }

@@ -1,2 +1,2 @@
 export * from './consul';
-export * from './kubernetes';
+export * from './mdns';

@@ -1,18 +1,34 @@
 import { ConsulDiscoveryClient } from './consul-discovery-client';
 import { ServiceInstance } from '@ultimate-backend/cloud';
+import { ConsulModule } from '@ultimate-backend/consul';
+import { Test } from '@nestjs/testing';
 
 jest.mock('./consul-discovery-client');
 
 describe('ConsulDiscoveryClient', () => {
-  let client = new ConsulDiscoveryClient({
-    host: 'test-host',
-    port: 8350,
-  });
+  let client: ConsulDiscoveryClient;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ConsulDiscoveryClient.mockClear();
+
+    const module = await Test.createTestingModule({
+      imports: [
+        ConsulModule.forRoot({
+          host: 'localhost',
+          port: '8350',
+          aclToken: 'access-token',
+        }),
+      ],
+      providers: [ConsulDiscoveryClient],
+    }).compile();
+
+    client = module.get(ConsulDiscoveryClient);
+  });
+
+  it('should be defined', () => {
+    expect(client).toBeTruthy();
   });
 
   it('client description', async () => {
@@ -28,37 +44,18 @@ describe('ConsulDiscoveryClient', () => {
   });
 
   it('get services succeeds with token', async () => {
-    client = new ConsulDiscoveryClient({
-      host: 'test-host',
-      port: 8350,
-      aclToken: 'test-token',
-    });
-
     const result = ['service-test'];
     jest.spyOn(client, 'getServices').mockImplementation(async () => result);
     expect(await client.getServices()).toEqual(result);
   });
 
   it('get instance succeeds with token', async () => {
-    client = new ConsulDiscoveryClient({
-      host: 'test-host',
-      port: 8350,
-    });
-
-    const result: ServiceInstance[] = [];
-    jest.spyOn(client, 'getInstances').mockImplementation(async () => result);
+    jest.spyOn(client, 'getInstances').mockImplementation(async () => []);
     expect(await client.getInstances('test-token')).toHaveLength(0);
   });
 
   it('get instance succeeds with token', async () => {
-    client = new ConsulDiscoveryClient({
-      host: 'test-host',
-      port: 8350,
-      aclToken: 'access-token',
-    });
-
-    const result: ServiceInstance[] = [];
-    jest.spyOn(client, 'getInstances').mockImplementation(async () => result);
+    jest.spyOn(client, 'getInstances').mockImplementation(async () => []);
     expect(await client.getInstances('test-token')).toHaveLength(0);
   });
 });

@@ -6,23 +6,23 @@ import {
   Service,
 } from '../../interfaces';
 import { IpUtils } from '../../utils';
-import { ConsulDiscoveryOptions } from './interfaces';
-import { ConsulRegistration } from './consul-registration';
+import { MdnsDiscoveryOptions } from './interfaces';
+import { MdnsRegistration } from './mdns-registration';
 
-export class ConsulRegistrationBuilder implements RegistrationBuilder {
+export class MdnsRegistrationBuilder implements RegistrationBuilder {
   private _serviceName: string | undefined;
   private _port: number | undefined;
   private _host: string | undefined;
   private _instanceId: string | undefined;
   private _heartbeatOptions: HeartbeatOptions | undefined;
-  private _discoveryOptions: ConsulDiscoveryOptions | undefined;
+  private _discoveryOptions: MdnsDiscoveryOptions | undefined;
 
   constructor(host?: string, port?: number) {
     this._host = host;
     this._port = port;
   }
 
-  discoveryOptions(properties: ConsulDiscoveryOptions): RegistrationBuilder {
+  discoveryOptions(properties: MdnsDiscoveryOptions): RegistrationBuilder {
     this._discoveryOptions = properties;
     return this;
   }
@@ -52,7 +52,7 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
     return this;
   }
 
-  build(): ConsulRegistration {
+  build(): MdnsRegistration {
     if (this._serviceName == null) throw Error('serviceName is required');
 
     if (this._host == null) {
@@ -85,7 +85,7 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
       check,
     };
 
-    return new ConsulRegistration(newService, this._discoveryOptions);
+    return new MdnsRegistration(newService, this._discoveryOptions);
   }
 
   private createCheck(): Check {

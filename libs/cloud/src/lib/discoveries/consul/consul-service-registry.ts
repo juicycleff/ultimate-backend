@@ -8,14 +8,14 @@ import {
 import retry from 'retry';
 import { ConsulRegistrationBuilder } from './consul-registration.builder';
 import { ConsulDiscoveryClient } from './consul-discovery-client';
-import { C_REGISTRY_CLIENT, C_REGISTRY_CONFIG } from '../../constants';
 import {
   ConsulRegistryProviderOptions,
   ServiceRegistration,
 } from '../../interfaces';
 import { ConsulRegistration } from './consul-registration';
 import { TtlScheduler } from './ttl-scheduler';
-import * as Consul from 'consul';
+import { consul } from '@ultimate-backend/consul';
+import { CLOUD_REGISTRY_CONFIG } from '../../cloud.constants';
 
 @Injectable()
 export class ConsulServiceRegistry
@@ -28,16 +28,12 @@ export class ConsulServiceRegistry
   logger = new Logger('ConsulServiceRegistry');
 
   constructor(
-    @Inject(C_REGISTRY_CLIENT) private readonly client: ConsulDiscoveryClient,
-    @Inject(C_REGISTRY_CONFIG)
+    private readonly client: ConsulDiscoveryClient,
+    @Inject(CLOUD_REGISTRY_CONFIG)
     private readonly options: ConsulRegistryProviderOptions
-  ) {
-    this.init();
-  }
+  ) {}
 
   async init() {
-    if (this.options.client == null) throw Error('ConsulOptions is required');
-
     if (this.options.heartbeat == null)
       throw Error('HeartbeatOptions is required');
 
@@ -56,6 +52,7 @@ export class ConsulServiceRegistry
       .build();
 
     if (this.options.heartbeat.enabled) {
+      console.log('consul');
       this.ttlScheduler = new TtlScheduler(
         this.options.heartbeat,
         await this.client.consul.client
@@ -68,8 +65,8 @@ export class ConsulServiceRegistry
       `registering service with id: ${this.registration.getInstanceId()}`
     );
     try {
-      const token = this.options.client.aclToken
-        ? { token: this.options.client.aclToken }
+      const token = this.client.consul.options.aclToken
+        ? { token: this.client.consul.options.aclToken }
         : {};
 
       const options = {
@@ -77,6 +74,7 @@ export class ConsulServiceRegistry
         ...token,
       };
 
+      console.log('Consul');
       await (await this.client.consul.client).agent.service.register(options);
 
       const service = this.registration.getService();
@@ -103,8 +101,8 @@ export class ConsulServiceRegistry
     );
     this.ttlScheduler?.remove(this.registration.getInstanceId());
 
-    const token = this.options.client.aclToken
-      ? { token: this.options.client.aclToken }
+    const token = this.client.consul.options.aclToken
+      ? { token: this.client.consul.options.aclToken }
       : {};
     const options = { id: this.registration.getInstanceId(), ...token };
     await (await this.client.consul.client).agent.service.deregister(options);
@@ -147,7 +145,7 @@ export class ConsulServiceRegistry
   }
 
   async retryRegister(): Promise<any> {
-    return new Promise<Consul.Consul>((resolve, reject) => {
+    return new Promise<consul.Consul>((resolve, reject) => {
       const operation = retry.operation();
       operation.attempt(async () => {
         try {
@@ -165,6 +163,7 @@ export class ConsulServiceRegistry
 
   async onModuleInit() {
     try {
+      await this.init();
       await this.retryRegister();
     } catch (e) {
       this.logger.error(e);

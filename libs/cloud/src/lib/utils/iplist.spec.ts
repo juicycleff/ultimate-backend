@@ -1,9 +1,8 @@
 import { validateOptions } from './iplist';
-import * as NewService from '../discoveries/consul/consul-interfaces';
-import { ConsulRegistryProviderOptions, HeartbeatOptions } from '../';
+import { ConsulRegistryProviderOptions, HeartbeatOptions, Service } from '../';
 import { ConsulDiscoveryOptions } from '../discoveries/consul/interfaces';
 
-const service: NewService.Service = {
+const service: Service = {
   address: '127.0.0.1',
   id: 'consul-service',
   port: 9000,

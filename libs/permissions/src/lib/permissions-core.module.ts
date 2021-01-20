@@ -1,7 +1,11 @@
 import { Module, Global, DynamicModule, Provider, Type } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { OsoService } from './oso.service';
-import { PermissionsModuleAsyncOptions, PermissionsModuleOptions, PermissionsOptionsFactory } from './interfaces';
+import {
+  PermissionsModuleAsyncOptions,
+  PermissionsModuleOptions,
+  PermissionsOptionsFactory,
+} from './interfaces';
 import { PERMISSION_MODULE_OPTIONS } from './permissions.constants';
 
 @Global()
@@ -11,13 +15,11 @@ import { PERMISSION_MODULE_OPTIONS } from './permissions.constants';
   exports: [PermissionsService, OsoService],
 })
 export class PermissionsCoreModule {
-
   static forRoot(options: PermissionsModuleOptions): DynamicModule {
-
     const permissionModuleOptionsProvider: Provider = {
       provide: PERMISSION_MODULE_OPTIONS,
       useValue: options,
-    }
+    };
 
     return {
       module: PermissionsCoreModule,
@@ -29,7 +31,7 @@ export class PermissionsCoreModule {
     const permissionModuleOptionsProvider: Provider = {
       provide: PERMISSION_MODULE_OPTIONS,
       useValue: options,
-    }
+    };
 
     const asyncProviders = this.createAsyncProviders(options);
 
@@ -39,35 +41,37 @@ export class PermissionsCoreModule {
     };
   }
 
-
   private static createAsyncProviders(
-    options: PermissionsModuleAsyncOptions,
+    options: PermissionsModuleAsyncOptions
   ): Provider[] {
     if (options.useFactory || options.useExisting) {
-      return [this.createAsyncOptionsProviders(options)]
+      return [this.createAsyncOptionsProviders(options)];
     }
 
     const useClass = options.useExisting as Type<PermissionsOptionsFactory>;
 
-    return [{
-      provide: useClass,
-      useClass
-    }]
+    return [
+      {
+        provide: useClass,
+        useClass,
+      },
+    ];
   }
 
   private static createAsyncOptionsProviders(
-    options: PermissionsModuleAsyncOptions,
+    options: PermissionsModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {
       return {
         useFactory: options.useFactory,
         inject: options.inject,
         provide: PERMISSION_MODULE_OPTIONS,
-      }
+      };
     }
 
     const inject = [
-      (options.useClass || options.useExisting) as Type<PermissionsOptionsFactory>
+      (options.useClass ||
+        options.useExisting) as Type<PermissionsOptionsFactory>,
     ];
 
     return {
@@ -75,6 +79,6 @@ export class PermissionsCoreModule {
       useFactory: async (optionsFactory: PermissionsOptionsFactory) =>
         await optionsFactory.createPermissionsOptions(),
       inject,
-    }
+    };
   }
 }

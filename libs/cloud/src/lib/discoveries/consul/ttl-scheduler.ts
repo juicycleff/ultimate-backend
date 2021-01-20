@@ -1,4 +1,4 @@
-import * as Consul from 'consul';
+import { consul } from '@ultimate-backend/consul';
 import { HeartbeatOptions } from '../../interfaces';
 import { Logger } from '@nestjs/common';
 
@@ -8,7 +8,7 @@ class ConsulHeartbeatTask {
   logger = new Logger('ConsulHeartbeatTask');
   private readonly checkId: string;
 
-  constructor(private consulClient: Consul.Consul, serviceId: string) {
+  constructor(private consulClient: consul.Consul, serviceId: string) {
     this.checkId = serviceId;
     if (!this.checkId.startsWith('service:')) {
       this.checkId = `service:${this.checkId}`;
@@ -28,7 +28,7 @@ export class TtlScheduler {
 
   constructor(
     private heartbeatOptions: HeartbeatOptions,
-    private consulClient: Consul.Consul
+    private consulClient: consul.Consul
   ) {}
 
   /**

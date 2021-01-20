@@ -27,6 +27,9 @@
     "grpc": { "tags": [] },
     "loadbalancer": { "tags": [] },
     "permissions": { "tags": [] },
-    "cli": { "tags": [] }
+    "cli": { "tags": [] },
+    "example": { "tags": [] },
+    "adv-example": { "tags": [] },
+    "consul": { "tags": [] }
   }
 }

@@ -1,2 +1,2 @@
 export * from './registry';
-export * from './ub-cloud-options.interface';
+export * from './cloud-options.interface';

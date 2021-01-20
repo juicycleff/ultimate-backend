@@ -13,9 +13,9 @@ describe('PermissionsService', () => {
         {
           provide: PERMISSION_MODULE_OPTIONS,
           useValue: {
-            oso: {}
+            oso: {},
           } as PermissionsModuleOptions,
-        }
+        },
       ],
     }).compile();
 

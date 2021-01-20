@@ -22,7 +22,8 @@
       "@ultimate-backend/grpc": ["libs/grpc/src/index.ts"],
       "@ultimate-backend/loadbalancer": ["libs/loadbalancer/src/index.ts"],
       "@ultimate-backend/permissions": ["libs/permissions/src/index.ts"],
-      "@ultimate-backend/cli": ["libs/cli/src/index.ts"]
+      "@ultimate-backend/cli": ["libs/cli/src/index.ts"],
+      "@ultimate-backend/consul": ["libs/consul/src/index.ts"]
     },
     "plugins": [
       {

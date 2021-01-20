@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { LoggerService } from '@nestjs/common/services/logger.service';
 
-export class LoggerUtils implements LoggerService {
+export class LoggerUtil implements LoggerService {
   logger = new Logger();
   enabled = true;
 
@@ -39,6 +39,4 @@ export class LoggerUtils implements LoggerService {
       this.logger.warn(message, context);
     }
   }
-
-
 }

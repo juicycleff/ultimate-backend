@@ -10,5 +10,8 @@ module.exports = {
     '<rootDir>/libs/loadbalancer',
     '<rootDir>/libs/permissions',
     '<rootDir>/libs/cli',
+    '<rootDir>/apps/example',
+    '<rootDir>/apps/adv-example',
+    '<rootDir>/libs/consul',
   ],
 };

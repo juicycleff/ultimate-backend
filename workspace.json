@@ -209,6 +209,140 @@
           }
         }
       }
+    },
+    "example": {
+      "root": "apps/example",
+      "sourceRoot": "apps/example/src",
+      "projectType": "application",
+      "prefix": "example",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/example",
+            "main": "apps/example/src/main.ts",
+            "tsConfig": "apps/example/tsconfig.app.json",
+            "assets": ["apps/example/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/example/src/environments/environment.ts",
+                  "with": "apps/example/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "example:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/example/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/example"],
+          "options": {
+            "jestConfig": "apps/example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "adv-example": {
+      "root": "apps/adv-example",
+      "sourceRoot": "apps/adv-example/src",
+      "projectType": "application",
+      "prefix": "adv-example",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/adv-example",
+            "main": "apps/adv-example/src/main.ts",
+            "tsConfig": "apps/adv-example/tsconfig.app.json",
+            "assets": ["apps/adv-example/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/adv-example/src/environments/environment.ts",
+                  "with": "apps/adv-example/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "adv-example:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/adv-example/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/adv-example"],
+          "options": {
+            "jestConfig": "apps/adv-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "consul": {
+      "root": "libs/consul",
+      "sourceRoot": "libs/consul/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/consul/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/consul"],
+          "options": {
+            "jestConfig": "libs/consul/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/consul",
+            "tsConfig": "libs/consul/tsconfig.lib.json",
+            "packageJson": "libs/consul/package.json",
+            "main": "libs/consul/src/index.ts",
+            "assets": ["libs/consul/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

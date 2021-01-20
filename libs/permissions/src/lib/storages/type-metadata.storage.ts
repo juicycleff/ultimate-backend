@@ -15,7 +15,6 @@ export class TypeMetadataStorageHost {
   getSchemaMetadataByTarget(target: Type<unknown>): OsoMetadata | undefined {
     return this.osoClasses.find((item) => item.target === target);
   }
-
 }
 
 const globalRef = global as any;

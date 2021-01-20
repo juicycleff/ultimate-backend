@@ -1,7 +1,7 @@
 import { TypeMetadataStorage } from '../storages';
 
 export interface ResourceMetadataOptions {
-  name?: string
+  name?: string;
 }
 
 /**

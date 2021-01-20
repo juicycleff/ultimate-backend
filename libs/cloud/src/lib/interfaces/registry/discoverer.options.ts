@@ -1,16 +1,18 @@
-import * as NewService from '../../discoveries/consul/consul-interfaces';
-import { ConsulDiscoveryOptions, ConsulOptions } from '../../discoveries';
+import { ConsulDiscoveryOptions } from '../../discoveries';
 import { HeartbeatOptions } from './heartbeat.interface';
+import { Service } from './service-registry.builder';
+import { MdnsDiscoveryOptions } from '../../discoveries/mdns/interfaces';
 
 export interface ConsulRegistryProviderOptions {
   discoverer: 'consul';
-  service: NewService.Service;
+  service: Service;
   discovery?: ConsulDiscoveryOptions;
-  client?: ConsulOptions;
   heartbeat?: HeartbeatOptions;
 }
 
 export type LocalRegistryProviderOptions = {
   discoverer: 'local';
+  service: Service;
+  discovery?: MdnsDiscoveryOptions;
   heartbeat?: HeartbeatOptions;
 };

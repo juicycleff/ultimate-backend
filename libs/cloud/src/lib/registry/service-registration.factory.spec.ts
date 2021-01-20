@@ -22,14 +22,20 @@ describe('ServiceRegistrationFactory', () => {
   });
 
   it('register and deregister service works', async () => {
-    const sr = ServiceRegistrationFactory.getInstance(registration, serviceRegistration);
+    const sr = ServiceRegistrationFactory.getInstance(
+      registration,
+      serviceRegistration
+    );
     expect(await sr.register()).toBeUndefined();
     expect(await sr.register()).toBeUndefined();
     expect(await sr.deregister()).toBeUndefined();
   });
 
   it('getInstance initializes a singleton class', async () => {
-    const t = ServiceRegistrationFactory.getInstance(registration, serviceRegistration);
+    const t = ServiceRegistrationFactory.getInstance(
+      registration,
+      serviceRegistration
+    );
     expect(t).toBeDefined();
   });
 });

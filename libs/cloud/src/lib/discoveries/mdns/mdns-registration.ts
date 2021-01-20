@@ -1,31 +1,30 @@
 import { Registration, Service } from '../../interfaces';
-import { ConsulDiscoveryOptions } from './interfaces';
-import { ConsulUtils } from './utils';
+import { ConsulDiscoveryOptions } from '../consul';
 
-export class ConsulRegistration implements Registration {
+export class MdnsRegistration implements Registration {
   constructor(
-    private newService: Service,
+    private service: Service,
     private discoveryOptions: ConsulDiscoveryOptions
   ) {}
 
   getService(): Service {
-    return this.newService;
+    return this.service;
   }
 
   getInstanceId(): string {
-    return this.newService.id || '';
+    return this.service.id || '';
   }
 
   getServiceId(): string {
-    return this.newService.name;
+    return this.service.name;
   }
 
   getHost(): string {
-    return this.newService.address || '';
+    return this.service.address || '';
   }
 
   getPort(): number {
-    return this.newService.port || 0;
+    return this.service.port || 0;
   }
 
   isSecure(): boolean {
@@ -42,7 +41,6 @@ export class ConsulRegistration implements Registration {
   }
 
   getMetadata(): Map<string, string> {
-    const tags = this.newService.tags || [];
-    return ConsulUtils.getMetadata(tags);
+    return null;
   }
 }

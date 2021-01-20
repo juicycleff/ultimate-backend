@@ -21,13 +21,6 @@ export function validateOptions(
   }
 
   if (options.discoverer === 'consul') {
-    if (options.client == null) {
-      options.client = {
-        port: 8500,
-        host: 'localhost',
-      };
-    }
-
     if (options.discovery == null) {
       options.discovery = {
         scheme: 'http',

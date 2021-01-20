@@ -1,26 +1,18 @@
-import * as Consul from 'consul';
 import _ from 'lodash';
 import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 import { DefaultServiceInstance } from '../../registry';
-import { ConsulUtils } from './utils';
-import { ConsulOptions } from './interfaces';
-import { ConsulClient } from './consul.client';
+import { ConsulUtils } from './utils/consul-utils';
+import { consul, Consul } from '@ultimate-backend/consul';
+import { Injectable, Logger } from '@nestjs/common';
 
+@Injectable()
 export class ConsulDiscoveryClient implements DiscoveryClient {
-  consul: ConsulClient;
+  logger = new Logger('ConsulDiscoveryClient');
 
-  constructor(private consulOptions: ConsulOptions) {
-    this.consul = new ConsulClient();
-    this.init();
-  }
+  constructor(readonly consul: Consul) {}
 
   async init() {
-    await this.consul.connect({
-      host: this.consulOptions.host,
-      port: `${this.consulOptions.port}`,
-      promisify: true,
-      secure: this.consulOptions.secure,
-    });
+    await this.logger.log('ConsulDiscoveryClient initiated');
   }
 
   description(): string {
@@ -34,11 +26,11 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   private async addInstancesToList(
     serviceId: string
   ): Promise<ServiceInstance[]> {
-    const token = this.consulOptions.aclToken;
+    const token = this.consul.options.aclToken;
 
-    let serviceOptions: Consul.Health.ServiceOptions = {
+    let serviceOptions: consul.Health.ServiceOptions = {
       service: serviceId,
-      passing: this.consulOptions.passing,
+      passing: this.consul.options.passing,
     };
 
     if (token) {
@@ -95,7 +87,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   }
 
   async getServices(): Promise<string[]> {
-    const token = this.consulOptions.aclToken;
+    const token = this.consul.options.aclToken;
 
     let services;
     if (token) {
