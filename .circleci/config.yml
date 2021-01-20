@@ -6,15 +6,15 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 # Define the jobs we want to run for this project
 jobs:
   lint:
-    docker:
-      - image: circleci/node:2.0.2
+    machine: true
     steps:
+      - checkout
       - run: npm i
       - run: npm run lint
   test:
-    docker:
-      - image: circleci/node:2.0.2
+    machine: true
     steps:
+      - checkout
       - run: npm i
       - run: npm run test
 
