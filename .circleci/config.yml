@@ -9,14 +9,14 @@ jobs:
     docker:
       - image: circleci/node:2.0.2
     steps:
-      - npm run lint
-      - run: echo "this is the build job"
+      - run: npm i
+      - run: npm run lint
   test:
     docker:
       - image: circleci/node:2.0.2
     steps:
-      - npm run test
-      - run: echo "this is the test job"
+      - run: npm i
+      - run: npm run test
 
 # Orchestrate our job run sequence
 workflows:
