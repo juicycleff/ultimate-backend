@@ -6,18 +6,16 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 # Define the jobs we want to run for this project
 jobs:
   lint:
-    executor:
-      name: node/default
-      tag: '13.14'
+    docker:
+      - image: 'cimg/node:12:'
     steps:
       - checkout
       - node/install-packages
       - run:
           command: npm run lint
   test:
-    executor:
-      name: node/default
-      tag: '13.14'
+    docker:
+      - image: 'cimg/node:12:'
     steps:
       - checkout
       - node/install-packages
