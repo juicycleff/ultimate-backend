@@ -6,17 +6,23 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 # Define the jobs we want to run for this project
 jobs:
   lint:
-    machine: true
+    executor:
+      name: node/default
+      tag: '13.14'
     steps:
       - checkout
-      - run: npm i
-      - run: npm run lint
+      - node/install-packages
+      - run:
+          command: npm run lint
   test:
-    machine: true
+    executor:
+      name: node/default
+      tag: '13.14'
     steps:
       - checkout
-      - run: npm i
-      - run: npm run test
+      - node/install-packages
+      - run:
+          command: npm run test
 
 # Orchestrate our job run sequence
 workflows:
