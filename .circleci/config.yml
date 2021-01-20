@@ -7,7 +7,7 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 jobs:
   lint:
     docker:
-      - image: 'cimg/node:12'
+      - image: cimg/node:12
     steps:
       - checkout
       - node/install-packages
@@ -15,7 +15,7 @@ jobs:
           command: npm run lint
   test:
     docker:
-      - image: 'cimg/node:12'
+      - image: cimg/node:12
     steps:
       - checkout
       - node/install-packages
