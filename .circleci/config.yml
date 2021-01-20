@@ -8,7 +8,7 @@ jobs:
   lint:
     executor:
       name: node/default
-      tag: '12'
+      tag: '13.14'
     steps:
       - checkout
       - node/install-packages
@@ -17,7 +17,7 @@ jobs:
   test:
     executor:
       name: node/default
-      tag: '12'
+      tag: '13.14'
     steps:
       - checkout
       - node/install-packages
