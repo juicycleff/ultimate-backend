@@ -1,24 +1,41 @@
-import { LocalRegistryProviderOptions, ServiceRegistration } from '../../index';
+/*******************************************************************************
+ * Copyright (c) 2021. Rex Isaac Raphael
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * File name:         mdns-service-registry.ts
+ * Last modified:     11/02/2021, 00:22
+ ******************************************************************************/
+
+import { LocalRegistryProviderOptions } from '../../index';
 import { Inject, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { MdnsRegistration } from './mdns-registration';
 import { MdnsRegistrationBuilder } from './mdns-registration.builder';
-import * as mdns from 'mdns';
-import { CLOUD_REGISTRY_CONFIG } from '../../cloud.constants';
+import { Bonjour, Browser } from 'bonjour';
+import * as bonjour from 'bonjour';
+import { SERVICE_REGISTRY_CONFIG, ServiceRegistry } from '@ultimate-backend/common';
 
 export class MdnsServiceRegistry
-  implements
-    ServiceRegistration<MdnsRegistration>,
-    OnModuleInit,
-    OnModuleDestroy {
+  implements ServiceRegistry<MdnsRegistration>, OnModuleInit, OnModuleDestroy {
   logger = new Logger('MdnsServiceRegistry');
 
   registration: MdnsRegistration;
-  browser: mdns.Browser = mdns.createBrowser(mdns.tcp('http'));
-
-  advertiser: mdns.Advertisement;
+  bon: Bonjour = bonjour();
+  browser: Browser;
 
   constructor(
-    @Inject(CLOUD_REGISTRY_CONFIG)
+    @Inject(SERVICE_REGISTRY_CONFIG)
     private readonly options: LocalRegistryProviderOptions
   ) {
     this.init();
@@ -31,17 +48,6 @@ export class MdnsServiceRegistry
     if (this.options.service == null)
       throw Error('Service options is required.');
 
-    this.advertiser = mdns.createAdvertisement(
-      mdns.tcp('http'),
-      this.options.service.port,
-      {
-        host: this.options.service.address,
-        name: this.options.service.name,
-        domain: this.options.service.domain,
-        context: this.options.service.id,
-      }
-    );
-
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.registration = new MdnsRegistrationBuilder()
@@ -49,45 +55,68 @@ export class MdnsServiceRegistry
       .heartbeatOptions(this.options.heartbeat)
       .host(this.options.service?.address)
       .port(this.options.service?.port)
+      .domain(this.options.service?.domain)
       .serviceName(this.options.service?.name)
       .instanceId(this.options.service?.id)
       .build();
 
-    if (this.options.heartbeat.enabled) {
-      // this.ttlScheduler = new TtlScheduler(this.options.heartbeat, null);
-    }
+    this.browser = await this.bon.find(
+      {
+        type: 'http',
+        txt: {
+          domain: this.options.service.domain,
+        },
+      },
+      (service) => {
+        // console.log('service operational: ', service);
+      }
+    );
 
-    this.browser.on('serviceUp', (service) => {
-      console.log('service up: ', service);
-    });
-
-    this.browser.on('serviceChanged', (service) => {
-      // console.log('service changed: ', service);
-    });
-
-    this.browser.on('error', (exception) => {
-      console.log('service error: ', exception);
-    });
-
-    this.browser.on('serviceDown', (service) => {
-      console.log('service down: ', service);
-    });
-
-    await this.browser.start();
+    this.listenForServices();
   }
 
   async close(): Promise<void> {
-    await this.advertiser.stop();
-    await this.advertiser.removeAllListeners();
-    await this.browser.removeAllListeners();
+    await this.bon.destroy();
+
+    if (this.browser) {
+      await this.browser.stop();
+      await this.browser.removeAllListeners();
+    }
+  }
+
+  listenForServices(): void {
+    try {
+      this.browser.on('up', (service) => {
+        if (
+          service.txt.domain &&
+          service.txt.domain === this.options.service.domain &&
+          service.txt.serviceid !== this.options.service.id
+        ) {
+          console.log('service up: ', service);
+        }
+      });
+      this.browser.on('down', (service) => {
+        if (
+          service.txt.domain &&
+          service.txt.domain === this.options.service.domain &&
+          service.txt.serviceid !== this.options.service.id
+        ) {
+          console.log('service down: ', service);
+        }
+      });
+
+      this.browser.start();
+    } catch (err) {
+      this.logger.error(err);
+    }
   }
 
   async deregister(): Promise<void> {
     this.logger.log(
       `Deregistering service with mdns: ${this.registration.getInstanceId()}`
     );
-    // this.ttlScheduler?.remove(this.registration.getInstanceId());
-    return this.advertiser.stop();
+
+    this.bon.destroy();
   }
 
   async register(): Promise<void> {
@@ -98,31 +127,17 @@ export class MdnsServiceRegistry
 
       const options = this.registration.getService();
 
-      this.advertiser = mdns.createAdvertisement(
-        mdns.tcp('http'),
-        options.port,
-        {
-          host: options.address,
-          name: options.name,
-          domain: options.domain,
-          context: options.id,
-        }
-      );
-
-      this.advertiser.on('error', (exception) => {
-        console.log('advertiser error: ', exception);
+      await this.bon.publish({
+        host: options.host,
+        name: options.name,
+        port: options.port,
+        txt: {
+          domain: options.txtRecord.domain,
+          serviceid: options.txtRecord.serviceId,
+        },
+        probe: true,
+        type: 'http',
       });
-
-      await this.advertiser.start();
-
-      const service = this.registration.getService();
-      if (
-        this.options.heartbeat.enabled &&
-        // this.ttlScheduler != null &&
-        service.check?.ttl != null
-      ) {
-        // this.ttlScheduler.add(this.registration.getInstanceId());
-      }
     } catch (e) {
       this.logger.error(e);
       throw e;
@@ -139,6 +154,7 @@ export class MdnsServiceRegistry
   }
 
   async onModuleInit() {
+    await this.init();
     await this.register();
   }
 

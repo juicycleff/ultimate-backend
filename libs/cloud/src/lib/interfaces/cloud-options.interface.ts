@@ -1,6 +1,8 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
-import { LocalRegistryProviderOptions } from './registry';
-import { ConsulRegistryProviderOptions } from './registry';
+import {
+  ConsulRegistryProviderOptions,
+  LocalRegistryProviderOptions,
+} from './registry.options';
 
 export type RegistryConfiguration =
   | ConsulRegistryProviderOptions

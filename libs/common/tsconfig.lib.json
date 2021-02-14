@@ -5,7 +5,13 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "types": ["node"],
-    "target": "es6"
+    "target": "es6",
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      }
+    ]
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]

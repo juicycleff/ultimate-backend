@@ -30,6 +30,12 @@
     "cli": { "tags": [] },
     "example": { "tags": [] },
     "adv-example": { "tags": [] },
-    "consul": { "tags": [] }
+    "consul": { "tags": [] },
+    "zookeeper": { "tags": [] },
+    "etcd": { "tags": [] },
+    "config": { "tags": [] },
+    "messaging": { "tags": [] },
+    "redis": { "tags": [] },
+    "event-store": { "tags": [] }
   }
 }

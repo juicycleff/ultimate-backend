@@ -1,6 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 
 export const enableKillGrace = (app: INestApplication) => {
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks();
+
   process.on('SIGINT', async () => {
     setTimeout(() => process.exit(1), 5000);
     await app.close();

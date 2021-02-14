@@ -1,18 +1,38 @@
+/*******************************************************************************
+ * Copyright (c) 2021. Rex Isaac Raphael
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * File name:         mdns-registration.builder.ts
+ * Last modified:     11/02/2021, 00:22
+ ******************************************************************************/
+
 import * as uuid from 'uuid';
-import {
-  Check,
-  HeartbeatOptions,
-  RegistrationBuilder,
-  Service,
-} from '../../interfaces';
-import { IpUtils } from '../../utils';
+
 import { MdnsDiscoveryOptions } from './interfaces';
 import { MdnsRegistration } from './mdns-registration';
+import {
+  HeartbeatOptions, IpUtils,
+  RegistrationBuilder,
+} from '@ultimate-backend/common';
+import { Service } from 'mdns';
 
 export class MdnsRegistrationBuilder implements RegistrationBuilder {
   private _serviceName: string | undefined;
   private _port: number | undefined;
   private _host: string | undefined;
+  private _domain: string | undefined;
   private _instanceId: string | undefined;
   private _heartbeatOptions: HeartbeatOptions | undefined;
   private _discoveryOptions: MdnsDiscoveryOptions | undefined;
@@ -47,6 +67,11 @@ export class MdnsRegistrationBuilder implements RegistrationBuilder {
     return this;
   }
 
+  domain(domain: string): RegistrationBuilder {
+    this._domain = domain;
+    return this;
+  }
+
   serviceName(name: string): RegistrationBuilder {
     this._serviceName = name;
     return this;
@@ -74,46 +99,17 @@ export class MdnsRegistrationBuilder implements RegistrationBuilder {
       this._instanceId = this._serviceName + '-' + uuid.v4();
     }
 
-    const check: Check = this.createCheck();
-
-    const newService: Service = {
+    const newService: Partial<Service> = {
+      replyDomain: this._domain,
       name: this._serviceName,
       port: this._port,
-      address: this._host,
-      id: this._instanceId,
-      tags,
-      check,
+      host: this._host,
+      txtRecord: {
+        serviceId: this._instanceId,
+        domain: this._domain,
+      },
     };
 
     return new MdnsRegistration(newService, this._discoveryOptions);
-  }
-
-  private createCheck(): Check {
-    let check: Check = {};
-
-    if (this._discoveryOptions?.healthCheckCriticalTimeout !== null) {
-      check = {
-        ...check,
-        deregistercriticalserviceafter: this._discoveryOptions
-          .healthCheckCriticalTimeout,
-      };
-    }
-
-    if (this._discoveryOptions?.healthCheckUrl !== null) {
-      check = {
-        ...check,
-        http: this._discoveryOptions.healthCheckUrl,
-      };
-    }
-
-    if (this._heartbeatOptions?.enabled) {
-      const ttl = this._heartbeatOptions.ttlInSeconds + 's';
-      return {
-        ...check,
-        ttl,
-      };
-    }
-
-    return check;
   }
 }

@@ -1,2 +1,2 @@
-export * from './registry';
+export * from './registry.options';
 export * from './cloud-options.interface';

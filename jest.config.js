@@ -13,5 +13,11 @@ module.exports = {
     '<rootDir>/apps/example',
     '<rootDir>/apps/adv-example',
     '<rootDir>/libs/consul',
+    '<rootDir>/libs/zookeeper',
+    '<rootDir>/libs/etcd',
+    '<rootDir>/libs/config',
+    '<rootDir>/libs/messaging',
+    '<rootDir>/libs/redis',
+    '<rootDir>/libs/event-store',
   ],
 };

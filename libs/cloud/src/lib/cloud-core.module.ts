@@ -4,55 +4,14 @@ import {
   CloudModuleOptions,
   CloudModuleOptionsFactory,
 } from './interfaces';
-import {
-  CLOUD_REGISTRY_CLIENT,
-  CLOUD_REGISTRY_CONFIG,
-} from './cloud.constants';
-import { validateOptions } from './utils';
+import { getSharedProviderUtils } from './utils';
 import { CLOUD_MODULE_OPTIONS } from './cloud.constants';
 
 @Global()
-@Module({
-  controllers: [],
-  providers: [],
-  exports: [],
-})
+@Module({})
 export class CloudCoreModule {
   static forRoot(options: CloudModuleOptions): DynamicModule {
-    const registryOption = validateOptions(options.registry);
-
-    const sharedProviders = [];
-
-    if (registryOption.discoverer === 'consul') {
-      const {
-        ConsulServiceRegistry,
-        ConsulDiscoveryClient,
-      } = require('./discoveries/consul');
-
-      sharedProviders.push(ConsulServiceRegistry);
-      sharedProviders.push(ConsulDiscoveryClient);
-    } else if (registryOption.discoverer === 'local') {
-      const { MdnsServiceRegistry } = require('./discoveries/mdns');
-      sharedProviders.push(MdnsServiceRegistry);
-    }
-
-    const configProvider = {
-      provide: CLOUD_REGISTRY_CONFIG,
-      useValue: options.registry,
-    };
-
-    sharedProviders.push(...[configProvider]);
-    if (registryOption.discoverer === 'consul') {
-      const {
-        ConsulServiceRegistry,
-        ConsulDiscoveryClient,
-      } = require('./discoveries/consul');
-      sharedProviders.push(ConsulServiceRegistry);
-      sharedProviders.push(ConsulDiscoveryClient);
-    } else if (registryOption.discoverer === 'local') {
-      const { MdnsServiceRegistry } = require('./discoveries/mdns');
-      sharedProviders.push(MdnsServiceRegistry);
-    }
+    const sharedProviders = getSharedProviderUtils(options.registry);
 
     return {
       module: CloudCoreModule,
@@ -62,33 +21,12 @@ export class CloudCoreModule {
   }
 
   static forRootAsync(options: CloudModuleAsyncOptions): DynamicModule {
-    let configProvider: Provider;
-    const sharedProviders = [];
+    let providers = [];
 
-    const clientProvider: Provider = {
-      provide: CLOUD_REGISTRY_CLIENT,
+    const configResolverProvider: Provider = {
+      provide: 'CONFIG_RESOLVER_HELPER',
       useFactory: async (moduleOptions: CloudModuleOptions) => {
-        configProvider = {
-          provide: CLOUD_REGISTRY_CONFIG,
-          useValue: moduleOptions.registry,
-        };
-
-        sharedProviders.push(configProvider);
-
-        if (moduleOptions.registry.discoverer === 'consul') {
-          const {
-            ConsulServiceRegistry,
-            ConsulDiscoveryClient,
-          } = require('./discoveries/consul');
-
-          sharedProviders.push(ConsulServiceRegistry);
-          sharedProviders.push(ConsulDiscoveryClient);
-        } else if (moduleOptions.registry.discoverer === 'local') {
-          const { MdnsServiceRegistry } = require('./discoveries/mdns');
-          sharedProviders.push(MdnsServiceRegistry);
-          return {};
-        }
-
+        providers = getSharedProviderUtils(moduleOptions.registry);
         return null;
       },
       inject: [CLOUD_MODULE_OPTIONS],
@@ -99,8 +37,8 @@ export class CloudCoreModule {
     return {
       module: CloudCoreModule,
       imports: options.imports,
-      providers: [...asyncProviders, ...sharedProviders],
-      exports: [clientProvider, ...sharedProviders],
+      providers: [...asyncProviders, configResolverProvider, ...providers],
+      exports: [ ...providers],
     };
   }
 

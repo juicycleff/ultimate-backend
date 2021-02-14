@@ -23,7 +23,13 @@
       "@ultimate-backend/loadbalancer": ["libs/loadbalancer/src/index.ts"],
       "@ultimate-backend/permissions": ["libs/permissions/src/index.ts"],
       "@ultimate-backend/cli": ["libs/cli/src/index.ts"],
-      "@ultimate-backend/consul": ["libs/consul/src/index.ts"]
+      "@ultimate-backend/consul": ["libs/consul/src/index.ts"],
+      "@ultimate-backend/zookeeper": ["libs/zookeeper/src/index.ts"],
+      "@ultimate-backend/etcd": ["libs/etcd/src/index.ts"],
+      "@ultimate-backend/config": ["libs/config/src/index.ts"],
+      "@ultimate-backend/messaging": ["libs/messaging/src/index.ts"],
+      "@ultimate-backend/redis": ["libs/redis/src/index.ts"],
+      "@ultimate-backend": ["libs/event-store/src/index.ts"]
     },
     "plugins": [
       {
