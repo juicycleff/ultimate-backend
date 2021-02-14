@@ -21,10 +21,8 @@ jobs:
       tag: '13.14'
     steps:
       - checkout
-      - node/install-packages:
-          override-ci-command: npm install
       - run:
-          command: npm run test
+          command: npm run affected:test
 
 # Orchestrate our job run sequence
 workflows:
