@@ -1,6 +1,6 @@
 {
   "npmScope": "ultimate-backend",
-  "affected": { "defaultBase": "master" },
+  "affected": { "defaultBase": "v3" },
   "implicitDependencies": {
     "workspace.json": "*",
     "package.json": { "dependencies": "*", "devDependencies": "*" },
