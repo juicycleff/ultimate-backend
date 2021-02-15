@@ -14,42 +14,49 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         event-store.broker.ts
- * Last modified:     14/02/2021, 18:26
+ * File name:         stan.client.spec.ts
+ * Last modified:     14/02/2021, 23:56
  ******************************************************************************/
 
-import { IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { Subject } from 'rxjs';
-import { EventStoreClient } from '../client';
+import { Test } from '@nestjs/testing';
+import { EventStoreClient } from './event-store.client';
+import { ProvidersConstants } from '../event-store.constant';
+import { EventStoreModuleOptions } from '../interface';
 
-@Injectable()
-export class EventStoreBroker implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource {
-  private logger = new LoggerUtil(this.constructor.name);
 
-  constructor(
-    private readonly eventStore: EventStoreClient
-  ) {}
+describe('EventStoreClient', () => {
+  let service: EventStoreClient;
 
-  bridgeEventsTo<T extends IEvent>(subject: Subject<T>): any {
-    // TODO: Fix soon
-  }
+  beforeEach(async () => {
 
-  onModuleDestroy(): any {
-    // TODO: Fix soon
-  }
+    const module = await Test.createTestingModule({
+      providers: [
+        {
+          provide: ProvidersConstants.EVENT_STORE_CONFIG,
+          useValue: {
+            debug: true,
+            broker: {
+              clientId: 'test-client-id'
+            }
+          } as EventStoreModuleOptions,
+        },
+        EventStoreClient,
+      ],
+    }).compile();
 
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
+    service = module.get(EventStoreClient);
+  });
 
-  publish<T extends IEvent>(event: T): any {
-    // TODO: Fix soon
-  }
+  it('should be defined', () => {
+    expect(service.connect()).toHaveReturned();
+    expect(service).toBeTruthy();
+  });
 
-  publishAll<T extends IEvent>(events: T[]): any {
-    // TODO: Fix soon
-  }
+  it('connected should be false', () => {
+    expect(service.connected).toBeTruthy();
+  });
 
-}
+  it('client should not be null', () => {
+    expect(service.client()).toBeDefined();
+  });
+});

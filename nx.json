@@ -36,6 +36,7 @@
     "config": { "tags": [] },
     "messaging": { "tags": [] },
     "redis": { "tags": [] },
-    "event-store": { "tags": [] }
+    "event-store": { "tags": [] },
+    "couchbase": { "tags": [] }
   }
 }

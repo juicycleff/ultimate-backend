@@ -14,42 +14,9 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         event-store.broker.ts
- * Last modified:     14/02/2021, 18:26
+ * File name:         index.ts
+ * Last modified:     19/01/2021, 18:02
  ******************************************************************************/
 
-import { IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { Subject } from 'rxjs';
-import { EventStoreClient } from '../client';
-
-@Injectable()
-export class EventStoreBroker implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource {
-  private logger = new LoggerUtil(this.constructor.name);
-
-  constructor(
-    private readonly eventStore: EventStoreClient
-  ) {}
-
-  bridgeEventsTo<T extends IEvent>(subject: Subject<T>): any {
-    // TODO: Fix soon
-  }
-
-  onModuleDestroy(): any {
-    // TODO: Fix soon
-  }
-
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
-
-  publish<T extends IEvent>(event: T): any {
-    // TODO: Fix soon
-  }
-
-  publishAll<T extends IEvent>(events: T[]): any {
-    // TODO: Fix soon
-  }
-
-}
+export * from './definitions.factory';
+export * from './schema.factory';

@@ -19,5 +19,6 @@ module.exports = {
     '<rootDir>/libs/messaging',
     '<rootDir>/libs/redis',
     '<rootDir>/libs/event-store',
+    '<rootDir>/libs/couchbase',
   ],
 };

@@ -14,42 +14,33 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         event-store.broker.ts
- * Last modified:     14/02/2021, 18:26
+ * File name:         stan.client.spec.ts
+ * Last modified:     14/02/2021, 23:51
  ******************************************************************************/
 
-import { IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { Subject } from 'rxjs';
-import { EventStoreClient } from '../client';
+import { Test } from '@nestjs/testing';
+import { StanClient } from './stan.client';
+import { ProvidersConstants } from '../event-store.constant';
+import { EventStoreModuleOptions } from '../interface';
 
-@Injectable()
-export class EventStoreBroker implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource {
-  private logger = new LoggerUtil(this.constructor.name);
+describe('StanClient', () => {
+  let service: StanClient;
 
-  constructor(
-    private readonly eventStore: EventStoreClient
-  ) {}
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        {
+          provide: ProvidersConstants.EVENT_STORE_CONFIG,
+          useValue: {} as EventStoreModuleOptions,
+        },
+        StanClient,
+      ],
+    }).compile();
 
-  bridgeEventsTo<T extends IEvent>(subject: Subject<T>): any {
-    // TODO: Fix soon
-  }
+    service = module.get(StanClient);
+  });
 
-  onModuleDestroy(): any {
-    // TODO: Fix soon
-  }
-
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
-
-  publish<T extends IEvent>(event: T): any {
-    // TODO: Fix soon
-  }
-
-  publishAll<T extends IEvent>(events: T[]): any {
-    // TODO: Fix soon
-  }
-
-}
+  it('should be defined', () => {
+    expect(service).toBeTruthy();
+  });
+});

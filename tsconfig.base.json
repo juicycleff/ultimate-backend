@@ -29,7 +29,8 @@
       "@ultimate-backend/config": ["libs/config/src/index.ts"],
       "@ultimate-backend/messaging": ["libs/messaging/src/index.ts"],
       "@ultimate-backend/redis": ["libs/redis/src/index.ts"],
-      "@ultimate-backend": ["libs/event-store/src/index.ts"]
+      "@ultimate-backend": ["libs/event-store/src/index.ts"],
+      "@ultimate-backend/couchbase": ["libs/couchbase/src/index.ts"]
     },
     "plugins": [
       {

@@ -38,7 +38,7 @@ export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnMo
   _client: EventStoreDBClient;
   connected: boolean;
 
-  private logger = new LoggerUtil(this.constructor.name);
+  private logger = new LoggerUtil('EventStoreClient');
 
   constructor(
     @Inject(ProvidersConstants.EVENT_STORE_CONFIG)

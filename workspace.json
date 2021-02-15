@@ -535,6 +535,38 @@
           }
         }
       }
+    },
+    "couchbase": {
+      "root": "libs/couchbase",
+      "sourceRoot": "libs/couchbase/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/couchbase/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/couchbase"],
+          "options": {
+            "jestConfig": "libs/couchbase/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/couchbase",
+            "tsConfig": "libs/couchbase/tsconfig.lib.json",
+            "packageJson": "libs/couchbase/package.json",
+            "main": "libs/couchbase/src/index.ts",
+            "assets": ["libs/couchbase/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

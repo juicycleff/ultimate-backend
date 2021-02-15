@@ -14,42 +14,22 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         event-store.broker.ts
- * Last modified:     14/02/2021, 18:26
+ * File name:         schema.decorator.ts
+ * Last modified:     20/01/2021, 11:17
  ******************************************************************************/
 
-import { IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { Subject } from 'rxjs';
-import { EventStoreClient } from '../client';
+import { TypeMetadataStorage } from '../storages';
+import { SchemaOptions } from '../interfaces';
 
-@Injectable()
-export class EventStoreBroker implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource {
-  private logger = new LoggerUtil(this.constructor.name);
-
-  constructor(
-    private readonly eventStore: EventStoreClient
-  ) {}
-
-  bridgeEventsTo<T extends IEvent>(subject: Subject<T>): any {
-    // TODO: Fix soon
-  }
-
-  onModuleDestroy(): any {
-    // TODO: Fix soon
-  }
-
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
-
-  publish<T extends IEvent>(event: T): any {
-    // TODO: Fix soon
-  }
-
-  publishAll<T extends IEvent>(events: T[]): any {
-    // TODO: Fix soon
-  }
-
+/**
+ * @Schema decorator is used to mark a class as a Mongoose schema.
+ * Only properties decorated with this decorator will be defined in the schema.
+ */
+export function Schema(options?: SchemaOptions): ClassDecorator {
+    return (target: Function) => {
+        TypeMetadataStorage.addSchemaMetadata({
+            target,
+            options,
+        });
+    };
 }
