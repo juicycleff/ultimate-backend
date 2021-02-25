@@ -6,7 +6,6 @@ import { StanClientOptions } from './stan-client.options';
 
 export type BrokerOptions = EventStoreClientOptions | StanClientOptions;
 
-
 export interface EventStoreModuleOptions extends BaseClientOptions {
   broker: BrokerOptions;
 
@@ -41,7 +40,7 @@ export interface EventStoreModuleAsyncOptions
   ) => Promise<EventStoreModuleOptions> | EventStoreModuleOptions;
 
   /**
-   * Inject any dependencies required by the Mongo module, such as a configuration service
+   * Inject any dependencies required by the module, such as a configuration service
    * that supplies the URI and database name
    */
   inject?: never[];

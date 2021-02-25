@@ -21,46 +21,32 @@
 import { EVENT_STORE_MODULE_OPTION, ProvidersConstants } from './event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from './interface';
 import { EventStoreClient, StanClient } from './client';
+import { Provider } from '@nestjs/common';
 
 export function getClientProvider(option: EventStoreModuleOptions) {
-  const provider = []
-  const _getClientP = {
-    provide: ProvidersConstants.EVENT_STORE_CLIENT,
-    useFactory: (): any => {
-      switch (option.broker.type) {
-        case EventStoreBrokerTypes.EventStore:
-          provider.push(EventStoreClient);
-          break;
-        case EventStoreBrokerTypes.STAN:
-          provider.push(StanClient);
-          break;
-        default:
-          throw new Error('event store broker type not supported');
-      }
-    }
-  };
-
-  return provider;
+  switch (option.broker.type) {
+    case EventStoreBrokerTypes.EventStore:
+      return EventStoreClient;
+    case EventStoreBrokerTypes.STAN:
+      return StanClient;
+    default:
+      throw new Error('event store broker type not supported');
+  }
 }
 
-export function getClientProviderAsync() {
-  const provider = []
-  const _getClientP = {
+export function getClientProviderAsync(): Provider {
+  return  {
     provide: ProvidersConstants.EVENT_STORE_CLIENT,
     useFactory: (esOptions: EventStoreModuleOptions): any => {
       switch (esOptions.broker.type) {
         case EventStoreBrokerTypes.EventStore:
-          provider.push(EventStoreClient);
-          break;
+          return EventStoreClient;
         case EventStoreBrokerTypes.STAN:
-          provider.push(StanClient);
-          break;
+          return StanClient;
         default:
           throw new Error('event store broker type not supported');
       }
     },
     inject: [EVENT_STORE_MODULE_OPTION]
   };
-
-  return provider;
 }

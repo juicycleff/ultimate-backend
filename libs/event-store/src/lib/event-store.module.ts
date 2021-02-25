@@ -14,7 +14,7 @@ import { EventStoreBroker } from './broker/event-store.broker';
 import { ExplorerService } from '@nestjs/cqrs/dist/services/explorer.service';
 
 @Module({
-  providers: [CqrsModule],
+  imports: [CqrsModule],
 })
 export class EventStoreModule {
 
@@ -31,9 +31,9 @@ export class EventStoreModule {
     return {
       module: EventStoreModule,
       imports: [CqrsModule],
-      providers: [...clientProvider, configProvider],
-      exports: [CqrsModule, ...clientProvider, configProvider],
-      global: options.global,
+      providers: [clientProvider, configProvider],
+      exports: [CqrsModule, clientProvider, configProvider],
+      global: options.global || true,
     }
   }
 
@@ -54,8 +54,8 @@ export class EventStoreModule {
     return {
       module: EventStoreModule,
       imports: [CqrsModule],
-      providers: [...asyncProviders, ...clientProvider, configProvider],
-      exports: [CqrsModule, ...clientProvider, configProvider],
+      providers: [...asyncProviders, clientProvider, configProvider],
+      exports: [CqrsModule, clientProvider, configProvider],
       global: options.global || true
     }
   }

@@ -29,8 +29,6 @@ export interface IBrokerClient<T> {
 
   close(): void;
 
-  newEvent(name: string, payload: Record<string, any>): CQRSEvent
-
 }
 
 export interface CQRSEvent {

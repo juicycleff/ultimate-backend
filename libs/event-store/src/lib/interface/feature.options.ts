@@ -21,6 +21,14 @@ import { EventStoreBrokerTypes } from './broker.enums';
 import { IAdapterStore } from '../adapter.interface';
 import { IEvent } from '@nestjs/cqrs';
 import { ModuleMetadata, Type } from '@nestjs/common';
+import { DuplexOptions, ReadableOptions } from 'stream';
+import { ConnectToPersistentSubscriptionOptions } from '@eventstore/db-client/dist/persistentSubscription';
+import {
+  EventType,
+  PersistentSubscription, StreamSubscription,
+} from '@eventstore/db-client/dist/types';
+import { AppendToStreamOptions, SubscribeToStreamOptions } from '@eventstore/db-client/dist/streams';
+import { Subscription, SubscriptionOptions } from '../external/stan.types';
 
 export interface IEventConstructors {
   [key: string]: (...args: any[]) => IEvent;
@@ -28,44 +36,91 @@ export interface IEventConstructors {
 
 export enum EventStoreSubscriptionType {
   Persistent,
-  Volatile
+  Standard,
 }
 
-export interface EventStoreSubscription {
-  type?: EventStoreSubscriptionType;
-  fromStream: string;
-  toStream: string;
-  resolveLinkTos?: boolean;
-  fromRevision?:  number | null | string;
+export interface EventStoreStandardSubscription {
+  type: EventStoreSubscriptionType.Standard;
+  streamName: string;
+  options?: SubscribeToStreamOptions;
+  readableOptions?: ReadableOptions;
 }
 
-export interface StanSubscription {
-  type?: EventStoreSubscriptionType;
-  stream: string;
-  durableName: string;
-  maxInflight?: number;
-  startAt?: number;
-  ackWait?: number,
-  manualAcks?: boolean
+export interface EventStorePersistentSubscription {
+  type: EventStoreSubscriptionType.Persistent;
+  streamName: string;
+  groupName: string;
+  options?: ConnectToPersistentSubscriptionOptions;
+  duplexOptions?: DuplexOptions;
 }
+
+export type EventStoreSubscription =
+  | EventStorePersistentSubscription
+  | EventStoreStandardSubscription;
+
+export interface BaseStanSubscription {
+  options?: SubscriptionOptions;
+  streamName: string;
+}
+
+export interface StanPersistentSubscription extends BaseStanSubscription {
+  type: EventStoreSubscriptionType.Persistent;
+  groupName: string;
+}
+
+export interface StanStandardSubscription extends BaseStanSubscription {
+  type: EventStoreSubscriptionType.Standard;
+}
+
+export type StanSubscription = StanPersistentSubscription | StanStandardSubscription;
 
 export interface BaseBrokerFeatureOption {
   streamName?: string;
   store?: IAdapterStore;
   eventHandlers: IEventConstructors;
+  strictStreamName?: boolean;
+  notify?: {
+    ignoreAck?: boolean;
+    ignoreNack?: boolean;
+  }
 }
 
 export interface EventStoreBrokerFeature extends BaseBrokerFeatureOption {
   type: EventStoreBrokerTypes.EventStore;
   subscriptions: EventStoreSubscription[];
+  options?: AppendToStreamOptions
 }
 
-export interface StanBrokerFeature extends BaseBrokerFeatureOption{
+export interface StanBrokerFeature extends BaseBrokerFeatureOption {
   type: EventStoreBrokerTypes.STAN;
   subscriptions: StanSubscription[];
 }
 
-export type EventStoreFeatureOptions =| EventStoreBrokerFeature | StanBrokerFeature;
+export interface ExtendedPersistentSubscription<E extends EventType = EventType>
+  extends PersistentSubscription<E> {
+  type: 'persistent';
+  isLive?: boolean | undefined;
+}
+
+export interface ExtendedStandardSubscription<E extends EventType = EventType>
+  extends StreamSubscription<E> {
+  type: 'normal';
+  isLive?: boolean | undefined;
+}
+
+export interface ExtendedStanPersistentSubscription extends Subscription {
+  type: 'persistent';
+  isLive?: boolean | undefined;
+}
+
+export interface ExtendedStanStandardSubscription extends Subscription {
+  type: 'normal';
+  isLive?: boolean | undefined;
+}
+
+export type EventStoreFeatureOptions =
+  | EventStoreBrokerFeature
+  | StanBrokerFeature;
 
 export interface EventStoreFeatureOptionsFactory {
   createFeatureOptions(
@@ -76,7 +131,7 @@ export interface EventStoreFeatureOptionsFactory {
 export interface EventStoreFeatureAsyncOptions
   extends Pick<ModuleMetadata, 'imports'> {
   name?: string;
-  type: EventStoreBrokerTypes
+  type: EventStoreBrokerTypes;
   useExisting?: Type<EventStoreFeatureOptionsFactory>;
   useClass?: Type<EventStoreFeatureOptionsFactory>;
   useFactory?: (

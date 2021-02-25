@@ -19,9 +19,10 @@
  ******************************************************************************/
 
 import { Test } from '@nestjs/testing';
+import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreBroker } from './event-store.broker';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreModuleOptions } from '../interface';
+import { EventStoreBrokerTypes, EventStoreFeatureOptions, EventStoreModuleOptions } from '../interface';
 import { EventStoreClient } from '../client';
 
 describe('EventStoreBroker', () => {
@@ -29,10 +30,31 @@ describe('EventStoreBroker', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [CqrsModule],
       providers: [
         {
           provide: ProvidersConstants.EVENT_STORE_CONFIG,
-          useValue: {} as EventStoreModuleOptions,
+          useValue: {
+            broker: {
+              type: EventStoreBrokerTypes.EventStore,
+              channelCredentials: {
+                insecure: true
+              },
+              connectionSettings: {
+                endpoint: {
+                  address: 'localhost',
+                  port: 2113,
+                }
+              }
+            }
+          } as EventStoreModuleOptions,
+        },
+        {
+          provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
+          useValue: {
+            type: EventStoreBrokerTypes.EventStore,
+            streamName: 'event-store',
+          } as EventStoreFeatureOptions,
         },
         EventStoreClient,
         EventStoreBroker,

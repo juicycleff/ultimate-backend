@@ -17,30 +17,55 @@
  * File name:         stan.client.spec.ts
  * Last modified:     14/02/2021, 23:51
  ******************************************************************************/
-
 import { Test } from '@nestjs/testing';
-import { StanClient } from './stan.client';
+import { EventStoreClient } from './event-store.client';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreModuleOptions } from '../interface';
+import { EventStoreBrokerTypes, EventStoreModuleOptions } from '../interface';
 
-describe('StanClient', () => {
-  let service: StanClient;
+
+describe('EventStoreClient', () => {
+  let service: EventStoreClient;
 
   beforeEach(async () => {
+
     const module = await Test.createTestingModule({
       providers: [
         {
           provide: ProvidersConstants.EVENT_STORE_CONFIG,
-          useValue: {} as EventStoreModuleOptions,
+          useValue: {
+            debug: true,
+            broker: {
+              type: EventStoreBrokerTypes.EventStore,
+              channelCredentials: {
+                insecure: true
+              },
+              connectionSettings: {
+                endpoint: {
+                  address: 'localhost',
+                  port: 2113,
+                }
+              }
+            }
+          } as EventStoreModuleOptions,
         },
-        StanClient,
+        EventStoreClient,
       ],
     }).compile();
 
-    service = module.get(StanClient);
+    service = module.get(EventStoreClient);
   });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('connected should be false', () => {
+    expect(service.connected).toBeFalsy();
+  });
+
+  it('client should not throw', () => {
+    expect(() => service.connect()).not.toThrow();
+    expect(service.connected).toBeTruthy();
+    expect(service.client()).toBeDefined();
   });
 });

@@ -21,23 +21,34 @@
 import { Test } from '@nestjs/testing';
 import { StanBroker } from './stan.broker';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreModuleOptions } from '../interface';
+import { EventStoreBrokerTypes, EventStoreFeatureOptions, EventStoreModuleOptions } from '../interface';
 import { StanClient } from '../client';
+import { CqrsModule } from '@nestjs/cqrs';
 
 describe('StanBroker', () => {
   let service: StanBroker;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [CqrsModule],
       providers: [
         {
           provide: ProvidersConstants.EVENT_STORE_CONFIG,
           useValue: {
             debug: true,
             broker: {
-              clientId: 'test-client-id'
+              type: EventStoreBrokerTypes.STAN,
+              clientId: 'test-client-id',
+              clusterId: 'my-cluster'
             }
           } as EventStoreModuleOptions,
+        },
+        {
+          provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
+          useValue: {
+            type: EventStoreBrokerTypes.STAN,
+            streamName: 'stan-store',
+          } as EventStoreFeatureOptions,
         },
         StanClient,
         StanBroker,

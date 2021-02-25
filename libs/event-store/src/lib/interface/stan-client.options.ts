@@ -18,9 +18,8 @@
  * Last modified:     14/02/2021, 16:17
  ******************************************************************************/
 
-import { ClientOpts } from 'node-nats-streaming';
 import { EventStoreBrokerTypes } from './broker.enums';
-
+import { ClientOpts } from '../external/stan.types';
 
 export interface StanClientOptions {
   type: EventStoreBrokerTypes.STAN;

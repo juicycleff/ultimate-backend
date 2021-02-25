@@ -20,9 +20,7 @@
 
 import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EventStoreDBClient } from '@eventstore/db-client';
-import * as uuid from 'uuid';
 import {
-  CQRSEvent,
   EventStoreClientOptions,
   EventStoreModuleOptions,
   IBrokerClient,
@@ -36,7 +34,7 @@ import { LoggerUtil } from '@ultimate-backend/common';
 @Injectable()
 export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnModuleInit, OnModuleDestroy {
   _client: EventStoreDBClient;
-  connected: boolean;
+  connected = false;
 
   private logger = new LoggerUtil('EventStoreClient');
 
@@ -48,7 +46,7 @@ export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnMo
   }
 
   onModuleInit() {
-     this.connect();
+    this.connect();
   }
 
   public client(): EventStoreDBClient {
@@ -62,30 +60,12 @@ export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnMo
   connect(): void {
     try {
       const broker = this.options.broker as EventStoreClientOptions;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this._client = new EventStoreDBClient(broker.connectionSettings, broker.connectionSettings, broker.defaultUserCredentials);
+      this._client = new EventStoreDBClient(broker.connectionSettings as any, broker.channelCredentials, broker.defaultUserCredentials);
+      this.connected = true;
     } catch (e) {
-      this.logger.error(e);
+      this.connected = false;
       throw new Error(e);
     }
-  }
-
-  newEvent(name, payload: Record<string, any>): CQRSEvent {
-    return this.newEventBuilder(name, payload);
-  }
-
-  private newEventBuilder(eventType: string, data: any, metadata?: any, eventId?: string): CQRSEvent {
-    const event: CQRSEvent = {
-      eventId: eventId || uuid.v4(),
-      eventType,
-      data
-    };
-
-    if (metadata !== undefined) {
-      event.metadata = metadata;
-    }
-    return event;
   }
 
   onModuleDestroy(): any {

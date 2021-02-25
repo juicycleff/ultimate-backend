@@ -19,44 +19,44 @@
  ******************************************************************************/
 
 import { Test } from '@nestjs/testing';
-import { EventStoreClient } from './event-store.client';
+import { StanClient } from './stan.client';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreModuleOptions } from '../interface';
+import { EventStoreBrokerTypes, EventStoreModuleOptions } from '../interface';
 
-
-describe('EventStoreClient', () => {
-  let service: EventStoreClient;
+describe('StanClient', () => {
+  let service: StanClient;
 
   beforeEach(async () => {
-
     const module = await Test.createTestingModule({
       providers: [
         {
           provide: ProvidersConstants.EVENT_STORE_CONFIG,
           useValue: {
-            debug: true,
             broker: {
-              clientId: 'test-client-id'
+              type: EventStoreBrokerTypes.STAN,
+              clientId: 'test-client-id',
+              clusterId: 'my-cluster'
             }
           } as EventStoreModuleOptions,
         },
-        EventStoreClient,
+        StanClient,
       ],
     }).compile();
 
-    service = module.get(EventStoreClient);
+    service = module.get(StanClient);
   });
 
   it('should be defined', () => {
-    expect(service.connect()).toHaveReturned();
     expect(service).toBeTruthy();
   });
 
   it('connected should be false', () => {
-    expect(service.connected).toBeTruthy();
+    expect(service.connected).toBeFalsy();
   });
 
-  it('client should not be null', () => {
+  it('client should not throw', () => {
+    expect(() => service.connect()).not.toThrow();
     expect(service.client()).toBeDefined();
+    // expect(service.connected).toBeTruthy();
   });
 });
