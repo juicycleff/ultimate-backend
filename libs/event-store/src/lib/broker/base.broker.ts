@@ -1,9 +1,3 @@
-import { EventStoreFeatureOptions, IEventConstructors } from '@ultimate-backend';
-import { Subject } from 'rxjs';
-import { IEvent } from '@nestjs/cqrs';
-import { IAdapterStore } from '../adapter.interface';
-import { Logger } from '@nestjs/common';
-
 /*******************************************************************************
  * Copyright (c) 2021. Rex Isaac Raphael
  *
@@ -23,6 +17,12 @@ import { Logger } from '@nestjs/common';
  * File name:         base.broker.ts
  * Last modified:     25/02/2021, 21:12
  ******************************************************************************/
+import { EventStoreFeatureOptions, IEventConstructors } from '@ultimate-backend';
+import { Subject } from 'rxjs';
+import { IEvent } from '@nestjs/cqrs';
+import { IAdapterStore } from '../adapter.interface';
+import { Logger } from '@nestjs/common';
+
 
 export abstract class BaseBroker {
 
