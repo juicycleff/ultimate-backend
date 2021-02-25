@@ -23,36 +23,36 @@ import { ModelMetadata } from 'ottoman/lib/types/model/interfaces/model-metadata
 import { ModuleMetadata, Type } from '@nestjs/common';
 
 export interface CouchbaseModuleOptions {
-    url: string;
-    ottoman?: OttomanConfig;
-    clusterName?: string;
-    scopeName?: string;
-    username: string;
-    password: string;
-    bucketName: string;
-    clientCertificate?: string;
-    certificateChain?: string;
-    transcoder?: unknown;
-    logFunc?: unknown;
-    retryAttempts?: number;
-    retryDelays?: number;
-    clusterFactory?: (connection: any, name: string) => any;
+  url: string;
+  ottoman?: OttomanConfig;
+  clusterName?: string;
+  scopeName?: string;
+  username: string;
+  password: string;
+  bucketName: string;
+  clientCertificate?: string;
+  certificateChain?: string;
+  transcoder?: unknown;
+  logFunc?: unknown;
+  retryAttempts?: number;
+  retryDelays?: number;
+  clusterFactory?: (connection: any, name: string) => any;
 }
 
 interface OttomanConfig {
-    collectionName?: string;
-    scopeName?: string;
-    modelKey?: string;
-    populateMaxDeep?: number;
-    searchConsistency?: SearchConsistency;
-    maxExpiry?: number;
-    keyGenerator?: (params: { metadata: ModelMetadata; id: string }) => string;
+  collectionName?: string;
+  scopeName?: string;
+  modelKey?: string;
+  populateMaxDeep?: number;
+  searchConsistency?: SearchConsistency;
+  maxExpiry?: number;
+  keyGenerator?: (params: { metadata: ModelMetadata; id: string }) => string;
 }
 
 export interface CouchbaseOptionsFactory {
-    createCouchbaseOptions():
-        | Promise<CouchbaseModuleOptions>
-        | CouchbaseModuleOptions;
+  createCouchbaseOptions():
+    | Promise<CouchbaseModuleOptions>
+    | CouchbaseModuleOptions;
 }
 
 /**
@@ -60,28 +60,27 @@ export interface CouchbaseOptionsFactory {
  * useExisting, useClass, or useFactory options for creation.
  */
 export interface CouchbaseModuleAsyncOptions
-    extends Pick<ModuleMetadata, 'imports'> {
-    /** couhbase connection name. */
-    connectionName?: string;
+  extends Pick<ModuleMetadata, 'imports'> {
+  /** couhbase connection name. */
+  connectionName?: string;
 
-    /** Reuse an injectable factory class created in another module. */
-    useExisting?: Type<CouchbaseOptionsFactory>;
+  /** Reuse an injectable factory class created in another module. */
+  useExisting?: Type<CouchbaseOptionsFactory>;
 
-    /**
-     * Use an injectable factory class to populate the module options, such as URI and database name.
-     */
-    useClass?: Type<CouchbaseOptionsFactory>;
+  /**
+   * Use an injectable factory class to populate the module options, such as URI and database name.
+   */
+  useClass?: Type<CouchbaseOptionsFactory>;
 
-    /**
-     * A factory function that will populate the module options, such as URI and database name.
-     */
-    useFactory?: (
-        ...args: never[]
-    ) => Promise<CouchbaseModuleOptions> | CouchbaseModuleOptions;
+  /**
+   * A factory function that will populate the module options, such as URI and database name.
+   */
+  useFactory?: (
+    ...args: never[]
+  ) => Promise<CouchbaseModuleOptions> | CouchbaseModuleOptions;
 
-    /**
-     * Inject any dependencies required by the Mongo module, such as a configuration service
-     * that supplies the URI and database name
-     */
-    inject?: never[];
+  /**
+   * Inject any dependencies required by the module, such as a configuration service
+   */
+  inject?: never[];
 }

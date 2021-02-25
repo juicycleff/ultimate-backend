@@ -56,8 +56,7 @@ export interface EtcdModuleAsyncOptions
   ) => Promise<EtcdModuleOptions> | EtcdModuleOptions;
 
   /**
-   * Inject any dependencies required by the Mongo module, such as a configuration service
-   * that supplies the URI and database name
+   * Inject any dependencies required by the module, such as a configuration service
    */
   inject?: never[];
 }

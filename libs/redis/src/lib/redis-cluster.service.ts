@@ -67,7 +67,6 @@ export class RedisClusterService
         )
       )
       .toPromise();
-    return;
   }
 
   beforeApplicationShutdown(signal?: string): any {
@@ -75,6 +74,10 @@ export class RedisClusterService
   }
 
   onModuleInit(): any {
-    this.connect();
+    try {
+      this.connect();
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

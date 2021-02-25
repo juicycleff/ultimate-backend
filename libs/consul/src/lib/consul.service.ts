@@ -20,34 +20,36 @@
 
 import * as ConsulStatic from 'consul';
 import {
-  Deferred, handleRetry,
+  handleRetry,
   IReactiveClient,
   LoggerUtil,
 } from '@ultimate-backend/common';
-import {
-  BeforeApplicationShutdown,
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConsulModuleOptions } from './consul-module.options';
 import { CONSUL_CONFIG_OPTIONS } from './consul.constant';
-import { Acl, Agent, Catalog, Event, Health, Kv, Lock, Session, Status, Watch } from 'consul';
-import * as retry from 'retry';
+import {
+  Acl,
+  Agent,
+  Catalog,
+  Event,
+  Health,
+  Kv,
+  Lock,
+  Session,
+  Status,
+  Watch,
+} from 'consul';
 import { defer } from 'rxjs';
 
 @Injectable()
-export class ConsulService implements
-  IReactiveClient<ConsulStatic.Consul>,
-  ConsulStatic.Consul,
-  OnModuleInit
-   {
+export class ConsulService
+  implements
+    IReactiveClient<ConsulStatic.Consul>,
+    ConsulStatic.Consul,
+    OnModuleInit {
   logger = new LoggerUtil('ConsulService');
 
   public consul: ConsulStatic.Consul;
-  // consul: Promise<ConsulStatic.Consul>;
-
-  private deferredClient: Deferred<ConsulStatic.Consul>;
 
   acl: Acl;
   agent: Agent;
@@ -109,9 +111,12 @@ export class ConsulService implements
     try {
       await defer(async () => {
         this.logger.log('ConsulService client started');
-        this.consul = await new ConsulStatic({...this.options,  promisify: true});
+        this.consul = await new ConsulStatic({
+          ...this.options,
+          promisify: true,
+        });
         this.logger.log('ConsulService client connected successfully');
-        this._initFields(this.consul)
+        this._initFields(this.consul);
       })
         .pipe(
           handleRetry(
@@ -129,5 +134,4 @@ export class ConsulService implements
   async onModuleInit(): Promise<void> {
     await this.connect();
   }
-
 }
