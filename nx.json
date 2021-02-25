@@ -37,6 +37,9 @@
     "messaging": { "tags": [] },
     "redis": { "tags": [] },
     "event-store": { "tags": [] },
-    "couchbase": { "tags": [] }
+    "couchbase": { "tags": [] },
+    "client": { "tags": [] },
+    "brakes": { "tags": [] },
+    "event-store-example": { "tags": [] }
   }
 }

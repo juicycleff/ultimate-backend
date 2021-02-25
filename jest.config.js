@@ -20,5 +20,8 @@ module.exports = {
     '<rootDir>/libs/redis',
     '<rootDir>/libs/event-store',
     '<rootDir>/libs/couchbase',
+    '<rootDir>/libs/client',
+    '<rootDir>/libs/brakes',
+    '<rootDir>/apps/event-store-example',
   ],
 };

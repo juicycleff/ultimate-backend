@@ -567,6 +567,121 @@
           }
         }
       }
+    },
+    "client": {
+      "root": "libs/client",
+      "sourceRoot": "libs/client/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/client"],
+          "options": {
+            "jestConfig": "libs/client/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/client",
+            "tsConfig": "libs/client/tsconfig.lib.json",
+            "packageJson": "libs/client/package.json",
+            "main": "libs/client/src/index.ts",
+            "assets": ["libs/client/*.md"]
+          }
+        }
+      }
+    },
+    "brakes": {
+      "root": "libs/brakes",
+      "sourceRoot": "libs/brakes/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/brakes/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/brakes"],
+          "options": {
+            "jestConfig": "libs/brakes/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/brakes",
+            "tsConfig": "libs/brakes/tsconfig.lib.json",
+            "packageJson": "libs/brakes/package.json",
+            "main": "libs/brakes/src/index.ts",
+            "assets": ["libs/brakes/*.md"]
+          }
+        }
+      }
+    },
+    "event-store-example": {
+      "root": "apps/event-store-example",
+      "sourceRoot": "apps/event-store-example/src",
+      "projectType": "application",
+      "prefix": "event-store-example",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/event-store-example",
+            "main": "apps/event-store-example/src/main.ts",
+            "tsConfig": "apps/event-store-example/tsconfig.app.json",
+            "assets": ["apps/event-store-example/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/event-store-example/src/environments/environment.ts",
+                  "with": "apps/event-store-example/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "event-store-example:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/event-store-example/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/event-store-example"],
+          "options": {
+            "jestConfig": "apps/event-store-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
