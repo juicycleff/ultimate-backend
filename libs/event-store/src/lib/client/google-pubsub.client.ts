@@ -18,20 +18,23 @@
  * Last modified:     14/02/2021, 16:40
  ******************************************************************************/
 
-import { EventStoreModuleOptions, IBrokerClient, StanClientOptions } from '../interface';
-import * as uuid from 'uuid';
+import {
+  EventStoreModuleOptions,
+  GooglePubsubClientOptions,
+  IBrokerClient,
+} from '../interface';
 import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ProvidersConstants } from '../event-store.constant';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { Stan } from '../external/stan.types';
 import { defer } from 'rxjs';
+import { PubSub } from '../external/gpubsub.types';
 
-let stanPackage: any = {};
+let googlePubsubPackage: any = {};
 
 @Injectable()
-export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDestroy {
-  _client: Stan;
+export class GooglePubsubClient implements IBrokerClient<PubSub>, OnModuleInit, OnModuleDestroy {
+  _client: PubSub;
   connected = false;
 
   private logger = new LoggerUtil(this.constructor.name);
@@ -40,49 +43,29 @@ export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDe
     @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
     private readonly options: EventStoreModuleOptions
   ) {
-    stanPackage = loadPackage('node-nats-streaming', StanClient.name, () => require('node-nats-streaming'));
+    googlePubsubPackage = loadPackage('@google-cloud/pubsub', GooglePubsubClient.name, () => require('@google-cloud/pubsub'));
     this.logger = new LoggerUtil(this.constructor.name, options.debug);
   }
 
-  public client(): Stan {
+  public client(): PubSub {
     return this._client;
   }
 
-  public close(): void {
-    this._client.close();
+  public async close(): Promise<void> {
+    await this._client.close();
   }
 
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        const broker = this.options.broker as StanClientOptions;
-        let clientId = uuid.v4();
-        if (clientId) {
-          clientId = broker.clientId;
-        }
-
-        this._client = stanPackage.connect(broker.clusterId, clientId, broker.options);
-
-        this._client.on('connect', () => {
-          this.connected = true;
-          this.logger.log('STAN Event Store client connected!');
-        });
-        this._client.on('disconnect:', () => {
-          this.connected = false;
-          this.logger.error('STAN Event Store client disconnected!');
-          throw new Error('STAN Event Store client disconnected!');
-        });
-        this._client.on('close:', () => {
-          this.connected = false;
-          this.logger.error('STAN Event Store client closed!');
-          throw new Error('STAN Event Store client closed!');
-        });
+        const broker = this.options.broker as GooglePubsubClientOptions;
+        this._client = new googlePubsubPackage.PubSub(broker.options);
       })
         .pipe(
           handleRetry(
             this.options.retryAttempts,
             this.options.retryDelays,
-            'StanClient'
+            'GooglePubsubClient'
           )
         )
         .toPromise();
@@ -92,11 +75,11 @@ export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDe
     }
   }
 
-  onModuleDestroy(): any {
-    this.close();
+  async onModuleDestroy() {
+    await this.close();
   }
 
-  onModuleInit(): any {
-    this.connect();
+  async onModuleInit() {
+    await this.connect();
   }
 }

@@ -24,3 +24,4 @@ export * from './stan-client.options';
 export * from './broker.enums';
 export * from './broker-client.interface';
 export * from './feature.options';
+export * from './google-pubsub.interface';

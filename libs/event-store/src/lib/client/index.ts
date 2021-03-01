@@ -20,3 +20,4 @@
 
 export * from './event-store.client';
 export * from './stan.client';
+export * from './google-pubsub.client';

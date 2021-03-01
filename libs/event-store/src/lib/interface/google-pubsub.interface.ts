@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2021. Rex Isaac Raphael
  *
@@ -15,12 +14,13 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         client.enums.ts
- * Last modified:     14/02/2021, 16:18
+ * File name:         gpubsub.interface.ts
+ * Last modified:     26/02/2021, 01:01
  ******************************************************************************/
+import { EventStoreBrokerTypes } from '@ultimate-backend';
+import { ClientConfig } from '../external/gpubsub.types';
 
-export enum EventStoreBrokerTypes {
-  EventStore,
-  STAN,
-  GOOGLE_PUB_SUB
+export interface GooglePubsubClientOptions {
+  type: EventStoreBrokerTypes.GOOGLE_PUB_SUB;
+  options: ClientConfig;
 }

@@ -26,7 +26,8 @@ import {
   IBrokerClient,
 } from '../interface';
 import { ProvidersConstants } from '../event-store.constant';
-import { LoggerUtil } from '@ultimate-backend/common';
+import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
+import { defer } from 'rxjs';
 
 /**
  * @description Event store setup from eventstore.org
@@ -57,11 +58,21 @@ export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnMo
     // throw new Error('Not implemented');
   }
 
-  connect(): void {
+  async connect(): Promise<void> {
     try {
-      const broker = this.options.broker as EventStoreClientOptions;
-      this._client = new EventStoreDBClient(broker.connectionSettings as any, broker.channelCredentials, broker.defaultUserCredentials);
-      this.connected = true;
+      await defer(async () => {
+        const broker = this.options.broker as EventStoreClientOptions;
+        this._client = new EventStoreDBClient(broker.connectionSettings as any, broker.channelCredentials, broker.defaultUserCredentials);
+        this.connected = true;
+      })
+        .pipe(
+          handleRetry(
+            this.options.retryAttempts,
+            this.options.retryDelays,
+            'EventStoreClient'
+          )
+        )
+        .toPromise();
     } catch (e) {
       this.connected = false;
       throw new Error(e);

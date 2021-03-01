@@ -25,15 +25,18 @@ import { DuplexOptions, ReadableOptions } from 'stream';
 import { ConnectToPersistentSubscriptionOptions } from '@eventstore/db-client/dist/persistentSubscription';
 import {
   EventType,
-  PersistentSubscription, StreamSubscription,
+  PersistentSubscription,
+  StreamSubscription,
 } from '@eventstore/db-client/dist/types';
 import { AppendToStreamOptions, SubscribeToStreamOptions } from '@eventstore/db-client/dist/streams';
 import { Subscription, SubscriptionOptions } from '../external/stan.types';
+import { CreateSubscriptionOptions, Subscription as PubsubSubscription } from '../external/gpubsub.types';
 
 export interface IEventConstructors {
   [key: string]: (...args: any[]) => IEvent;
 }
 
+/***************************Event Store*********************/
 export enum EventStoreSubscriptionType {
   Persistent,
   Standard,
@@ -58,6 +61,7 @@ export type EventStoreSubscription =
   | EventStorePersistentSubscription
   | EventStoreStandardSubscription;
 
+/***********************Nats Streaming***********************/
 export interface BaseStanSubscription {
   options?: SubscriptionOptions;
   streamName: string;
@@ -73,6 +77,18 @@ export interface StanStandardSubscription extends BaseStanSubscription {
 }
 
 export type StanSubscription = StanPersistentSubscription | StanStandardSubscription;
+
+/***********************Google PubSub***********************/
+
+export interface GooglePubsubSubscription {
+  type: EventStoreSubscriptionType.Standard;
+  topicName: string;
+  subscriptionName: string;
+  options?: CreateSubscriptionOptions;
+}
+
+/***********************Real***********************/
+
 
 export interface BaseBrokerFeatureOption {
   streamName?: string;
@@ -94,6 +110,12 @@ export interface EventStoreBrokerFeature extends BaseBrokerFeatureOption {
 export interface StanBrokerFeature extends BaseBrokerFeatureOption {
   type: EventStoreBrokerTypes.STAN;
   subscriptions: StanSubscription[];
+}
+
+export interface GooglePubsubBrokerFeature extends BaseBrokerFeatureOption {
+  type: EventStoreBrokerTypes.GOOGLE_PUB_SUB;
+  streamName: string;
+  subscriptions: GooglePubsubSubscription[];
 }
 
 export interface ExtendedPersistentSubscription<E extends EventType = EventType>
@@ -118,8 +140,14 @@ export interface ExtendedStanStandardSubscription extends Subscription {
   isLive?: boolean | undefined;
 }
 
+export interface ExtendedPubsubStandardSubscription extends PubsubSubscription {
+  type: 'normal';
+  isLive?: boolean | undefined;
+}
+
 export type EventStoreFeatureOptions =
   | EventStoreBrokerFeature
+  | GooglePubsubBrokerFeature
   | StanBrokerFeature;
 
 export interface EventStoreFeatureOptionsFactory {

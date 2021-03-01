@@ -3,8 +3,9 @@ import { ModuleMetadata, Type } from '@nestjs/common';
 
 import { EventStoreClientOptions } from './event-store-client.options';
 import { StanClientOptions } from './stan-client.options';
+import { GooglePubsubClientOptions } from './google-pubsub.interface';
 
-export type BrokerOptions = EventStoreClientOptions | StanClientOptions;
+export type BrokerOptions = EventStoreClientOptions | StanClientOptions | GooglePubsubClientOptions;
 
 export interface EventStoreModuleOptions extends BaseClientOptions {
   broker: BrokerOptions;
