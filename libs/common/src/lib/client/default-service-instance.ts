@@ -2,6 +2,8 @@ import { ServiceInstance } from './service-instance';
 
 export class DefaultServiceInstance implements ServiceInstance {
   /**
+   *
+   *
    * @param instanceId the id of the instance.
    * @param serviceId the id of the service.
    * @param host the host where the service instance can be found.

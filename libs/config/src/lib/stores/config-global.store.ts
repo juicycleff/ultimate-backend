@@ -27,14 +27,12 @@ export class ConfigGlobalStore {
   private _dataArr: ConfigData[];
 
   /**
-   *
-   *6
    * @param source
    * @param key
    * @param value
-   */
+   *
   set(source: ConfigSource, key: string, value: any): void {
-    //
+    /
   }
 
   /**

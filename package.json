@@ -28,7 +28,9 @@
   },
   "private": false,
   "dependencies": {
+    "@azure/event-hubs": "^5.4.0",
     "@eventstore/db-client": "^0.0.0-alpha.17",
+    "@google-cloud/pubsub": "^2.10.0",
     "@iarna/toml": "^2.2.5",
     "@mikro-orm/core": "^4.3.3",
     "@mikro-orm/mongodb": "^4.3.3",
@@ -85,6 +87,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
+    "clear": "^0.1.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
