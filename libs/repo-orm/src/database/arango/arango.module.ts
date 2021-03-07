@@ -1,4 +1,4 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { Module, DynamicModule, Global } from '@nestjs/common';
 import { ArangoCoreModule } from './arango-core.module';
 import {
   createArangoProviders,
@@ -9,6 +9,7 @@ import { ArangoClientOption, ArangoModuleAsyncOptions } from './interfaces';
 /**
  * Module for the MongoDB driver
  */
+@Global()
 @Module({})
 export class ArangoModule {
   /**
@@ -17,10 +18,12 @@ export class ArangoModule {
    * @param option
    */
   static register(option: ArangoModuleOption): DynamicModule {
-    const { uri, dbName, options, connectionName } = option;
+    const { dbName, clientOptions, connectionName } = option;
     return {
       module: ArangoModule,
-      imports: [ArangoCoreModule.forRoot(uri, dbName, options, connectionName)],
+      imports: [
+        ArangoCoreModule.forRoot(dbName, clientOptions, connectionName),
+      ],
     };
   }
 
@@ -60,8 +63,7 @@ export class ArangoModule {
 }
 
 interface ArangoModuleOption {
-  uri: string;
   dbName: string;
-  options?: ArangoClientOption;
+  clientOptions: ArangoClientOption;
   connectionName?: string;
 }

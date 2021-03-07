@@ -3,7 +3,7 @@ import { COLUMN_KEY, ColumnOptions } from '../interfaces';
 
 /**
  * Special type of column that is available only for MongoDB database.
- * Marks your entity's column to be an object id.
+ * Marks your entities's column to be an object id.
  */
 
 export function ObjectIdColumn(options?: ColumnOptions): Function {

@@ -21,15 +21,11 @@ const operators = {
 const logicalOperators = {
   AND: ' AND ',
   OR: ' OR ',
-  _OR: ' AND ',
-  _AND: ' OR ',
+  _OR: ' OR ',
+  _AND: ' AND ',
 };
 
-export function arangoQueryBuilder(
-  query: object,
-  docName?: string,
-  grouped?: boolean,
-) {
+function arangoQueryBuilder(query: any, docName?: string, grouped?: boolean) {
   const doc = docName;
   const group = grouped;
 
@@ -49,25 +45,21 @@ export function arangoQueryBuilder(
         prop = '';
       }
       if (prop === '$or') {
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < val.length; i++) {
           aqlOr.push(arangoQueryBuilder(val[i]));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators.OR) + ')';
       } else if (prop === '_OR') {
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < val.length; i++) {
           aqlOr.push(arangoQueryBuilder(val[i]));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators._OR) + ')';
       } else if (prop === '$and') {
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < val.length; i++) {
           aqlOr.push(arangoQueryBuilder(val[i]));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators._AND) + ')';
       } else if (prop === '_AND') {
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < val.length; i++) {
           aqlOr.push(arangoQueryBuilder(val[i]));
         }
@@ -110,3 +102,19 @@ export function arangoQueryBuilder(
 
   return str;
 }
+
+function GraphqlArangoParser() {
+  return (
+    args: Record<string, unknown>,
+    docName = 'doc',
+    grouped?: boolean,
+  ): string => {
+    return arangoQueryBuilder(args, docName, grouped);
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const GqlArangoParser = GraphqlArangoParser();
+
+// admin 1xDKUrMwSbkisUuKJRt7

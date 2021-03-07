@@ -75,7 +75,7 @@ export interface ColumnCommonOptions {
 
   /**
    * Specifies if this column will use auto increment (sequence, generated identity).
-   * Note that in some databases only one column in entity can be marked as generated, and it must be a primary column.
+   * Note that in some databases only one column in entities can be marked as generated, and it must be a primary column.
    */
   generated?: boolean | 'increment' | 'uuid';
 

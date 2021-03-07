@@ -58,7 +58,10 @@ export const defaultKeywords: Keywords = {
 };
 const defaultValues: Resolvers = {};
 
-export const isOperator = (key: string, keywords: object): boolean => {
+export const isOperator = (
+  key: string,
+  keywords: Record<string, unknown>,
+): boolean => {
   return Object.keys(keywords).includes(key);
 };
 
@@ -74,14 +77,17 @@ export const isValidDate = (val): boolean => {
   return moment(val, moment.ISO_8601, true).isValid();
 };
 
-export const isComputable = (key: string, resolvers: object): boolean => {
+export const isComputable = (
+  key: string,
+  resolvers: Record<string, unknown>,
+): boolean => {
   return Object.keys(resolvers).includes(key);
 };
 
 export const isNested = (
   value,
-  keywords: object,
-  resolvers: object,
+  keywords: Record<string, unknown>,
+  resolvers: Record<string, unknown>,
 ): boolean => {
   if (typeof value !== 'object') {
     return false;
@@ -100,17 +106,22 @@ export const isNested = (
   return nested;
 };
 
-export const computedValue = (parent: object, resolvers: object) => {
+export const computedValue = (
+  parent: Record<string, unknown>,
+  resolvers: Record<string, unknown>,
+) => {
   for (const valueKey in resolvers) {
     if (parent[valueKey] !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return resolvers[valueKey](parent);
     }
   }
 };
 
 export const argType = (
-  keywords: object,
-  resolvers: object,
+  keywords: Record<string, unknown>,
+  resolvers: Record<string, unknown>,
   key?: string,
   val?: string,
 ): ArgType => {
@@ -255,7 +266,7 @@ export const buildFilters = (
 function GraphqlMongoParser(
   customKeywords: Keywords = {},
   customResolvers: Resolvers = {},
-  merge: boolean = true,
+  merge = true,
 ) {
   const keywords: Keywords = merge
     ? { ...defaultKeywords, ...customKeywords }
@@ -263,8 +274,8 @@ function GraphqlMongoParser(
   const resolvers: Resolvers = merge
     ? { ...defaultValues, ...customResolvers }
     : customResolvers;
-  return (args: object): object =>
+  return (args: Record<string, unknown>): Record<string, unknown> =>
     buildFilters(args, null, keywords, resolvers);
 }
 
-export const mongoParser = GraphqlMongoParser();
+export const GqlMongoParser = GraphqlMongoParser();

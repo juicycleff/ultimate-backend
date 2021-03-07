@@ -5,11 +5,9 @@ import {
   Cursor,
   DeleteWriteOpResultObject,
   ObjectID,
-  UpdateWriteOpResult,
 } from 'mongodb';
 import { CacheStore } from '@nestjs/common';
 import * as moment from 'moment';
-// const { performance } = require('perf_hooks');
 import { MongoCollectionProps, MongoDBSource } from '../interfaces';
 import { DataEvents } from '../../../enums';
 import {
@@ -22,7 +20,6 @@ import {
   PRE_KEY,
   TenantData,
   UpdateByIdRequest,
-  UpdateOneRequest,
   UpdateRequest,
 } from '../../../interfaces';
 import { cleanEmptyProperties, NotFoundError } from '@ultimatebackend/common';
@@ -114,7 +111,9 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
       return cachedResult;
     }
 
-    const found = await collection.find(query as object).toArray();
+    const found = await collection
+      .find(query as Record<string, unknown>)
+      .toArray();
 
     const results: DOC[] = [];
     for (const result of found) {
@@ -139,7 +138,10 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
    * @returns {Promise<DOC>}
    * @memberof BaseMongoRepository
    */
-  async findOne(conditions: object, noCache = false): Promise<DOC> {
+  async findOne(
+    conditions: Record<string, unknown>,
+    noCache = false,
+  ): Promise<DOC> {
     const collection = await this.collection;
 
     const cleanConditions = cleanEmptyProperties({
@@ -169,8 +171,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
         ['FIND', 'FIND_ONE'],
         document,
       );
-      // @ts-ignore
-      document = this.convertDateToString(document);
+      // document = this.convertDateToString(document);
       if (noCache === false) {
         await this.saveToCache(cacheKey, document);
       }
@@ -187,7 +188,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
    * @param options
    */
   async aggregate(
-    pipeline?: object[],
+    pipeline?: Record<string, unknown>[],
     options?: CollectionAggregationOptions,
   ): Promise<
     AggregationCursor<DOC> | AggregationCursor<DOC[]> | AggregationCursor<any>
@@ -253,15 +254,22 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
       const nextCount = i + 1;
 
       correctDoc = this.toggleId(newDocuments[i], false) as any;
-      // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
-      correctDoc = this.convertDateToString(correctDoc);
+      correctDoc = await this.invokeEvents(
+        POST_KEY,
+        ['FIND', 'FIND_MANY'],
+        correctDoc,
+      );
+      // correctDoc = this.convertDateToString(correctDoc);
       results.push(correctDoc);
 
       if (nextCount <= newDocuments.length - 1) {
         correctDoc = this.toggleId(newDocuments[nextCount], false) as any;
-        // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
-        // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
-        correctDoc = this.convertDateToString(correctDoc);
+        correctDoc = await this.invokeEvents(
+          POST_KEY,
+          ['FIND', 'FIND_MANY'],
+          correctDoc,
+        );
+        // correctDoc = this.convertDateToString(correctDoc);
         results.push(correctDoc);
       }
     }
@@ -300,7 +308,6 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const cacheKey = JSON.stringify({ cleanConditions, ...req.args });
     const cachedResult = await this.retrieveFromCache(cacheKey);
     if (cachedResult) {
-      // @ts-ignore
       return cachedResult;
     }
 
@@ -353,22 +360,29 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     // const t1 = Date.now();
     // console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
 
-    const edges: Array<CursorEdge<DOC>> = [];
+    const edges: CursorEdge<DOC>[] = [];
     for (let i = 0; i < newDocuments.length; i += 2) {
       const nextCount = i + 1;
 
       let curValue = this.toggleId(newDocuments[i], false) as any;
-      // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
+      correctNode = await this.invokeEvents(
+        POST_KEY,
+        ['FIND', 'FIND_MANY'],
+        curValue,
+      );
 
-      correctNode = this.convertDateToString(curValue);
+      // correctNode = this.convertDateToString(curValue);
       edges.push({ cursor: curValue.id.toString(), node: correctNode });
       list.push(correctNode);
 
       if (nextCount <= newDocuments.length - 1) {
         curValue = this.toggleId(newDocuments[nextCount], false) as any;
-        // curValue = await this.invokeEvents(POST_KEY, ['FIND', 'FIND_MANY'], curValue);
-
-        correctNode = this.convertDateToString(curValue);
+        correctNode = await this.invokeEvents(
+          POST_KEY,
+          ['FIND', 'FIND_MANY'],
+          curValue,
+        );
+        // correctNode = this.convertDateToString(curValue);
         edges.push({ cursor: curValue.id.toString(), node: correctNode });
         list.push(correctNode);
       }
@@ -408,27 +422,24 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
    */
   async create(document: Partial<DTO> | DTO): Promise<DOC> {
     const collection = await this.collection;
-    const eventResult: unknown = await this.invokeEvents(
+    const eventResult: Record<string, unknown> = await this.invokeEvents(
       PRE_KEY,
       ['SAVE', 'CREATE'],
       document,
     );
 
     const tenantFix = { tenantId: this.tenant?.tenantId };
-    // @ts-ignore
     const cleanDoc = { ...eventResult, ...cleanEmptyProperties(tenantFix) };
     const res = await collection.insertOne(cleanDoc);
 
     let newDocument = res.ops[0];
-    // @ts-ignore
     newDocument = this.toggleId(newDocument, false);
     newDocument = await this.invokeEvents(
       POST_KEY,
       ['SAVE', 'CREATE'],
       newDocument,
     );
-    newDocument = this.convertDateToString(newDocument);
-    // @ts-ignore
+    // newDocument = this.convertDateToString(newDocument);
     return newDocument;
   }
 
@@ -442,6 +453,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
   async save(document: Document): Promise<DOC> {
     const collection = await this.collection;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const id = new ObjectID(document.id); // flip/flop ids
 
@@ -450,24 +462,24 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     delete updates._id;
     const query = { _id: id };
     const res = await collection.updateOne(
-      query as object,
+      query as Record<string, unknown>,
       { $set: updates },
       { upsert: true },
     );
-    let newDocument = await collection.findOne(query as object);
+    let newDocument = await collection.findOne(
+      query as Record<string, unknown>,
+    );
 
     // project new items
     if (newDocument) {
       Object.assign(document, newDocument);
     }
 
-    // @ts-ignore
     newDocument.id = id.toString(); // flip flop ids back
-    // @ts-ignore
     delete newDocument._id;
 
     newDocument = await this.invokeEvents(POST_KEY, ['SAVE'], newDocument);
-    newDocument = this.convertDateToString(newDocument);
+    // newDocument = this.convertDateToString(newDocument);
     return newDocument;
   }
 
@@ -487,7 +499,6 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
       cleanDocs.push({ ...value, ...cleanEmptyProperties(tenantFix) });
     });
 
-    // @ts-ignore
     const res = await collection.insertMany(cleanDocs);
 
     const newDocuments = res.ops;
@@ -495,11 +506,10 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const results = [];
     for (let document of newDocuments) {
       document = this.toggleId(document, false) as any;
-      document = this.convertDateToString(document);
+      // document = this.convertDateToString(document);
       results.push(document);
     }
 
-    // @ts-ignore
     return results;
   }
 
@@ -542,7 +552,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const updates = await this.invokeEvents(
       PRE_KEY,
       ['UPDATE', 'UPDATE_ONE'],
-      { $set: { ...req.updates } },
+      req.updates,
     );
 
     const conditions = cleanEmptyProperties({
@@ -568,7 +578,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const updates = await this.invokeEvents(
       PRE_KEY,
       ['UPDATE', 'UPDATE_ONE'],
-      { $set: { ...req.updates } },
+      req.updates,
     );
 
     const conditions = cleanEmptyProperties({
@@ -587,30 +597,8 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
       ['UPDATE', 'UPDATE_ONE'],
       document,
     );
-    document = this.convertDateToString(document);
+    // document = this.convertDateToString(document);
     return document;
-  }
-
-  /**
-   * update with new values
-   *
-   * @param {UpdateRequest} req
-   * @returns {Promise<DOC>}
-   * @memberof BaseMongoRepository
-   */
-  async updateOne(req: UpdateOneRequest): Promise<UpdateWriteOpResult> {
-    const collection = await this.collection;
-    const updates = await this.invokeEvents(
-      PRE_KEY,
-      ['UPDATE', 'UPDATE_ONE'],
-      { $set: { ...req.updates } },
-    );
-
-    const conditions = cleanEmptyProperties({
-      tenantId: this.tenant?.tenantId,
-      ...req.conditions,
-    });
-    return await collection.updateOne(conditions, updates);
   }
 
   /**
@@ -873,7 +861,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     // TODO: Initialize tenant data isolation
   }
 
-  public onSave(): { createdAt: Date; updatedAt: Date } {
+  public onSave(): { createdAt?: Date; updatedAt?: Date } {
     return {
       createdAt: DateTime.local().toBSON(),
       updatedAt: DateTime.local().toBSON(),
@@ -883,7 +871,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
   public onUpdate(): any {
     return {
       $set: {
-        updatedAt: new Date(),
+        updatedAt: DateTime.local().toBSON(),
       },
     };
   }

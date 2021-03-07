@@ -7,6 +7,7 @@ import {
   getCurrentTenantToken,
   getEdgeCollectionToken,
 } from '../utils';
+import { getArangoDbToken } from '@juicycleff/repo-orm/database/arango/database.util';
 
 /**
  * Inject the MongoClient object associated with a connection
@@ -33,8 +34,14 @@ export const InjectCurrentTenant = (connectionName?: string) =>
  * Inject the Db object associated with a connection
  * @param connectionName The unique name associated with the connection
  */
-export const InjectDb = (connectionName?: string) =>
+export const InjectMongoDb = (connectionName?: string) =>
   Inject(getDbToken(connectionName));
+/**
+ * Inject the Db object associated with a connection
+ * @param connectionName The unique name associated with the connection
+ */
+export const InjectArangoDb = (connectionName?: string) =>
+  Inject(getArangoDbToken(connectionName));
 
 /**
  * Inject the DB Collection object associated with a Db

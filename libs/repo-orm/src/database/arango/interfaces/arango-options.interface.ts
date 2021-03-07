@@ -1,13 +1,13 @@
 import { ModuleMetadata, Type } from '@nestjs/common/interfaces';
+import { ArangoClientOption } from '@juicycleff/repo-orm/database';
 
 /**
  * Options that ultimately need to be provided to create a MongoDB connection
  */
 export interface ArangoModuleOptions {
   connectionName?: string;
-  uri: string | string[];
   dbName: string;
-  clientOptions?: any;
+  clientOptions: ArangoClientOption;
   tenantName?: string;
 }
 

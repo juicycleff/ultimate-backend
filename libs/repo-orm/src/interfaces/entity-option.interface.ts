@@ -1,10 +1,10 @@
 /**
- * Describes all entity's options.
+ * Describes all entities's options.
  */
 export interface EntityOptions {
   /**
    * Collection name.
-   * If not specified then naming strategy will generate collection name from entity name.
+   * If not specified then naming strategy will generate collection name from entities name.
    */
   name?: string;
 

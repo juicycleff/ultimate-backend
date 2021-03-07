@@ -15,11 +15,6 @@ export interface UpdateRequest extends UpdateByIdRequest {
   conditions: any;
 }
 
-export interface UpdateOneRequest {
-  updates: any;
-  conditions: any;
-}
-
 export interface FindRequest {
   conditions: any;
   limit?: number;
