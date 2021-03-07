@@ -4,7 +4,6 @@ module.exports = {
   projects: [
     '<rootDir>/libs/cloud',
     '<rootDir>/libs/proto-schema',
-    '<rootDir>/libs/grpc',
     '<rootDir>/libs/core',
     '<rootDir>/libs/common',
     '<rootDir>/libs/loadbalancer',

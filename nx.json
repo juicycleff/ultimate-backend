@@ -1,9 +1,14 @@
 {
   "npmScope": "ultimate-backend",
-  "affected": { "defaultBase": "v3" },
+  "affected": {
+    "defaultBase": "v3"
+  },
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
@@ -21,25 +26,62 @@
     }
   },
   "projects": {
-    "core": { "tags": [] },
-    "common": { "tags": [] },
-    "cloud": { "tags": [] },
-    "grpc": { "tags": [] },
-    "loadbalancer": { "tags": [] },
-    "permissions": { "tags": [] },
-    "cli": { "tags": [] },
-    "example": { "tags": [] },
-    "adv-example": { "tags": [] },
-    "consul": { "tags": [] },
-    "zookeeper": { "tags": [] },
-    "etcd": { "tags": [] },
-    "config": { "tags": [] },
-    "messaging": { "tags": [] },
-    "redis": { "tags": [] },
-    "event-store": { "tags": [] },
-    "couchbase": { "tags": [] },
-    "client": { "tags": [] },
-    "brakes": { "tags": [] },
-    "event-store-example": { "tags": [] }
+    "core": {
+      "tags": []
+    },
+    "common": {
+      "tags": []
+    },
+    "cloud": {
+      "tags": []
+    },
+    "loadbalancer": {
+      "tags": []
+    },
+    "permissions": {
+      "tags": []
+    },
+    "cli": {
+      "tags": []
+    },
+    "example": {
+      "tags": []
+    },
+    "adv-example": {
+      "tags": []
+    },
+    "consul": {
+      "tags": []
+    },
+    "zookeeper": {
+      "tags": []
+    },
+    "etcd": {
+      "tags": []
+    },
+    "config": {
+      "tags": []
+    },
+    "messaging": {
+      "tags": []
+    },
+    "redis": {
+      "tags": []
+    },
+    "event-store": {
+      "tags": []
+    },
+    "couchbase": {
+      "tags": []
+    },
+    "client": {
+      "tags": []
+    },
+    "brakes": {
+      "tags": []
+    },
+    "event-store-example": {
+      "tags": []
+    }
   }
 }
