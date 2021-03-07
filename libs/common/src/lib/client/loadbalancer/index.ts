@@ -15,12 +15,9 @@
  * DEALINGS IN THE SOFTWARE.
  *
  * File name:         index.ts
- * Last modified:     09/02/2021, 18:11
+ * Last modified:     06/03/2021, 18:54
  ******************************************************************************/
 
-export * from './service-registry';
-export * from './discovery';
-export * from './loadbalancer';
-
-export * from './service-instance';
-export * from './default-service-instance';
+export * from './loadbalance.interface';
+export * from './base.strategy';
+export * from './pool.interface';

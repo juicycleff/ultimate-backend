@@ -14,13 +14,23 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     09/02/2021, 18:11
+ * File name:         service.interface.ts
+ * Last modified:     10/02/2021, 23:22
  ******************************************************************************/
 
-export * from './service-registry';
-export * from './discovery';
-export * from './loadbalancer';
+export interface IServiceState {
+  status: string;
+  totalRequests: number;
+  activeRequestsCount: number;
+  weight: number;
+  responseTimeAvg: number;
+  responseTimeMax: number;
 
-export * from './service-instance';
-export * from './default-service-instance';
+  lastConnectionFailedTimestamp: number;
+  lastConnectionFailedMessage: string;
+  serverFailureCounts: number;
+
+  getActiveRequestsCount(currentTime?: number): number;
+
+  isLive(): boolean;
+}

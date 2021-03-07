@@ -14,13 +14,11 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     09/02/2021, 18:11
+ * File name:         pool.interface.ts
+ * Last modified:     04/03/2021, 23:10
  ******************************************************************************/
+import { IService } from '@ultimate-backend/common';
 
-export * from './service-registry';
-export * from './discovery';
-export * from './loadbalancer';
-
-export * from './service-instance';
-export * from './default-service-instance';
+export interface ServicePool {
+  services: IService[];
+}

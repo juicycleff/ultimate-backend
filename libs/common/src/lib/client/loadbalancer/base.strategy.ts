@@ -14,13 +14,27 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     09/02/2021, 18:11
+ * File name:         base.strategy.ts
+ * Last modified:     02/03/2021, 01:33
  ******************************************************************************/
 
-export * from './service-registry';
-export * from './discovery';
-export * from './loadbalancer';
+import { IService } from '@ultimate-backend/common';
+import { ServicePool } from './pool.interface';
 
-export * from './service-instance';
-export * from './default-service-instance';
+/**
+ * Base load-balance strategy
+ */
+export abstract class BaseStrategy {
+  constructor(protected pool: ServicePool) {}
+
+  /**
+   * Pick a service instance
+   */
+  pick(): IService {
+    throw new Error("Not Implemented");
+  }
+
+  getInstance(name: string): IService {
+    throw new Error("Not Implemented");
+  }
+}

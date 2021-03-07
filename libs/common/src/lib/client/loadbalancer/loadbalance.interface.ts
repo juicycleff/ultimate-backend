@@ -14,13 +14,14 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     09/02/2021, 18:11
+ * File name:         load-balancer.interface.ts
+ * Last modified:     06/03/2021, 18:51
  ******************************************************************************/
+import { IService } from '../../interfaces';
+import { BaseStrategy } from './base.strategy';
 
-export * from './service-registry';
-export * from './discovery';
-export * from './loadbalancer';
+export interface ILoadbalance {
+  pickLoadBalancer(serviceName: string): BaseStrategy;
 
-export * from './service-instance';
-export * from './default-service-instance';
+  pick(serviceName: string): IService;
+}
