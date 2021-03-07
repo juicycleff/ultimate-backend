@@ -1,1 +1,1 @@
-export * from './lib/load-balancer.module';
+export * from './lib/loadbalancer.module';
