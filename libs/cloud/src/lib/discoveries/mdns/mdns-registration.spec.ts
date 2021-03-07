@@ -28,7 +28,7 @@ const newService: Service = {
   port: 9000,
   name: 'service',
 };
-const consulDiscoveryOptions: MdnsDiscoveryOptions = {
+const mdnsDiscoveryOptions: MdnsDiscoveryOptions = {
   scheme: 'http',
   failFast: false,
   healthCheckCriticalTimeout: '1000',
@@ -37,26 +37,26 @@ const consulDiscoveryOptions: MdnsDiscoveryOptions = {
 
 describe('MdnsRegistration', () => {
   it('can get registration host', async () => {
-    let result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getHost()).toEqual(newService.address);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new MdnsRegistration({ address: null }, consulDiscoveryOptions);
+    result = new MdnsRegistration({ address: null }, mdnsDiscoveryOptions);
     expect(result.getHost()).toEqual('');
   });
 
   it('can get registration port', async () => {
-    let result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getPort()).toEqual(newService.port);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new MdnsRegistration({ port: null }, consulDiscoveryOptions);
+    result = new MdnsRegistration({ port: null }, mdnsDiscoveryOptions);
     expect(result.getPort()).toEqual(0);
   });
 
   it('can get registration scheme', async () => {
-    let result = new MdnsRegistration(newService, consulDiscoveryOptions);
-    expect(result.getScheme()).toEqual(consulDiscoveryOptions.scheme);
+    let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
+    expect(result.getScheme()).toEqual(mdnsDiscoveryOptions.scheme);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     result = new MdnsRegistration(newService, { scheme: null });
@@ -64,38 +64,38 @@ describe('MdnsRegistration', () => {
   });
 
   it('can check registration secure', async () => {
-    const result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.isSecure()).toEqual(false);
   });
 
   it('can get registration uri', async () => {
-    const result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getUri()).toEqual(
-      `${consulDiscoveryOptions.scheme}://${newService.address}:${newService.port}`
+      `${mdnsDiscoveryOptions.scheme}://${newService.address}:${newService.port}`
     );
   });
 
   it('can get registration service', async () => {
-    const result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getService()).toEqual(newService);
   });
 
   it('can get registration instance id', async () => {
-    let result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getInstanceId()).toEqual(newService.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new MdnsRegistration({ id: null }, consulDiscoveryOptions);
+    result = new MdnsRegistration({ id: null }, mdnsDiscoveryOptions);
     expect(result.getInstanceId()).toEqual('');
   });
 
   it('can get registration service id', async () => {
-    const result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getServiceId()).toEqual(newService.name);
   });
 
   it('can get registration metadata', async () => {
-    const result = new MdnsRegistration(newService, consulDiscoveryOptions);
+    const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getMetadata()).toEqual(null);
   });
 });
