@@ -31,7 +31,7 @@ export class Brakes {
   ) {}
 
   prepare(name: string, action: Function, fallback: ((...args: any[]) => any) | CircuitBreaker): Function;
-  prepare(action: Function, fallback: ((...args: any[]) => any) | CircuitBreaker, ): Function;
+  prepare(action: Function, fallback: ((...args: any[]) => any) | CircuitBreaker): Function;
   prepare(name: string, action: Function): Function;
   prepare(
     nameOrAction: string | Function,
