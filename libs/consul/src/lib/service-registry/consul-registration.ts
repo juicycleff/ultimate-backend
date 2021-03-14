@@ -1,13 +1,15 @@
-import { Registration } from '@ultimate-backend/common';
+import { PlainObject, Registration } from '@ultimate-backend/common';
 import { Service } from '../consul.interface';
-import { ConsulUtils } from '../utils';
 import { ConsulDiscoveryOptions } from './consul-discovery.options';
 
-export class ConsulRegistration implements Registration {
-  constructor(
-    private newService: Service,
-    private discoveryOptions: ConsulDiscoveryOptions
-  ) {}
+export class ConsulRegistration implements Registration<Service> {
+  private newService: Service;
+  private discoveryOptions: ConsulDiscoveryOptions;
+
+  constructor(newService: Service, discoveryOptions: ConsulDiscoveryOptions) {
+    this.newService = newService;
+    this.discoveryOptions = discoveryOptions;
+  }
 
   getService(): Service {
     return this.newService;
@@ -42,8 +44,19 @@ export class ConsulRegistration implements Registration {
     return this.discoveryOptions.scheme || 'http';
   }
 
-  getMetadata(): Map<string, string> {
-    const tags = this.newService.tags || [];
-    return ConsulUtils.getMetadata(tags);
+  getMetadata(): PlainObject {
+    return this.newService.meta || {};
+  }
+
+  getNodeID(): string {
+    return '';
+  }
+
+  getStatus(): string {
+    return this.newService.status || '';
+  }
+
+  getTags(): string[] {
+    return this.newService.tags || [];
   }
 }

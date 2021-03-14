@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import { consul, ConsulService } from '@ultimate-backend/consul';
 import { Injectable, Logger } from '@nestjs/common';
-import { DiscoveryClient, ServiceInstance } from '@ultimate-backend/common';
+import { DiscoveryClient, PlainObject, ServiceInstance } from '@ultimate-backend/common';
 import { ConsulUtils } from '../utils';
 import { ConsulServiceInstance } from './consul-service.instance';
 
 @Injectable()
 export class ConsulDiscoveryClient implements DiscoveryClient {
-  logger = new Logger('ConsulDiscoveryClient');
+  logger = new Logger(ConsulDiscoveryClient.name);
 
   constructor(readonly consul: ConsulService) {}
 
@@ -45,18 +45,18 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
       const host = this.findHost(healthService);
       const metadata = this.getMetadata(healthService.Service.Tags || []);
       let secure = false;
-      if (metadata.has('secure')) {
+      if (metadata?.secure) {
         secure = /true/i.test(metadata.get('secure') || '');
       }
 
-      return new ConsulServiceInstance(
-        healthService.Service.ID,
+      return new ConsulServiceInstance({
+        instanceId: healthService.Service.ID,
         serviceId,
         host,
-        healthService.Service.Port,
+        port: healthService.Service.Port,
         secure,
-        metadata
-      );
+        metadata,
+      });
     });
   }
 
@@ -73,7 +73,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
     return node.Node;
   }
 
-  private getMetadata(tags: string[]): Map<string, string> {
+  private getMetadata(tags: string[]): PlainObject {
     return ConsulUtils.getMetadata(tags);
   }
 

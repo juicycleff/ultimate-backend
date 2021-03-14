@@ -5,7 +5,7 @@ import { HeartbeatOptions } from './heartbeat.interface';
 const tasks = new Map<string, any>();
 
 class ConsulHeartbeatTask {
-  logger = new Logger('ConsulHeartbeatTask');
+  logger = new Logger(ConsulHeartbeatTask.name);
   private readonly checkId: string;
 
   constructor(private client: ConsulService, serviceId: string) {
@@ -16,10 +16,14 @@ class ConsulHeartbeatTask {
   }
 
   run() {
-    (async () => {
-      this.client.consul.agent.check.pass(this.checkId);
-    })();
-    this.logger.log(`Sending consul heartbeat for: ${this.checkId}`);
+    try {
+      (async () => {
+        this.client.consul.agent.check.pass(this.checkId);
+      })();
+      this.logger.log(`Sending consul heartbeat for: ${this.checkId}`);
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 }
 
@@ -59,9 +63,9 @@ export class TtlScheduler {
 
   private computeHeartbeatInterval(): number {
     const intervalRatio = 2.0 / 3.0;
-    const interval = this.heartbeatOptions.ttlInSeconds * intervalRatio;
+    const interval = (this.heartbeatOptions.ttlInSeconds || 60) * intervalRatio;
     const max = Math.max(interval, 1);
-    const ttlMinus1 = this.heartbeatOptions.ttlInSeconds - 1;
+    const ttlMinus1 = (this.heartbeatOptions.ttlInSeconds || 60) - 1;
     const min = Math.min(ttlMinus1, max);
     const heartbeatInterval = Math.round(1000 * min);
     this.logger.log(`computed heartbeat interval ${heartbeatInterval}`);

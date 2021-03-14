@@ -9,13 +9,17 @@ const newService: Service = {
   check: undefined,
   name: 'service',
   tags: ['svc=cluster'],
+  meta: {
+    svc: 'cluster'
+  }
 };
 
 const consulDiscoveryOptions: ConsulDiscoveryOptions = {
+  type: 'http',
   scheme: 'http',
   failFast: false,
-  healthCheckCriticalTimeout: '1000',
-  healthCheckUrl: '/',
+  timeout: 1000,
+  http: '/',
 };
 
 describe('ConsulRegistration', () => {
@@ -77,14 +81,15 @@ describe('ConsulRegistration', () => {
     expect(result.getServiceId()).toEqual(newService.name);
   });
 
-  it('can get registration metadata', async () => {
+  it('can get registration metadata and tags', async () => {
     let result = new ConsulRegistration(newService, consulDiscoveryOptions);
-    const m = new Map<string, string>();
-    m.set('svc', 'cluster');
+    const m = {svc: 'cluster'};
     expect(result.getMetadata()).toEqual(m);
+    expect(result.getTags()).toEqual(['svc=cluster']);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({ tags: null }, consulDiscoveryOptions);
-    expect(result.getMetadata()).toEqual(new Map());
+    result = new ConsulRegistration({ tags: null, meta: null }, consulDiscoveryOptions);
+    expect(result.getMetadata()).toEqual({});
+    expect(result.getTags()).toEqual([]);
   });
 });

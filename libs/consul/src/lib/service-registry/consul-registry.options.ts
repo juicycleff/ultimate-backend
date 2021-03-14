@@ -18,9 +18,9 @@
  * Last modified:     11/02/2021, 00:15
  ******************************************************************************/
 
-import { Service } from '../consul.interface';
 import { HeartbeatOptions } from '../discovery/heartbeat.interface';
 import { ConsulDiscoveryOptions } from './consul-discovery.options';
+import { Service } from '@ultimate-backend/common';
 
 export interface ConsulRegistryOptions {
   service: Service;

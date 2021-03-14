@@ -1,7 +1,15 @@
 import { DiscoveryOptions } from '@ultimate-backend/common';
 
-export interface ConsulDiscoveryOptions extends DiscoveryOptions {
-  scheme: string;
+type ConsulDiscoveryOption = {
+  scheme?: string;
 
   failFast?: boolean;
-}
+
+  notes?: string;
+
+  script?: string;
+
+  deregisterCriticalServiceAfter?: string;
+};
+
+export type ConsulDiscoveryOptions = DiscoveryOptions & ConsulDiscoveryOption;

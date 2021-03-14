@@ -2,7 +2,7 @@ import { ConsulServiceRegistry } from './consul-service-registry';
 import { Test } from '@nestjs/testing';
 import { ConsulModule } from '../../';
 import { ConsulDiscoveryClient } from '../discovery';
-import { SERVICE_REGISTRY_CONFIG } from '@ultimate-backend/common';
+import { SERVICE_REGISTRY_CONFIG, ServiceStore } from '@ultimate-backend/common';
 
 describe('ConsulServiceRegistry', () => {
   let registry: ConsulServiceRegistry;
@@ -19,6 +19,7 @@ describe('ConsulServiceRegistry', () => {
       providers: [
         ConsulServiceRegistry,
         ConsulDiscoveryClient,
+        ServiceStore,
         {
           provide: SERVICE_REGISTRY_CONFIG,
           useValue: {

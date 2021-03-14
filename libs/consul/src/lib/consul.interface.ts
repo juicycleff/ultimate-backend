@@ -17,23 +17,14 @@
  * File name:         consul.interface.ts
  * Last modified:     10/02/2021, 23:23
  ******************************************************************************/
+import * as Consul from 'consul';
 
-export interface Check {
-  http?: string;
-  script?: string;
-  interval?: string;
-  ttl?: string;
-  notes?: string;
-  status?: string;
-  deregistercriticalserviceafter?: string;
-}
+import ConsulCheck = Consul.Agent.Check.RegisterOptions;
+import ConsulService = Consul.Agent.Service.RegisterOptions;
 
-export interface Service {
-  name: string;
-  id?: string;
-  tags?: string[];
-  address?: string;
-  port?: number;
-  check?: Check;
+export type Check = ConsulCheck;
+
+export interface Service extends ConsulService {
   region?: string;
+  status?: string;
 }

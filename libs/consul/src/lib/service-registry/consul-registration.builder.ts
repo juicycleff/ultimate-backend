@@ -18,7 +18,7 @@
  * Last modified:     11/02/2021, 02:58
  ******************************************************************************/
 
-import { IpUtils, RegistrationBuilder } from '@ultimate-backend/common';
+import { IpUtils, PlainObject, RegistrationBuilder } from '@ultimate-backend/common';
 import * as uuid from 'uuid';
 import { Check, Service } from '../consul.interface';
 import { HeartbeatOptions } from '../discovery/heartbeat.interface';
@@ -29,7 +29,11 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
   private _serviceName: string | undefined;
   private _port: number | undefined;
   private _host: string | undefined;
+  private _status: string;
+  private _version: string;
+  private _tags: string[] | undefined;
   private _domain: string | undefined;
+  private _meta: PlainObject | undefined;
   private _instanceId: string | undefined;
   private _heartbeatOptions: HeartbeatOptions | undefined;
   private _discoveryOptions: ConsulDiscoveryOptions | undefined;
@@ -41,6 +45,16 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
 
   domain(domain: string): RegistrationBuilder {
     this._domain = domain || 'ultimate-backend';
+    return this;
+  }
+
+  tags(tags: string[]): RegistrationBuilder {
+    this._tags = tags;
+    return this;
+  }
+
+  metadata(metadata: PlainObject): RegistrationBuilder {
+    this._meta = metadata;
     return this;
   }
 
@@ -75,28 +89,51 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
   }
 
   build(): ConsulRegistration {
-    if (this._serviceName == null) throw Error('serviceName is required');
+    if (!this._serviceName) {
+      throw Error('serviceName is required');
+    }
 
-    if (this._host == null) {
-      // get ip address
+    if (!this._host) {
       this._host = IpUtils.getIpAddress();
     }
 
-    if (this._port == null) throw Error('port is required');
+    if (!this._port) {
+      throw Error('port is required');
+    }
 
-    if (this._discoveryOptions == null)
+    if (!this._discoveryOptions) {
       throw Error('discoveryOptions is required.');
+    }
 
     const scheme = this._discoveryOptions?.scheme;
     const isSecure = scheme == 'https';
+    const domain = this._domain || 'ultimate-backend';
 
-    const tags = [`secure=${isSecure}`];
+    const tags = ['service', this._version].concat(...(this._tags || []));
+    const meta = Object.assign(
+      {},
+      {
+        domain: domain,
+        secure: `${isSecure}`,
+        version: this._version,
+      },
+      this._meta
+    );
 
-    if (this._instanceId == null) {
+    if (!this._instanceId) {
       this._instanceId = this._serviceName + '-' + uuid.v4();
+    } else {
+      this._instanceId = `${this._instanceId}-${this._version}`;
     }
 
-    const check: Check = this.createCheck();
+    if (
+      this._heartbeatOptions.enabled &&
+      !this._heartbeatOptions.ttlInSeconds
+    ) {
+      this._heartbeatOptions.ttlInSeconds = 30;
+    }
+
+    const check: Check = this.createCheck(this._discoveryOptions);
 
     const newService: Service = {
       name: this._serviceName,
@@ -105,37 +142,85 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
       id: this._instanceId,
       tags,
       check,
+      meta,
     };
 
     return new ConsulRegistration(newService, this._discoveryOptions);
   }
 
-  private createCheck(): Check {
-    let check: Check = {};
+  private createCheck(opts: ConsulDiscoveryOptions): Check {
+    const check: Partial<Check> = {
+      service_id: opts.serviceId || this._instanceId,
+      name: opts.serviceName || this._serviceName + ' Status',
+      interval: (opts.interval || 10) + 's',
+    };
 
-    if (this._discoveryOptions?.healthCheckCriticalTimeout !== null) {
-      check = {
-        ...check,
-        deregistercriticalserviceafter: this._discoveryOptions
-          .healthCheckCriticalTimeout,
-      };
+    if (opts?.notes) {
+      check.notes = opts?.notes;
     }
 
-    if (this._discoveryOptions?.healthCheckUrl !== null) {
-      check = {
-        ...check,
-        http: this._discoveryOptions.healthCheckUrl,
-      };
+    if (opts?.deregisterCriticalServiceAfter) {
+      check.deregister_critical_service_after =
+        opts?.deregisterCriticalServiceAfter;
     }
 
-    if (this._heartbeatOptions?.enabled) {
-      const ttl = this._heartbeatOptions.ttlInSeconds + 's';
-      return {
-        ...check,
-        ttl,
-      };
+    switch (opts.type) {
+      case 'alias':
+        check.alias_service = opts?.aliasService;
+        check.alias_node = opts?.aliasNode;
+        break;
+      case 'grpc':
+        check.grpc = opts?.grpc;
+        check.grpc_use_tls = opts?.useTLS;
+        break;
+      case 'ttl':
+        check.ttl = (opts?.ttl || 30) + 's';
+        if (!this._heartbeatOptions) {
+          this._heartbeatOptions.enabled = true
+          this._heartbeatOptions.ttlInSeconds = 30;
+        }
+        break;
+      case 'docker':
+        check.docker_container_id = opts?.dockerContainerId;
+        check.timeout = (opts?.timeout || 10) + 's';
+        check.shell = opts?.shell;
+        check.args = opts?.args;
+        break;
+      case 'tcp':
+        check.tcp = opts?.tcp;
+        if (!this._heartbeatOptions) {
+          this._heartbeatOptions.enabled = true
+          this._heartbeatOptions.ttlInSeconds = 30;
+        }
+        break;
+      case 'http':
+        check.http = opts?.http;
+        check.timeout = (opts?.timeout || 10) + 's';
+        check.body = opts?.body;
+        check.header = opts?.header;
+        check.method = opts?.method;
+        check.tls_skip_verify = opts?.skipVerifyTLS || true;
+        break;
+      case 'script':
+        check.args = opts?.args;
+        check.script = opts?.script;
+        check.timeout = (opts?.timeout || 10) + 's';
+        break;
+      default:
+        check.ttl = '30s';
+        break;
     }
 
-    return check;
+    return check as Check;
+  }
+
+  version(version: string): RegistrationBuilder {
+    this._version = version || 'latest';
+    return this;
+  }
+
+  status(status: string): RegistrationBuilder {
+    this._status = status;
+    return this;
   }
 }

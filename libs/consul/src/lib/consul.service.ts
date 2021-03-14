@@ -47,7 +47,7 @@ export class ConsulService
     IReactiveClient<ConsulStatic.Consul>,
     ConsulStatic.Consul,
     OnModuleInit {
-  logger = new LoggerUtil('ConsulService');
+  logger = new LoggerUtil(ConsulService.name);
 
   public consul: ConsulStatic.Consul;
 
@@ -92,8 +92,8 @@ export class ConsulService
   /**
    * Close consul connection
    */
-  close(): any | Promise<void> {
-    // super.status.;
+  close() {
+    // close connection;
   }
 
   private _initFields(client: ConsulStatic.Consul) {
