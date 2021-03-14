@@ -18,18 +18,9 @@
  * Last modified:     11/02/2021, 01:12
  ******************************************************************************/
 
-import { DiscoveryOptions, HeartbeatOptions } from '@ultimate-backend/common';
+import { DiscoveryOptions, HeartbeatOptions, Service } from '@ultimate-backend/common';
 import * as uuid from 'uuid';
 import { MdnsDiscoveryOptions } from '../discoveries/mdns/interfaces';
-
-export interface Service {
-  name: string;
-  address: string;
-  port?: number;
-  id?: string;
-  version?: string;
-  domain?: string;
-}
 
 export const DefaultService: Service = {
   name: 'ultimate-backend-service',

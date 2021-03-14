@@ -14,13 +14,32 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         mdns-discovery.options.ts
- * Last modified:     11/02/2021, 00:22
+ * File name:         mdns-service.utils.ts
+ * Last modified:     13/03/2021, 23:34
  ******************************************************************************/
-import { DiscoveryOptions } from '@ultimate-backend/common';
+import { RemoteService } from 'bonjour';
+import { DefaultServiceInstance, ServiceInstance } from '@ultimate-backend/common';
 
-export type MdnsDiscoveryOptions = DiscoveryOptions & {
-  scheme: string;
+export function mdnsToServicesInstance(services: RemoteService[]): ServiceInstance[] {
+  const instances: ServiceInstance[] = [];
 
-  failFast?: boolean;
-};
+  for (const service of services) {
+    instances.push(mdnsToServiceInstance(service));
+  }
+
+  return instances;
+}
+
+
+export function mdnsToServiceInstance(service: RemoteService): ServiceInstance {
+  return new DefaultServiceInstance({
+    nodeID: service.fqdn,
+    port: service.port,
+    instanceId: service.txt.serviceid,
+    status: service.txt.status,
+    metadata: service.txt,
+    host: service.txt.host,
+    secure: Boolean(service.txt.secure),
+    serviceId: service.name,
+  });
+}

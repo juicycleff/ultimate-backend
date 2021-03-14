@@ -22,87 +22,82 @@ import { LocalRegistryProviderOptions } from '../../index';
 import { Inject, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { MdnsRegistration } from './mdns-registration';
 import { MdnsRegistrationBuilder } from './mdns-registration.builder';
-import { Bonjour, Browser } from 'bonjour';
+import { Bonjour, Browser, RemoteService, Service } from 'bonjour';
 import * as bonjour from 'bonjour';
-import { SERVICE_REGISTRY_CONFIG, ServiceRegistry } from '@ultimate-backend/common';
+import { Registration, SERVICE_REGISTRY_CONFIG, ServiceRegistry, ServiceStore } from '@ultimate-backend/common';
+import { mdnsToServiceInstance } from './mdns-service.utils';
 
 export class MdnsServiceRegistry
   implements ServiceRegistry<MdnsRegistration>, OnModuleInit, OnModuleDestroy {
-  logger = new Logger('MdnsServiceRegistry');
+  logger = new Logger(MdnsServiceRegistry.name);
 
-  registration: MdnsRegistration;
+  registration: Registration<Service>;
   bon: Bonjour = bonjour();
   browser: Browser;
+  activeService: Service;
 
   constructor(
     @Inject(SERVICE_REGISTRY_CONFIG)
-    private readonly options: LocalRegistryProviderOptions
+    private readonly options: LocalRegistryProviderOptions,
+    private readonly serviceStore: ServiceStore
   ) {
     this.init();
   }
 
   async init() {
-    if (this.options.heartbeat == null)
+    if (!this.options.heartbeat)
       throw Error('HeartbeatOptions is required');
 
-    if (this.options.service == null)
+    if (!this.options.service)
       throw Error('Service options is required.');
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     this.registration = new MdnsRegistrationBuilder()
       .discoveryOptions(this.options.discovery)
       .heartbeatOptions(this.options.heartbeat)
       .host(this.options.service?.address)
       .port(this.options.service?.port)
+      .metadata(this.options.service?.metadata)
+      .tags(this.options.service?.tags)
+      .status(this.options.service?.status)
+      .version(this.options.service?.version)
       .domain(this.options.service?.domain)
       .serviceName(this.options.service?.name)
       .instanceId(this.options.service?.id)
       .build();
 
-    this.browser = await this.bon.find(
+    this.browser = this.bon.find(
       {
         type: 'http',
         txt: {
-          domain: this.options.service.domain,
-        },
-      },
-      (service) => {
-        // console.log('service operational: ', service);
-      }
-    );
+          domain: this.options.service.domain
+        }
+      }, (service) => {
+        if (
+          service.txt.domain &&
+          service.txt.domain === this.options.service.domain
+        ) {
+          this.addToStore(service)
+        }
+      });
 
     this.listenForServices();
   }
 
-  async close(): Promise<void> {
-    await this.bon.destroy();
+  private addToStore(service: RemoteService) {
+    const instance = mdnsToServiceInstance(service);
+    this.serviceStore.setServices(service.name, [instance]);
+  }
 
+  async close(): Promise<void> {
     if (this.browser) {
       await this.browser.stop();
-      await this.browser.removeAllListeners();
     }
   }
 
   listenForServices(): void {
     try {
-      this.browser.on('up', (service) => {
-        if (
-          service.txt.domain &&
-          service.txt.domain === this.options.service.domain &&
-          service.txt.serviceid !== this.options.service.id
-        ) {
-          console.log('service up: ', service);
-        }
-      });
       this.browser.on('down', (service) => {
-        if (
-          service.txt.domain &&
-          service.txt.domain === this.options.service.domain &&
-          service.txt.serviceid !== this.options.service.id
-        ) {
-          console.log('service down: ', service);
-        }
+        this.serviceStore.removeService(service.name);
       });
 
       this.browser.start();
@@ -116,7 +111,13 @@ export class MdnsServiceRegistry
       `Deregistering service with mdns: ${this.registration.getInstanceId()}`
     );
 
-    this.bon.destroy();
+    if (this.activeService) {
+      await this.activeService.stop();
+    }
+    this.browser.update();
+    this.close();
+
+    this.activeService = null;
   }
 
   async register(): Promise<void> {
@@ -127,14 +128,11 @@ export class MdnsServiceRegistry
 
       const options = this.registration.getService();
 
-      await this.bon.publish({
+      this.activeService = await this.bon.publish({
         host: options.host,
         name: options.name,
         port: options.port,
-        txt: {
-          domain: options.txtRecord.domain,
-          serviceid: options.txtRecord.serviceId,
-        },
+        txt: options.txt,
         probe: true,
         type: 'http',
       });
@@ -144,13 +142,12 @@ export class MdnsServiceRegistry
     }
   }
 
-  getStatus<T>(registration: MdnsRegistration): Promise<T> {
+  getStatus<T>(_registration: MdnsRegistration): Promise<T> {
     return Promise.resolve(undefined);
   }
 
   async onModuleDestroy() {
     await this.deregister();
-    await this.close();
   }
 
   async onModuleInit() {
@@ -158,7 +155,7 @@ export class MdnsServiceRegistry
     await this.register();
   }
 
-  setStatus(registration: MdnsRegistration, status: string): Promise<void> {
+  setStatus(_registration: MdnsRegistration, _status: string): Promise<void> {
     return Promise.resolve(undefined);
   }
 }

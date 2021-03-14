@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import { MdnsOptions } from './interfaces';
-import { DiscoveryClient, ServiceInstance } from '../../interfaces';
 import { Injectable } from '@nestjs/common';
+import { DiscoveryClient, ServiceInstance } from '@ultimate-backend/common';
 
 @Injectable()
 export class MdnsDiscoveryClient implements DiscoveryClient {
-  constructor(private options: MdnsOptions) {}
+  constructor(private _options: MdnsOptions) {}
 
   description(): string {
     return 'MDNS Discovery Client';
@@ -16,7 +16,7 @@ export class MdnsDiscoveryClient implements DiscoveryClient {
   }
 
   private async addInstancesToList(
-    serviceId: string
+    _serviceId: string
   ): Promise<ServiceInstance[]> {
     return null;
   }
@@ -34,7 +34,7 @@ export class MdnsDiscoveryClient implements DiscoveryClient {
     return node.Node;
   }
 
-  private getMetadata(tags: string[]): Map<string, string> {
+  private getMetadata(_tags: string[]): Map<string, string> {
     return null;
   }
 

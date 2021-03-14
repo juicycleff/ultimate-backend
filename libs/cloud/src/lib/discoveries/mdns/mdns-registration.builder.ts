@@ -23,16 +23,21 @@ import * as uuid from 'uuid';
 import { MdnsDiscoveryOptions } from './interfaces';
 import { MdnsRegistration } from './mdns-registration';
 import {
-  HeartbeatOptions, IpUtils,
+  HeartbeatOptions,
+  IpUtils, PlainObjectString,
   RegistrationBuilder,
 } from '@ultimate-backend/common';
-import { Service } from 'mdns';
+import { Service } from 'bonjour';
 
 export class MdnsRegistrationBuilder implements RegistrationBuilder {
   private _serviceName: string | undefined;
   private _port: number | undefined;
   private _host: string | undefined;
+  private _tags: string[];
+  private _status: string;
+  private _version: string;
   private _domain: string | undefined;
+  private _meta: PlainObjectString | undefined;
   private _instanceId: string | undefined;
   private _heartbeatOptions: HeartbeatOptions | undefined;
   private _discoveryOptions: MdnsDiscoveryOptions | undefined;
@@ -40,6 +45,16 @@ export class MdnsRegistrationBuilder implements RegistrationBuilder {
   constructor(host?: string, port?: number) {
     this._host = host;
     this._port = port;
+  }
+
+  version(version: string): RegistrationBuilder {
+    this._version = version || 'latest';
+    return this;
+  }
+
+  status(status: string): RegistrationBuilder {
+    this._status = status;
+    return this;
   }
 
   discoveryOptions(properties: MdnsDiscoveryOptions): RegistrationBuilder {
@@ -78,38 +93,59 @@ export class MdnsRegistrationBuilder implements RegistrationBuilder {
   }
 
   build(): MdnsRegistration {
-    if (this._serviceName == null) throw Error('serviceName is required');
+    if (!this._serviceName) {
+      throw Error('serviceName is required');
+    }
 
-    if (this._host == null) {
-      // get ip address
+    if (!this._host) {
       this._host = IpUtils.getIpAddress();
     }
 
-    if (this._port == null) throw Error('port is required');
+    if (!this._port) {
+      throw Error('port is required');
+    }
 
-    if (this._discoveryOptions == null)
-      throw Error('discoveryOptions is required.');
-
-    const scheme = this._discoveryOptions?.scheme;
+    const scheme = this._discoveryOptions?.scheme || 'http';
     const isSecure = scheme == 'https';
 
-    const tags = [`secure=${isSecure}`];
+    if (!this._instanceId) {
+      this._instanceId = `${this._serviceName}-${this._version}-${uuid.v4()}`;
+    } else {
+      this._instanceId = `${this._instanceId}-${this._version}`;
+    }
 
-    if (this._instanceId == null) {
-      this._instanceId = this._serviceName + '-' + uuid.v4();
+    const meta = Object.assign(
+      {},
+      {
+        domain: this._domain,
+        version: this._version,
+        secure: `${isSecure}`,
+        serviceId: this._instanceId,
+      },
+      this._meta
+    );
+
+    if (this._status) {
+      meta[status] = this._status;
     }
 
     const newService: Partial<Service> = {
-      replyDomain: this._domain,
       name: this._serviceName,
       port: this._port,
       host: this._host,
-      txtRecord: {
-        serviceId: this._instanceId,
-        domain: this._domain,
-      },
+      txt: meta,
     };
 
     return new MdnsRegistration(newService, this._discoveryOptions);
+  }
+
+  metadata(metadata: PlainObjectString): RegistrationBuilder {
+    this._meta = metadata;
+    return this;
+  }
+
+  tags(tags: string[]): RegistrationBuilder {
+    this._tags = tags;
+    return this;
   }
 }

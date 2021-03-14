@@ -38,7 +38,7 @@ export class CloudCoreModule {
       module: CloudCoreModule,
       imports: options.imports,
       providers: [...asyncProviders, configResolverProvider, ...providers],
-      exports: [ ...providers],
+      exports: [...providers],
     };
   }
 

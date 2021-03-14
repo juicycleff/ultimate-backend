@@ -18,11 +18,11 @@
  * Last modified:     11/02/2021, 00:22
  ******************************************************************************/
 
-import { Registration } from '@ultimate-backend/common';
+import { PlainObject, Registration } from '@ultimate-backend/common';
 import { MdnsDiscoveryOptions } from './interfaces';
-import { Service } from 'mdns';
+import { Service } from 'bonjour';
 
-export class MdnsRegistration implements Registration {
+export class MdnsRegistration implements Registration<Service> {
   constructor(
     private service: Partial<Service>,
     private discoveryOptions: MdnsDiscoveryOptions
@@ -33,7 +33,7 @@ export class MdnsRegistration implements Registration {
   }
 
   getInstanceId(): string {
-    return this.service.txtRecord.serviceId || '';
+    return this.service.txt.serviceId || '';
   }
 
   getServiceId(): string {
@@ -45,7 +45,7 @@ export class MdnsRegistration implements Registration {
   }
 
   getDomain(): string {
-    return this.service.txtRecord.domain || 'ultimate-backend';
+    return this.service.txt.domain || 'ultimate-backend';
   }
 
   getPort(): number {
@@ -53,7 +53,7 @@ export class MdnsRegistration implements Registration {
   }
 
   isSecure(): boolean {
-    return this.discoveryOptions.scheme === 'https';
+    return this.discoveryOptions?.scheme === 'https' || false;
   }
 
   getUri(): string {
@@ -62,10 +62,22 @@ export class MdnsRegistration implements Registration {
   }
 
   getScheme(): string {
-    return this.discoveryOptions.scheme || 'http';
+    return this.discoveryOptions?.scheme || 'http';
   }
 
-  getMetadata(): Map<string, string> {
-    return null;
+  getMetadata(): PlainObject {
+    return this.service.txt;
+  }
+
+  getNodeID(): string {
+    return '';
+  }
+
+  getStatus(): string {
+    return this.service.txt['status'] || '';
+  }
+
+  getTags(): string[] {
+    return [];
   }
 }

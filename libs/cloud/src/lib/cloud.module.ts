@@ -3,11 +3,7 @@ import { CloudModuleAsyncOptions, CloudModuleOptions } from './interfaces';
 import { CloudCoreModule } from './cloud-core.module';
 
 @Global()
-@Module({
-  controllers: [],
-  providers: [],
-  exports: [],
-})
+@Module({})
 export class CloudModule {
   static forRoot(option: CloudModuleOptions): DynamicModule {
     return {

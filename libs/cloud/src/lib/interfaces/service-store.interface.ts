@@ -14,13 +14,23 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         mdns-discovery.options.ts
- * Last modified:     11/02/2021, 00:22
+ * File name:         service-store.interface.ts
+ * Last modified:     07/03/2021, 18:09
  ******************************************************************************/
-import { DiscoveryOptions } from '@ultimate-backend/common';
+import { ServiceInstance } from '@ultimate-backend/common';
 
-export type MdnsDiscoveryOptions = DiscoveryOptions & {
-  scheme: string;
+export interface IServiceStore {
+  getServices(): Map<string, ServiceInstance[]>;
 
-  failFast?: boolean;
-};
+  getServiceNames(): string[];
+
+  getServiceNodes(name: string, passing?: boolean): ServiceInstance[];
+
+  addService(name: string, service: ServiceInstance): void;
+
+  removeService(name: string): void;
+
+  watch(callback: (type: 'added' | 'removed', name: string, service: ServiceInstance[]) => void): void;
+
+  addServices(name: string, services: ServiceInstance[]): void;
+}

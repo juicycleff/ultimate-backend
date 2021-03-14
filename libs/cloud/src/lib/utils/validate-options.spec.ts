@@ -1,6 +1,6 @@
-import { validateOptions } from './iplist';
-import { ConsulRegistryProviderOptions, Service } from '../';
-import { DiscoveryOptions, HeartbeatOptions } from '@ultimate-backend/common';
+import { validateOptions } from './validate-options';
+import { ConsulRegistryProviderOptions } from '../';
+import { DiscoveryOptions, HeartbeatOptions, Service } from '@ultimate-backend/common';
 
 const service: Service = {
   address: '127.0.0.1',
@@ -10,8 +10,9 @@ const service: Service = {
 };
 
 const discovery: DiscoveryOptions = {
-  healthCheckCriticalTimeout: '1000',
-  healthCheckUrl: '/',
+  timeout: 1000,
+  http: '/',
+  type: 'http',
 };
 
 const heartbeat: HeartbeatOptions = {
