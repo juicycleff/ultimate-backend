@@ -24,3 +24,4 @@ export * from './discovery.interface';
 export * from './heartbeat.interface';
 export * from './service-registry.builder';
 export * from './service-registry.factory';
+export * from './service.store';

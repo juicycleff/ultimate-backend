@@ -25,7 +25,7 @@ import { Registration } from './registration';
  *
  * @author Rex Isaac Raphael
  */
-export interface ServiceRegistry<R extends Registration> {
+export interface ServiceRegistry<R extends Registration<any>> {
   /**
    * Registers a registration. A registration contains information about an instance, such as host and port.
    *

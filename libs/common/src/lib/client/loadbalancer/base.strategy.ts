@@ -18,23 +18,25 @@
  * Last modified:     02/03/2021, 01:33
  ******************************************************************************/
 
-import { IService } from '@ultimate-backend/common';
-import { ServicePool } from './pool.interface';
+import { Type } from '@nestjs/common';
 
 /**
  * Base load-balance strategy
  */
-export abstract class BaseStrategy {
-  constructor(protected pool: ServicePool) {}
+export abstract class BaseStrategy<T> {
+
+  init(serviceName: string, list: any): void {
+    throw new Error('Not Implemented');
+  }
 
   /**
    * Pick a service instance
    */
-  pick(): IService {
-    throw new Error("Not Implemented");
+  choose(): T {
+    throw new Error('Not Implemented');
   }
 
-  getInstance(name: string): IService {
-    throw new Error("Not Implemented");
+  static getInstance<K>(name: string, type: Type<K>): K {
+    throw new Error('Not Implemented');
   }
 }

@@ -23,4 +23,5 @@ export * from './discovery';
 export * from './loadbalancer';
 
 export * from './service-instance';
+export * from './service-instance.options';
 export * from './default-service-instance';

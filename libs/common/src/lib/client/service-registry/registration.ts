@@ -20,4 +20,6 @@
 
 import { ServiceInstance } from '../service-instance';
 
-export type Registration = ServiceInstance;
+export interface Registration<T> extends ServiceInstance {
+  getService(): T;
+}

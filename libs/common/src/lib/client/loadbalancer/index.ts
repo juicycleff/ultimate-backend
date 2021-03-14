@@ -18,6 +18,5 @@
  * Last modified:     06/03/2021, 18:54
  ******************************************************************************/
 
-export * from './loadbalance.interface';
 export * from './base.strategy';
 export * from './pool.interface';

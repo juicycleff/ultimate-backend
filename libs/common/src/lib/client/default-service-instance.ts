@@ -1,43 +1,41 @@
 import { ServiceInstance } from './service-instance';
+import { ServiceInstanceOptions } from './service-instance.options';
+import { PlainObject } from '../utils';
 
 export class DefaultServiceInstance implements ServiceInstance {
-  /**
-   *
-   *
-   * @param instanceId the id of the instance.
-   * @param serviceId the id of the service.
-   * @param host the host where the service instance can be found.
-   * @param port the port on which the service is running.
-   * @param secure indicates whether or not the connection needs to be secure.
-   * @param metadata optional a map containing metadata.
-   */
-  constructor(
-    private instanceId: string,
-    private serviceId: string,
-    private host: string,
-    private port: number,
-    private secure: boolean,
-    private metadata?: Map<string, string>
-  ) {}
+
+  constructor(private opts: ServiceInstanceOptions) {}
 
   getInstanceId(): string {
-    return this.instanceId;
+    return this.opts.instanceId;
   }
 
   getServiceId(): string {
-    return this.serviceId;
+    return this.opts.serviceId;
   }
 
   getHost(): string {
-    return this.host;
+    return this.opts.host;
   }
 
   getPort(): number {
-    return this.port;
+    return this.opts.port;
+  }
+
+  getTags(): string[] {
+    return this.opts.tags || [];
+  }
+
+  getStatus(): string {
+    return this.opts.status;
+  }
+
+  getNodeID(): string {
+    return this.opts.nodeID;
   }
 
   isSecure(): boolean {
-    return this.secure;
+    return this.opts.secure;
   }
 
   getUri(): string {
@@ -50,7 +48,7 @@ export class DefaultServiceInstance implements ServiceInstance {
     return this.isSecure() ? 'https' : 'http';
   }
 
-  getMetadata(): Map<string, string> {
-    return this.metadata || new Map();
+  getMetadata(): PlainObject {
+    return this.opts.metadata || new Map();
   }
 }

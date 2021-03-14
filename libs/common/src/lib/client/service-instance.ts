@@ -17,6 +17,7 @@
  * File name:         service-instance.ts
  * Last modified:     10/01/2021, 19:15
  ******************************************************************************/
+import { PlainObject } from '../utils';
 
 export interface ServiceInstance {
   /**
@@ -57,5 +58,20 @@ export interface ServiceInstance {
   /**
    * @returns the key / value pair associated with the service id.
    */
-  getMetadata(): Map<string, string>;
+  getMetadata(): PlainObject;
+
+  /**
+   * @returns the key / value pair associated with the service id.
+   */
+  getTags(): string[];
+
+  /**
+   * @returns returns service instance heakth status.
+   */
+  getStatus(): string;
+
+  /**
+   * @returns service instance cluster node ID
+   */
+  getNodeID(): string;
 }

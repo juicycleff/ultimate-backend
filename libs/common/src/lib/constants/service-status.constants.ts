@@ -14,9 +14,12 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     11/02/2021, 00:13
+ * File name:         service-status.constants.ts
+ * Last modified:     12/03/2021, 16:04
  ******************************************************************************/
 
-export * from './injectable.constants';
-export * from './service-status.constants';
+export enum ServiceStatus {
+  PASSING = 'passing',
+  CRITICAL = 'critical',
+  WARNING = 'warning',
+}

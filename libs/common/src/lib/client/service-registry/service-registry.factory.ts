@@ -21,6 +21,7 @@
 import { Logger } from '@nestjs/common';
 import { Registration } from './registration';
 import { ServiceRegistry } from './service-registry';
+import { ServiceInstance } from '../service-instance';
 
 export class ServiceRegistryFactory {
   private static INSTANCE: ServiceRegistryFactory;
@@ -28,8 +29,8 @@ export class ServiceRegistryFactory {
   private isRunning = false;
 
   private constructor(
-    private registration: Registration,
-    private serviceRegistration: ServiceRegistry<Registration>
+    private registration: Registration<ServiceInstance>,
+    private serviceRegistration: ServiceRegistry<Registration<ServiceInstance>>
   ) {}
 
   async register(): Promise<void> {
@@ -52,8 +53,8 @@ export class ServiceRegistryFactory {
    * @returns ServiceRegistryFactory
    */
   static getInstance(
-    registration: Registration,
-    serviceRegistration: ServiceRegistry<Registration>
+    registration: Registration<ServiceInstance>,
+    serviceRegistration: ServiceRegistry<Registration<ServiceInstance>>
   ): ServiceRegistryFactory {
     if (registration == null)
       throw Error('an instance of Registration is required');
