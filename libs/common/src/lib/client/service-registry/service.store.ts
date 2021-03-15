@@ -17,14 +17,17 @@
  * File name:         service.store.ts
  * Last modified:     11/03/2021, 14:13
  ******************************************************************************/
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { IServiceStore } from '@ultimate-backend/cloud';
 import { ServiceInstance, ServiceStatus } from '@ultimate-backend/common';
 import { EventEmitter } from 'events';
 
 @Injectable()
-export class ServiceStore extends EventEmitter implements IServiceStore {
+export class ServiceStore
+  extends EventEmitter
+  implements IServiceStore, OnModuleDestroy {
   private readonly services: Map<string, ServiceInstance[]> = new Map();
+  private eventName = 'change';
 
   getServiceNames(): string[] {
     const names: string[] = [];
@@ -39,7 +42,7 @@ export class ServiceStore extends EventEmitter implements IServiceStore {
   getServiceNodes(name: string, passing?: boolean): ServiceInstance[] {
     const nodes = this.services.get(name) || [];
     if (passing) {
-      return nodes.filter(node => node.getStatus() === ServiceStatus.PASSING);
+      return nodes.filter((node) => node.getStatus() === ServiceStatus.PASSING);
     }
     return nodes;
   }
@@ -54,7 +57,7 @@ export class ServiceStore extends EventEmitter implements IServiceStore {
     } else {
       this.services.set(name, [service]);
     }
-    this.emit('change', 'added', name, [service]);
+    this.emit(this.eventName, 'added', name, [service]);
   }
 
   addServices(name: string, services: ServiceInstance[]): void {
@@ -63,17 +66,17 @@ export class ServiceStore extends EventEmitter implements IServiceStore {
     } else {
       this.services.set(name, services);
     }
-    this.emit('change', 'added', name, services);
+    this.emit(this.eventName, 'added', name, services);
   }
 
   setServices(name: string, services: ServiceInstance[]): void {
     this.services.set(name, services || []);
-    this.emit('change', 'added', name, services);
+    this.emit(this.eventName, 'added', name, services);
   }
 
   removeService(name: string): void {
     if (this.services.has(name)) {
-      this.emit('change', 'removed', name, [this.services.get(name)]);
+      this.emit(this.eventName, 'removed', name, [this.services.get(name)]);
       this.services.delete(name);
     }
   }
@@ -82,7 +85,21 @@ export class ServiceStore extends EventEmitter implements IServiceStore {
     this.services.clear();
   }
 
-  watch(callback: (type: 'added' | 'removed', name: string, service: ServiceInstance[]) => void): void {
-    this.on('change', callback);
+  close(): void {
+    this.removeAllListeners(this.eventName);
+  }
+
+  watch(
+    callback: (
+      type: 'added' | 'removed',
+      name: string,
+      service: ServiceInstance[]
+    ) => void
+  ): void {
+    this.on(this.eventName, callback);
+  }
+
+  onModuleDestroy() {
+    this.close();
   }
 }
