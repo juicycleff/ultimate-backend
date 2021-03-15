@@ -19,4 +19,9 @@
  ******************************************************************************/
 
 export * from './lib/etcd.module';
-export * from './lib/etcd.service';
+export * from './lib/etcd.client';
+export * from './lib/etcd.types';
+
+import * as etcd3 from 'etcd3';
+
+export { etcd3 };

@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         etcd.service.ts
+ * File name:         etcd.client.ts
  * Last modified:     07/02/2021, 12:15
  ******************************************************************************/
 
@@ -25,15 +25,13 @@ import { ETCD_CONFIG_OPTIONS } from './etcd.constant';
 import { EtcdModuleOptions } from './etcd-module.options';
 
 @Injectable()
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export class EtcdService
+export class EtcdClient
   extends Etcd3
   implements IReactiveClient<Etcd3>, BeforeApplicationShutdown {
   constructor(
-    @Inject(ETCD_CONFIG_OPTIONS) private readonly options: EtcdModuleOptions
+    @Inject(ETCD_CONFIG_OPTIONS) private readonly opts: EtcdModuleOptions
   ) {
-    super(options.etcdOptions);
+    super(opts.etcdOptions);
   }
 
   close(): any | Promise<void> {

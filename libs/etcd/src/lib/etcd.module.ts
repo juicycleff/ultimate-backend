@@ -25,7 +25,7 @@ import {
   EtcdModuleOptionsFactory,
 } from './etcd-module.options';
 import { ETCD_CONFIG_OPTIONS, ETCD_MODULE_OPTIONS } from './etcd.constant';
-import { EtcdService } from './etcd.service';
+import { EtcdClient } from './etcd.client';
 
 @Global()
 @Module({})
@@ -34,19 +34,19 @@ export class EtcdModule {
     return {
       module: EtcdModule,
       providers: [
-        EtcdService,
+        EtcdClient,
         {
           provide: ETCD_CONFIG_OPTIONS,
           useValue: options,
         },
       ],
-      exports: [EtcdService],
+      exports: [EtcdClient],
       global: options.global || true,
     };
   }
 
   static forRootAsync(options: EtcdModuleAsyncOptions) {
-    const providers: Provider[] = [EtcdService];
+    const providers: Provider[] = [EtcdClient];
 
     const configProvider: Provider = {
       provide: ETCD_CONFIG_OPTIONS,
@@ -61,7 +61,7 @@ export class EtcdModule {
     return {
       module: EtcdModule,
       imports: options.imports,
-      providers: [...asyncProviders, ...providers, configProvider, EtcdService],
+      providers: [...asyncProviders, ...providers, configProvider, EtcdClient],
       exports: providers,
       global: true,
     };

@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
-import { EtcdService } from './etcd.service';
+import { EtcdClient } from './etcd.client';
 import { ETCD_CONFIG_OPTIONS } from './etcd.constant';
 import { EtcdModuleOptions } from './etcd-module.options';
 
-describe('EtcdService', () => {
-  let service: EtcdService;
+describe('EtcdClient', () => {
+  let service: EtcdClient;
   let mock;
 
   beforeEach(async () => {
@@ -14,11 +14,11 @@ describe('EtcdService', () => {
           provide: ETCD_CONFIG_OPTIONS,
           useValue: {} as EtcdModuleOptions,
         },
-        EtcdService,
+        EtcdClient,
       ],
     }).compile();
 
-    service = module.get(EtcdService);
+    service = module.get(EtcdClient);
     mock = service.mock({ exec: jest.fn() });
 
     mock.exec.mockResolvedValue({ kvs: [{ key: 'foo', value: 'bar' }] });
