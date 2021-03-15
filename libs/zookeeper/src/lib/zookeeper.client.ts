@@ -35,7 +35,6 @@ export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutd
   private opts = {};
   private logg = new LoggerUtil(ZookeeperClient.name);
   public connected = false;
-  private _zookeeper: ZooKeeper;
 
   constructor(
     @Inject(ZOOKEEPER_CONFIG_OPTIONS)
@@ -62,10 +61,6 @@ export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutd
     });
 
     this.logg = new LoggerUtil(ZookeeperClient.name, options.debug);
-  }
-
-  get zookeeper(): ZooKeeper {
-    return this._zookeeper;
   }
 
   close(): any | Promise<void> {
