@@ -89,7 +89,6 @@ export class ConfigEnvSource implements IConfigSource, OnModuleInit {
       } catch (e) {
         this.logger.error(e);
       }
-
       return;
     }
 
