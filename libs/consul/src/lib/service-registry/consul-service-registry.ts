@@ -8,11 +8,11 @@ import {
 import retry from 'retry';
 import _ from 'lodash';
 import { ConsulRegistration } from './consul-registration';
-import { consul, ConsulService } from '@ultimate-backend/consul';
+import { consul, ConsulClient } from '@ultimate-backend/consul';
 import {
   Registration,
   SERVICE_REGISTRY_CONFIG,
-  ServiceRegistry, ServiceStore,
+  ServiceRegistry, ServiceStore, sleep,
 } from '@ultimate-backend/common';
 import { TtlScheduler } from '../discovery';
 import { ConsulRegistryOptions } from './consul-registry.options';
@@ -38,7 +38,7 @@ export class ConsulServiceRegistry
   private watchers: Map<string, Watch> = new Map();
 
   constructor(
-    private readonly client: ConsulService,
+    private readonly client: ConsulClient,
     @Inject(SERVICE_REGISTRY_CONFIG)
     private readonly options: ConsulRegistryOptions,
     private readonly serviceStore: ServiceStore
@@ -94,25 +94,34 @@ export class ConsulServiceRegistry
     this.logger.log(
       `registering service with id: ${this.registration.getInstanceId()}`
     );
-    try {
-      const service = this.generateService();
-      await this.client.consul.agent.service.register(service);
 
-      if (
-        this.options.heartbeat.enabled &&
-        this.ttlScheduler != null &&
-        service.check?.ttl != null
-      ) {
-        this.ttlScheduler.add(this.registration.getInstanceId());
+    const loop = true;
+    while (loop) {
+      try {
+        const service = this.generateService();
+        await this.client.consul.agent.service.register(service);
+
+        if (
+          this.options.heartbeat.enabled &&
+          this.ttlScheduler != null &&
+          service.check?.ttl != null
+        ) {
+          this.ttlScheduler.add(this.registration.getInstanceId());
+        }
+
+        this.logger.log('service registered');
+        break;
+      } catch (e) {
+        if (this.options.discovery.failFast) {
+          this.logger.warn(
+            `Fail fast is false. Error registering service with consul: ${this.registration.getService()} ${e}`
+          );
+          throw e;
+        }
+        await sleep( (this.options.heartbeat.ttlInSeconds || 5) * 1000);
       }
-    } catch (e) {
-      if (this.options.discovery.failFast) {
-        throw e;
-      }
-      this.logger.warn(
-        `Fail fast is false. Error registering service with consul: ${this.registration.getService()} ${e}`
-      );
     }
+
   }
 
   async deregister(): Promise<void> {
@@ -224,7 +233,6 @@ export class ConsulServiceRegistry
     watcher.on('change', (nodes) => {
       const serviceNodes = consulServiceToServiceInstance(nodes);
       this.serviceStore.setServices(serviceName, serviceNodes);
-      console.log('data => ', this.serviceStore.getServiceNodes(serviceName));
     });
   }
 

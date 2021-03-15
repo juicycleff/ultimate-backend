@@ -1,14 +1,14 @@
 import { Logger } from '@nestjs/common';
-import { ConsulService } from '../../';
+import { ConsulClient } from '../../';
 import { HeartbeatOptions } from './heartbeat.interface';
 
 const tasks = new Map<string, any>();
 
 class ConsulHeartbeatTask {
-  logger = new Logger(ConsulHeartbeatTask.name);
+  logger = new Logger('CONSUL: '+ ConsulHeartbeatTask.name);
   private readonly checkId: string;
 
-  constructor(private client: ConsulService, serviceId: string) {
+  constructor(private client: ConsulClient, serviceId: string) {
     this.checkId = serviceId;
     if (!this.checkId.startsWith('service:')) {
       this.checkId = `service:${this.checkId}`;
@@ -28,11 +28,11 @@ class ConsulHeartbeatTask {
 }
 
 export class TtlScheduler {
-  logger = new Logger('TtlScheduler');
+  logger = new Logger('CONSUL: ' + TtlScheduler.name);
 
   constructor(
     private heartbeatOptions: HeartbeatOptions,
-    private client: ConsulService
+    private client: ConsulClient
   ) {}
 
   /**

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { consul, ConsulService } from '@ultimate-backend/consul';
+import { consul, ConsulClient } from '@ultimate-backend/consul';
 import { Injectable, Logger } from '@nestjs/common';
 import { DiscoveryClient, PlainObject, ServiceInstance } from '@ultimate-backend/common';
 import { ConsulUtils } from '../utils';
@@ -9,14 +9,14 @@ import { ConsulServiceInstance } from './consul-service.instance';
 export class ConsulDiscoveryClient implements DiscoveryClient {
   logger = new Logger(ConsulDiscoveryClient.name);
 
-  constructor(readonly consul: ConsulService) {}
+  constructor(readonly consul: ConsulClient) {}
 
   async init() {
     await this.logger.log('ConsulDiscoveryClient initiated');
   }
 
   description(): string {
-    return 'ConsulService Discovery Client';
+    return 'ConsulClient Discovery Client';
   }
 
   async getInstances(serviceId: string): Promise<ServiceInstance[]> {

@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         consul.service.ts
+ * File name:         consul.client.ts
  * Last modified:     21/01/2021, 00:54
  ******************************************************************************/
 
@@ -42,12 +42,12 @@ import {
 import { defer } from 'rxjs';
 
 @Injectable()
-export class ConsulService
+export class ConsulClient
   implements
     IReactiveClient<ConsulStatic.Consul>,
     ConsulStatic.Consul,
     OnModuleInit {
-  logger = new LoggerUtil(ConsulService.name);
+  logger = new LoggerUtil(ConsulClient.name);
 
   public consul: ConsulStatic.Consul;
 
@@ -61,8 +61,8 @@ export class ConsulService
   status: Status;
 
   /**
-   * Creates an instance of ConsulService.
-   * @memberof ConsulService
+   * Creates an instance of ConsulClient.
+   * @memberof ConsulClient
    */
   constructor(
     @Inject(CONSUL_CONFIG_OPTIONS)
@@ -110,19 +110,19 @@ export class ConsulService
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        this.logger.log('ConsulService client started');
+        this.logger.log('ConsulClient client started');
         this.consul = await new ConsulStatic({
           ...this.options,
           promisify: true,
         });
-        this.logger.log('ConsulService client connected successfully');
+        this.logger.log('ConsulClient client connected successfully');
         this._initFields(this.consul);
       })
         .pipe(
           handleRetry(
             this.options.retryAttempts,
             this.options.retryDelays,
-            'ConsulService'
+            ConsulClient.name
           )
         )
         .toPromise();

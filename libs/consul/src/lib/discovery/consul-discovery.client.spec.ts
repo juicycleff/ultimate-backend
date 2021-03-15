@@ -31,7 +31,7 @@ describe('ConsulDiscoveryClient', () => {
   });
 
   it('client description', async () => {
-    const result = 'ConsulService Discovery Client';
+    const result = 'ConsulClient Discovery Client';
     jest.spyOn(client, 'description').mockImplementation(() => result);
     expect(client.description()).toEqual(result);
   });

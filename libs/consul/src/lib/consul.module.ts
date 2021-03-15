@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 import { DynamicModule, Global, Module, Provider, Type } from '@nestjs/common';
-import { ConsulService } from './consul.service';
+import { ConsulClient } from './consul.client';
 import {
   ConsulModuleAsyncOptions,
   ConsulModuleOptions,
@@ -39,7 +39,7 @@ export class ConsulModule {
         provide: CONSUL_CONFIG_OPTIONS,
         useValue: options,
       },
-      ConsulService,
+      ConsulClient,
     ];
 
     return {
@@ -64,8 +64,8 @@ export class ConsulModule {
     return {
       module: ConsulModule,
       imports: options.imports,
-      providers: [...asyncProviders, configProvider, ConsulService],
-      exports: [ConsulService],
+      providers: [...asyncProviders, configProvider, ConsulClient],
+      exports: [ConsulClient],
       global: true,
     };
   }

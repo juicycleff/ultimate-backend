@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
-import { ConsulService } from './consul.service';
+import { ConsulClient } from './consul.client';
 import { ConsulModuleOptions } from './consul-module.options';
 import { CONSUL_CONFIG_OPTIONS } from './consul.constant';
 
-describe('ConsulService', () => {
-  let service: ConsulService;
+describe('ConsulClient', () => {
+  let service: ConsulClient;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -18,11 +18,11 @@ describe('ConsulService', () => {
             port: '8500',
           } as ConsulModuleOptions,
         },
-        ConsulService,
+        ConsulClient,
       ],
     }).compile();
 
-    service = module.get(ConsulService);
+    service = module.get(ConsulClient);
   });
 
   it('should be defined', () => {
