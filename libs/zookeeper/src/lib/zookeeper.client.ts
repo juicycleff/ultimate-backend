@@ -17,7 +17,6 @@
  * File name:         zookeeper.client.ts
  * Last modified:     08/02/2021, 11:17
  ******************************************************************************/
-
 import {
   BeforeApplicationShutdown,
   Inject,
@@ -25,59 +24,78 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { defer } from 'rxjs';
+import { merge } from 'lodash';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { ZookeeperModuleOptions } from './zookeeper-module.options';
 import { ZOOKEEPER_CONFIG_OPTIONS } from './zookeeper.constant';
-import ZooKeeper = require('zookeeper');
+import ZooKeeper from 'zookeeper';
 
 @Injectable()
-export class ZookeeperClient
-  extends ZooKeeper
-  implements BeforeApplicationShutdown, OnModuleInit {
-  config = {};
-  logger = new LoggerUtil(ZookeeperClient.name);
+export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutdown, OnModuleInit {
+  private opts = {};
+  private logg = new LoggerUtil(ZookeeperClient.name);
+  public connected = false;
+  private _zookeeper: ZooKeeper;
 
   constructor(
     @Inject(ZOOKEEPER_CONFIG_OPTIONS)
     private readonly options: ZookeeperModuleOptions
   ) {
-    super({
+    super(merge( {
+      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+      host_order_deterministic: false,
+    }, {
+      connect: options.host,
+      timeout: options.timeout,
+      debug_level: options.logLevel,
+      host_order_deterministic: false,
+    }));
+
+    this.opts = merge( {
+      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+      host_order_deterministic: false,
+    }, {
       connect: options.host,
       timeout: options.timeout,
       debug_level: options.logLevel,
       host_order_deterministic: false,
     });
 
-    this.config = {
-      connect: options.host,
-      timeout: options.timeout,
-      debug_level: options.logLevel,
-      host_order_deterministic: false,
-    };
+    this.logg = new LoggerUtil(ZookeeperClient.name, options.debug);
+  }
 
-    this.logger = new LoggerUtil(ZookeeperClient.name, options.debug);
+  get zookeeper(): ZooKeeper {
+    return this._zookeeper;
   }
 
   close(): any | Promise<void> {
-    super.removeAllListeners();
     super.close();
   }
 
   async connect(): Promise<void> {
-    await defer(async () => {
-      this.on('connect', () => {
-        this.logger.log('Zookeeper client connected successfully');
-      });
-      super.init(this.config);
-    })
-      .pipe(
-        handleRetry(
-          this.options.retryAttempts,
-          this.options.retryDelays,
-          'RedisService'
+    try {
+      await defer(async () => {
+        this.on('connect', () => {
+          this.connected = true;
+          this.logg.log('Zookeeper client connected successfully');
+        });
+        super.connect(this.opts, () => {
+          this.connected = true;
+          // this.logg.log('Zookeeper client connected successfully');
+        });
+      })
+        .pipe(
+          handleRetry(
+            this.options.retryAttempts,
+            this.options.retryDelays,
+            ZookeeperClient.name,
+          )
         )
-      )
-      .toPromise();
+        .toPromise();
+    } catch (e) {
+      this.connected = false;
+      this.logg.error(e);
+    }
   }
 
   beforeApplicationShutdown(signal?: string): any {

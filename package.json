@@ -67,7 +67,7 @@
     "yaml": "^1.10.0",
     "yaml-schema-validator": "^1.2.2",
     "yaml-validator": "^3.0.0",
-    "zookeeper": "^4.7.1"
+    "zookeeper": "^4.8.1"
   },
   "devDependencies": {
     "@nestjs/schematics": "^7.2.7",
@@ -98,6 +98,7 @@
     "jest": "^26.6.3",
     "jest-mock-extended": "^1.0.10",
     "jest-ts-auto-mock": "^1.0.12",
+    "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
     "ts-auto-mock": "^3.1.0",
     "ts-jest": "^26.4.4",
