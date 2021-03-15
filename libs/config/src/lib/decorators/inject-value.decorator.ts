@@ -14,38 +14,20 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config.interface.ts
- * Last modified:     07/02/2021, 13:00
+ * File name:         inject-value.decorator.ts
+ * Last modified:     14/03/2021, 20:14
  ******************************************************************************/
+import 'reflect-metadata';
+import { applyDecorators } from '@nestjs/common';
+import { ExtendMetadata } from '@ultimate-backend/common';
+import { CONFIG_VALUE } from '../config.constant';
 
-import { ConfigSource } from '../config.enum';
-
-export interface IConfigSource {
-  watch<T extends any>(path: string, callback: (value: any) => void): void;
-
-  /**
-   * Get a configuration by  key path. It will return default value if path is missing
-   * @param path
-   * @param defaultValue
-   */
-  get<T extends any>(path: string, defaultValue: T): T | Promise<T> | undefined;
-
-  /**
-   * Get a configuration by  key path.
-   * @param path
-   */
-  get<T extends any>(path: string): T | Promise<T> | undefined;
-
-  /**
-   * Set config value by key path
-   * @param path
-   * @param value
-   * @param forceUpdate
-   */
-  set(path: string, value: any, forceUpdate?: boolean): Promise<void>;
-}
-
-export interface ConfigData {
-  source: ConfigSource;
-  data: Map<string, any>;
+export function ConfigValue(name?: string, defaults?: any): PropertyDecorator {
+  return applyDecorators((target, property) => {
+    return ExtendMetadata(CONFIG_VALUE, {
+      property,
+      name,
+      defaults,
+    })(target, property);
+  });
 }

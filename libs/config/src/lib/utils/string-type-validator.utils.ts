@@ -23,9 +23,9 @@ import * as TOML from '@iarna/toml';
 import { TomlError } from '@iarna/toml/lib/toml-parser.js';
 
 export enum StringFormatType {
-  json,
-  yaml,
-  toml,
+  json = 'json',
+  yaml = 'yaml',
+  toml = 'toml',
 }
 
 /**
@@ -84,6 +84,39 @@ export function validateAndGetStringType(rawString: string): StringFormatType {
     return StringFormatType.yaml;
   } else if (isValidToml(rawString)) {
     return StringFormatType.toml;
+  }
+
+  throw new Error('Invalid config format (only supports json, yaml and toml)');
+}
+
+/**
+ * Convert string to object type
+ * @param rawString
+ */
+export function stringToObjectType(rawString: string): any {
+  if (isValidJson(rawString)) {
+    return JSON.parse(rawString);
+  } else if (isValidYaml(rawString)) {
+    return YAML.parse(rawString);
+  } else if (isValidToml(rawString)) {
+    return TOML.parse(rawString);
+  }
+
+  throw new Error('Invalid config format (only supports json, yaml and toml)');
+}
+
+/**
+ * Convert object to string
+ * @param rawString
+ * @param object
+ */
+export function objectToStringFormat(rawString: string, object: any): string {
+  if (isValidJson(rawString)) {
+    return JSON.stringify(object);
+  } else if (isValidYaml(rawString)) {
+    return YAML.stringify(object);
+  } else if (isValidToml(rawString)) {
+    return TOML.stringify(object);
   }
 
   throw new Error('Invalid config format (only supports json, yaml and toml)');

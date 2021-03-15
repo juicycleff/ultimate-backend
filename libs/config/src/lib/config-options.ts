@@ -14,38 +14,26 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config.interface.ts
- * Last modified:     07/02/2021, 13:00
+ * File name:         config-options.ts
+ * Last modified:     14/03/2021, 17:37
  ******************************************************************************/
+import { ConfigModuleOptions } from './interfaces';
+import { OnModuleInit } from '@nestjs/common';
+import { assign } from 'lodash';
 
-import { ConfigSource } from '../config.enum';
+export class ConfigOptions implements OnModuleInit {
+  private CONFIG_PREFIX = 'config';
+  private options: Partial<ConfigModuleOptions> = {};
 
-export interface IConfigSource {
-  watch<T extends any>(path: string, callback: (value: any) => void): void;
+  constructor(private moduleOptions: ConfigModuleOptions) {}
 
-  /**
-   * Get a configuration by  key path. It will return default value if path is missing
-   * @param path
-   * @param defaultValue
-   */
-  get<T extends any>(path: string, defaultValue: T): T | Promise<T> | undefined;
+  get config(): ConfigModuleOptions {
+    return <ConfigModuleOptions>this.options;
+  }
 
-  /**
-   * Get a configuration by  key path.
-   * @param path
-   */
-  get<T extends any>(path: string): T | Promise<T> | undefined;
-
-  /**
-   * Set config value by key path
-   * @param path
-   * @param value
-   * @param forceUpdate
-   */
-  set(path: string, value: any, forceUpdate?: boolean): Promise<void>;
-}
-
-export interface ConfigData {
-  source: ConfigSource;
-  data: Map<string, any>;
+  onModuleInit(): any {
+    if (this.moduleOptions) {
+      this.options = assign(this.moduleOptions, this.options);
+    }
+  }
 }

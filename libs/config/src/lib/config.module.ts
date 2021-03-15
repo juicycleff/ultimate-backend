@@ -18,31 +18,72 @@
  * Last modified:     06/02/2021, 18:06
  ******************************************************************************/
 
-import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
+import { Module, DynamicModule, Provider, Type, Global } from '@nestjs/common';
 import {
   ConfigModuleAsyncOptions,
   ConfigModuleOptions,
   ConfigModuleOptionsFactory,
 } from './interfaces';
-import { CONFIG_MODULE_OPTIONS } from './config.constant';
-import { ConfigService } from './config.service';
+import {
+  CONFIG_CONFIGURATION_OPTIONS,
+  CONFIG_MODULE_OPTIONS,
+} from './config.constant';
+import { configSourceProviders } from './utils';
+import { ConfigOptions } from './config-options';
+import { ConfigStore } from './config.store';
+import { DiscoveryModule } from '@nestjs/core';
+import { ConfigMetadataAccessor } from './config-metadata.accessor';
+import { ConfigOrchestrator } from './config.orchestrator';
+import { ConfigDiscovery } from './config.discovery';
 
-@Module({})
+@Global()
+@Module({
+  imports: [DiscoveryModule],
+  providers: [ConfigMetadataAccessor, ConfigOrchestrator],
+})
 export class ConfigModule {
   static forRoot(options: ConfigModuleOptions): DynamicModule {
+    const providers = [
+      {
+        provide: CONFIG_CONFIGURATION_OPTIONS,
+        useValue: new ConfigOptions(options),
+      },
+      ...configSourceProviders(options),
+      ConfigDiscovery,
+      ConfigStore,
+    ];
+
     return {
       module: ConfigModule,
+      providers,
       global: options.global || true,
     };
   }
 
   static forRootAsync(options: ConfigModuleAsyncOptions): DynamicModule {
+    let providers = [];
+
+    const configProvider: Provider = {
+      provide: CONFIG_CONFIGURATION_OPTIONS,
+      useFactory: async (modOptions: ConfigModuleOptions) => {
+        providers = configSourceProviders(modOptions);
+        return new ConfigOptions(modOptions);
+      },
+      inject: [CONFIG_MODULE_OPTIONS],
+    };
+
     const asyncProviders = this.createAsyncProviders(options);
     return {
       module: ConfigModule,
       imports: options.imports,
-      providers: [...asyncProviders, ConfigService],
-      // global: options.global || true
+      providers: [
+        ...asyncProviders,
+        ...providers,
+        configProvider,
+        ConfigDiscovery,
+        ConfigStore,
+      ],
+      global: options.global || true,
     };
   }
 

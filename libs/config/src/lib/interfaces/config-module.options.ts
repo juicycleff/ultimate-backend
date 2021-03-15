@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-options.interface.ts
+ * File name:         config-module.options.ts
  * Last modified:     07/02/2021, 23:32
  ******************************************************************************/
 
@@ -28,7 +28,8 @@ export interface BaseConfigOptions {
 export interface EnvConfigOptions extends BaseConfigOptions {
   source: ConfigSource.Env;
   envFilePath?: string;
-  ignoreEnvFile?: true;
+  prefix: string;
+  ignoreEnvFile?: boolean;
 }
 
 export interface FileConfigOptions extends BaseConfigOptions {
@@ -44,14 +45,15 @@ export interface ConsulConfigOptions extends BaseConfigOptions {
 
 export interface EtcdConfigOptions extends BaseConfigOptions {
   source: ConfigSource.Etcd;
-  prefix?: string;
   key: string;
+  namespace?: string;
 }
 
 export interface ZookeeperConfigOptions extends BaseConfigOptions {
   source: ConfigSource.Zookeeper;
   prefix?: string;
   key: string;
+  namespace: string;
 }
 
 export type Configurations =
@@ -63,9 +65,9 @@ export type Configurations =
 
 export interface ConfigModuleOptions {
   load: Configurations | Array<Configurations>;
-  namespace?: string;
   global?: boolean;
   debug?: boolean;
+  namespace?: string;
 }
 
 export interface ConfigModuleOptionsFactory {
@@ -97,4 +99,6 @@ export interface ConfigModuleAsyncOptions
    * Inject any dependencies required by the module, such as a configuration service
    */
   inject?: never[];
+
+  global?: boolean;
 }

@@ -14,38 +14,23 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config.interface.ts
- * Last modified:     07/02/2021, 13:00
+ * File name:         config-metadata.accessor.ts
+ * Last modified:     14/03/2021, 23:05
  ******************************************************************************/
+import { Injectable } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { CONFIG_VALUE } from './config.constant';
+import { ConfigValueMetadata } from './interfaces/config-metadata.interface';
 
-import { ConfigSource } from '../config.enum';
+@Injectable()
+export class ConfigMetadataAccessor {
+  constructor(private readonly reflector: Reflector) {}
 
-export interface IConfigSource {
-  watch<T extends any>(path: string, callback: (value: any) => void): void;
-
-  /**
-   * Get a configuration by  key path. It will return default value if path is missing
-   * @param path
-   * @param defaultValue
-   */
-  get<T extends any>(path: string, defaultValue: T): T | Promise<T> | undefined;
-
-  /**
-   * Get a configuration by  key path.
-   * @param path
-   */
-  get<T extends any>(path: string): T | Promise<T> | undefined;
-
-  /**
-   * Set config value by key path
-   * @param path
-   * @param value
-   * @param forceUpdate
-   */
-  set(path: string, value: any, forceUpdate?: boolean): Promise<void>;
-}
-
-export interface ConfigData {
-  source: ConfigSource;
-  data: Map<string, any>;
+  getConfigValues(target: Function): ConfigValueMetadata[] | undefined {
+    try {
+      return this.reflector.get(CONFIG_VALUE, target);
+    } catch (e) {
+      return;
+    }
+  }
 }
