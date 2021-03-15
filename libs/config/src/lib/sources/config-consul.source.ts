@@ -21,7 +21,7 @@
 import { ConsulConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
-import { consul, ConsulService } from '@ultimate-backend/consul';
+import { consul, ConsulClient } from '@ultimate-backend/consul';
 import { ConfigOptions } from '../config-options';
 import { ConfigStore } from '../config.store';
 import { ConfigSource } from '../config.enum';
@@ -49,7 +49,7 @@ export class ConfigConsulSource implements IConfigSource, OnModuleInit {
   private readonly logger = new LoggerUtil(ConfigConsulSource.name);
 
   constructor(
-    private readonly client: ConsulService,
+    private readonly client: ConsulClient,
     @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
