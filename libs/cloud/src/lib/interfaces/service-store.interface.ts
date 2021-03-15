@@ -30,7 +30,15 @@ export interface IServiceStore {
 
   removeService(name: string): void;
 
-  watch(callback: (type: 'added' | 'removed', name: string, service: ServiceInstance[]) => void): void;
+  watch(
+    callback: (
+      type: 'added' | 'removed',
+      name: string,
+      service: ServiceInstance[]
+    ) => void
+  ): void;
+
+  close(): void;
 
   addServices(name: string, services: ServiceInstance[]): void;
 }
