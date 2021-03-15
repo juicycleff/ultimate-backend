@@ -21,6 +21,7 @@
 import { EnvConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import {isPlainObject} from 'lodash';
 import { LoggerUtil } from '@ultimate-backend/common';
 import { InjectConfigOptions } from '../decorators/inject-config.decorator';
 import { ConfigOptions } from '../config-options';
@@ -82,7 +83,7 @@ export class ConfigEnvSource implements IConfigSource, OnModuleInit {
     if (shouldSkip) {
       try {
         const result = readEnv(shouldSkip.prefix, { separator: '_' });
-        if (result) {
+        if (isPlainObject(result)) {
           this.store.merge(result);
         }
       } catch (e) {
@@ -102,7 +103,7 @@ export class ConfigEnvSource implements IConfigSource, OnModuleInit {
       try {
         dotenv.config({ path });
         const result = readEnv(load.prefix, { separator: '_' });
-        if (result) {
+        if (isPlainObject(result)) {
           this.store.merge(result);
         }
       } catch (e) {

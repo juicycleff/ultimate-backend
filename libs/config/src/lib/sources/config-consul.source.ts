@@ -20,6 +20,7 @@
 
 import { ConsulConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { isPlainObject } from 'lodash';
 import { consul, ConsulService } from '@ultimate-backend/consul';
 import { ConfigOptions } from '../config-options';
 import { ConfigStore } from '../config.store';
@@ -98,7 +99,9 @@ export class ConfigConsulSource implements IConfigSource, OnModuleInit {
 
     watcher.on('change', (data: KVResult) => {
       const parsedData = stringToObjectType(data.Value);
-      callback(parsedData);
+      if (isPlainObject(parsedData)) {
+        callback(parsedData);
+      }
     });
   }
 
@@ -138,7 +141,9 @@ export class ConfigConsulSource implements IConfigSource, OnModuleInit {
       const watcher = this.watchers[key];
       watcher.on('change', (data: KVResult) => {
         const parsedData = stringToObjectType(data.Value);
-        this.store.merge(parsedData);
+        if (isPlainObject(parsedData)) {
+          this.store.merge(parsedData);
+        }
       });
       watcher.on('error', () => {
         this.logger.error(`error on key: [${key}]`);

@@ -20,6 +20,7 @@
 
 import { ZookeeperConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { isPlainObject } from 'lodash';
 import { LoggerUtil } from '@ultimate-backend/common';
 import { InjectConfigOptions } from '../decorators/inject-config.decorator';
 import { ConfigOptions } from '../config-options';
@@ -48,6 +49,9 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
   }
 
   async onModuleInit() {
+    this.zookeeper.once('connect', async () => {
+      await this.watchAllConfigs();
+    })
     await this.watchAllConfigs();
   }
 
@@ -74,44 +78,69 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
   }
 
   async watch<T extends any>(path: string, callback: (value: T) => void) {
-    await this.zookeeper.w_get(path, (data) => {
-      const parsedData = stringToObjectType(data.toString());
-      callback(parsedData);
-    });
+    try {
+      await this.zookeeper.w_get(path, async (type, stat, path) => {
+        const [, data] = await this.zookeeper.get(path, false);
+        const parsedData = stringToObjectType(data.toString());
+        if (isPlainObject(parsedData)) {
+          callback(parsedData);
+        }
+      });
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 
   private async watchAllConfigs() {
-    const loads: ZookeeperConfigOptions[] = [];
-
-    if (!Array.isArray(this.options.config.load)) {
-      if (this.options.config.load.source === ConfigSource.Zookeeper) {
-        loads.push(this.options.config.load);
-      }
-    } else {
-      const _zookeeperLoads = this.options.config.load.filter(
-        (value) => value.source === ConfigSource.Zookeeper
-      ) as ZookeeperConfigOptions[];
-      loads.push(..._zookeeperLoads);
-    }
-
-    for (const load of loads) {
-      const key = load.key;
-
-      if (this.watchers[key]) {
-        // figure out how to close watch
+    try {
+      if (!this.zookeeper.connected) {
+        return;
       }
 
-      this.watchers[key] = this.zookeeper.aw_get(key, null, (data) => {
-        try {
-          const parsedData = stringToObjectType(data.toString());
-          if (parsedData) {
-            console.log(parsedData);
-            this.store.merge(parsedData);
-          }
-        } catch (e) {
-          this.logger.error(e);
+      const loads: ZookeeperConfigOptions[] = [];
+
+      if (!Array.isArray(this.options.config.load)) {
+        if (this.options.config.load.source === ConfigSource.Zookeeper) {
+          loads.push(this.options.config.load);
         }
-      });
+      } else {
+        const _zookeeperLoads = this.options.config.load.filter(
+          (value) => value.source === ConfigSource.Zookeeper
+        ) as ZookeeperConfigOptions[];
+        loads.push(..._zookeeperLoads);
+      }
+
+      for (const load of loads) {
+        const key = load.prefix ? `${load.prefix}${load.key}` : load.key;
+
+        if (this.watchers[key]) {
+          // figure out how to close watch
+        }
+
+        this.watchers[key] = this.zookeeper.aw_get(key, async (type, stat, path) => {
+          try {
+            const [, data] = await this.zookeeper.get(path, false);
+            const parsedData = stringToObjectType(data.toString());
+            if (isPlainObject(parsedData)) {
+              console.log(parsedData);
+              this.store.merge(parsedData);
+            }
+          } catch (e) {
+            this.logger.error(e);
+          }
+        }, (rc, error, stat, data) => {
+          try {
+            const parsedData = stringToObjectType(data.toString());
+            if (isPlainObject(parsedData)) {
+              this.store.merge(parsedData);
+            }
+          } catch (e) {
+            this.logger.error(e);
+          }
+        });
+      }
+    } catch (e) {
+      this.logger.error(e);
     }
   }
 }

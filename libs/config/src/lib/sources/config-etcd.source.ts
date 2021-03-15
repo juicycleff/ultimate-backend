@@ -19,6 +19,7 @@
  ******************************************************************************/
 import { EtcdConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { isPlainObject } from 'lodash';
 import { EtcdClient, etcd3, IWatchResponse } from '@ultimate-backend/etcd';
 import { LoggerUtil } from '@ultimate-backend/common';
 import { ConfigSetException } from '../exceptions';
@@ -120,7 +121,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
           .get(key);
 
         curConfig = stringToObjectType(curConfig);
-        if (curConfig) {
+        if (isPlainObject(curConfig)) {
           this.store.merge(curConfig);
         }
       } catch (e) {
@@ -146,8 +147,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
           if (event.kv.value && event.kv.value.toString()) {
             try {
               const parsedData = stringToObjectType(event.kv.value.toString());
-              if (parsedData) {
-                console.log(parsedData);
+              if (isPlainObject(parsedData)) {
                 this.store.merge(parsedData);
               }
             } catch (e) {

@@ -19,6 +19,7 @@
  ******************************************************************************/
 import * as fs from 'fs';
 import * as util from 'util';
+import {isPlainObject} from 'lodash';
 import { FileConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectConfigOptions } from '../decorators/inject-config.decorator';
@@ -89,17 +90,17 @@ export class ConfigFileSource implements IConfigSource, OnModuleInit {
       try {
         const str = await readFile(key);
         const parsedData = stringToObjectType(str.toString());
-        if (parsedData) {
+        if (isPlainObject(parsedData)) {
           this.store.merge(parsedData);
         }
       } catch (e) {
-        console.log(e);
+        this.logger.error(e);
       }
 
       this.watchers[key] = fs.watch(key, async () => {
         const str = await readFile(key);
         const parsedData = stringToObjectType(str.toString());
-        if (parsedData) {
+        if (isPlainObject(parsedData)) {
           this.store.merge(parsedData);
         }
       });

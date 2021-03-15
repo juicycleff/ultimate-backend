@@ -53,7 +53,6 @@ export interface ZookeeperConfigOptions extends BaseConfigOptions {
   source: ConfigSource.Zookeeper;
   prefix?: string;
   key: string;
-  namespace: string;
 }
 
 export type Configurations =
