@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         zookeeper.service.ts
+ * File name:         zookeeper.client.ts
  * Last modified:     08/02/2021, 11:17
  ******************************************************************************/
 
@@ -31,11 +31,11 @@ import { ZOOKEEPER_CONFIG_OPTIONS } from './zookeeper.constant';
 import ZooKeeper = require('zookeeper');
 
 @Injectable()
-export class ZookeeperService
+export class ZookeeperClient
   extends ZooKeeper
   implements BeforeApplicationShutdown, OnModuleInit {
   config = {};
-  logger = new LoggerUtil('ZookeeperService');
+  logger = new LoggerUtil(ZookeeperClient.name);
 
   constructor(
     @Inject(ZOOKEEPER_CONFIG_OPTIONS)
@@ -55,7 +55,7 @@ export class ZookeeperService
       host_order_deterministic: false,
     };
 
-    this.logger = new LoggerUtil('ZookeeperService', options.debug);
+    this.logger = new LoggerUtil(ZookeeperClient.name, options.debug);
   }
 
   close(): any | Promise<void> {

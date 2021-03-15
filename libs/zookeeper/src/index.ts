@@ -1,6 +1,6 @@
-import Zookeeper = require('zookeeper');
+const Zookeeper = require('zookeeper');
 
 export * from './lib/zookeeper.module';
-export * from './lib/zookeeper.service';
+export * from './lib/zookeeper.client';
 
 export { Zookeeper };

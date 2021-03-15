@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 import { Module, Global, DynamicModule, Provider, Type } from '@nestjs/common';
-import { ZookeeperService } from './zookeeper.service';
+import { ZookeeperClient } from './zookeeper.client';
 import {
   ZookeeperModuleAsyncOptions,
   ZookeeperModuleOptions,
@@ -37,13 +37,13 @@ export class ZookeeperModule {
     return {
       module: ZookeeperModule,
       providers: [
-        ZookeeperService,
+        ZookeeperClient,
         {
           provide: ZOOKEEPER_CONFIG_OPTIONS,
           useValue: options,
         },
       ],
-      exports: [ZookeeperService],
+      exports: [ZookeeperClient],
       global: true,
     };
   }
@@ -62,8 +62,8 @@ export class ZookeeperModule {
     return {
       module: ZookeeperModule,
       imports: options.imports,
-      providers: [...asyncProviders, configProvider, ZookeeperService],
-      exports: [ZookeeperService],
+      providers: [...asyncProviders, configProvider, ZookeeperClient],
+      exports: [ZookeeperClient],
       global: true,
     };
   }
