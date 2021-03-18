@@ -19,8 +19,9 @@ describe('MdnsRegistrationBuilder', () => {
     const t = client
       .serviceName('service-name')
       .discoveryOptions({
-        healthCheckCriticalTimeout: '3000',
-        healthCheckUrl: '/',
+        timeout: 3000,
+        type: 'http',
+        http: '/',
       })
       .build();
     expect(t).toBeDefined();
@@ -40,8 +41,9 @@ describe('MdnsRegistrationBuilder', () => {
       .instanceId('2')
       .serviceName('service-name')
       .discoveryOptions({
-        healthCheckCriticalTimeout: '3000',
-        healthCheckUrl: '/',
+        timeout: 3000,
+        type: 'http',
+        http: '/',
       })
       .heartbeatOptions({
         enabled: true,
@@ -63,8 +65,9 @@ describe('MdnsRegistrationBuilder', () => {
       .instanceId('2')
       .serviceName('service-name')
       .discoveryOptions({
-        healthCheckCriticalTimeout: '3000',
-        healthCheckUrl: '/',
+        timeout: 3000,
+        type: 'http',
+        http: '/',
       })
       .build();
     expect(t).toBeDefined();
@@ -76,8 +79,9 @@ describe('MdnsRegistrationBuilder', () => {
       client
         .serviceName('service-name')
         .discoveryOptions({
-          healthCheckCriticalTimeout: '3000',
-          healthCheckUrl: '/',
+          timeout: 3000,
+          type: 'http',
+          http: '/',
         })
         .build();
     };
