@@ -23,7 +23,7 @@ import {} from 'got';
 
 @Injectable()
 export class HttpClient {
-  constructor() {}
+  constructor(private readonly LoadBalancerClient) {}
 
   private request() {}
 }
