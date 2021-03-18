@@ -17,7 +17,7 @@
  * File name:         npm-release.js
  * Last modified:     18/03/2021, 16:08
  ******************************************************************************/
-const execSync = require('child_process').execSync;
+const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
 
@@ -42,9 +42,7 @@ function command() {
   }
 
   const cmd = `npx nx run-many --target=${target} --projects=${projects.join(',')} --parallel`;
-  console.log(cmd);
-
-  execSync(cmd);
+  shell.exec(cmd);
 }
 
 command();

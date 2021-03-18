@@ -5,20 +5,20 @@ const serviceId = 'string';
 const host = 'string';
 const port = 2133;
 const secure = true;
-const metadata = new Map<string, any>();
+const metadata = {};
 
 describe('DefaultServiceInstance', () => {
   let service: DefaultServiceInstance;
 
   beforeEach(() => {
-    service = new DefaultServiceInstance(
+    service = new DefaultServiceInstance({
       instanceId,
       serviceId,
       host,
       port,
       secure,
-      metadata
-    );
+      metadata,
+    });
   });
 
   it('can get registration host', async () => {
@@ -46,27 +46,26 @@ describe('DefaultServiceInstance', () => {
 
   it('can get registration scheme', async () => {
     expect(service.getScheme()).toEqual('https');
-    service = new DefaultServiceInstance(
+    service = new DefaultServiceInstance({
       instanceId,
       serviceId,
       host,
       port,
-      false,
-      metadata
-    );
+      secure: false,
+      metadata,
+    });
     expect(service.getScheme()).toEqual('http');
   });
 
   it('can get registration metadata', async () => {
     expect(service.getMetadata()).toEqual(metadata);
-    service = new DefaultServiceInstance(
+    service = new DefaultServiceInstance({
       instanceId,
       serviceId,
       host,
       port,
-      false,
-      null
-    );
+      secure: false,
+    });
     expect(service.getMetadata()).toEqual(new Map());
   });
 });
