@@ -23,21 +23,19 @@ import {
   ServiceInstance,
 } from '@ultimate-backend/common';
 import { random } from 'lodash';
-import { ServiceInstancePool } from '../service-instance-pool';
+import { ServiceInstanceList } from '../service-instance-list';
 import { Injectable } from '@nestjs/common';
-import { LoadBalancerStrategy } from '../decorators';
 
 /**
  * random load-balance strategy
  */
-@LoadBalancerStrategy()
 @Injectable()
 export class RandomStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(RandomStrategy.name);
   private serviceId: String;
-  private serviceInstanceList: ServiceInstancePool;
+  private serviceInstanceList: ServiceInstanceList;
 
-  init(serviceName: string, list: ServiceInstancePool) {
+  init(serviceName: string, list: ServiceInstanceList) {
     this.serviceId = serviceName;
     this.serviceInstanceList = list;
   }
@@ -46,6 +44,7 @@ export class RandomStrategy extends BaseStrategy<ServiceInstance> {
    * Choose a service instance from the list of service pool
    */
   choose(): ServiceInstance {
+    this.serviceInstanceList.get();
     const liveServices = this.serviceInstanceList.get();
     const liveServicesCount = liveServices.length;
 

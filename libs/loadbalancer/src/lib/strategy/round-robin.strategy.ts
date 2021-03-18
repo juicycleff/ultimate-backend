@@ -22,30 +22,29 @@ import {
   LoggerUtil,
   ServiceInstance,
 } from '@ultimate-backend/common';
-import { ServiceInstancePool } from '../service-instance-pool';
+import { ServiceInstanceList } from '../service-instance-list';
 import { Injectable } from '@nestjs/common';
-import { LoadBalancerStrategy } from '../decorators';
 
 /**
  * round robin load-balance strategy
  */
-@LoadBalancerStrategy()
 @Injectable()
 export class RoundRobinStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(RoundRobinStrategy.name);
   private serviceId: String;
-  private serviceInstanceList: ServiceInstancePool;
+  private serviceInstanceList: ServiceInstanceList;
   counter = 0;
 
-  init(serviceName: string, list: ServiceInstancePool) {
+  init(serviceName: string, list: ServiceInstanceList) {
     this.serviceId = serviceName;
-    this.serviceInstanceList = list as ServiceInstancePool;
+    this.serviceInstanceList = list as ServiceInstanceList;
   }
 
   /**
    * Choose a service instance from the list of service pool
    */
   choose(): ServiceInstance {
+    this.serviceInstanceList.get();
     const liveServices = this.serviceInstanceList.get();
     const liveServicesCount = liveServices.length;
 

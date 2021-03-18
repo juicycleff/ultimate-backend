@@ -17,7 +17,8 @@
  * File name:         loadbalancer.module.ts
  * Last modified:     07/03/2021, 18:09
  ******************************************************************************/
-import { DynamicModule, Global, Module, Provider, Type } from '@nestjs/common';
+
+import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { LoadBalancerClient } from './loadbalance.client';
 import {
   LoadBalancerModuleAsyncOptions,
@@ -34,17 +35,10 @@ import {
   WeightedRoundRobinStrategy,
 } from './strategy';
 import { WeightedRandomStrategy } from './strategy/weighted-random.strategy';
-import { StrategyDiscovery } from './strategy.discovery';
+import { StrategyInstanceListBuilder } from './strategy-instance-list.builder';
 import { DiscoveryModule } from '@nestjs/core';
-import { LoadbalancerConfig } from './loadbalancer.config';
-import { StrategyRegistry } from './strategy.registry';
-import { Scanner } from '@ultimate-backend/common';
 
-@Global()
-@Module({
-  imports: [DiscoveryModule],
-  providers: [Scanner],
-})
+@Module({})
 export class LoadBalancerModule {
   static forRoot(options?: LoadBalancerModuleOptions): DynamicModule {
     return {
@@ -53,16 +47,15 @@ export class LoadBalancerModule {
       providers: [
         {
           provide: LOAD_BALANCE_CONFIG_OPTIONS,
-          useValue: new LoadbalancerConfig(options),
+          useValue: options || { strategy: 'RoundRobin' },
         },
-        StrategyDiscovery,
+        StrategyInstanceListBuilder,
         RoundRobinStrategy,
         RandomStrategy,
         WeightedRoundRobinStrategy,
         WeightedRandomStrategy,
         ...(options?.customStrategies || []),
         LoadBalancerClient,
-        StrategyRegistry,
       ],
       exports: [LoadBalancerClient],
       global: true,
@@ -76,7 +69,7 @@ export class LoadBalancerModule {
       provide: LOAD_BALANCE_CONFIG_OPTIONS,
       useFactory: async (modOptions: LoadBalancerModuleOptions) => {
         customStrategies = modOptions.customStrategies;
-        return new LoadbalancerConfig(modOptions || { strategy: 'RoundRobin' });
+        return modOptions;
       },
       inject: [LOAD_BALANCE_CONFIG_OPTIONS],
     };
@@ -89,14 +82,13 @@ export class LoadBalancerModule {
       providers: [
         ...asyncProviders,
         configProvider,
-        StrategyDiscovery,
+        StrategyInstanceListBuilder,
         RoundRobinStrategy,
         RandomStrategy,
         WeightedRoundRobinStrategy,
         WeightedRandomStrategy,
         ...(customStrategies || []),
         LoadBalancerClient,
-        StrategyRegistry,
       ],
       exports: [LoadBalancerClient],
       global: true,
