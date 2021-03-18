@@ -14,32 +14,40 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-env.store.ts
- * Last modified:     07/02/2021, 11:27
+ * File name:         health-check.ts
+ * Last modified:     09/03/2021, 23:28
  ******************************************************************************/
 
-import { IConfigStore } from '../interfaces';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import dotenv from 'dotenv';
+export class HealthCheck {
+  /**
+   * Initial delay value for the HealthCheck scheduler.
+   */
+  initialDelay = 0;
 
-@Injectable()
-export class ConfigEnvStore implements IConfigStore, OnModuleInit {
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
+  /**
+   * Interval for rerunning the HealthCheck scheduler.
+   */
+  interval = 25000;
 
-  get<T extends any>(path: string, defaultValue: T): Promise<T> | T | undefined;
-  get<T extends any>(path: string): Promise<T> | T | undefined;
+  /**
+   * Interval for refetching available service instances.
+   */
+  refetchInstancesInterval = 25000;
 
-  get<T extends any>(path: string, defaultValue?): Promise<T> | T | undefined {
-    return undefined;
-  }
+  path: Map<String, String> = new Map();
 
-  set(path: string, value: string): Promise<void> {
-    return Promise.resolve(undefined);
-  }
+  /**
+   * Indicates whether the instances should be refetched by the
+   * <code>HealthCheckServiceInstanceListSupplier</code>. This can be used if the
+   * instances can be updated and the underlying delegate does not provide an
+   * ongoing flux.
+   */
+  refetchInstances = false;
 
-  watch<T extends any>(paths: string): void {
-    // TODO: Fix soon
-  }
+  /**
+   * Indicates whether health checks should keep repeating. It might be useful to
+   * set it to <code>false</code> if periodically refetching the instances, as every
+   * refetch will also trigger a healthcheck.
+   */
+  repeatHealthCheck = true;
 }

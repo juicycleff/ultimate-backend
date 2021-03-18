@@ -14,13 +14,10 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         strategy.enum.ts
- * Last modified:     02/03/2021, 01:22
+ * File name:         zookeeper-service.instance.ts
+ * Last modified:     17/03/2021, 01:12
  ******************************************************************************/
 
-export enum LoadBalanceStrategy {
-  RoundRobin,
-  Random,
-  WeightedRandom,
-  WeightedRoundRandom,
-}
+import { DefaultServiceInstance } from '@ultimate-backend/common';
+
+export class ZookeeperServiceInstance extends DefaultServiceInstance {}

@@ -14,11 +14,53 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config.service.ts
- * Last modified:     21/01/2021, 00:33
+ * File name:         static.strategy.ts
+ * Last modified:     02/03/2021, 01:34
  ******************************************************************************/
-
+import {
+  BaseStrategy,
+  LoggerUtil,
+  ServiceInstance,
+} from '@ultimate-backend/common';
+import { random } from 'lodash';
+import { ServiceInstanceList } from '../service-instance-list';
 import { Injectable } from '@nestjs/common';
 
+/**
+ * random load-balance strategy
+ */
 @Injectable()
-export class ConfigService {}
+export class StaticStrategy extends BaseStrategy<ServiceInstance> {
+  private logger = new LoggerUtil(StaticStrategy.name);
+  private serviceId: String;
+  private serviceInstanceList: ServiceInstanceList;
+  private currentIdx: number;
+
+  init(serviceName: string, list: ServiceInstanceList) {
+    this.serviceId = serviceName;
+    this.serviceInstanceList = list;
+  }
+
+  /**
+   * Choose a service instance from the list of service pool
+   */
+  choose(): ServiceInstance {
+    this.serviceInstanceList.get();
+    const liveServices = this.serviceInstanceList.get();
+    const liveServicesCount = liveServices.length;
+
+    if (this.currentIdx) {
+      return liveServices[this.currentIdx];
+    }
+
+    if (liveServicesCount === 0) {
+      this.logger.error(
+        `no live servers available for service: ${this.serviceId}`
+      );
+      return null;
+    }
+
+    this.currentIdx = random(0, liveServicesCount - 1);
+    return liveServices[this.currentIdx];
+  }
+}

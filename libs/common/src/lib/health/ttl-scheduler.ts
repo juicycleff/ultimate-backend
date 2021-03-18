@@ -1,38 +1,15 @@
 import { Logger } from '@nestjs/common';
-import { ConsulClient } from '../../';
-import { HeartbeatOptions } from './heartbeat.interface';
+import { HeartbeatOptions } from '../';
+import { HeartbeatTask } from '../interfaces';
 
 const tasks = new Map<string, any>();
 
-class ConsulHeartbeatTask {
-  logger = new Logger('CONSUL: '+ ConsulHeartbeatTask.name);
-  private readonly checkId: string;
-
-  constructor(private client: ConsulClient, serviceId: string) {
-    this.checkId = serviceId;
-    if (!this.checkId.startsWith('service:')) {
-      this.checkId = `service:${this.checkId}`;
-    }
-  }
-
-  run() {
-    try {
-      (async () => {
-        this.client.consul.agent.check.pass(this.checkId);
-      })();
-      this.logger.log(`Sending consul heartbeat for: ${this.checkId}`);
-    } catch (e) {
-      this.logger.error(e);
-    }
-  }
-}
-
 export class TtlScheduler {
-  logger = new Logger('CONSUL: ' + TtlScheduler.name);
+  logger = new Logger(TtlScheduler.name);
 
   constructor(
     private heartbeatOptions: HeartbeatOptions,
-    private client: ConsulClient
+    private task: HeartbeatTask
   ) {}
 
   /**
@@ -41,9 +18,8 @@ export class TtlScheduler {
    * @param instanceId instance id
    */
   add(instanceId: string): void {
-    const task = new ConsulHeartbeatTask(this.client, instanceId);
     const taskId = setInterval(() => {
-      task.run();
+      this.task.run();
     }, this.computeHeartbeatInterval());
     const previousTaskId = tasks.get(instanceId);
     if (previousTaskId) {

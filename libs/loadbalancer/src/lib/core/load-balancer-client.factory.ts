@@ -14,36 +14,19 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-zookeeper.store.ts
- * Last modified:     07/02/2021, 11:31
+ * File name:         load-balancer-client.factory.ts
+ * Last modified:     10/03/2021, 00:22
  ******************************************************************************/
-
-import { IConfigStore } from '../interfaces';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import dotenv from 'dotenv';
+import { BaseStrategy, ServiceInstance } from '@ultimate-backend/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ConfigZookeeperStore implements IConfigStore, OnModuleInit {
-  constructor() {
-    // TODO: Fix soon
-  } // private readonly internalConfig: Record<string, any> = {}, // @Inject(CONFIGURATION_TOKEN) // @Optional()
+export class LoadBalancerClientFactory {
+  private strategies: Map<string, BaseStrategy<ServiceInstance>>;
 
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
+  addStrategy() {}
 
-  get<T extends any>(path: string, defaultValue: T): Promise<T> | T | undefined;
-  get<T extends any>(path: string): Promise<T> | T | undefined;
-
-  get<T extends any>(path: string, defaultValue?): Promise<T> | T | undefined {
-    return undefined;
-  }
-
-  set(path: string, value: string): Promise<void> {
-    return Promise.resolve(undefined);
-  }
-
-  watch<T extends any>(paths: string): void {
-    // TODO: Fix soon
+  getStrategy(name: string): BaseStrategy<ServiceInstance> {
+    return this.strategies.get(name);
   }
 }

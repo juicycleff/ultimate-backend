@@ -14,38 +14,12 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-global.store.ts
- * Last modified:     07/02/2021, 20:41
+ * File name:         index.ts
+ * Last modified:     15/03/2021, 15:52
  ******************************************************************************/
 
-import { Injectable } from '@nestjs/common';
-import { ConfigData } from '../interfaces';
-import { ConfigSource } from '../config.enum';
-
-@Injectable()
-export class ConfigGlobalStore {
-  private _dataArr: ConfigData[];
-
-  /**
-   * @param source
-   * @param key
-   * @param value
-   *
-  set(source: ConfigSource, key: string, value: any): void {
-    /
-  }
-
-  /**
-   * @description
-   *
-   * @param source
-   * @param key
-   */
-  delete(source: ConfigSource, key: string): void {
-    // TODO: Fix soon
-  }
-
-  get<T>(source: ConfigSource, key: string): T {
-    // TODO: Fix soon
-  }
-}
+export * from './zookeeper-service-registry';
+export * from './zookeeper-discovery.options';
+export * from './zookeeper-registration.builder';
+export * from './zookeeper-registration';
+export * from './zookeeper-registry.options';

@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { ConfigService } from './config.service';
+import { LoadBalancerClient } from './loadbalance.client';
 
-describe('ConfigService', () => {
-  let service: ConfigService;
+describe('LoadBalancerClient', () => {
+  let service: LoadBalancerClient;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [ConfigService],
+      providers: [LoadBalancerClient],
     }).compile();
 
-    service = module.get(ConfigService);
+    service = module.get(LoadBalancerClient);
   });
 
   it('should be defined', () => {

@@ -14,34 +14,15 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-consul.store.ts
- * Last modified:     07/02/2021, 11:30
+ * File name:         etcd-registry.options.ts
+ * Last modified:     11/02/2021, 00:15
  ******************************************************************************/
 
-import { IConfigStore } from '../interfaces';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import dotenv from 'dotenv';
+import { HeartbeatOptions, Service } from '@ultimate-backend/common';
+import { EtcdDiscoveryOptions } from './etcd-discovery.options';
 
-@Injectable()
-export class ConfigConsulStore implements IConfigStore, OnModuleInit {
-  // constructor() {} // private readonly internalConfig: Record<string, any> = {}, // @Inject(CONFIGURATION_TOKEN) // @Optional()
-
-  onModuleInit(): any {
-    // TODO: Fix soon
-  }
-
-  get<T extends any>(path: string, defaultValue: T): Promise<T> | T | undefined;
-  get<T extends any>(path: string): Promise<T> | T | undefined;
-
-  get<T extends any>(path: string, defaultValue?): Promise<T> | T | undefined {
-    return undefined;
-  }
-
-  set(path: string, value: string): Promise<void> {
-    return Promise.resolve(undefined);
-  }
-
-  watch<T extends any>(paths: string): void {
-    // TODO: Fix soon
-  }
+export interface EtcdRegistryOptions {
+  service: Service;
+  discovery?: EtcdDiscoveryOptions;
+  heartbeat?: HeartbeatOptions;
 }

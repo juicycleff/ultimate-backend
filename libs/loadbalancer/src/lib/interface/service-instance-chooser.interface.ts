@@ -14,14 +14,23 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         load-balancer.interface.ts
- * Last modified:     06/03/2021, 18:51
+ * File name:         service-instance-chooser.interface.ts
+ * Last modified:     09/03/2021, 20:48
  ******************************************************************************/
-import { IService } from '../../interfaces';
-import { BaseStrategy } from './base.strategy';
+import { BaseStrategy, ServiceInstance } from '@ultimate-backend/common';
 
-export interface ILoadbalance {
-  pickLoadBalancer(serviceName: string): BaseStrategy;
+export interface ServiceInstanceChooser {
+  /**
+   * Chooses a ServiceInstance from the LoadBalancer for the specified service.
+   * @param serviceId The service ID to look up the LoadBalancer.
+   * @return A ServiceInstance that matches the serviceId.
+   */
+  choose(serviceId: string): ServiceInstance;
 
-  pick(serviceName: string): IService;
+  /**
+   * Chooses a ServiceInstance from the LoadBalancer for the specified service strategy
+   * @param serviceId The service ID to look up the LoadBalancer.
+   * @return A BaseStrategy<ServiceInstance> that matches the serviceId.
+   */
+  chooseStrategy(serviceId: string): BaseStrategy<ServiceInstance>;
 }
