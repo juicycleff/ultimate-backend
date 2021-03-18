@@ -20,7 +20,7 @@
 import { EtcdConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
-import { EtcdClient, etcd3, IWatchResponse } from '@ultimate-backend/etcd';
+import { EtcdClient, etcd, IWatchResponse } from '@ultimate-backend/etcd';
 import { LoggerUtil } from '@ultimate-backend/common';
 import { ConfigSetException } from '../exceptions';
 import { ConfigSource } from '../config.enum';
@@ -35,7 +35,7 @@ import { objectToStringFormat, stringToObjectType } from '../utils';
  */
 @Injectable()
 export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
-  private watchers: Map<string, etcd3.Watcher> = new Map();
+  private watchers: Map<string, etcd.Watcher> = new Map();
   private readonly logger = new LoggerUtil(ConfigEtcdSource.name);
   private defaultNamespace: string;
 

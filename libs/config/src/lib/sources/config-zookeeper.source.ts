@@ -46,6 +46,8 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
       options.config.debug
     );
     this.defaultNamespace = options.config.namespace;
+
+    this.storeUpdate.bind(this);
   }
 
   async onModuleInit() {
@@ -117,30 +119,30 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
           // figure out how to close watch
         }
 
-        this.watchers[key] = this.zookeeper.aw_get(key, async (type, stat, path) => {
-          try {
-            const [, data] = await this.zookeeper.get(path, false);
-            const parsedData = stringToObjectType(data.toString());
-            if (isPlainObject(parsedData)) {
-              console.log(parsedData);
-              this.store.merge(parsedData);
-            }
-          } catch (e) {
-            this.logger.error(e);
-          }
-        }, (rc, error, stat, data) => {
-          try {
-            const parsedData = stringToObjectType(data.toString());
-            if (isPlainObject(parsedData)) {
-              this.store.merge(parsedData);
-            }
-          } catch (e) {
-            this.logger.error(e);
-          }
-        });
+        const callback = this.storeUpdate
+        this.setWatch(key, callback);
       }
     } catch (e) {
       this.logger.error(e);
     }
+  }
+
+  private storeUpdate(data: string | Buffer, store: ConfigStore, logger: LoggerUtil) {
+    try {
+      const parsedData = stringToObjectType(data.toString());
+      if (isPlainObject(parsedData)) {
+        store.merge(parsedData);
+      }
+    } catch (e) {
+      logger.error(e);
+    }
+  }
+
+  private setWatch(key: string, callback: Function): void {
+    this.watchers[key] = this.zookeeper.w_get(key, async (rc, error, stat) => {
+      const [, data] = await this.zookeeper.get(key, false);
+      this.setWatch(key, callback);
+      callback(data, this.store, this.logger);
+    });
   }
 }

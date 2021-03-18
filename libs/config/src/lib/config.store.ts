@@ -29,10 +29,7 @@ import {
   isPlainObject,
 } from 'lodash';
 import { EventEmitter } from 'events';
-import { objectToMap } from '@ultimate-backend/common';
 import { Injectable } from '@nestjs/common';
-
-type MapFunctionType = { [key: string]: Array<(value: any) => void> };
 
 @Injectable()
 export class ConfigStore extends EventEmitter {
