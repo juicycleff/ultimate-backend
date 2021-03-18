@@ -18,10 +18,10 @@
  * Last modified:     02/03/2021, 01:35
  ******************************************************************************/
 import { RoundRobinStrategy } from './round-robin.strategy';
+import { Injectable } from '@nestjs/common';
 
 /**
  * Weighted round robin strategy
  */
-export class WeightedRoundRobinStrategy extends RoundRobinStrategy {
-
-}
+@Injectable()
+export class WeightedRoundRobinStrategy extends RoundRobinStrategy {}

@@ -18,22 +18,22 @@
  * Last modified:     08/02/2021, 11:17
  ******************************************************************************/
 
-import { ModuleMetadata, Type } from '@nestjs/common';
-import { LoadBalanceStrategy } from './strategy.enum';
-import { BaseStrategy } from '@ultimate-backend/common';
+import { ClassProvider, ModuleMetadata, Type } from '@nestjs/common';
+import { LoadBalancerProperties } from './config';
+import { LoadBalanceStrategy } from './strategy.option';
+import { BaseStrategy, ServiceInstance } from '@ultimate-backend/common';
 
-export interface LoadbalancerModuleOptions {
-  strategy: LoadBalanceStrategy | BaseStrategy;
-  services?: Array<{
-    serviceName: string;
-    strategy: LoadBalanceStrategy | BaseStrategy;
-  }>
+export interface LoadBalancerModuleOptions {
+  strategy: LoadBalanceStrategy;
+  services?: { serviceName: string; strategyName: string }[];
+  customStrategies?: ClassProvider<BaseStrategy<ServiceInstance>>[];
+  options?: LoadBalancerProperties;
 }
 
 export interface LoadBalancerModuleOptionsFactory {
-  createClientOptions():
-    | Promise<LoadbalancerModuleOptions>
-    | LoadbalancerModuleOptions;
+  createLoaderBalancerOptions():
+    | Promise<LoadBalancerModuleOptions>
+    | LoadBalancerModuleOptions;
 }
 
 /**
@@ -55,7 +55,7 @@ export interface LoadBalancerModuleAsyncOptions
    */
   useFactory?: (
     ...args: never[]
-  ) => Promise<LoadbalancerModuleOptions> | LoadbalancerModuleOptions;
+  ) => Promise<LoadBalancerModuleOptions> | LoadBalancerModuleOptions;
 
   /**
    * Inject any dependencies required by the module, such as a configuration service
