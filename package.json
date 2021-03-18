@@ -105,6 +105,7 @@
     "jest-ts-auto-mock": "^1.0.12",
     "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
+    "shelljs": "^0.8.4",
     "ts-auto-mock": "^3.1.0",
     "ts-jest": "^26.4.4",
     "ts-node": "~7.0.0",
