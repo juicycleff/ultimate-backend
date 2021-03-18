@@ -17,7 +17,7 @@
  * File name:         service.store.ts
  * Last modified:     11/03/2021, 14:13
  ******************************************************************************/
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { IServiceStore } from '@ultimate-backend/cloud';
 import { ServiceInstance, ServiceStatus } from '@ultimate-backend/common';
 import { EventEmitter } from 'events';
@@ -28,6 +28,7 @@ export class ServiceStore
   implements IServiceStore, OnModuleDestroy {
   private readonly services: Map<string, ServiceInstance[]> = new Map();
   private eventName = 'change';
+  logger = new Logger(ServiceStore.name);
 
   getServiceNames(): string[] {
     const names: string[] = [];
@@ -53,7 +54,12 @@ export class ServiceStore
 
   addService(name: string, service: ServiceInstance) {
     if (this.services.has(name)) {
-      this.services.get(name).push(service);
+      const idx = this.services.get(name).findIndex(elem => elem.getServiceId() === service.getServiceId());
+      if (idx !== -1) {
+        this.services.get(name)[idx] = service;
+      } else {
+        this.services.get(name).push(service);
+      }
     } else {
       this.services.set(name, [service]);
     }
@@ -62,7 +68,9 @@ export class ServiceStore
 
   addServices(name: string, services: ServiceInstance[]): void {
     if (this.services.has(name)) {
-      this.services.get(name).concat(...services);
+      for (const service of services) {
+        this.addService(name, service);
+      }
     } else {
       this.services.set(name, services);
     }
@@ -76,8 +84,27 @@ export class ServiceStore
 
   removeService(name: string): void {
     if (this.services.has(name)) {
-      this.emit(this.eventName, 'removed', name, [this.services.get(name)]);
+      this.emit(this.eventName, 'removed', name, this.services.get(name));
       this.services.delete(name);
+    }
+  }
+
+  removeServiceNode(serviceName: string, nodeId: string): void {
+    try {
+      if (this.services.has(serviceName)) {
+        if (this.services.get(serviceName).length === 1) {
+          this.emit(this.eventName, 'removed', serviceName, this.services.get(serviceName));
+          this.services.delete(serviceName);
+        } else {
+          const idx = this.services.get(serviceName).findIndex((elem) => elem.getServiceId() === nodeId);
+          if (idx !== -1) {
+            const service = this.services.get(serviceName).splice(idx, 1);
+            this.emit(this.eventName, 'removed', serviceName, [service]);
+          }
+        }
+      }
+    } catch (e) {
+      this.logger.error(e);
     }
   }
 

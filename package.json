@@ -26,6 +26,9 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "patch-package": "npx patch-package consul",
+    "release:pre": "nx run workspace:version --version=prerelease --preid=alpha",
+    "release:next": "nx run workspace:version --version=prerelease --preid=alpha",
+    "release": "nx run workspace:version",
     "postinstall": "patch-package"
   },
   "private": false,

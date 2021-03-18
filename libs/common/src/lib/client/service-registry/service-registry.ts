@@ -49,15 +49,15 @@ export interface ServiceRegistry<R extends Registration<any>> {
    *  Sets the status of the registration. The status values are determined by the
    * individual implementations.
    *
-   * @param registration registration metadata
    * @param status the status code.
    */
-  setStatus(registration: R, status: string): Promise<void>;
+  setStatus(status: string): Promise<void>;
 
   /**
+   *  Gets the status of the registration. The status values are determined by the
+   * individual implementations.
    *
-   * @param registration registration metadata
    * @returns
    */
-  getStatus<T>(registration: R): Promise<T>;
+  getStatus<T>(): Promise<T>;
 }
