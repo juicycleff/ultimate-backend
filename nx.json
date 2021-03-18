@@ -19,7 +19,12 @@
       "runner": "@nrwl/nx-cloud",
       "options": {
         "accessToken": "MDVhYjA4NTUtZDY0YS00MzhlLWI1YTgtNjE2MjVmYWNmNGQxfHJlYWQtd3JpdGU=",
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint",
+          "e2e"
+        ],
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
@@ -81,6 +86,9 @@
       "tags": []
     },
     "event-store-example": {
+      "tags": []
+    },
+    "workspace": {
       "tags": []
     }
   }

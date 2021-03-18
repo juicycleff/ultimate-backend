@@ -5,6 +5,7 @@ export * from './retry.util';
 export * from './iplist';
 export * from './transform.utils';
 export * from './metadata.utils';
+export * from './instance-converter.util';
 export * from './sleep.util';
 
 export type PlainObject = { [name: string]: any };

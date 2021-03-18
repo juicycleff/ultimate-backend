@@ -1,4 +1,5 @@
 import { PlainObject } from '../../utils';
+import { DiscoveryOptions } from './discovery.interface';
 
 export interface HeartbeatOptions {
   enabled: boolean;
@@ -15,4 +16,6 @@ export interface Service {
   metadata?: PlainObject;
   status?: string;
   tags?: string[];
+  region?: string;
+  checks?: DiscoveryOptions;
 }

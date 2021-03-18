@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -26,6 +26,10 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "patch-package": "npx patch-package consul",
+    "release:pre": "nx run workspace:version --version=prerelease --preid=alpha",
+    "release:next": "nx run workspace:version --version=prerelease --preid=alpha",
+    "release": "nx run workspace:version",
+    "ci:test": "node ./tools/scripts/test-script.js test",
     "postinstall": "patch-package"
   },
   "private": false,
@@ -58,7 +62,7 @@
     "node-nats-streaming": "^0.3.2",
     "opossum": "^5.1.3",
     "oso": "^0.8.2",
-    "ottoman": "^2.0.0-alpha.16.2",
+    "ottoman": "^2.0.0-alpha.19",
     "read-env": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
@@ -70,6 +74,7 @@
     "zookeeper": "^4.8.1"
   },
   "devDependencies": {
+    "@jscutlery/semver": "^1.3.2",
     "@nestjs/schematics": "^7.2.7",
     "@nestjs/testing": "^7.6.12",
     "@nrwl/cli": "^11.1.5",
@@ -100,6 +105,7 @@
     "jest-ts-auto-mock": "^1.0.12",
     "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
+    "shelljs": "^0.8.4",
     "ts-auto-mock": "^3.1.0",
     "ts-jest": "^26.4.4",
     "ts-node": "~7.0.0",
