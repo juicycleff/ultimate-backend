@@ -142,7 +142,7 @@ export class MdnsServiceRegistry
     }
   }
 
-  getStatus<T>(_registration: MdnsRegistration): Promise<T> {
+  getStatus<T>(): Promise<T> {
     return Promise.resolve(undefined);
   }
 
@@ -155,7 +155,7 @@ export class MdnsServiceRegistry
     await this.register();
   }
 
-  setStatus(_registration: MdnsRegistration, _status: string): Promise<void> {
+  setStatus(_status: string): Promise<void> {
     return Promise.resolve(undefined);
   }
 }

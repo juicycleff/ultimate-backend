@@ -17,7 +17,6 @@
  * File name:         provider.util.ts
  * Last modified:     11/02/2021, 01:27
  ******************************************************************************/
-
 import {
   LocalRegistryProviderOptions,
   RegistryConfiguration,
@@ -45,21 +44,50 @@ export function getSharedProviderUtils(
     } = require('@ultimate-backend/consul');
 
     configProvider.useValue = {
-      service: {
-        address: options.service.address,
-        id: options.service.id,
-        name: options.service.name,
-        port: options.service.port,
-      },
+      service: options.service,
       discovery: {
-        ...options.discovery,
         failFast: true,
+        ...options.discovery,
       },
       heartbeat: options.heartbeat,
     };
 
     sharedProviders.push(ConsulServiceRegistry);
     sharedProviders.push(ConsulDiscoveryClient);
+  } else if (registryOption.discoverer === 'etcd') {
+    const {
+      EtcdServiceRegistry,
+      EtcdDiscoveryClient,
+    } = require('@ultimate-backend/etcd');
+
+    configProvider.useValue = {
+      service: options.service,
+      discovery: {
+        failFast: true,
+        ...options.discovery,
+      },
+      heartbeat: options.heartbeat,
+    };
+
+    sharedProviders.push(EtcdServiceRegistry);
+    sharedProviders.push(EtcdDiscoveryClient);
+  } else if (registryOption.discoverer === 'zookeeper') {
+    const {
+      ZookeeperServiceRegistry,
+      ZookeeperDiscoveryClient,
+    } = require('@ultimate-backend/zookeeper');
+
+    configProvider.useValue = {
+      service: options.service,
+      discovery: {
+        failFast: true,
+        ...options.discovery,
+      },
+      heartbeat: options.heartbeat,
+    };
+
+    sharedProviders.push(ZookeeperServiceRegistry);
+    sharedProviders.push(ZookeeperDiscoveryClient);
   } else if (registryOption.discoverer === 'local') {
     configProvider.useValue = {
       service: options.service,

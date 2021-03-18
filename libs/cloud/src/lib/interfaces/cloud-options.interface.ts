@@ -1,11 +1,13 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
 import {
-  ConsulRegistryProviderOptions,
-  LocalRegistryProviderOptions,
+  ConsulRegistryProviderOptions, EtcdRegistryProviderOptions,
+  LocalRegistryProviderOptions, ZookeeperRegistryProviderOptions,
 } from './registry.options';
 
 export type RegistryConfiguration =
   | ConsulRegistryProviderOptions
+  | EtcdRegistryProviderOptions
+  | ZookeeperRegistryProviderOptions
   | LocalRegistryProviderOptions;
 
 export interface CloudModuleOptions {
