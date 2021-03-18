@@ -33,7 +33,7 @@ export class MdnsRegistration implements Registration<Service> {
   }
 
   getInstanceId(): string {
-    return this.service.txt.serviceId || '';
+    return this.service.txt?.serviceId || '';
   }
 
   getServiceId(): string {
@@ -45,7 +45,7 @@ export class MdnsRegistration implements Registration<Service> {
   }
 
   getDomain(): string {
-    return this.service.txt.domain || 'ultimate-backend';
+    return this.service.txt?.domain || 'ultimate-backend';
   }
 
   getPort(): number {
@@ -74,7 +74,7 @@ export class MdnsRegistration implements Registration<Service> {
   }
 
   getStatus(): string {
-    return this.service.txt['status'] || '';
+    return this.service?.txt['status'] || '';
   }
 
   getTags(): string[] {

@@ -20,7 +20,7 @@
 
 import { MdnsRegistration } from './mdns-registration';
 import { MdnsDiscoveryOptions } from './interfaces';
-import { Service } from '../../interfaces';
+import { Service } from '@ultimate-backend/common';
 
 const newService: Service = {
   address: '127.0.0.1',
@@ -31,8 +31,9 @@ const newService: Service = {
 const mdnsDiscoveryOptions: MdnsDiscoveryOptions = {
   scheme: 'http',
   failFast: false,
-  healthCheckCriticalTimeout: '1000',
-  healthCheckUrl: '/',
+  timeout: 1000,
+  type: 'http',
+  http: '/'
 };
 
 describe('MdnsRegistration', () => {
@@ -85,7 +86,7 @@ describe('MdnsRegistration', () => {
     expect(result.getInstanceId()).toEqual(newService.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new MdnsRegistration({ id: null }, mdnsDiscoveryOptions);
+    result = new MdnsRegistration({ id: 'my-instance', txt: {serviceId: 'my-instance'} }, mdnsDiscoveryOptions);
     expect(result.getInstanceId()).toEqual('');
   });
 
