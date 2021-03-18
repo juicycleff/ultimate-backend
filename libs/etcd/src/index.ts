@@ -21,7 +21,9 @@
 export * from './lib/etcd.module';
 export * from './lib/etcd.client';
 export * from './lib/etcd.types';
+export * from './lib/service-registry';
+export * from './lib/discovery';
 
-import * as etcd3 from 'etcd3';
+import * as etcd from 'etcd3';
 
-export { etcd3 };
+export { etcd };
