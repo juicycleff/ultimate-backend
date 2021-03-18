@@ -18,10 +18,10 @@
  * Last modified:     02/03/2021, 01:39
  ******************************************************************************/
 import { RandomStrategy } from './random.strategy';
+import { Injectable } from '@nestjs/common';
 
 /**
  * weighted random load-balance strategy
  */
-export class WeightedRandomStrategy extends RandomStrategy {
-
-}
+@Injectable()
+export class WeightedRandomStrategy extends RandomStrategy {}

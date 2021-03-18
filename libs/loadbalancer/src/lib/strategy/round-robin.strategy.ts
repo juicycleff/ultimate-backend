@@ -17,26 +17,41 @@
  * File name:         round-robin.strategy.ts
  * Last modified:     02/03/2021, 01:34
  ******************************************************************************/
-import { BaseStrategy, IService, ServicePool } from '@ultimate-backend/common';
+import {
+  BaseStrategy,
+  LoggerUtil,
+  ServiceInstance,
+} from '@ultimate-backend/common';
+import { ServiceInstanceList } from '../service-instance-list';
+import { Injectable } from '@nestjs/common';
 
 /**
  * round robin load-balance strategy
  */
-export class RoundRobinStrategy extends BaseStrategy {
+@Injectable()
+export class RoundRobinStrategy extends BaseStrategy<ServiceInstance> {
+  private logger = new LoggerUtil(RoundRobinStrategy.name);
+  private serviceId: String;
+  private serviceInstanceList: ServiceInstanceList;
   counter = 0;
 
-  constructor(pool: ServicePool) {
-    super(pool);
+  init(serviceName: string, list: ServiceInstanceList) {
+    this.serviceId = serviceName;
+    this.serviceInstanceList = list as ServiceInstanceList;
   }
 
   /**
-   * Pick a service from the list of service pool
+   * Choose a service instance from the list of service pool
    */
-  pick(): IService {
-    const liveServices = this.pool.services.filter(service => service.state.isLive());
+  choose(): ServiceInstance {
+    this.serviceInstanceList.get();
+    const liveServices = this.serviceInstanceList.get();
     const liveServicesCount = liveServices.length;
 
     if (liveServicesCount === 0) {
+      this.logger.error(
+        `no live servers available for service: ${this.serviceId}`
+      );
       return null;
     }
 
@@ -46,5 +61,4 @@ export class RoundRobinStrategy extends BaseStrategy {
 
     return liveServices[this.counter++];
   }
-
 }
