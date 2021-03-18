@@ -24,7 +24,7 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
       - run:
-          command: npx nx run-many --all --target=test --parallel
+          command: npm run ci:test
 
 # Orchestrate our job run sequence
 workflows:
