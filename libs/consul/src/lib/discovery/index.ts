@@ -1,3 +1,3 @@
 export * from './consul-discovery.client';
 export * from './consul-service.instance';
-export * from './ttl-scheduler';
+export * from './consul-heartbeat.task';

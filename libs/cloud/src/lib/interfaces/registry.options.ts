@@ -32,13 +32,21 @@ export const DefaultService: Service = {
 };
 
 export interface BaseRegistryOption {
-  service: Service;
+  service: Omit<Service, 'checks' | 'region'>;
   discovery?: DiscoveryOptions;
   heartbeat?: HeartbeatOptions;
 }
 
 export interface ConsulRegistryProviderOptions extends BaseRegistryOption {
   discoverer: 'consul';
+}
+
+export interface EtcdRegistryProviderOptions extends BaseRegistryOption {
+  discoverer: 'etcd';
+}
+
+export interface ZookeeperRegistryProviderOptions extends BaseRegistryOption {
+  discoverer: 'zookeeper';
 }
 
 export interface LocalRegistryProviderOptions extends BaseRegistryOption {

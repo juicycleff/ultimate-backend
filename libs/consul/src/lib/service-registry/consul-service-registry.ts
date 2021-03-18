@@ -8,13 +8,12 @@ import {
 import retry from 'retry';
 import _ from 'lodash';
 import { ConsulRegistration } from './consul-registration';
-import { consul, ConsulClient } from '@ultimate-backend/consul';
+import { consul, ConsulClient, ConsulHeartbeatTask } from '@ultimate-backend/consul';
 import {
   Registration,
   SERVICE_REGISTRY_CONFIG,
-  ServiceRegistry, ServiceStore, sleep,
+  ServiceRegistry, ServiceStore, TtlScheduler,
 } from '@ultimate-backend/common';
-import { TtlScheduler } from '../discovery';
 import { ConsulRegistryOptions } from './consul-registry.options';
 import { ConsulRegistrationBuilder } from './consul-registration.builder';
 import { Watch } from 'consul';
@@ -22,6 +21,7 @@ import * as Consul from 'consul';
 import RegisterOptions = Consul.Agent.Service.RegisterOptions;
 import { Service } from '../consul.interface';
 import { consulServiceToServiceInstance } from '../utils';
+import { EtcdHeartbeatTask } from '@ultimate-backend/etcd';
 
 @Injectable()
 export class ConsulServiceRegistry
@@ -65,7 +65,8 @@ export class ConsulServiceRegistry
       .build();
 
     if (this.options.heartbeat.enabled) {
-      this.ttlScheduler = new TtlScheduler(this.options.heartbeat, this.client);
+      const task = new ConsulHeartbeatTask(this.client, this.registration.getInstanceId());
+      this.ttlScheduler = new TtlScheduler(this.options.heartbeat, task);
     }
 
     // watch for service change
@@ -81,79 +82,70 @@ export class ConsulServiceRegistry
   private generateService(): RegisterOptions {
     let check = this.registration.getService().check;
     check = _.omitBy(check, _.isUndefined);
+    const {checks, ...rest} = this.options.service;
 
     return {
-      ...this.options.service,
+      ...rest,
       ...this.registration.getService(),
       check,
       ...this.getToken(),
     };
   }
 
-  async register(): Promise<void> {
+  private async _internalRegister(): Promise<void> {
     this.logger.log(
       `registering service with id: ${this.registration.getInstanceId()}`
     );
 
-    const loop = true;
-    while (loop) {
-      try {
-        const service = this.generateService();
-        await this.client.consul.agent.service.register(service);
+    const service = this.generateService();
+    await this.client.consul.agent.service.register(service);
 
-        if (
-          this.options.heartbeat.enabled &&
-          this.ttlScheduler != null &&
-          service.check?.ttl != null
-        ) {
-          this.ttlScheduler.add(this.registration.getInstanceId());
-        }
-
-        this.logger.log('service registered');
-        break;
-      } catch (e) {
-        if (this.options.discovery.failFast) {
-          this.logger.warn(
-            `Fail fast is false. Error registering service with consul: ${this.registration.getService()} ${e}`
-          );
-          throw e;
-        }
-        await sleep( (this.options.heartbeat.ttlInSeconds || 5) * 1000);
-      }
+    if (
+      this.options.heartbeat.enabled &&
+      this.ttlScheduler != null &&
+      service.check?.ttl != null
+    ) {
+      this.ttlScheduler.add(this.registration.getInstanceId());
     }
 
+    this.logger.log('service registered');
   }
 
   async deregister(): Promise<void> {
     this.logger.log(
       `Deregistering service with consul: ${this.registration.getInstanceId()}`
     );
-    this.ttlScheduler?.remove(this.registration.getInstanceId());
 
-    const options = {
-      id: this.registration.getInstanceId(),
-      ...this.getToken(),
-    };
-    await this.client.consul.agent.service.deregister(options);
+    try {
+      this.ttlScheduler?.remove(this.registration.getInstanceId());
+
+      const options = {
+        id: this.registration.getInstanceId(),
+        ...this.getToken(),
+      };
+      await this.client.consul.agent.service.deregister(options);
+      this.logger.log(
+        `Deregistered service with consul: ${this.registration.getInstanceId()}`
+      );
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 
   close(): void {
     // not implemented
   }
 
-  async setStatus(
-    registration: ConsulRegistration,
-    status: 'OUT_OF_SERVICE' | 'UP'
-  ): Promise<void> {
+  async setStatus(status: 'OUT_OF_SERVICE' | 'UP'): Promise<void> {
     if (status == 'OUT_OF_SERVICE') {
       // enable maintenance mode
       await this.client.consul.agent.service.maintenance({
-        id: registration.getInstanceId(),
+        id: this.registration.getInstanceId(),
         enable: true,
       });
     } else if (status == 'UP') {
       await this.client.consul.agent.service.maintenance({
-        id: registration.getInstanceId(),
+        id: this.registration.getInstanceId(),
         enable: false,
       });
     } else {
@@ -161,13 +153,13 @@ export class ConsulServiceRegistry
     }
   }
 
-  async getStatus<T>(registration: ConsulRegistration): Promise<T> {
+  async getStatus<T>(): Promise<T> {
     const checks: any[] = await this.client.consul.health.checks(
-      registration.getServiceId()
+      this.registration.getServiceId()
     );
 
     for (const check of checks) {
-      if (check['ServiceID'] == registration.getInstanceId()) {
+      if (check['ServiceID'] == this.registration.getInstanceId()) {
         if (check['Name'] == 'Service Maintenance Mode') {
           return ({ status: 'OUT_OF_SERVICE' } as unknown) as T;
         }
@@ -177,14 +169,20 @@ export class ConsulServiceRegistry
     return JSON.parse(JSON.stringify({ status: 'UP' }));
   }
 
-  async retryRegister(): Promise<any> {
+  async register(): Promise<any> {
     return new Promise<consul.Consul>((resolve, reject) => {
       const operation = retry.operation();
       operation.attempt(async () => {
         try {
-          await this.register();
+          await this._internalRegister();
           resolve(null);
         } catch (e) {
+          if (this.options.discovery.failFast) {
+            this.logger.warn(
+              `Fail fast is false. Error registering service with consul: ${this.registration.getService()} ${e}`
+            );
+            reject(e);
+          }
           if (operation.retry(e)) {
             return;
           }
@@ -258,7 +256,7 @@ export class ConsulServiceRegistry
   async onModuleInit() {
     try {
       await this.init();
-      await this.retryRegister();
+      await this.register();
     } catch (e) {
       this.logger.error(e);
     }
