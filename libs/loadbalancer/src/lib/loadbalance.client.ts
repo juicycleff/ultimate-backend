@@ -36,7 +36,7 @@ export class LoadBalancerClient
     for (const service of services) {
       const nodes = this.serviceStore.getServiceNodes(service);
 
-      // console.log(service, nodes);
+      console.log(service, nodes);
 
       if (!service || this.serviceStrategies.has(service)) {
         return;
