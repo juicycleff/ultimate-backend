@@ -17,6 +17,9 @@
  * File name:         zookeeper.client.ts
  * Last modified:     08/02/2021, 11:17
  ******************************************************************************/
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import * as ZooKeeper from 'zookeeper';
 import {
   BeforeApplicationShutdown,
   Inject,
@@ -28,7 +31,6 @@ import { merge } from 'lodash';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { ZookeeperModuleOptions } from './zookeeper-module.options';
 import { ZOOKEEPER_CONFIG_OPTIONS } from './zookeeper.constant';
-import ZooKeeper from 'zookeeper';
 
 @Injectable()
 export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutdown, OnModuleInit {
@@ -70,7 +72,7 @@ export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutd
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        this.on('connect', () => {
+        this.once('connect', () => {
           this.connected = true;
           this.logg.log('Zookeeper client connected successfully');
         });
