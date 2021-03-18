@@ -18,3 +18,5 @@
  * Last modified:     04/03/2021, 23:15
  ******************************************************************************/
 
+export * from './service-instance-chooser.interface';
+export * from './loadbalance.interface';
