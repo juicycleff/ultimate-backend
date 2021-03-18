@@ -45,7 +45,6 @@ import { defer } from 'rxjs';
 @Module({})
 export class CouchbaseCoreModule implements OnApplicationShutdown {
     constructor(
-        // @Inject(COUCHBASE_CONNECTION_NAME) private connectionName: string,
         private readonly moduleRef: ModuleRef,
     ) {}
 
