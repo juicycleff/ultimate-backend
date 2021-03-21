@@ -29,6 +29,7 @@
     "release:pre": "nx run workspace:version --version=prerelease --preid=alpha",
     "release:next": "nx run workspace:version --version=prerelease --preid=alpha",
     "release": "nx run workspace:version",
+    "release:public": "node ./tools/scripts/npm-release.js",
     "ci:test": "node ./tools/scripts/test-script.js test",
     "postinstall": "patch-package"
   },

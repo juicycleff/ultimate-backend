@@ -25,6 +25,19 @@ jobs:
           override-ci-command: npm install
       - run:
           command: npm run ci:test
+  publish:
+    filters:
+      branches:
+        only: master
+    executor:
+      name: node/default
+      tag: '13.14'
+    steps:
+      - checkout
+      - node/install-packages:
+          override-ci-command: npm install
+      - run:
+          command: npm run release:public
 
 # Orchestrate our job run sequence
 workflows:

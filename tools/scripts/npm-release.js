@@ -17,16 +17,45 @@
  * File name:         npm-release.js
  * Last modified:     18/03/2021, 16:08
  ******************************************************************************/
-const execSync = require('child_process').execSync;
+const shell = require('shelljs');
+const fs = require('fs');
+const path = require('path');
 
-const commands = JSON.parse(process.argv[2]);
-const projects = commands[process.argv[3]];
-const target = process.argv[4];
-execSync(
-  `npx nx run-many --target=${target} --projects=${projects.join(
-    ','
-  )} --parallel`,
-  {
-    stdio: [0, 1, 2]
+const target = process.argv[2];
+
+function command() {
+  const file = fs.readFileSync(path.join(__dirname, '../../workspace.json'));
+  const ws = JSON.parse(file.toString());
+  const rootProjects = (ws.projects || {});
+
+  if (!rootProjects) {
+    return;
   }
-);
+
+  try {
+    shell.exec(`rm -rf dist`);
+  } catch (e) {
+    //
+  }
+
+  // Build
+  for (let key in rootProjects) {
+    const value = rootProjects[key];
+    if (value.projectType === 'library') {
+      shell.exec(`nx build ${key} --with-deps`);
+    }
+  }
+
+  // Publish
+  for (let key in rootProjects) {
+    const value = rootProjects[key];
+    if (value.projectType === 'library') {
+      shell.exec(`rm -rf build`);
+      const cmd = `npm publish --access public`;
+      shell.exec(cmd);
+      shell.exec('cd ../../../');
+    }
+  }
+}
+
+command();
