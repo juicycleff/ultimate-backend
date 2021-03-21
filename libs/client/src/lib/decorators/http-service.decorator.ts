@@ -14,16 +14,27 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         http.client.ts
- * Last modified:     15/02/2021, 20:57
+ * File name:         service.decorator.ts
+ * Last modified:     18/03/2021, 22:28
  ******************************************************************************/
+import { applyDecorators } from '@nestjs/common';
+import { ExtendMetadata } from '@ultimate-backend/common';
+import { HTTP_CLIENT_SERVICE } from '../client.constants';
+import { IHttpServiceClient } from '../interface';
 
-import { Injectable } from '@nestjs/common';
-import {} from 'got';
-
-@Injectable()
-export class HttpClient {
-  constructor(private readonly LoadBalancerClient) {}
-
-  private request() {}
+export function HttpServiceClient(
+  name: string,
+  options?: Omit<IHttpServiceClient, 'transport'>
+) {
+  return applyDecorators((target, property) => {
+    return ExtendMetadata(HTTP_CLIENT_SERVICE, {
+      name,
+      property,
+      options: {
+        ...options,
+        transport: 'http',
+        service: name,
+      },
+    })(target, property);
+  });
 }

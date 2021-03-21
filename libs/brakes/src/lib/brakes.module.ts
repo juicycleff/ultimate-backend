@@ -8,16 +8,17 @@ import { BRAKES_CONFIG_OPTIONS, BRAKES_MODULE_OPTIONS } from './brakes.constants
 @Module({})
 export class BrakesModule {
 
-  static forRoot(options: BrakesModuleOptions): DynamicModule {
+  static forRoot(options?: BrakesModuleOptions): DynamicModule {
     const configProvider: Provider = {
       provide: BRAKES_CONFIG_OPTIONS,
-      useValue: options,
+      useValue: options || {},
     };
 
     return {
       module: BrakesModule,
       providers: [configProvider, Brakes, BrakesFactory, BrakesResolver],
       exports: [Brakes],
+      global: options?.global || true
     }
   }
 

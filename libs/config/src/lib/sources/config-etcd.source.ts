@@ -169,7 +169,6 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
       .create();
 
     watcher.on('data', (res: IWatchResponse) => {
-      console.log(res);
       const event = res.events.filter((e) => !e.prev_kv)[0];
       if (!event) {
         return;

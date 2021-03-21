@@ -14,11 +14,9 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         http.orchestrator.ts
- * Last modified:     15/02/2021, 20:21
+ * File name:         client.constants.ts
+ * Last modified:     18/03/2021, 22:31
  ******************************************************************************/
-
-import { Injectable } from '@nestjs/common';
-
-@Injectable()
-export class HttpOrchestrator {}
+export const CLIENT_SERVICE = 'CLIENT_SERVICE';
+export const GRPC_CLIENT_SERVICE = 'GRPC_CLIENT_SERVICE';
+export const HTTP_CLIENT_SERVICE = 'HTTP_CLIENT_SERVICE';

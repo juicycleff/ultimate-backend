@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { CloudModule } from '@ultimate-backend/cloud';
 import { RedisModule } from '@ultimate-backend/redis';
 import { ConsulModule } from '@ultimate-backend/consul';
+import { ClientModule } from '@ultimate-backend/client';
+import { LoadBalancerModule } from '@ultimate-backend/loadbalancer';
+import { BrakesModule } from '@ultimate-backend/brakes';
 
 @Module({
   imports: [
@@ -31,6 +34,11 @@ import { ConsulModule } from '@ultimate-backend/consul';
         db: 0,
       },
     }),
+    ClientModule.forRoot(),
+    LoadBalancerModule.forRoot({
+      services: [{strategy: 'RoundRobinStrategy', name: 'example'}]
+    }),
+    BrakesModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

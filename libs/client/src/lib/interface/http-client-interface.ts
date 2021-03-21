@@ -14,8 +14,19 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         index.ts
- * Last modified:     15/02/2021, 20:21
+ * File name:         http-client-interface.ts
+ * Last modified:     18/03/2021, 22:46
  ******************************************************************************/
+import { GotJSONOptions, GotPromise, GotUrl } from 'got';
 
-export * from './http.orchestrator';
+export interface IHttpClient<T> {
+  get<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+
+  post<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+
+  put<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+
+  patch<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+
+  head<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+}

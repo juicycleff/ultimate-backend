@@ -18,7 +18,11 @@
  * Last modified:     11/02/2021, 01:12
  ******************************************************************************/
 
-import { DiscoveryOptions, HeartbeatOptions, Service } from '@ultimate-backend/common';
+import {
+  DiscoveryOptions,
+  HeartbeatOptions,
+  Service,
+} from '@ultimate-backend/common';
 import * as uuid from 'uuid';
 import { MdnsDiscoveryOptions } from '../discoveries/mdns/interfaces';
 

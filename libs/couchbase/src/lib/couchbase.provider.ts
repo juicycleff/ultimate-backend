@@ -65,7 +65,6 @@ export function createCouchbaseAsyncProviders(
             {
                 provide: getModelToken(option.name),
                 useFactory: async (ottoman: Ottoman, ...args: any[]) => {
-                    console.log(args);
                     const schema = await option.useFactory(args);
 
                     const model = ottoman.model(

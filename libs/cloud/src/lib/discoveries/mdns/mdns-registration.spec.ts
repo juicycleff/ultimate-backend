@@ -33,7 +33,7 @@ const mdnsDiscoveryOptions: MdnsDiscoveryOptions = {
   failFast: false,
   timeout: 1000,
   type: 'http',
-  http: '/'
+  http: '/',
 };
 
 describe('MdnsRegistration', () => {
@@ -86,7 +86,10 @@ describe('MdnsRegistration', () => {
     expect(result.getInstanceId()).toEqual(newService.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new MdnsRegistration({ id: 'my-instance', txt: {serviceId: 'my-instance'} }, mdnsDiscoveryOptions);
+    result = new MdnsRegistration(
+      { id: 'my-instance', txt: { serviceId: 'my-instance' } },
+      mdnsDiscoveryOptions
+    );
     expect(result.getInstanceId()).toEqual('');
   });
 

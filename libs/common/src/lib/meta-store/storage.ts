@@ -14,11 +14,41 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         grpc.orchestrator.ts
- * Last modified:     15/02/2021, 20:24
+ * File name:         storage.ts
+ * Last modified:     21/03/2021, 11:37
  ******************************************************************************/
+import { ClassType } from './class-type.interface';
+import { ensureReflectMetadataExists } from '../utils';
 
-import { Injectable } from '@nestjs/common';
+export class MetadataStorage {
+  instances: InstanceMetadata[] = [];
 
-@Injectable()
-export class GrpcOrchestrator {}
+  strategies: InstanceMetadata[] = [];
+
+  constructor() {
+    ensureReflectMetadataExists();
+  }
+
+  collectLbStrategyMetadata(definition: InstanceMetadata) {
+    this.strategies.push(definition);
+  }
+
+  clear() {
+    this.instances = [];
+    this.strategies = [];
+  }
+}
+
+export type TypeValue = ClassType | Function | object | symbol;
+export type TypeValueThunk = (type?: void) => TypeValue;
+export type ClassTypeResolver = (of?: void) => ClassType;
+
+export interface InstanceMetadata {
+  name: string;
+  target: Function;
+  prototype?: any;
+  property?: any;
+  getObjectType?: ClassTypeResolver;
+  fieldType?: string | ClassType<any>;
+  objectType?: any;
+}

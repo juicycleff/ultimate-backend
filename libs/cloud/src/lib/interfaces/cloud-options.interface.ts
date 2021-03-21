@@ -1,7 +1,9 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
 import {
-  ConsulRegistryProviderOptions, EtcdRegistryProviderOptions,
-  LocalRegistryProviderOptions, ZookeeperRegistryProviderOptions,
+  ConsulRegistryProviderOptions,
+  EtcdRegistryProviderOptions,
+  LocalRegistryProviderOptions,
+  ZookeeperRegistryProviderOptions,
 } from './registry.options';
 
 export type RegistryConfiguration =

@@ -17,33 +17,46 @@
  * File name:         brakes.class.ts
  * Last modified:     19/02/2021, 21:22
  ******************************************************************************/
-
 import { Injectable } from '@nestjs/common';
 import { BrakesFactory } from './brakes.factory';
 import * as CircuitBreaker from 'opossum';
 import { BrakesResolver } from './brakes.resolver';
 
+export type BrakesFallback = ((...args: any[]) => any) | CircuitBreaker;
+
 @Injectable()
 export class Brakes {
   constructor(
     private readonly brakesFactory: BrakesFactory,
-    private readonly brakesResolver: BrakesResolver,
+    private readonly brakesResolver: BrakesResolver
   ) {}
 
-  prepare(name: string, action: Function, fallback: ((...args: any[]) => any) | CircuitBreaker): Function;
-  prepare(action: Function, fallback: ((...args: any[]) => any) | CircuitBreaker): Function;
+  prepare(name: string, action: Function, fallback: BrakesFallback): Function;
+  prepare(action: Function, fallback: BrakesFallback): Function;
   prepare(name: string, action: Function): Function;
   prepare(
     nameOrAction: string | Function,
-    actionOrFallback: ((...args: any[]) => any) | CircuitBreaker | Function,
-    fall?: ((...args: any[]) => any) | CircuitBreaker): Function {
-
+    actionOrFallback: BrakesFallback | Function,
+    fall?: BrakesFallback
+  ): Function {
     const [name, action, fallback] =
-      typeof nameOrAction === 'string' && fall ?
-        [nameOrAction as string, actionOrFallback as (...args: any) => Promise<any>, fall as ((...args: any[]) => any) | CircuitBreaker] :
-        typeof nameOrAction === 'string' && !fall ?
-          [nameOrAction, actionOrFallback as (...args: any) => Promise<any>, undefined] :
-          [undefined, nameOrAction as (...args: any) => Promise<any>, actionOrFallback as ((...args: any[]) => any) | CircuitBreaker];
+      typeof nameOrAction === 'string' && fall
+        ? [
+            nameOrAction as string,
+            actionOrFallback as (...args: any) => Promise<any>,
+            fall as BrakesFallback,
+          ]
+        : typeof nameOrAction === 'string' && !fall
+        ? [
+            nameOrAction,
+            actionOrFallback as (...args: any) => Promise<any>,
+            undefined,
+          ]
+        : [
+            undefined,
+            nameOrAction as (...args: any) => Promise<any>,
+            actionOrFallback as BrakesFallback,
+          ];
 
     let brake = this.brakesResolver.getBrakes(name);
     if (!brake) {

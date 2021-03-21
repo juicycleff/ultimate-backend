@@ -19,3 +19,5 @@
  ******************************************************************************/
 
 export * from './decorate-util';
+export * from './loadbalancer-strategy.decorator';
+export * from './inject-loadbalancer-config';

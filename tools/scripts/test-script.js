@@ -24,10 +24,9 @@ const path = require('path');
 const target = process.argv[2];
 
 function command() {
-
   const file = fs.readFileSync(path.join(__dirname, '../../workspace.json'));
   const ws = JSON.parse(file.toString());
-  const rootProjects = (ws.projects || {});
+  const rootProjects = ws.projects || {};
 
   if (!rootProjects) {
     return;
@@ -41,7 +40,9 @@ function command() {
     }
   }
 
-  const cmd = `npx nx run-many --target=${target} --projects=${projects.join(',')} --parallel`;
+  const cmd = `npx nx run-many --target=${target} --projects=${projects.join(
+    ','
+  )} --parallel`;
   shell.exec(cmd);
 }
 

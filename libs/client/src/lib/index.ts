@@ -15,7 +15,12 @@
  * DEALINGS IN THE SOFTWARE.
  *
  * File name:         index.ts
- * Last modified:     15/02/2021, 20:21
+ * Last modified:     21/03/2021, 13:00
  ******************************************************************************/
 
-export * from './grpc.orchestrator';
+export * from './transports';
+export * from './interface';
+export * from './decorators';
+export * from './client.factory';
+export * from './client.module';
+export * from './client.constants';

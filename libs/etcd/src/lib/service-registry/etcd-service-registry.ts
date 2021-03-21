@@ -212,8 +212,6 @@ export class EtcdServiceRegistry
         this.logger.error(`invalid value format for path: [${name}]`);
       }
     }
-
-    console.log('services ', this.serviceStore.getServices());
   }
 
   async watch(
@@ -279,8 +277,6 @@ export class EtcdServiceRegistry
         }
       }
     }
-
-    console.log(this.serviceStore.getServices())
 
     this.watcher = await this.client.namespace(this.namespace).watch().prefix('').create();
 

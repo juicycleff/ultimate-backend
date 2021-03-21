@@ -8,11 +8,17 @@ import {
 import retry from 'retry';
 import _ from 'lodash';
 import { ConsulRegistration } from './consul-registration';
-import { consul, ConsulClient, ConsulHeartbeatTask } from '@ultimate-backend/consul';
+import {
+  consul,
+  ConsulClient,
+  ConsulHeartbeatTask,
+} from '@ultimate-backend/consul';
 import {
   Registration,
   SERVICE_REGISTRY_CONFIG,
-  ServiceRegistry, ServiceStore, TtlScheduler,
+  ServiceRegistry,
+  ServiceStore,
+  TtlScheduler,
 } from '@ultimate-backend/common';
 import { ConsulRegistryOptions } from './consul-registry.options';
 import { ConsulRegistrationBuilder } from './consul-registration.builder';
@@ -29,7 +35,6 @@ export class ConsulServiceRegistry
     ServiceRegistry<ConsulRegistration>,
     OnModuleInit,
     OnModuleDestroy {
-
   watcher: Watch;
   registration: Registration<Service>;
   ttlScheduler?: TtlScheduler;
@@ -65,7 +70,10 @@ export class ConsulServiceRegistry
       .build();
 
     if (this.options.heartbeat.enabled) {
-      const task = new ConsulHeartbeatTask(this.client, this.registration.getInstanceId());
+      const task = new ConsulHeartbeatTask(
+        this.client,
+        this.registration.getInstanceId()
+      );
       this.ttlScheduler = new TtlScheduler(this.options.heartbeat, task);
     }
 
@@ -82,7 +90,7 @@ export class ConsulServiceRegistry
   private generateService(): RegisterOptions {
     let check = this.registration.getService().check;
     check = _.omitBy(check, _.isUndefined);
-    const {checks, ...rest} = this.options.service;
+    const { checks, ...rest } = this.options.service;
 
     return {
       ...rest,
@@ -193,22 +201,22 @@ export class ConsulServiceRegistry
   }
 
   private async buildServiceStore(services: string[]) {
-    this.watchers.forEach(watcher => watcher.end());
+    this.watchers.forEach((watcher) => watcher.end());
     this.watchers = new Map();
 
     await Promise.all(
       services.map(async (service: string) => {
-        const nodes = await this.client.consul.health.service(service) as any[];
+        const nodes = (await this.client.consul.health.service(
+          service
+        )) as any[];
         const serviceNodes = consulServiceToServiceInstance(nodes);
         this.serviceStore.setServices(service, serviceNodes);
         this.watch(service);
-      }),
+      })
     );
   }
 
-  private watch(
-    serviceName: string,
-  ) {
+  private watch(serviceName: string) {
     if (!this.client.consul) {
       return;
     }
@@ -248,7 +256,7 @@ export class ConsulServiceRegistry
     });
 
     this.watcher.on('change', async (data) => {
-      const svcs = Object.keys(data).filter(value => value !== 'consul');
+      const svcs = Object.keys(data).filter((value) => value !== 'consul');
       await this.buildServiceStore(svcs);
     });
   }

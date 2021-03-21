@@ -21,7 +21,7 @@
 import { Options } from 'opossum';
 import { ModuleMetadata, Type } from '@nestjs/common';
 
-export type BrakesModuleOptions = Options
+export type BrakesModuleOptions = Options & {global?: boolean}
 
 
 export interface BrakesModuleOptionsFactory {

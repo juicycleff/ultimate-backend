@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         client.interface.ts
+ * File name:         http-client-interface.ts
  * Last modified:     14/02/2021, 16:51
  ******************************************************************************/
 
@@ -28,7 +28,6 @@ export interface IBrokerClient<T> {
   client(): T;
 
   close(): void;
-
 }
 
 export interface CQRSEvent {

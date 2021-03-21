@@ -19,9 +19,49 @@
  ******************************************************************************/
 import { RandomStrategy } from './random.strategy';
 import { Injectable } from '@nestjs/common';
+import { random } from 'lodash';
+import { LoadBalancerStrategy } from '../decorators';
+import { BaseStrategy, LoggerUtil, ServiceInstance } from '@ultimate-backend/common';
+import { ServiceInstancePool } from '../service-instance-pool';
 
 /**
  * weighted random load-balance strategy
  */
+@LoadBalancerStrategy()
 @Injectable()
-export class WeightedRandomStrategy extends RandomStrategy {}
+export class WeightedRandomStrategy extends BaseStrategy<ServiceInstance> {
+  private logger = new LoggerUtil(RandomStrategy.name);
+  private serviceId: String;
+  private serviceInstanceList: ServiceInstancePool;
+  currentWeight = 0;
+  currentIdx = 0;
+
+  init(serviceName: string, list: ServiceInstancePool) {
+    this.serviceId = serviceName;
+    this.serviceInstanceList = list;
+  }
+
+  /**
+   * Choose a service instance from the list of service pool
+   */
+  choose(): ServiceInstance {
+    const liveServices = this.serviceInstanceList.get();
+    const liveServicesCount = liveServices.length;
+
+    if (liveServicesCount === 0) {
+      this.logger.error(
+        `no live servers available for service: ${this.serviceId}`
+      );
+      return null;
+    }
+
+    if (liveServices[this.currentIdx]?.weight && this.currentWeight < liveServices[this.currentIdx].weight) {
+      this.currentWeight++;
+      return liveServices[this.currentIdx];
+    }
+
+    this.currentWeight = 0;
+    this.currentIdx = random(0, liveServicesCount - 1)
+    return liveServices[this.currentIdx];
+  }
+}

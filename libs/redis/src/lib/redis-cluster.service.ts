@@ -28,7 +28,7 @@ import { Cluster } from 'ioredis';
 import {
   Deferred,
   IReactiveClient,
-  handleRetry,
+  handleRetry, LoggerUtil,
 } from '@ultimate-backend/common';
 import { defer } from 'rxjs';
 import { RedisModuleOptions } from './redis-module.options';
@@ -40,11 +40,13 @@ export class RedisClusterService
   implements IReactiveClient<Cluster>, BeforeApplicationShutdown, OnModuleInit {
   client: Promise<Cluster>;
   deferredClient: Deferred<Cluster>;
+  logger= new LoggerUtil(RedisClusterService.name);
 
   constructor(
     @Inject(REDIS_CONFIG_OPTIONS) private readonly options: RedisModuleOptions
   ) {
     super(options.nodes, options.redisOptions);
+    this.logger = new LoggerUtil(RedisClusterService.name, options.debug);
   }
 
   /**
@@ -77,7 +79,7 @@ export class RedisClusterService
     try {
       this.connect();
     } catch (err) {
-      console.log(err);
+      this.logger.error(err);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
   BaseStrategy,
@@ -6,16 +6,19 @@ import {
   ServiceStore,
 } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from './core';
-import { LOAD_BALANCE_CONFIG_OPTIONS } from './loadbalancer.constant';
-import { LoadBalancerModuleOptions } from './loadbalancer-module.options';
+import { InjectLoadbalancerConfig } from './decorators';
+import { LoadbalancerConfig } from './loadbalancer.config';
+import { StrategyRegistry } from './strategy.registry';
+import { ServiceInstancePool } from './service-instance-pool';
 
 @Injectable()
 export class LoadBalancerClient
   implements ILoadBalancerClient, ServiceInstanceChooser, OnModuleInit {
   constructor(
-    @Inject(LOAD_BALANCE_CONFIG_OPTIONS)
-    private readonly properties: LoadBalancerModuleOptions,
-    private readonly serviceStore: ServiceStore
+    @InjectLoadbalancerConfig()
+    private readonly properties: LoadbalancerConfig,
+    private readonly serviceStore: ServiceStore,
+    private readonly registry: StrategyRegistry,
   ) {}
 
   private readonly serviceStrategies = new Map<
@@ -36,12 +39,21 @@ export class LoadBalancerClient
     for (const service of services) {
       const nodes = this.serviceStore.getServiceNodes(service);
 
-      console.log(service, nodes);
-
       if (!service || this.serviceStrategies.has(service)) {
         return;
       }
+
+      const strategyName = this.properties.getStrategy(service);
+      const strategy = this.registry.getStrategy(strategyName);
+      if (strategy) {
+        this.createStrategy(service, nodes, strategy);
+      }
     }
+  }
+
+  private createStrategy(serviceName: string, nodes: ServiceInstance[], strategy: BaseStrategy<any>) {
+    strategy.init(serviceName, new ServiceInstancePool(serviceName, nodes));
+    this.serviceStrategies.set(serviceName, strategy);
   }
 
   choose(serviceId: string): ServiceInstance {
@@ -71,24 +83,21 @@ export class LoadBalancerClient
   execute<T>(serviceId: string, request: LoadBalancerRequest<T>): T;
   execute<T>(
     serviceId: string,
-    serviceInstance: ServiceInstance,
+    node: ServiceInstance,
     request: LoadBalancerRequest<T>
   ): T;
   execute<T>(
     serviceId: string,
-    serviceInstanceOrRequest: LoadBalancerRequest<T> | ServiceInstance,
+    nodeOrRequest: LoadBalancerRequest<T> | ServiceInstance,
     request?: LoadBalancerRequest<T>
   ): T {
     if (!serviceId) {
       throw new Error('serviceId is missing');
     }
 
-    const [req, serviceInstance] = request
-      ? [
-          request as LoadBalancerRequest<T>,
-          serviceInstanceOrRequest as ServiceInstance,
-        ]
-      : [undefined, serviceInstanceOrRequest as ServiceInstance];
+    const [req, node] = request
+      ? [request as LoadBalancerRequest<T>, nodeOrRequest as ServiceInstance]
+      : [undefined, nodeOrRequest as ServiceInstance];
 
     return undefined;
   }

@@ -14,15 +14,11 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         service-instance-list.ts
- * Last modified:     09/03/2021, 13:18
+ * File name:         inject-loadbalancer-config.ts
+ * Last modified:     19/03/2021, 12:11
  ******************************************************************************/
-import { ServiceInstance } from '@ultimate-backend/common';
 
-export interface ServiceInstanceList {
-  getServiceId(): string;
+import { Inject } from '@nestjs/common';
+import { LOAD_BALANCE_CONFIG_OPTIONS } from '../loadbalancer.constant';
 
-  get(): Array<ServiceInstance>;
-
-  // builder(): StrategyInstanceListBuilder;
-}
+export const InjectLoadbalancerConfig = () => Inject(LOAD_BALANCE_CONFIG_OPTIONS);

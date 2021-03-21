@@ -14,44 +14,9 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         strategy-instance-list.builder.ts
- * Last modified:     09/03/2021, 13:18
+ * File name:         index.ts
+ * Last modified:     18/03/2021, 22:44
  ******************************************************************************/
-import { LoggerUtil } from '@ultimate-backend/common';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { DiscoveryService, Reflector } from '@nestjs/core';
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
-
-@Injectable()
-export class StrategyInstanceListBuilder implements OnModuleInit {
-  private logger = new LoggerUtil(StrategyInstanceListBuilder.name, true);
-
-  constructor(
-    private readonly discoveryService: DiscoveryService,
-    private readonly reflector: Reflector
-  ) {}
-
-  explore() {
-    const providers: InstanceWrapper[] = [
-      ...this.discoveryService.getProviders(),
-      ...this.discoveryService.getControllers(),
-    ];
-
-    for (const wrapper of providers) {
-      const { instance } = wrapper;
-      if (!instance || typeof instance === 'string') {
-        return;
-      }
-
-      this.lookupStrategy(instance);
-    }
-  }
-
-  lookupStrategy(instance: Function) {
-    // console.log(instance);
-  }
-
-  onModuleInit(): any {
-    this.explore();
-  }
-}
+export * from './http-service.decorator';
+export * from './grpc-service.decorator';
+export * from './service.decorator';

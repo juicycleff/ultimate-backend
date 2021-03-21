@@ -33,7 +33,9 @@ import { ZookeeperModuleOptions } from './zookeeper-module.options';
 import { ZOOKEEPER_CONFIG_OPTIONS } from './zookeeper.constant';
 
 @Injectable()
-export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutdown, OnModuleInit {
+export class ZookeeperClient
+  extends ZooKeeper
+  implements BeforeApplicationShutdown, OnModuleInit {
   private opts = {};
   private logg = new LoggerUtil(ZookeeperClient.name);
   public connected = false;
@@ -42,25 +44,33 @@ export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutd
     @Inject(ZOOKEEPER_CONFIG_OPTIONS)
     private readonly options: ZookeeperModuleOptions
   ) {
-    super(merge( {
-      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
-      host_order_deterministic: false,
-    }, {
-      connect: options.host,
-      timeout: options.timeout,
-      debug_level: options.logLevel,
-      host_order_deterministic: false,
-    }));
+    super(
+      merge(
+        {
+          debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+          host_order_deterministic: false,
+        },
+        {
+          connect: options.host,
+          timeout: options.timeout,
+          debug_level: options.logLevel,
+          host_order_deterministic: false,
+        }
+      )
+    );
 
-    this.opts = merge( {
-      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
-      host_order_deterministic: false,
-    }, {
-      connect: options.host,
-      timeout: options.timeout,
-      debug_level: options.logLevel,
-      host_order_deterministic: false,
-    });
+    this.opts = merge(
+      {
+        debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+        host_order_deterministic: false,
+      },
+      {
+        connect: options.host,
+        timeout: options.timeout,
+        debug_level: options.logLevel,
+        host_order_deterministic: false,
+      }
+    );
 
     this.logg = new LoggerUtil(ZookeeperClient.name, options.debug);
   }
@@ -85,7 +95,7 @@ export class ZookeeperClient extends ZooKeeper implements BeforeApplicationShutd
           handleRetry(
             this.options.retryAttempts,
             this.options.retryDelays,
-            ZookeeperClient.name,
+            ZookeeperClient.name
           )
         )
         .toPromise();
