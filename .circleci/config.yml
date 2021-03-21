@@ -43,7 +43,7 @@ workflows:
     jobs:
       - lint
       - test
-      - publish
+      - publish:
         filters:
           branches:
             only:
