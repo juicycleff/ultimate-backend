@@ -19,3 +19,4 @@
  ******************************************************************************/
 
 export * from './ttl-scheduler';
+export * from './service-instance.state';

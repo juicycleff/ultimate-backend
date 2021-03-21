@@ -24,10 +24,10 @@ export class LoadbalancerConfig implements OnModuleInit {
   private options: LoadBalancerModuleOptions;
   private CONFIG_PREFIX = 'loadbalance';
 
-  constructor(private readonly opts: LoadBalancerModuleOptions){}
+  constructor(private readonly opts: LoadBalancerModuleOptions) {}
 
   get config(): LoadBalancerModuleOptions {
-    return this.options
+    return this.options;
   }
 
   public getServicesOption() {
@@ -40,7 +40,7 @@ export class LoadbalancerConfig implements OnModuleInit {
 
   public getStrategy(serviceName: string) {
     const serviceOptions = this.getServicesOption();
-    const serviceOption = serviceOptions.filter(item => {
+    const serviceOption = serviceOptions.filter((item) => {
       return item.name === serviceName;
     })[0];
 

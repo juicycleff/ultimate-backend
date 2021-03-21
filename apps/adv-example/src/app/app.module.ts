@@ -36,7 +36,7 @@ import { BrakesModule } from '@ultimate-backend/brakes';
     }),
     ClientModule.forRoot(),
     LoadBalancerModule.forRoot({
-      services: [{strategy: 'RoundRobinStrategy', name: 'example'}]
+      services: [{ strategy: 'RoundRobinStrategy', name: 'example' }],
     }),
     BrakesModule.forRoot(),
   ],

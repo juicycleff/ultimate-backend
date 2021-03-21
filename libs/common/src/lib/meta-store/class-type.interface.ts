@@ -28,4 +28,6 @@ export interface DecoratorTypeOptions {
   defaultValue?: any;
 }
 
-export interface ClassWithArgs<T> extends Function { new (...args: any[]): T; }
+export interface ClassWithArgs<T> extends Function {
+  new (...args: any[]): T;
+}

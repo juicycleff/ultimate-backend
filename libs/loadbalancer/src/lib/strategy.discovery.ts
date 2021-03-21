@@ -17,7 +17,13 @@
  * File name:         strategy.discovery.ts
  * Last modified:     09/03/2021, 13:18
  ******************************************************************************/
-import { BaseStrategy, ClassWithArgs, getMetadataStorage, LoggerUtil, ServiceInstance } from '@ultimate-backend/common';
+import {
+  BaseStrategy,
+  ClassWithArgs,
+  getMetadataStorage,
+  LoggerUtil,
+  ServiceInstance,
+} from '@ultimate-backend/common';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { StrategyRegistry } from './strategy.registry';
 
@@ -25,9 +31,7 @@ import { StrategyRegistry } from './strategy.registry';
 export class StrategyDiscovery implements OnModuleInit {
   private logger = new LoggerUtil(StrategyDiscovery.name, true);
 
-  constructor(
-    private readonly strategyRegistry: StrategyRegistry,
-  ) {}
+  constructor(private readonly strategyRegistry: StrategyRegistry) {}
 
   discover() {
     try {
@@ -37,8 +41,11 @@ export class StrategyDiscovery implements OnModuleInit {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const StrategyClass: ClassWithArgs<typeof ref.target> = ref.target;
-          const strategy = new StrategyClass() as unknown as BaseStrategy<ServiceInstance>;
-          this.strategyRegistry.addStrategy(ref.name || (ref.target).name, strategy);
+          const strategy = (new StrategyClass() as unknown) as BaseStrategy<ServiceInstance>;
+          this.strategyRegistry.addStrategy(
+            ref.name || ref.target.name,
+            strategy
+          );
         }
       }
     } catch (e) {

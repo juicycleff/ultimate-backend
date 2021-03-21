@@ -27,10 +27,7 @@ import { Module } from '@nestjs/core/injector/module';
 export class Scanner implements OnModuleInit {
   private container: NestContainer;
 
-  constructor(
-    private readonly discoveryService: DiscoveryService,
-  ) {
-  }
+  constructor(private readonly discoveryService: DiscoveryService) {}
 
   onModuleInit(): any {
     this.container = this.findContainer();
@@ -43,10 +40,18 @@ export class Scanner implements OnModuleInit {
     const modules = this.container.getModules().values();
     for (const module of modules) {
       const instanceWrapper = module.injectables.get(metaType.name);
-      if (instanceWrapper && module.injectables.has(metaType.name) && instanceWrapper.metatype === metaType) {
-        const instanceWrapper: InstanceWrapper = module.injectables.get(metaType.name);
+      if (
+        instanceWrapper &&
+        module.injectables.has(metaType.name) &&
+        instanceWrapper.metatype === metaType
+      ) {
+        const instanceWrapper: InstanceWrapper = module.injectables.get(
+          metaType.name
+        );
         if (instanceWrapper) {
-          const instanceHost = instanceWrapper.getInstanceByContextId(STATIC_CONTEXT);
+          const instanceHost = instanceWrapper.getInstanceByContextId(
+            STATIC_CONTEXT
+          );
           if (instanceHost.isResolved && instanceHost.instance) {
             return instanceHost.instance;
           }
@@ -62,7 +67,9 @@ export class Scanner implements OnModuleInit {
       if (instanceWrapper && module.providers.has(name)) {
         const instanceWrapper: InstanceWrapper = module.providers.get(name);
         if (instanceWrapper) {
-          const instanceHost = instanceWrapper.getInstanceByContextId(STATIC_CONTEXT);
+          const instanceHost = instanceWrapper.getInstanceByContextId(
+            STATIC_CONTEXT
+          );
           if (instanceHost.isResolved && instanceHost.instance) {
             return instanceHost.instance;
           }
@@ -108,7 +115,7 @@ export class Scanner implements OnModuleInit {
 
   public findInjectableInstance<T extends Record<string, any>>(
     context: string,
-    metaTypeOrName: Function | string,
+    metaTypeOrName: Function | string
   ): InstanceWrapper | undefined {
     const collection = this.container.getModules();
     const module = collection.get(context);
@@ -116,12 +123,14 @@ export class Scanner implements OnModuleInit {
       return undefined;
     }
     const injectables = module.injectables;
-    return injectables.get(typeof metaTypeOrName === 'string' ? metaTypeOrName : metaTypeOrName.name);
+    return injectables.get(
+      typeof metaTypeOrName === 'string' ? metaTypeOrName : metaTypeOrName.name
+    );
   }
 
   public findProviderInstance<T extends Record<string, any>>(
     context: string,
-    metaTypeOrName: Function | string,
+    metaTypeOrName: Function | string
   ): InstanceWrapper | undefined {
     const collection = this.container.getModules();
     const module = collection.get(context);
@@ -129,13 +138,15 @@ export class Scanner implements OnModuleInit {
       return undefined;
     }
     const providers = module.providers;
-    return providers.get(typeof metaTypeOrName === 'string' ? metaTypeOrName : metaTypeOrName.name);
+    return providers.get(
+      typeof metaTypeOrName === 'string' ? metaTypeOrName : metaTypeOrName.name
+    );
   }
 
   public findProviderByClassName(module: Module, className: string): boolean {
     const { providers } = module;
     const hasProvider = [...providers.keys()].some(
-      provider => provider === className,
+      (provider) => provider === className
     );
     return hasProvider;
   }

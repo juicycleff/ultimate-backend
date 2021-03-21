@@ -25,61 +25,54 @@ import { Ottoman } from 'ottoman';
 import { AsyncModelFactory } from './interfaces/async-model-factory.interface';
 
 export function createCouchbaseProviders(
-    connectionName: string,
-    options: ModelDefinition[] = [],
+  connectionName: string,
+  options: ModelDefinition[] = []
 ): Provider[] {
-    return options.reduce(
-        (providers, option) => [
-            ...providers,
-            ...createCouchbaseProviders(connectionName),
-            {
-                provide: getModelToken(option.name),
-                useFactory: (ottoman: Ottoman) => {
-                    const model = ottoman.model(
-                        option.name,
-                        option.schema,
-                        option.option,
-                    );
+  return options.reduce(
+    (providers, option) => [
+      ...providers,
+      ...createCouchbaseProviders(connectionName),
+      {
+        provide: getModelToken(option.name),
+        useFactory: (ottoman: Ottoman) => {
+          const model = ottoman.model(
+            option.name,
+            option.schema,
+            option.option
+          );
 
-                    try {
-                        ottoman.start();
-                    } catch (e) {
-                        Logger.error(e, 'createCouchbaseProviders');
-                    }
-                    return model;
-                },
-                inject: [getConnectionToken(connectionName)],
-            },
-        ],
-        [] as Provider[],
-    );
+          try {
+            ottoman.start();
+          } catch (e) {
+            Logger.error(e, 'createCouchbaseProviders');
+          }
+          return model;
+        },
+        inject: [getConnectionToken(connectionName)],
+      },
+    ],
+    [] as Provider[]
+  );
 }
 
 export function createCouchbaseAsyncProviders(
-    connectionName: string,
-    modelFactories: AsyncModelFactory[] = [],
+  connectionName: string,
+  modelFactories: AsyncModelFactory[] = []
 ): Provider[] {
-    return modelFactories.reduce(
-        (providers, option) => [
-            ...providers,
-            {
-                provide: getModelToken(option.name),
-                useFactory: async (ottoman: Ottoman, ...args: any[]) => {
-                    const schema = await option.useFactory(args);
+  return modelFactories.reduce(
+    (providers, option) => [
+      ...providers,
+      {
+        provide: getModelToken(option.name),
+        useFactory: async (ottoman: Ottoman, ...args: any[]) => {
+          const schema = await option.useFactory(args);
 
-                    const model = ottoman.model(
-                        option.name,
-                        schema,
-                        option.option,
-                    );
-                    return model;
-                },
-                inject: [
-                    getConnectionToken(connectionName),
-                    ...(option.inject || []),
-                ],
-            },
-        ],
-        [] as Provider[],
-    );
+          const model = ottoman.model(option.name, schema, option.option);
+          return model;
+        },
+        inject: [getConnectionToken(connectionName), ...(option.inject || [])],
+      },
+    ],
+    [] as Provider[]
+  );
 }

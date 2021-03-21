@@ -28,7 +28,8 @@ import { Cluster } from 'ioredis';
 import {
   Deferred,
   IReactiveClient,
-  handleRetry, LoggerUtil,
+  handleRetry,
+  LoggerUtil,
 } from '@ultimate-backend/common';
 import { defer } from 'rxjs';
 import { RedisModuleOptions } from './redis-module.options';
@@ -40,7 +41,7 @@ export class RedisClusterService
   implements IReactiveClient<Cluster>, BeforeApplicationShutdown, OnModuleInit {
   client: Promise<Cluster>;
   deferredClient: Deferred<Cluster>;
-  logger= new LoggerUtil(RedisClusterService.name);
+  logger = new LoggerUtil(RedisClusterService.name);
 
   constructor(
     @Inject(REDIS_CONFIG_OPTIONS) private readonly options: RedisModuleOptions

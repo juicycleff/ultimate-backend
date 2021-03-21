@@ -5,7 +5,6 @@ import { HttpClient, HttpServiceClient } from '@ultimate-backend/client';
 
 @Controller()
 export class AppController {
-
   @HttpServiceClient('example')
   serviceInstance: HttpClient;
 

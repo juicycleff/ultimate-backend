@@ -18,7 +18,10 @@
  * Last modified:     18/03/2021, 23:08
  ******************************************************************************/
 import * as got from 'got';
-import { LoadBalancerClient } from '@ultimate-backend/loadbalancer';
+import {
+  LoadBalancerClient,
+  LoadBalancerRequest,
+} from '@ultimate-backend/loadbalancer';
 import { HttpGotOptions, IHttpServiceClient } from '../interface';
 import { Brakes } from '@ultimate-backend/brakes';
 import { merge } from 'lodash';
@@ -26,8 +29,9 @@ import { ServiceInstance } from '@ultimate-backend/common';
 import { HttpException, Logger } from '@nestjs/common';
 
 export class HttpClient {
-  logger = new Logger(HttpClient.name)
+  logger = new Logger(HttpClient.name);
   private serviceId: string;
+  private node: ServiceInstance;
   private httpOpts: HttpGotOptions & {
     baseUrl?: string;
     responseType?: 'json';
@@ -114,10 +118,16 @@ export class HttpClient {
     method: string,
     options?: Partial<HttpGotOptions>
   ): got.GotPromise<string> {
-    return this.instance(path, {
-      ...options,
-      method,
-    });
+    return this.lb.execute(
+      this.serviceId,
+      this.node,
+      new LoadBalancerRequest<
+        Promise<got.Response<string>> & { cancel(): void }
+      >(this.instance, path, {
+        ...options,
+        method,
+      })
+    );
   }
 
   public request(
@@ -168,8 +178,8 @@ export class HttpClient {
     baseUrl: string;
     node: ServiceInstance;
   } {
-    const node = this.lb.choose(this.serviceId);
-    const baseUrl = `${node.getScheme()}://${node.getHost()}:${node.getPort()}`;
-    return { baseUrl, node };
+    this.node = this.lb.choose(this.serviceId);
+    const baseUrl = `${this.node.getScheme()}://${this.node.getHost()}:${this.node.getPort()}`;
+    return { baseUrl, node: this.node };
   }
 }

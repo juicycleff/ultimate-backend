@@ -17,10 +17,7 @@
  * File name:         grpc.client.ts
  * Last modified:     19/03/2021, 00:26
  ******************************************************************************/
-import {
-  LoadBalancerClient,
-  LoadBalancerRequest,
-} from '@ultimate-backend/loadbalancer';
+import { LoadBalancerClient } from '@ultimate-backend/loadbalancer';
 import { IGrpcServiceClient } from '../interface';
 import { ClientGrpcProxy } from '@nestjs/microservices';
 import { ServiceInstance } from '@ultimate-backend/common';
@@ -52,11 +49,9 @@ export class GrpcClient {
           service = noClusterService;
           return service[key](...args);
         }
-        return this.lb.execute<Observable<any>>(
-          key,
-          node,
-          new LoadBalancerRequest(service)
-        );
+
+        const observable = service[key](...args);
+        return this.lb.executeGrpc<Observable<any>>(key, node, observable);
       };
     });
 

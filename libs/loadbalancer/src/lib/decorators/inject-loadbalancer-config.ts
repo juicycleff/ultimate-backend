@@ -21,4 +21,5 @@
 import { Inject } from '@nestjs/common';
 import { LOAD_BALANCE_CONFIG_OPTIONS } from '../loadbalancer.constant';
 
-export const InjectLoadbalancerConfig = () => Inject(LOAD_BALANCE_CONFIG_OPTIONS);
+export const InjectLoadbalancerConfig = () =>
+  Inject(LOAD_BALANCE_CONFIG_OPTIONS);

@@ -17,12 +17,18 @@
  * File name:         etcd-registration.builder.ts
  * Last modified:     15/03/2021, 15:36
  ******************************************************************************/
-import { HeartbeatOptions, IpUtils, PlainObject, RegistrationBuilder, Service } from '@ultimate-backend/common';
+import {
+  HeartbeatOptions,
+  IpUtils,
+  PlainObject,
+  RegistrationBuilder,
+  Service,
+} from '@ultimate-backend/common';
 import * as uuid from 'uuid';
 import { EtcdDiscoveryOptions } from './etcd-discovery.options';
 import { EtcdRegistration } from './etcd-registration';
 
-export class EtcdRegistrationBuilder {
+export class EtcdRegistrationBuilder implements RegistrationBuilder {
   private _serviceName: string | undefined;
   private _port: number | undefined;
   private _host: string | undefined;
@@ -118,7 +124,9 @@ export class EtcdRegistrationBuilder {
     );
 
     if (!this._instanceId) {
-      this._instanceId = `service__${this._serviceName}__${this._version}-${uuid.v4()}`;
+      this._instanceId = `service__${this._serviceName}__${
+        this._version
+      }-${uuid.v4()}`;
     } else {
       this._instanceId = `service__${this._serviceName}__${this._instanceId}-${this._version}`;
     }

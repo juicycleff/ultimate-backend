@@ -18,7 +18,11 @@
  * Last modified:     11/02/2021, 02:58
  ******************************************************************************/
 
-import { IpUtils, PlainObject, RegistrationBuilder } from '@ultimate-backend/common';
+import {
+  IpUtils,
+  PlainObject,
+  RegistrationBuilder,
+} from '@ultimate-backend/common';
 import * as uuid from 'uuid';
 import { Check, Service } from '../consul.interface';
 import { HeartbeatOptions } from '../discovery/heartbeat.interface';
@@ -54,6 +58,11 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
   }
 
   metadata(metadata: PlainObject): RegistrationBuilder {
+    this._meta = metadata;
+    return this;
+  }
+
+  state(metadata: PlainObject): RegistrationBuilder {
     this._meta = metadata;
     return this;
   }
@@ -176,7 +185,7 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
       case 'ttl':
         check.ttl = (opts?.ttl || 30) + 's';
         if (!this._heartbeatOptions) {
-          this._heartbeatOptions.enabled = true
+          this._heartbeatOptions.enabled = true;
           this._heartbeatOptions.ttlInSeconds = 30;
         }
         break;
@@ -189,7 +198,7 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
       case 'tcp':
         check.tcp = opts?.tcp;
         if (!this._heartbeatOptions) {
-          this._heartbeatOptions.enabled = true
+          this._heartbeatOptions.enabled = true;
           this._heartbeatOptions.ttlInSeconds = 30;
         }
         break;

@@ -19,6 +19,7 @@
  ******************************************************************************/
 import { ServiceInstance } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from '../core';
+import { Observable } from 'rxjs';
 
 export interface ILoadBalancerClient {
   /**
@@ -46,5 +47,23 @@ export interface ILoadBalancerClient {
     serviceId: string,
     node: ServiceInstance,
     request: LoadBalancerRequest<T>
+  ): T;
+
+  /**
+   * Executes grpc request using a ServiceInstance from the LoadBalancer for the specified
+   * service.
+   *
+   */
+  executeGrpc<T>(serviceId: string, request: LoadBalancerRequest<T>): T;
+
+  /**
+   * Executes grpc request using a ServiceInstance from the LoadBalancer for the specified
+   * service.
+   *
+   */
+  executeGrpc<T>(
+    serviceId: string,
+    node: ServiceInstance,
+    request: Observable<T>
   ): T;
 }
