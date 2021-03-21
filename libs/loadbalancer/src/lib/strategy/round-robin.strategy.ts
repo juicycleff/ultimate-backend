@@ -22,7 +22,7 @@ import {
   LoggerUtil,
   ServiceInstance,
 } from '@ultimate-backend/common';
-import { ServiceInstanceList } from '../service-instance-list';
+import { ServiceInstancePool } from '../service-instance-pool';
 import { Injectable } from '@nestjs/common';
 
 /**
@@ -32,12 +32,12 @@ import { Injectable } from '@nestjs/common';
 export class RoundRobinStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(RoundRobinStrategy.name);
   private serviceId: String;
-  private serviceInstanceList: ServiceInstanceList;
+  private serviceInstanceList: ServiceInstancePool;
   counter = 0;
 
-  init(serviceName: string, list: ServiceInstanceList) {
+  init(serviceName: string, list: ServiceInstancePool) {
     this.serviceId = serviceName;
-    this.serviceInstanceList = list as ServiceInstanceList;
+    this.serviceInstanceList = list as ServiceInstancePool;
   }
 
   /**
