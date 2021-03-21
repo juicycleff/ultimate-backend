@@ -27,6 +27,6 @@ execSync(
     ','
   )} --parallel`,
   {
-    stdio: [0, 1, 2],
+    stdio: [0, 1, 2]
   }
 );
