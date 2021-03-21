@@ -21,7 +21,10 @@ import {
   LocalRegistryProviderOptions,
   RegistryConfiguration,
 } from '../interfaces';
-import { SERVICE_REGISTRY_CONFIG, ServiceStore } from '@ultimate-backend/common';
+import {
+  SERVICE_REGISTRY_CONFIG,
+  ServiceStore,
+} from '@ultimate-backend/common';
 import { Provider } from '@nestjs/common';
 import { MdnsServiceRegistry } from '../discoveries';
 import { validateOptions } from './validate-options';

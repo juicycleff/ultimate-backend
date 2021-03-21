@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
   BaseStrategy,
@@ -6,16 +6,21 @@ import {
   ServiceStore,
 } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from './core';
-import { LOAD_BALANCE_CONFIG_OPTIONS } from './loadbalancer.constant';
-import { LoadBalancerModuleOptions } from './loadbalancer-module.options';
+import { InjectLoadbalancerConfig } from './decorators';
+import { LoadbalancerConfig } from './loadbalancer.config';
+import { StrategyRegistry } from './strategy.registry';
+import { ServiceInstancePool } from './service-instance-pool';
+import { ServerCriticalException } from '../../../common/src/lib/exceptions';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class LoadBalancerClient
   implements ILoadBalancerClient, ServiceInstanceChooser, OnModuleInit {
   constructor(
-    @Inject(LOAD_BALANCE_CONFIG_OPTIONS)
-    private readonly properties: LoadBalancerModuleOptions,
-    private readonly serviceStore: ServiceStore
+    @InjectLoadbalancerConfig()
+    private readonly properties: LoadbalancerConfig,
+    private readonly serviceStore: ServiceStore,
+    private readonly registry: StrategyRegistry
   ) {}
 
   private readonly serviceStrategies = new Map<
@@ -35,19 +40,31 @@ export class LoadBalancerClient
     const services = this.serviceStore.getServiceNames();
     for (const service of services) {
       const nodes = this.serviceStore.getServiceNodes(service);
-
-      console.log(service, nodes);
-
       if (!service || this.serviceStrategies.has(service)) {
         return;
       }
+
+      const strategyName = this.properties.getStrategy(service);
+      const strategy = this.registry.getStrategy(strategyName);
+      if (strategy) {
+        this.createStrategy(service, nodes, strategy);
+      }
     }
+  }
+
+  private createStrategy(
+    serviceName: string,
+    nodes: ServiceInstance[],
+    strategy: BaseStrategy<any>
+  ) {
+    strategy.init(serviceName, new ServiceInstancePool(serviceName, nodes));
+    this.serviceStrategies.set(serviceName, strategy);
   }
 
   choose(serviceId: string): ServiceInstance {
     const strategy = this.serviceStrategies.get(serviceId);
     if (!strategy) {
-      throw new Error(`service [${serviceId}] does not exist`);
+      throw new Error(`service [${serviceId}] does not exist with loadbalance strategy`);
     }
 
     return strategy.choose();
@@ -71,26 +88,122 @@ export class LoadBalancerClient
   execute<T>(serviceId: string, request: LoadBalancerRequest<T>): T;
   execute<T>(
     serviceId: string,
-    serviceInstance: ServiceInstance,
+    node: ServiceInstance,
     request: LoadBalancerRequest<T>
   ): T;
-  execute<T>(
+  async execute<T>(
     serviceId: string,
-    serviceInstanceOrRequest: LoadBalancerRequest<T> | ServiceInstance,
+    nodeOrRequest: LoadBalancerRequest<T> | ServiceInstance,
     request?: LoadBalancerRequest<T>
-  ): T {
+  ): Promise<T> {
     if (!serviceId) {
       throw new Error('serviceId is missing');
     }
 
-    const [req, serviceInstance] = request
-      ? [
-          request as LoadBalancerRequest<T>,
-          serviceInstanceOrRequest as ServiceInstance,
-        ]
-      : [undefined, serviceInstanceOrRequest as ServiceInstance];
+    const [req, node] = request
+      ? [request as LoadBalancerRequest<T>, nodeOrRequest as ServiceInstance]
+      : [undefined, nodeOrRequest as ServiceInstance];
 
-    return undefined;
+    if (node) {
+      node.getState().incrementActiveRequests();
+      node.getState().incrementRequestCounts();
+      if (!node.getState().firstConnectionTimestamp) {
+        node.getState().setFirstConnectionTime();
+      }
+    }
+
+    const startTime = new Date().getTime();
+    try {
+      const firstReq = req.arguments[0];
+      const path = req.arguments[1];
+      const opts = req.arguments[2];
+      const response = await firstReq(path, opts);
+
+      if (node) {
+        const endTime = new Date().getTime();
+        node.getState().setResponseTime(endTime - startTime);
+        node.getState().decrementActiveRequests();
+      }
+      return response;
+    } catch (e) {
+      if (node) {
+        node.getState().decrementActiveRequests();
+      }
+      if (e.response) {
+        throw new HttpException(e.response.data, e.response.status);
+      } else if (e.request) {
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
+        throw new ServerCriticalException(e.message);
+      } else {
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
+        throw new ServerCriticalException(e.message);
+      }
+    }
+  }
+
+  /**
+   * Execute grpc request
+   *
+   * @param serviceId
+   * @param request
+   */
+  executeGrpc<T>(serviceId: string, request: LoadBalancerRequest<T>): T;
+  executeGrpc<T>(
+    serviceId: string,
+    node: ServiceInstance,
+    request: Observable<T>
+  ): T;
+  executeGrpc<T>(
+    serviceId: string,
+    nodeOrRequest: LoadBalancerRequest<T> | ServiceInstance,
+    request?: Observable<T>
+  ): Observable<T> {
+    if (!serviceId) {
+      throw new Error('serviceId is missing');
+    }
+
+    const [observable, node] = request
+      ? [request as Observable<T>, nodeOrRequest as ServiceInstance]
+      : [undefined, nodeOrRequest as ServiceInstance];
+
+    if (node) {
+      node.getState().incrementActiveRequests();
+      node.getState().incrementRequestCounts();
+      if (!node.getState().firstConnectionTimestamp) {
+        node.getState().setFirstConnectionTime();
+      }
+    }
+
+    const startTime = new Date().getTime();
+
+    return new Observable((observer) => {
+      observable.subscribe({
+        error: (err) => {
+          if (node) {
+            node.getState().decrementActiveRequests();
+            node.getState().incrementFailureCounts();
+          }
+          observer.error(err);
+        },
+        complete: () => {
+          if (node) {
+            const endTime = new Date().getTime();
+            node.getState().setResponseTime(endTime - startTime);
+            node.getState().decrementActiveRequests();
+          }
+          observer.complete();
+        },
+        next: (data) => {
+          observer.next(data);
+        },
+      });
+    });
   }
 
   onModuleInit(): any {

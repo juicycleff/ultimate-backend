@@ -53,7 +53,7 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
   async onModuleInit() {
     this.zookeeper.once('connect', async () => {
       await this.watchAllConfigs();
-    })
+    });
     await this.watchAllConfigs();
   }
 
@@ -119,7 +119,7 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
           // figure out how to close watch
         }
 
-        const callback = this.storeUpdate
+        const callback = this.storeUpdate;
         this.setWatch(key, callback);
       }
     } catch (e) {
@@ -127,7 +127,11 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
     }
   }
 
-  private storeUpdate(data: string | Buffer, store: ConfigStore, logger: LoggerUtil) {
+  private storeUpdate(
+    data: string | Buffer,
+    store: ConfigStore,
+    logger: LoggerUtil
+  ) {
     try {
       const parsedData = stringToObjectType(data.toString());
       if (isPlainObject(parsedData)) {

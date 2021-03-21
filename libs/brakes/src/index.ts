@@ -1,1 +1,1 @@
-export * from './lib/brakes.module';
+export * from './lib';

@@ -54,7 +54,9 @@ export class ServiceStore
 
   addService(name: string, service: ServiceInstance) {
     if (this.services.has(name)) {
-      const idx = this.services.get(name).findIndex(elem => elem.getServiceId() === service.getServiceId());
+      const idx = this.services
+        .get(name)
+        .findIndex((elem) => elem.getServiceId() === service.getServiceId());
       if (idx !== -1) {
         this.services.get(name)[idx] = service;
       } else {
@@ -93,10 +95,17 @@ export class ServiceStore
     try {
       if (this.services.has(serviceName)) {
         if (this.services.get(serviceName).length === 1) {
-          this.emit(this.eventName, 'removed', serviceName, this.services.get(serviceName));
+          this.emit(
+            this.eventName,
+            'removed',
+            serviceName,
+            this.services.get(serviceName)
+          );
           this.services.delete(serviceName);
         } else {
-          const idx = this.services.get(serviceName).findIndex((elem) => elem.getServiceId() === nodeId);
+          const idx = this.services
+            .get(serviceName)
+            .findIndex((elem) => elem.getServiceId() === nodeId);
           if (idx !== -1) {
             const service = this.services.get(serviceName).splice(idx, 1);
             this.emit(this.eventName, 'removed', serviceName, [service]);

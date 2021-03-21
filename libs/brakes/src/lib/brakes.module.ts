@@ -1,24 +1,31 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import { BrakesModuleAsyncOptions, BrakesModuleOptions, BrakesModuleOptionsFactory } from './brakes-module.options';
+import {
+  BrakesModuleAsyncOptions,
+  BrakesModuleOptions,
+  BrakesModuleOptionsFactory,
+} from './brakes-module.options';
 import { BrakesFactory } from './brakes.factory';
 import { BrakesResolver } from './brakes.resolver';
 import { Brakes } from './brakes.class';
-import { BRAKES_CONFIG_OPTIONS, BRAKES_MODULE_OPTIONS } from './brakes.constants';
+import {
+  BRAKES_CONFIG_OPTIONS,
+  BRAKES_MODULE_OPTIONS,
+} from './brakes.constants';
 
 @Module({})
 export class BrakesModule {
-
-  static forRoot(options: BrakesModuleOptions): DynamicModule {
+  static forRoot(options?: BrakesModuleOptions): DynamicModule {
     const configProvider: Provider = {
       provide: BRAKES_CONFIG_OPTIONS,
-      useValue: options,
+      useValue: options || {},
     };
 
     return {
       module: BrakesModule,
       providers: [configProvider, Brakes, BrakesFactory, BrakesResolver],
       exports: [Brakes],
-    }
+      global: options?.global || true,
+    };
   }
 
   static forRootAsync(options: BrakesModuleAsyncOptions): DynamicModule {
@@ -33,9 +40,15 @@ export class BrakesModule {
     const asyncProviders = this.createAsyncProviders(options);
     return {
       module: BrakesModule,
-      providers: [...asyncProviders, configProvider, Brakes, BrakesFactory, BrakesResolver],
+      providers: [
+        ...asyncProviders,
+        configProvider,
+        Brakes,
+        BrakesFactory,
+        BrakesResolver,
+      ],
       exports: [Brakes],
-    }
+    };
   }
 
   private static createAsyncProviders(

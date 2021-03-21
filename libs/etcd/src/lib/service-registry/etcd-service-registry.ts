@@ -19,12 +19,15 @@
  * Last modified:     15/03/2021, 15:36
  ******************************************************************************/
 import {
-  Registration, Service,
+  Registration,
+  Service,
   SERVICE_REGISTRY_CONFIG,
   ServiceInstance,
   ServiceRegistry,
-  ServiceStore, serviceToInstance,
-  sleep, TtlScheduler,
+  ServiceStore,
+  serviceToInstance,
+  sleep,
+  TtlScheduler,
 } from '@ultimate-backend/common';
 import { Inject, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import * as _ from 'lodash';
@@ -38,11 +41,7 @@ import { isPlainObject } from '@nestjs/common/utils/shared.utils';
 import { EtcdHeartbeatTask } from '../discovery';
 
 export class EtcdServiceRegistry
-  implements
-    ServiceRegistry<EtcdRegistration>,
-    OnModuleInit,
-    OnModuleDestroy {
-
+  implements ServiceRegistry<EtcdRegistration>, OnModuleInit, OnModuleDestroy {
   // ub-service/service__${serviceName}__${ip}__${port}__<version (optional)>
   private readonly namespace = 'ub-service/';
 
@@ -58,7 +57,6 @@ export class EtcdServiceRegistry
     private readonly options: EtcdRegistryOptions,
     private readonly serviceStore: ServiceStore
   ) {}
-
 
   async init() {
     if (this.options.heartbeat == null)
@@ -81,7 +79,10 @@ export class EtcdServiceRegistry
       .build();
 
     if (this.options.heartbeat.enabled) {
-      const task = new EtcdHeartbeatTask(this.client, this.registration.getInstanceId());
+      const task = new EtcdHeartbeatTask(
+        this.client,
+        this.registration.getInstanceId()
+      );
       this.ttlScheduler = new TtlScheduler(this.options.heartbeat, task);
     }
 
@@ -125,7 +126,10 @@ export class EtcdServiceRegistry
     try {
       this.ttlScheduler?.remove(this.registration.getInstanceId());
 
-      await this.client.namespace(this.namespace).delete().key(this.registration.getInstanceId());
+      await this.client
+        .namespace(this.namespace)
+        .delete()
+        .key(this.registration.getInstanceId());
       this.logger.log(
         `Deregistered service with consul: ${this.registration.getInstanceId()}`
       );
@@ -135,7 +139,6 @@ export class EtcdServiceRegistry
   }
 
   async register(): Promise<void> {
-
     this.logger.log(
       `registering service with id: ${this.registration.getInstanceId()}`
     );
@@ -145,8 +148,13 @@ export class EtcdServiceRegistry
 
       while (loop) {
         try {
-          const lease = await this.client.namespace(this.namespace).lease(this.options.heartbeat.ttlInSeconds || 200);
-          await lease.put(this.registration.getInstanceId()).value(JSON.stringify(service)).exec();
+          const lease = await this.client
+            .namespace(this.namespace)
+            .lease(this.options.heartbeat.ttlInSeconds || 200);
+          await lease
+            .put(this.registration.getInstanceId())
+            .value(JSON.stringify(service))
+            .exec();
           lease.on('lost', async () => {
             lease.removeAllListeners('lost');
             await sleep(5000);
@@ -156,7 +164,7 @@ export class EtcdServiceRegistry
           break;
         } catch (e) {
           this.logger.error(`problem registering service, retrying...`, e);
-          await sleep( (this.options.heartbeat.ttlInSeconds || 5) * 1000);
+          await sleep((this.options.heartbeat.ttlInSeconds || 5) * 1000);
         }
       }
 
@@ -204,7 +212,10 @@ export class EtcdServiceRegistry
       if (event.kv.value && event.kv.value.toString()) {
         try {
           const instance = this.getServiceInst(event.kv.value);
-          this.serviceStore.addService(name || instance.getServiceId(), instance);
+          this.serviceStore.addService(
+            name || instance.getServiceId(),
+            instance
+          );
         } catch (e) {
           this.logger.error(e);
         }
@@ -212,15 +223,12 @@ export class EtcdServiceRegistry
         this.logger.error(`invalid value format for path: [${name}]`);
       }
     }
-
-    console.log('services ', this.serviceStore.getServices());
   }
 
   async watch(
     serviceName: string,
     callback: (event: 'register' | 'deregister', data: any) => void
   ) {
-
     let key = serviceName;
     if (!key.startsWith('service__')) {
       key = `service__${key}`;
@@ -254,7 +262,6 @@ export class EtcdServiceRegistry
               instance = serviceToInstance(parsedData);
             }
             callback('register', instance);
-
           } catch (e) {
             this.logger.error(e);
           }
@@ -266,7 +273,10 @@ export class EtcdServiceRegistry
   }
 
   private async watchAll() {
-    const services = await this.client.namespace(this.namespace).getAll().json();
+    const services = await this.client
+      .namespace(this.namespace)
+      .getAll()
+      .json();
     const groupedService = _.groupBy(services, 'name');
     if (!_.isEmpty(groupedService)) {
       for (const key in groupedService) {
@@ -280,9 +290,11 @@ export class EtcdServiceRegistry
       }
     }
 
-    console.log(this.serviceStore.getServices())
-
-    this.watcher = await this.client.namespace(this.namespace).watch().prefix('').create();
+    this.watcher = await this.client
+      .namespace(this.namespace)
+      .watch()
+      .prefix('')
+      .create();
 
     this.watcher.on('data', (res: IWatchResponse) => {
       this.addToServiceStore(res);

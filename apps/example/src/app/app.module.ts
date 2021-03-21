@@ -4,26 +4,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CloudModule } from '@ultimate-backend/cloud';
 import { ConsulModule } from '@ultimate-backend/consul';
+import { ClientModule } from '@ultimate-backend/client';
+import { LoadBalancerModule } from '@ultimate-backend/loadbalancer';
+import { BrakesModule } from '@ultimate-backend/brakes';
 
 @Module({
   imports: [
-    ConsulModule.forRoot({
-      port: '8500',
-      host: 'localhost',
-      promisify: true,
-      secure: false,
-    }),
     CloudModule.forRoot({
       registry: {
-        discoverer: 'local',
+        discoverer: 'consul',
         service: {
           id: 'example',
           port: 3333,
           name: 'example',
           address: 'localhost',
-        },
-        discovery: {
-          scheme: 'http',
         },
         heartbeat: {
           enabled: true,
@@ -31,6 +25,15 @@ import { ConsulModule } from '@ultimate-backend/consul';
         },
       },
     }),
+    ConsulModule.forRoot({
+      port: '8500',
+      host: 'localhost',
+      promisify: true,
+      secure: false,
+    }),
+    ClientModule.forRoot(),
+    LoadBalancerModule.forRoot(),
+    BrakesModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

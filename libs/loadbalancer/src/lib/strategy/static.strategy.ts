@@ -23,20 +23,22 @@ import {
   ServiceInstance,
 } from '@ultimate-backend/common';
 import { random } from 'lodash';
-import { ServiceInstanceList } from '../service-instance-list';
+import { ServiceInstancePool } from '../service-instance-pool';
 import { Injectable } from '@nestjs/common';
+import { LoadBalancerStrategy } from '../decorators';
 
 /**
  * random load-balance strategy
  */
+@LoadBalancerStrategy()
 @Injectable()
 export class StaticStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(StaticStrategy.name);
   private serviceId: String;
-  private serviceInstanceList: ServiceInstanceList;
+  private serviceInstanceList: ServiceInstancePool;
   private currentIdx: number;
 
-  init(serviceName: string, list: ServiceInstanceList) {
+  init(serviceName: string, list: ServiceInstancePool) {
     this.serviceId = serviceName;
     this.serviceInstanceList = list;
   }

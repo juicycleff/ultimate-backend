@@ -17,11 +17,59 @@
  * File name:         weighted-round-robin.strategy.ts
  * Last modified:     02/03/2021, 01:35
  ******************************************************************************/
-import { RoundRobinStrategy } from './round-robin.strategy';
 import { Injectable } from '@nestjs/common';
+import { LoadBalancerStrategy } from '../decorators';
+import {
+  BaseStrategy,
+  LoggerUtil,
+  ServiceInstance,
+} from '@ultimate-backend/common';
+import { ServiceInstancePool } from '../service-instance-pool';
 
 /**
  * Weighted round robin strategy
  */
+@LoadBalancerStrategy()
 @Injectable()
-export class WeightedRoundRobinStrategy extends RoundRobinStrategy {}
+export class WeightedRoundRobinStrategy extends BaseStrategy<ServiceInstance> {
+  private logger = new LoggerUtil(WeightedRoundRobinStrategy.name);
+  private serviceId: String;
+  private serviceInstanceList: ServiceInstancePool;
+  counter = 0;
+  currentWeight = 0;
+
+  init(serviceName: string, list: ServiceInstancePool) {
+    this.serviceId = serviceName;
+    this.serviceInstanceList = list as ServiceInstancePool;
+  }
+
+  /**
+   * Choose a service instance from the list of service pool
+   */
+  choose(): ServiceInstance {
+    const liveServices = this.serviceInstanceList.get();
+    const liveServicesCount = liveServices.length;
+
+    if (liveServicesCount === 0) {
+      this.logger.error(
+        `no live servers available for service: ${this.serviceId}`
+      );
+      return null;
+    }
+
+    if (this.counter >= liveServicesCount) {
+      this.counter = 0;
+    }
+
+    if (
+      liveServices[this.counter]?.weight &&
+      this.currentWeight < liveServices[this.counter].weight
+    ) {
+      this.currentWeight++;
+      return liveServices[this.counter];
+    }
+
+    this.currentWeight = 0;
+    return liveServices[this.counter++];
+  }
+}

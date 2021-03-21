@@ -7,6 +7,7 @@ export * from './transform.utils';
 export * from './metadata.utils';
 export * from './instance-converter.util';
 export * from './sleep.util';
+export * from './scanner';
 
 export type PlainObject = { [name: string]: any };
 export type PlainObjectString = { [name: string]: string };

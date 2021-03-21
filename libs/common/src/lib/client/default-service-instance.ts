@@ -1,10 +1,18 @@
 import { ServiceInstance } from './service-instance';
 import { ServiceInstanceOptions } from './service-instance.options';
 import { PlainObject } from '../utils';
+import { ServiceInstanceState } from '../health';
 
 export class DefaultServiceInstance implements ServiceInstance {
+  state: ServiceInstanceState;
 
-  constructor(private opts: ServiceInstanceOptions) {}
+  constructor(private opts: ServiceInstanceOptions) {
+    this.state = opts.state || new ServiceInstanceState();
+  }
+
+  getState(): ServiceInstanceState {
+    return this.state;
+  }
 
   getInstanceId(): string {
     return this.opts.instanceId;

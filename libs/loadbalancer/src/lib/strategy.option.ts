@@ -19,9 +19,9 @@
  ******************************************************************************/
 
 export type LoadBalanceStrategy =
-  | 'RoundRobin'
-  | 'Random'
-  | 'Static'
-  | 'WeightedRandom'
-  | 'WeightedRoundRandom'
+  | 'RoundRobinStrategy'
+  | 'RandomStrategy'
+  | 'StaticStrategy'
+  | 'WeightedRandomStrategy'
+  | 'WeightedRoundRandomStrategy'
   | string;

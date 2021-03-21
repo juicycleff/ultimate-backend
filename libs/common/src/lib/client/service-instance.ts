@@ -18,6 +18,7 @@
  * Last modified:     10/01/2021, 19:15
  ******************************************************************************/
 import { PlainObject } from '../utils';
+import { ServiceInstanceState } from '../health';
 
 export interface ServiceInstance {
   /**
@@ -74,4 +75,9 @@ export interface ServiceInstance {
    * @returns service instance cluster node ID
    */
   getNodeID(): string;
+
+  /**
+   * @returns service instance state
+   */
+  getState(): ServiceInstanceState;
 }

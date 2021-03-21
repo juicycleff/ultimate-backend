@@ -14,11 +14,32 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         http.orchestrator.ts
- * Last modified:     15/02/2021, 20:21
+ * File name:         strategy.registry.ts
+ * Last modified:     19/03/2021, 12:34
  ******************************************************************************/
-
 import { Injectable } from '@nestjs/common';
+import { BaseStrategy, ServiceInstance } from '@ultimate-backend/common';
 
 @Injectable()
-export class HttpOrchestrator {}
+export class StrategyRegistry {
+  private readonly strategies = new Map<
+    string,
+    BaseStrategy<ServiceInstance>
+  >();
+  private readonly refs: Function[] = [];
+
+  public addStrategy(name: string, strategy: BaseStrategy<ServiceInstance>) {
+    if (!this.strategies.has(name)) {
+      this.strategies.set(name, strategy);
+      this.refs.forEach((ref) => ref());
+    }
+  }
+
+  public getStrategy(name: string): BaseStrategy<ServiceInstance> | undefined {
+    return this.strategies.get(name);
+  }
+
+  public watch(ref: () => void) {
+    this.refs.push(ref);
+  }
+}

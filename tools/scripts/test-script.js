@@ -24,7 +24,6 @@ const path = require('path');
 const target = process.argv[2];
 
 function command() {
-
   const file = fs.readFileSync(path.join(__dirname, '../../workspace.json'));
   const ws = JSON.parse(file.toString());
   const rootProjects = (ws.projects || {});

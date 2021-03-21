@@ -14,15 +14,9 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         service-instance-list.ts
- * Last modified:     09/03/2021, 13:18
+ * File name:         index.ts
+ * Last modified:     18/03/2021, 22:44
  ******************************************************************************/
-import { ServiceInstance } from '@ultimate-backend/common';
-
-export interface ServiceInstanceList {
-  getServiceId(): string;
-
-  get(): Array<ServiceInstance>;
-
-  // builder(): StrategyInstanceListBuilder;
-}
+export * from './http-service.decorator';
+export * from './grpc-service.decorator';
+export * from './service.decorator';

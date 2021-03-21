@@ -24,7 +24,12 @@ import { MdnsRegistration } from './mdns-registration';
 import { MdnsRegistrationBuilder } from './mdns-registration.builder';
 import { Bonjour, Browser, RemoteService, Service } from 'bonjour';
 import * as bonjour from 'bonjour';
-import { Registration, SERVICE_REGISTRY_CONFIG, ServiceRegistry, ServiceStore } from '@ultimate-backend/common';
+import {
+  Registration,
+  SERVICE_REGISTRY_CONFIG,
+  ServiceRegistry,
+  ServiceStore,
+} from '@ultimate-backend/common';
 import { mdnsToServiceInstance } from './mdns-service.utils';
 
 export class MdnsServiceRegistry
@@ -45,11 +50,9 @@ export class MdnsServiceRegistry
   }
 
   async init() {
-    if (!this.options.heartbeat)
-      throw Error('HeartbeatOptions is required');
+    if (!this.options.heartbeat) throw Error('HeartbeatOptions is required');
 
-    if (!this.options.service)
-      throw Error('Service options is required.');
+    if (!this.options.service) throw Error('Service options is required.');
 
     this.registration = new MdnsRegistrationBuilder()
       .discoveryOptions(this.options.discovery)
@@ -69,16 +72,18 @@ export class MdnsServiceRegistry
       {
         type: 'http',
         txt: {
-          domain: this.options.service.domain
-        }
-      }, (service) => {
+          domain: this.options.service.domain,
+        },
+      },
+      (service) => {
         if (
           service.txt.domain &&
           service.txt.domain === this.options.service.domain
         ) {
-          this.addToStore(service)
+          this.addToStore(service);
         }
-      });
+      }
+    );
 
     this.listenForServices();
   }

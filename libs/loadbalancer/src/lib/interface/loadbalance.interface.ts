@@ -18,7 +18,8 @@
  * Last modified:     06/03/2021, 18:51
  ******************************************************************************/
 import { ServiceInstance } from '@ultimate-backend/common';
-import { LoadBalancerRequest } from '../core/load-balancer.request';
+import { LoadBalancerRequest } from '../core';
+import { Observable } from 'rxjs';
 
 export interface ILoadBalancerClient {
   /**
@@ -36,7 +37,7 @@ export interface ILoadBalancerClient {
    * Executes request using a ServiceInstance from the LoadBalancer for the specified
    * service.
    * @param serviceId The service ID to look up the LoadBalancer.
-   * @param serviceInstance The service to execute the request to.
+   * @param node
    * @param request Allows implementations to execute pre and post actions, such as
    * incrementing metrics.
    * @return The result of the LoadBalancerRequest callback on the selected
@@ -44,7 +45,25 @@ export interface ILoadBalancerClient {
    */
   execute<T>(
     serviceId: string,
-    serviceInstance: ServiceInstance,
+    node: ServiceInstance,
     request: LoadBalancerRequest<T>
+  ): T;
+
+  /**
+   * Executes grpc request using a ServiceInstance from the LoadBalancer for the specified
+   * service.
+   *
+   */
+  executeGrpc<T>(serviceId: string, request: LoadBalancerRequest<T>): T;
+
+  /**
+   * Executes grpc request using a ServiceInstance from the LoadBalancer for the specified
+   * service.
+   *
+   */
+  executeGrpc<T>(
+    serviceId: string,
+    node: ServiceInstance,
+    request: Observable<T>
   ): T;
 }

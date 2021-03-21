@@ -18,4 +18,10 @@
  * Last modified:     09/03/2021, 22:25
  ******************************************************************************/
 
-export class LoadBalancerRequest<T> {}
+export class LoadBalancerRequest<T> {
+  arguments: any[];
+
+  constructor(...args: any[]) {
+    this.arguments = args;
+  }
+}

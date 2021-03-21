@@ -24,8 +24,8 @@ import { LoadBalanceStrategy } from './strategy.option';
 import { BaseStrategy, ServiceInstance } from '@ultimate-backend/common';
 
 export interface LoadBalancerModuleOptions {
-  strategy: LoadBalanceStrategy;
-  services?: { serviceName: string; strategyName: string }[];
+  strategy?: LoadBalanceStrategy;
+  services?: { name: string; strategy: string }[];
   customStrategies?: ClassProvider<BaseStrategy<ServiceInstance>>[];
   options?: LoadBalancerProperties;
 }
