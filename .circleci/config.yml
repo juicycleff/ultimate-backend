@@ -27,8 +27,6 @@ jobs:
           command: npm run ci:test
 
   publish:
-    branches:
-      only: master
     executor:
       name: node/default
       tag: '13.14'
@@ -46,3 +44,7 @@ workflows:
       - lint
       - test
       - publish
+        filters:
+          branches:
+            only:
+              - master
