@@ -84,9 +84,9 @@ describe('MdnsRegistration', () => {
   it('can get registration instance id', async () => {
     let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getInstanceId()).toEqual(newService.id);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     result = new MdnsRegistration(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       { id: 'my-instance', txt: { serviceId: 'my-instance' } },
       mdnsDiscoveryOptions
     );
