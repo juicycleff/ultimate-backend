@@ -44,6 +44,9 @@ workflows:
       - lint
       - test
       - publish:
+        requires:
+          - lint
+          - test
         filters:
           branches:
             only:
