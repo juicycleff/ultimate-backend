@@ -64,7 +64,7 @@ export class LoadBalancerClient
   choose(serviceId: string): ServiceInstance {
     const strategy = this.serviceStrategies.get(serviceId);
     if (!strategy) {
-      throw new Error(`service [${serviceId}] does not exist`);
+      throw new Error(`service [${serviceId}] does not exist with loadbalance strategy`);
     }
 
     return strategy.choose();
@@ -118,21 +118,30 @@ export class LoadBalancerClient
       const path = req.arguments[1];
       const opts = req.arguments[2];
       const response = await firstReq(path, opts);
-      const endTime = new Date().getTime();
-      node.getState().setResponseTime(endTime - startTime);
-      node.getState().decrementActiveRequests();
+
+      if (node) {
+        const endTime = new Date().getTime();
+        node.getState().setResponseTime(endTime - startTime);
+        node.getState().decrementActiveRequests();
+      }
       return response;
     } catch (e) {
-      node.getState().decrementActiveRequests();
+      if (node) {
+        node.getState().decrementActiveRequests();
+      }
       if (e.response) {
         throw new HttpException(e.response.data, e.response.status);
       } else if (e.request) {
-        node.getState().incrementFailureCounts();
-        node.getState().setConnectionFailedTime(e.message);
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
         throw new ServerCriticalException(e.message);
       } else {
-        node.getState().incrementFailureCounts();
-        node.getState().setConnectionFailedTime(e.message);
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
         throw new ServerCriticalException(e.message);
       }
     }

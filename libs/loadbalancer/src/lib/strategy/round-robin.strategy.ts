@@ -24,10 +24,12 @@ import {
 } from '@ultimate-backend/common';
 import { ServiceInstancePool } from '../service-instance-pool';
 import { Injectable } from '@nestjs/common';
+import { LoadBalancerStrategy } from '../decorators';
 
 /**
  * round robin load-balance strategy
  */
+@LoadBalancerStrategy()
 @Injectable()
 export class RoundRobinStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(RoundRobinStrategy.name);

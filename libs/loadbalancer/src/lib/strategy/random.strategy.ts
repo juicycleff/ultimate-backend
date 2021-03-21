@@ -25,10 +25,12 @@ import {
 import { random } from 'lodash';
 import { ServiceInstancePool } from '../service-instance-pool';
 import { Injectable } from '@nestjs/common';
+import { LoadBalancerStrategy } from '../decorators';
 
 /**
  * random load-balance strategy
  */
+@LoadBalancerStrategy()
 @Injectable()
 export class RandomStrategy extends BaseStrategy<ServiceInstance> {
   private logger = new LoggerUtil(RandomStrategy.name);

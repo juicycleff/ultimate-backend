@@ -49,7 +49,6 @@ export class ClientOrchestrator implements OnApplicationBootstrap {
   private async mountClients() {
     for (const item of this.clients.values()) {
       const { property, target, options } = item;
-
       Object.defineProperty(target, property, {
         get: () => {
           return ClientFactory.create(this.lb, this.brakes, options);
