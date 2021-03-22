@@ -383,7 +383,9 @@
             "tsConfig": "libs/etcd/tsconfig.lib.json",
             "packageJson": "libs/etcd/package.json",
             "main": "libs/etcd/src/index.ts",
-            "assets": ["libs/etcd/*.md"]
+            "assets": ["libs/etcd/*.md"],
+            "withDeps": true,
+            "parallel": true
           }
         }
       }
@@ -673,6 +675,71 @@
         }
       },
       "root": "."
+    },
+    "plugin-nx": {
+      "root": "libs/plugin-nx",
+      "sourceRoot": "libs/plugin-nx/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/plugin-nx/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/plugin-nx"],
+          "options": {
+            "jestConfig": "libs/plugin-nx/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/plugin-nx",
+            "tsConfig": "libs/plugin-nx/tsconfig.lib.json",
+            "packageJson": "libs/plugin-nx/package.json",
+            "main": "libs/plugin-nx/src/index.ts",
+            "assets": [
+              "libs/plugin-nx/*.md",
+              {
+                "input": "./libs/plugin-nx/src",
+                "glob": "**/*.!(ts)",
+                "output": "./src"
+              },
+              {
+                "input": "./libs/plugin-nx",
+                "glob": "generators.json",
+                "output": "."
+              },
+              {
+                "input": "./libs/plugin-nx",
+                "glob": "executors.json",
+                "output": "."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "plugin-nx-e2e": {
+      "projectType": "application",
+      "root": "apps/plugin-nx-e2e",
+      "sourceRoot": "apps/plugin-nx-e2e/src",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/nx-plugin:e2e",
+          "options": {
+            "target": "plugin-nx:build",
+            "npmPackageName": "@ultimate-backend/plugin-nx",
+            "pluginOutputPath": "dist/libs/plugin-nx",
+            "jestConfig": "apps/plugin-nx-e2e/jest.config.js"
+          }
+        }
+      }
     }
   },
   "cli": {

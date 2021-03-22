@@ -22,5 +22,7 @@ module.exports = {
     '<rootDir>/libs/client',
     '<rootDir>/libs/brakes',
     '<rootDir>/apps/event-store-example',
+    '<rootDir>/libs/plugin-nx',
+    '<rootDir>/apps/plugin-nx-e2e',
   ],
 };

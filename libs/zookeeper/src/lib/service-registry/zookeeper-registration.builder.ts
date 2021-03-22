@@ -17,10 +17,16 @@
  * File name:         zookeeper-registration.builder.ts
  * Last modified:     16/03/2021, 23:22
  ******************************************************************************/
-import { HeartbeatOptions, IpUtils, PlainObject, RegistrationBuilder, Service } from '@ultimate-backend/common';
+import {
+  HeartbeatOptions,
+  IpUtils,
+  PlainObject,
+  RegistrationBuilder,
+  Service,
+} from '@ultimate-backend/common';
 import { ZookeeperDiscoveryOptions } from './zookeeper-discovery.options';
-import { EtcdDiscoveryOptions, EtcdRegistration } from '@ultimate-backend/etcd';
 import * as uuid from 'uuid';
+import { ZookeeperRegistration } from './zookeeper-registration';
 
 export class ZookeeperRegistrationBuilder {
   private _serviceName: string | undefined;
@@ -55,7 +61,7 @@ export class ZookeeperRegistrationBuilder {
     return this;
   }
 
-  discoveryOptions(properties: EtcdDiscoveryOptions): RegistrationBuilder {
+  discoveryOptions(properties: ZookeeperDiscoveryOptions): RegistrationBuilder {
     this._discoveryOptions = properties;
     return this;
   }
@@ -85,7 +91,7 @@ export class ZookeeperRegistrationBuilder {
     return this;
   }
 
-  build(): EtcdRegistration {
+  build(): ZookeeperRegistration {
     if (!this._serviceName) {
       throw Error('serviceName is required');
     }
@@ -118,7 +124,9 @@ export class ZookeeperRegistrationBuilder {
     );
 
     if (!this._instanceId) {
-      this._instanceId = `service__${this._serviceName}__${this._version}-${uuid.v4()}`;
+      this._instanceId = `service__${this._serviceName}__${
+        this._version
+      }-${uuid.v4()}`;
     } else {
       this._instanceId = `service__${this._serviceName}__${this._instanceId}-${this._version}`;
     }
@@ -147,7 +155,7 @@ export class ZookeeperRegistrationBuilder {
       metadata,
     };
 
-    return new EtcdRegistration(newService, this._discoveryOptions);
+    return new ZookeeperRegistration(newService, this._discoveryOptions);
   }
 
   version(version: string): RegistrationBuilder {

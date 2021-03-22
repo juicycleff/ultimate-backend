@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "plugin-nx",
+  "version": "0.0.1",
+  "generators": {
+    "plugin-nx": {
+      "factory": "./src/generators/plugin-nx/generator",
+      "schema": "./src/generators/plugin-nx/schema.json",
+      "description": "plugin-nx generator"
+    }
+  }
+}

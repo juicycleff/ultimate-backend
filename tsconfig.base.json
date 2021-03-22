@@ -31,7 +31,8 @@
       "@ultimate-backend": ["libs/event-store/src/index.ts"],
       "@ultimate-backend/couchbase": ["libs/couchbase/src/index.ts"],
       "@ultimate-backend/client": ["libs/client/src/index.ts"],
-      "@ultimate-backend/brakes": ["libs/brakes/src/index.ts"]
+      "@ultimate-backend/brakes": ["libs/brakes/src/index.ts"],
+      "@ultimate-backend/nx-plugin": ["libs/plugin-nx/src/index.ts"]
     },
     "plugins": [
       {

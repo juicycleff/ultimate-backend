@@ -2,6 +2,7 @@ import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
   BaseStrategy,
+  ServerCriticalException,
   ServiceInstance,
   ServiceStore,
 } from '@ultimate-backend/common';
@@ -10,7 +11,6 @@ import { InjectLoadbalancerConfig } from './decorators';
 import { LoadbalancerConfig } from './loadbalancer.config';
 import { StrategyRegistry } from './strategy.registry';
 import { ServiceInstancePool } from './service-instance-pool';
-import { ServerCriticalException } from '../../../common/src/lib/exceptions';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -64,7 +64,9 @@ export class LoadBalancerClient
   choose(serviceId: string): ServiceInstance {
     const strategy = this.serviceStrategies.get(serviceId);
     if (!strategy) {
-      throw new Error(`service [${serviceId}] does not exist with loadbalance strategy`);
+      throw new Error(
+        `service [${serviceId}] does not exist with loadbalance strategy`
+      );
     }
 
     return strategy.choose();

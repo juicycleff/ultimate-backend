@@ -1,14 +1,9 @@
 {
   "npmScope": "ultimate-backend",
-  "affected": {
-    "defaultBase": "v3"
-  },
+  "affected": { "defaultBase": "v3" },
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
@@ -26,65 +21,27 @@
     }
   },
   "projects": {
-    "core": {
-      "tags": []
-    },
-    "common": {
-      "tags": []
-    },
-    "cloud": {
-      "tags": []
-    },
-    "loadbalancer": {
-      "tags": []
-    },
-    "permissions": {
-      "tags": []
-    },
-    "cli": {
-      "tags": []
-    },
-    "example": {
-      "tags": []
-    },
-    "adv-example": {
-      "tags": []
-    },
-    "consul": {
-      "tags": []
-    },
-    "zookeeper": {
-      "tags": []
-    },
-    "etcd": {
-      "tags": []
-    },
-    "config": {
-      "tags": []
-    },
-    "messaging": {
-      "tags": []
-    },
-    "redis": {
-      "tags": []
-    },
-    "event-store": {
-      "tags": []
-    },
-    "couchbase": {
-      "tags": []
-    },
-    "client": {
-      "tags": []
-    },
-    "brakes": {
-      "tags": []
-    },
-    "event-store-example": {
-      "tags": []
-    },
-    "workspace": {
-      "tags": []
-    }
+    "core": { "tags": [] },
+    "common": { "tags": [] },
+    "cloud": { "tags": [] },
+    "loadbalancer": { "tags": [] },
+    "permissions": { "tags": [] },
+    "cli": { "tags": [] },
+    "example": { "tags": [] },
+    "adv-example": { "tags": [] },
+    "consul": { "tags": [], "implicitDependencies": ["common"] },
+    "zookeeper": { "tags": [] },
+    "etcd": { "tags": [], "implicitDependencies": ["common"] },
+    "config": { "tags": [] },
+    "messaging": { "tags": [] },
+    "redis": { "tags": [] },
+    "event-store": { "tags": [] },
+    "couchbase": { "tags": [] },
+    "client": { "tags": [] },
+    "brakes": { "tags": [] },
+    "event-store-example": { "tags": [] },
+    "workspace": { "tags": [] },
+    "plugin-nx": { "tags": [] },
+    "plugin-nx-e2e": { "tags": [], "implicitDependencies": ["plugin-nx"] }
   }
 }

@@ -4,6 +4,4 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.0.2](https://github.com/juicycleff/ultimate-backend/compare/v0.0.1...v0.0.2) (2021-03-21)
 
-
-
 ## 0.0.1 (2021-03-18)

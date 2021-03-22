@@ -1,5 +1,9 @@
-import { PlainObject, ServiceInstance, ServiceStatus } from '@ultimate-backend/common';
-import { ConsulServiceInstance } from '@ultimate-backend/consul';
+import {
+  PlainObject,
+  ServiceInstance,
+  ServiceStatus,
+} from '@ultimate-backend/common';
+import { ConsulServiceInstance } from '../../';
 
 export class ConsulUtils {
   static getMetadata(tags: string[]): PlainObject {
@@ -14,7 +18,9 @@ export class ConsulUtils {
   }
 }
 
-export function consulServiceToServiceInstance(nodes: any[]): ServiceInstance[] {
+export function consulServiceToServiceInstance(
+  nodes: any[]
+): ServiceInstance[] {
   const serviceInstances: ConsulServiceInstance[] = [];
   for (const node of nodes) {
     let status = ServiceStatus.CRITICAL;
@@ -34,17 +40,19 @@ export function consulServiceToServiceInstance(nodes: any[]): ServiceInstance[] 
       }
     }
 
-    serviceInstances.push(new ConsulServiceInstance({
-      host: node.Service.Address,
-      metadata: node.Service.Meta,
-      instanceId: node.Service.ID,
-      nodeID: node.Node.Node,
-      port: node.Service.Port,
-      status,
-      secure: node.Service.Meta.Secure || false,
-      serviceId: node.Service.Service,
-      tags: node.Service.Tags,
-    }));
+    serviceInstances.push(
+      new ConsulServiceInstance({
+        host: node.Service.Address,
+        metadata: node.Service.Meta,
+        instanceId: node.Service.ID,
+        nodeID: node.Node.Node,
+        port: node.Service.Port,
+        status,
+        secure: node.Service.Meta.Secure || false,
+        serviceId: node.Service.Service,
+        tags: node.Service.Tags,
+      })
+    );
   }
 
   return serviceInstances;

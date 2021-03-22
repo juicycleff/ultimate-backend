@@ -26,7 +26,7 @@ const target = process.argv[2];
 function command() {
   const file = fs.readFileSync(path.join(__dirname, '../../workspace.json'));
   const ws = JSON.parse(file.toString());
-  const rootProjects = (ws.projects || {});
+  const rootProjects = ws.projects || {};
 
   if (!rootProjects) {
     return;
@@ -41,15 +41,15 @@ function command() {
   // Build
   for (let key in rootProjects) {
     const value = rootProjects[key];
-    if (value.projectType === 'library') {
-      shell.exec(`nx build ${key} --with-deps`);
+    if (value.projectType === 'library' && key !== 'core') {
+      shell.exec(`nx run ${key}:build --with-deps`);
     }
   }
 
   // Publish
   for (let key in rootProjects) {
     const value = rootProjects[key];
-    if (value.projectType === 'library') {
+    if (value.projectType === 'library' && key !== 'core') {
       shell.exec(`rm -rf build`);
       const cmd = `npm publish --access public`;
       shell.exec(cmd);

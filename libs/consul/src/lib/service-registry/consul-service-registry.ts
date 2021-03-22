@@ -9,17 +9,13 @@ import retry from 'retry';
 import _ from 'lodash';
 import { ConsulRegistration } from './consul-registration';
 import {
-  consul,
-  ConsulClient,
-  ConsulHeartbeatTask,
-} from '@ultimate-backend/consul';
-import {
   Registration,
   SERVICE_REGISTRY_CONFIG,
   ServiceRegistry,
   ServiceStore,
   TtlScheduler,
 } from '@ultimate-backend/common';
+import { consul, ConsulClient, ConsulHeartbeatTask } from '../../';
 import { ConsulRegistryOptions } from './consul-registry.options';
 import { ConsulRegistrationBuilder } from './consul-registration.builder';
 import { Watch } from 'consul';
@@ -27,7 +23,6 @@ import * as Consul from 'consul';
 import RegisterOptions = Consul.Agent.Service.RegisterOptions;
 import { Service } from '../consul.interface';
 import { consulServiceToServiceInstance } from '../utils';
-import { EtcdHeartbeatTask } from '@ultimate-backend/etcd';
 
 @Injectable()
 export class ConsulServiceRegistry

@@ -131,7 +131,7 @@ export class EtcdServiceRegistry
         .delete()
         .key(this.registration.getInstanceId());
       this.logger.log(
-        `Deregistered service with consul: ${this.registration.getInstanceId()}`
+        `Deregistered service with etcd: ${this.registration.getInstanceId()}`
       );
     } catch (e) {
       this.logger.error(e);
@@ -180,7 +180,7 @@ export class EtcdServiceRegistry
         throw e;
       }
       this.logger.warn(
-        `Fail fast is false. Error registering service with consul: ${this.registration.getService()} ${e}`
+        `Fail fast is false. Error registering service with etcd: ${this.registration.getService()} ${e}`
       );
     }
   }

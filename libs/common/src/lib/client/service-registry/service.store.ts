@@ -18,8 +18,11 @@
  * Last modified:     11/03/2021, 14:13
  ******************************************************************************/
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { IServiceStore } from '@ultimate-backend/cloud';
-import { ServiceInstance, ServiceStatus } from '@ultimate-backend/common';
+import {
+  IServiceStore,
+  ServiceInstance,
+  ServiceStatus,
+} from '@ultimate-backend/common';
 import { EventEmitter } from 'events';
 
 @Injectable()
