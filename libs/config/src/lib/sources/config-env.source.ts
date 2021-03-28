@@ -21,9 +21,8 @@
 import { EnvConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import {isPlainObject} from 'lodash';
+import { isPlainObject } from 'lodash';
 import { LoggerUtil } from '@ultimate-backend/common';
-import { InjectConfigOptions } from '../decorators/inject-config.decorator';
 import { ConfigOptions } from '../config-options';
 import { ConfigStore } from '../config.store';
 import { ConfigSource } from '../config.enum';
@@ -32,17 +31,18 @@ import { readEnv } from 'read-env';
 @Injectable()
 export class ConfigEnvSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, any> = new Map();
-  private readonly logger = new LoggerUtil(ConfigEnvSource.name);
+  private logger = new LoggerUtil(ConfigEnvSource.name);
 
   constructor(
-    @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
-  ) {
-    this.logger = new LoggerUtil(ConfigEnvSource.name, options.config.debug);
-  }
+  ) {}
 
   async onModuleInit() {
+    this.logger = new LoggerUtil(
+      ConfigEnvSource.name,
+      this.options.config.debug
+    );
     await this.buildConfigs();
   }
 
@@ -78,7 +78,7 @@ export class ConfigEnvSource implements IConfigSource, OnModuleInit {
       loads.push(..._fileLoads);
     }
 
-    const shouldSkip = loads.find(value => value.ignoreEnvFile === true);
+    const shouldSkip = loads.find((value) => value.ignoreEnvFile === true);
 
     if (shouldSkip) {
       try {

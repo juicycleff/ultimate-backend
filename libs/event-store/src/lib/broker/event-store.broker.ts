@@ -18,19 +18,19 @@
  * Last modified:     14/02/2021, 18:26
  ******************************************************************************/
 
-import { EventBus, IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
 import {
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
+  EventBus,
+  IEvent,
+  IEventPublisher,
+  IMessageSource,
+} from '@nestjs/cqrs';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Subject } from 'rxjs';
 import * as uuid from 'uuid';
 import { EventStoreClient } from '../client';
 import {
   EventStoreBrokerFeature,
   EventStoreFeatureOptions,
-  EventStoreModuleOptions,
   EventStorePersistentSubscription,
   EventStoreStandardSubscription,
   EventStoreSubscription,
@@ -43,9 +43,9 @@ import { ProvidersConstants } from '../event-store.constant';
 import { BaseBroker } from './base.broker';
 
 @Injectable()
-export class EventStoreBroker extends BaseBroker
+export class EventStoreBroker
+  extends BaseBroker
   implements IEventPublisher, OnModuleInit, IMessageSource {
-
   private persistentSubscriptions: ExtendedPersistentSubscription[] = [];
   private persistentSubscriptionsCount: number;
 
@@ -57,28 +57,25 @@ export class EventStoreBroker extends BaseBroker
    * Parameters are automatically injected
    *
    * @param eventStore {EventStoreClient}
-   * @param options {EventStoreModuleOptions}
    * @param featureStreamConfig {EventStoreFeatureOptions}
    * @param eventsBus {EventBus}
    */
   constructor(
     private readonly eventStore: EventStoreClient,
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions,
     @Inject(ProvidersConstants.EVENT_STORE_FEATURE_CONFIG)
     private readonly featureStreamConfig: EventStoreFeatureOptions,
-    private readonly eventsBus: EventBus,
+    private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, EventStoreBroker.name);
-    this.init(featureStreamConfig);
   }
 
-  private init(featureStreamConfig: EventStoreFeatureOptions) {
+  private async init(featureStreamConfig: EventStoreFeatureOptions) {
     if (!this.eventStore.connected) {
-      this.eventStore.connect();
+      await this.eventStore.connect();
     }
 
-    const subs = (featureStreamConfig.subscriptions || []) as EventStoreSubscription[];
+    const subs = (featureStreamConfig.subscriptions ||
+      []) as EventStoreSubscription[];
 
     if (subs.length > 0) {
       const persistentSubscriptions = subs.filter((sub) => {
@@ -129,18 +126,19 @@ export class EventStoreBroker extends BaseBroker
     this.subject$ = subject;
   }
 
-  onModuleInit(): any {
+  async onModuleInit() {
+    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;
   }
 
-  async publish<T extends IEvent & {streamName?: string}>(event: T) {
+  async publish<T extends IEvent & { streamName?: string }>(event: T) {
     if (!event) {
       return;
     }
 
-    const config = this.featureStreamConfig as EventStoreBrokerFeature
+    const config = this.featureStreamConfig as EventStoreBrokerFeature;
 
     let streamId = this.getStreamId(this.streamName);
     if (!this.featureStreamConfig.strictStreamName) {
@@ -152,11 +150,13 @@ export class EventStoreBroker extends BaseBroker
       type: event.constructor.name,
       data: event as JSONType,
       metadata: {
-        originalEvenType: event.constructor.name
+        originalEvenType: event.constructor.name,
       },
     });
     try {
-      await this.eventStore.client().appendToStream(streamId, eventPayload, config.options);
+      await this.eventStore
+        .client()
+        .appendToStream(streamId, eventPayload, config.options);
     } catch (e) {
       this.logger.error(e);
     }
@@ -166,22 +166,26 @@ export class EventStoreBroker extends BaseBroker
     if ((events || []).length === 0) {
       return;
     }
-    const config = this.featureStreamConfig as EventStoreBrokerFeature
+    const config = this.featureStreamConfig as EventStoreBrokerFeature;
 
     const payloadEvents = [];
     for (const event of events) {
-      payloadEvents.push(jsonEvent({
-        id: uuid.v4(),
-        type: event.constructor.name,
-        data: event as JSONType,
-        metadata: {
-          originalEvenType: event.constructor.name
-        },
-      }));
+      payloadEvents.push(
+        jsonEvent({
+          id: uuid.v4(),
+          type: event.constructor.name,
+          data: event as JSONType,
+          metadata: {
+            originalEvenType: event.constructor.name,
+          },
+        })
+      );
     }
 
     try {
-      await this.eventStore.client().appendToStream(this.streamName, payloadEvents, config.options);
+      await this.eventStore
+        .client()
+        .appendToStream(this.streamName, payloadEvents, config.options);
     } catch (e) {
       this.logger.error(e);
     }
@@ -195,7 +199,7 @@ export class EventStoreBroker extends BaseBroker
        Connecting to persistent subscription group [${opts.groupName}] on stream [${opts.streamName}]!
       `);
 
-      const resolved = await this.eventStore
+      const resolved = (await this.eventStore
         .client()
         .connectToPersistentSubscription(
           opts.streamName,
@@ -205,7 +209,9 @@ export class EventStoreBroker extends BaseBroker
         )
         .on('data', (event) => this.handleEvent(event))
         .on('error', (error) => this.handleError(null, error))
-        .on('close', (error) => this.handleError(null, error)) as ExtendedPersistentSubscription;
+        .on('close', (error) =>
+          this.handleError(null, error)
+        )) as ExtendedPersistentSubscription;
       resolved.isLive = true;
 
       return resolved;
@@ -221,13 +227,15 @@ export class EventStoreBroker extends BaseBroker
       `Standard subscription subscribing to stream [${opts.streamName}]`
     );
     try {
-      const resolved = await this.eventStore
+      const resolved = (await this.eventStore
         .client()
         .subscribeToStream(opts.streamName, opts.options, opts.readableOptions)
         .on('data', (event) => this.handleEvent(event))
         .on('confirmation', () => this.onLiveProcessingStarted())
         .on('error', (error) => this.handleError(null, error))
-        .on('close', (error) => this.handleError(null, error)) as ExtendedStandardSubscription;
+        .on('close', (error) =>
+          this.handleError(null, error)
+        )) as ExtendedStandardSubscription;
 
       resolved.isLive = true;
       return resolved;
@@ -294,12 +302,8 @@ export class EventStoreBroker extends BaseBroker
     this.logger.error('onDropped => ' + error.message);
   }
 
-
-  private async handleEvent(
-    payload: ResolvedEvent
-  ) {
+  private async handleEvent(payload: ResolvedEvent) {
     try {
-
       const { event } = payload;
 
       if (!event || !event.isJson) {
@@ -330,5 +334,4 @@ export class EventStoreBroker extends BaseBroker
       this.logger.error(e);
     }
   }
-
 }

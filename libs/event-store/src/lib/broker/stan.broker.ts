@@ -18,11 +18,15 @@
  * Last modified:     14/02/2021, 17:24
  ******************************************************************************/
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { EventBus, IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
+import {
+  EventBus,
+  IEvent,
+  IEventPublisher,
+  IMessageSource,
+} from '@nestjs/cqrs';
 import { Subject } from 'rxjs';
 import {
   EventStoreFeatureOptions,
-  EventStoreModuleOptions,
   StanPersistentSubscription,
   StanStandardSubscription,
   EventStoreSubscription,
@@ -36,8 +40,9 @@ import { ProvidersConstants } from '../event-store.constant';
 import { Message } from '../external/stan.types';
 
 @Injectable()
-export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleInit, IMessageSource {
-
+export class StanBroker
+  extends BaseBroker
+  implements IEventPublisher, OnModuleInit, IMessageSource {
   private persistentSubscriptions: ExtendedStanPersistentSubscription[] = [];
   private persistentSubscriptionsCount: number;
 
@@ -46,22 +51,20 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
 
   constructor(
     private readonly stan: StanClient,
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions,
     @Inject(ProvidersConstants.EVENT_STORE_FEATURE_CONFIG)
     private readonly featureStreamConfig: EventStoreFeatureOptions,
-    private readonly eventsBus: EventBus,
+    private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, StanBroker.name);
-    this.init(featureStreamConfig);
   }
 
-  private init(featureStreamConfig: EventStoreFeatureOptions) {
+  private async init(featureStreamConfig: EventStoreFeatureOptions) {
     if (!this.stan.connected) {
-      this.stan.connect();
+      await this.stan.connect();
     }
 
-    const subs = (featureStreamConfig.subscriptions || []) as EventStoreSubscription[];
+    const subs = (featureStreamConfig.subscriptions ||
+      []) as EventStoreSubscription[];
 
     if (subs.length > 0) {
       const persistentSubscriptions = subs.filter((sub) => {
@@ -112,13 +115,14 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
     this.subject$ = subject;
   }
 
-  onModuleInit(): any {
+  async onModuleInit() {
+    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;
   }
 
-  async publish<T extends IEvent & {streamName?: string}>(event: T) {
+  async publish<T extends IEvent & { streamName?: string }>(event: T) {
     if (!event) {
       return;
     }
@@ -136,7 +140,7 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
     }
   }
 
-  async publishAll<T extends IEvent& {streamName?: string}>(events: T[]) {
+  async publishAll<T extends IEvent & { streamName?: string }>(events: T[]) {
     if ((events || []).length === 0) {
       return;
     }
@@ -163,14 +167,16 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
        Connecting to persistent subscription group [${opts.groupName}] on stream [${opts.streamName}]!
       `);
 
-      const resolved = await this.stan
+      const resolved = (await this.stan
         .client()
         .subscribe(opts.streamName, opts.groupName, opts.options)
         .on('message', (event) => this.handleEvent(event))
         .on('ready', () => this.onLiveProcessingStarted())
         .on('error', (error) => this.handleError(error))
         .on('unsubscribed', (error) => this.handleError(error))
-        .on('close', (error) => this.handleError(error)) as ExtendedStanPersistentSubscription;
+        .on('close', (error) =>
+          this.handleError(error)
+        )) as ExtendedStanPersistentSubscription;
       resolved.isLive = true;
 
       return resolved;
@@ -186,14 +192,16 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
       `Standard subscription subscribing to stream [${opts.streamName}]`
     );
     try {
-      const resolved = await this.stan
+      const resolved = (await this.stan
         .client()
         .subscribe(opts.streamName, opts.options)
         .on('message', (event) => this.handleEvent(event))
         .on('ready', () => this.onLiveProcessingStarted())
         .on('error', (error) => this.handleError(error))
         .on('unsubscribed', (error) => this.handleError(error))
-        .on('closed', (error) => this.handleError(error)) as ExtendedStanStandardSubscription;
+        .on('closed', (error) =>
+          this.handleError(error)
+        )) as ExtendedStanStandardSubscription;
 
       resolved.isLive = true;
       return resolved;
@@ -251,17 +259,16 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
     );
   }
 
-  private async handleEvent(
-    payload: Message
-  ) {
+  private async handleEvent(payload: Message) {
     try {
-
       if (!payload) {
         this.logger.error('Received event that could not be resolved!');
         return;
       }
 
-      const data: any & {handlerType?: string} = JSON.parse(payload.getRawData().toString());
+      const data: any & { handlerType?: string } = JSON.parse(
+        payload.getRawData().toString()
+      );
       const eventType = payload.getSubject();
 
       const handler = this.eventHandlers[eventType];
@@ -280,7 +287,7 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
         }
 
         if (this.featureStreamConfig.notify?.ignoreAck) {
-          return
+          return;
         }
 
         payload.ack();
@@ -292,9 +299,7 @@ export class StanBroker extends BaseBroker implements IEventPublisher, OnModuleI
     }
   }
 
-  private handleError(
-    error: Error
-  ) {
+  private handleError(error: Error) {
     this.logger.error('onDropped => ' + error.message);
   }
 }

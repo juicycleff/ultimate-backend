@@ -18,30 +18,29 @@
  * Last modified:     14/02/2021, 16:40
  ******************************************************************************/
 
-import { EventStoreModuleOptions, IBrokerClient, StanClientOptions } from '../interface';
+import { IBrokerClient, StanClientOptions } from '../interface';
 import * as uuid from 'uuid';
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ProvidersConstants } from '../event-store.constant';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { Stan } from '../external/stan.types';
 import { defer } from 'rxjs';
+import { EventStoreConfig } from '../event-store.config';
 
 let stanPackage: any = {};
 
 @Injectable()
-export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDestroy {
+export class StanClient
+  implements IBrokerClient<Stan>, OnModuleInit, OnModuleDestroy {
   _client: Stan;
   connected = false;
 
   private logger = new LoggerUtil(this.constructor.name);
 
-  constructor(
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions
-  ) {
-    stanPackage = loadPackage('node-nats-streaming', StanClient.name, () => require('node-nats-streaming'));
-    this.logger = new LoggerUtil(this.constructor.name, options.debug);
+  constructor(private readonly options: EventStoreConfig) {
+    stanPackage = loadPackage('node-nats-streaming', StanClient.name, () =>
+      require('node-nats-streaming')
+    );
   }
 
   public client(): Stan {
@@ -55,13 +54,17 @@ export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDe
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        const broker = this.options.broker as StanClientOptions;
+        const broker = this.options.config?.broker as StanClientOptions;
         let clientId = uuid.v4();
         if (clientId) {
           clientId = broker.clientId;
         }
 
-        this._client = stanPackage.connect(broker.clusterId, clientId, broker.options);
+        this._client = stanPackage.connect(
+          broker.clusterId,
+          clientId,
+          broker.options
+        );
 
         this._client.on('connect', () => {
           this.connected = true;
@@ -80,8 +83,8 @@ export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDe
       })
         .pipe(
           handleRetry(
-            this.options.retryAttempts,
-            this.options.retryDelays,
+            this.options.config?.retryAttempts,
+            this.options.config?.retryDelays,
             'StanClient'
           )
         )
@@ -96,7 +99,11 @@ export class StanClient implements IBrokerClient<Stan>, OnModuleInit, OnModuleDe
     this.close();
   }
 
-  onModuleInit(): any {
-    this.connect();
+  async onModuleInit() {
+    this.logger = new LoggerUtil(
+      this.constructor.name,
+      this.options.config?.debug
+    );
+    await this.connect();
   }
 }

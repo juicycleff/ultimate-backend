@@ -42,10 +42,6 @@ describe('Cloud Utils', () => {
       ttlInSeconds: 30,
       enabled: true,
     });
-    expect(result.discovery).toEqual({
-      scheme: 'http',
-      failFast: true,
-    });
 
     result = validateOptions({
       ...result,

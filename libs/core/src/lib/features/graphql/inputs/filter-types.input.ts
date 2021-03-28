@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 import { Field, InputType, GraphQLISODateTime } from '@nestjs/graphql';
+import { ClassType } from '@ultimate-backend/common';
 
 @InputType()
 export class OtherComparisonFilter {
@@ -62,13 +63,19 @@ export class StringComparisonFilter {
   _GTE?: string;
 }
 
-@InputType()
-export class EnumComparisonFilter<T> {
-  @Field({ nullable: true })
-  _EQ?: string;
+export function enumComparisonFilterBuilder<T extends any>(
+  TClass?: ClassType<Partial<T>>
+): any {
+  @InputType()
+  class EnumComparisonFilter {
+    @Field(() => TClass, { nullable: true })
+    _EQ?: typeof TClass;
 
-  @Field({ nullable: true })
-  _NE?: string;
+    @Field(() => TClass, { nullable: true })
+    _NE?: typeof TClass;
+  }
+
+  return EnumComparisonFilter;
 }
 
 @InputType()

@@ -20,11 +20,13 @@
 
 import { MdnsRegistration } from './mdns-registration';
 import { MdnsDiscoveryOptions } from './interfaces';
-import { Service } from '@ultimate-backend/common';
+import { Service } from 'bonjour';
 
-const newService: Service = {
-  address: '127.0.0.1',
-  id: 'consul-service',
+const newService: Service & any = {
+  host: '127.0.0.1',
+  txt: {
+    serviceId: 'consul-service',
+  },
   port: 9000,
   name: 'service',
 };
@@ -39,7 +41,7 @@ const mdnsDiscoveryOptions: MdnsDiscoveryOptions = {
 describe('MdnsRegistration', () => {
   it('can get registration host', async () => {
     let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
-    expect(result.getHost()).toEqual(newService.address);
+    expect(result.getHost()).toEqual(newService.host);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     result = new MdnsRegistration({ address: null }, mdnsDiscoveryOptions);
@@ -72,7 +74,7 @@ describe('MdnsRegistration', () => {
   it('can get registration uri', async () => {
     const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
     expect(result.getUri()).toEqual(
-      `${mdnsDiscoveryOptions.scheme}://${newService.address}:${newService.port}`
+      `${mdnsDiscoveryOptions.scheme}://${newService.host}:${newService.port}`
     );
   });
 
@@ -83,14 +85,14 @@ describe('MdnsRegistration', () => {
 
   it('can get registration instance id', async () => {
     let result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
-    expect(result.getInstanceId()).toEqual(newService.id);
+    expect(result.getInstanceId()).toEqual("consul-service");
     result = new MdnsRegistration(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       { id: 'my-instance', txt: { serviceId: 'my-instance' } },
       mdnsDiscoveryOptions
     );
-    expect(result.getInstanceId()).toEqual('');
+    expect(result.getInstanceId()).toEqual('my-instance');
   });
 
   it('can get registration service id', async () => {
@@ -100,6 +102,6 @@ describe('MdnsRegistration', () => {
 
   it('can get registration metadata', async () => {
     const result = new MdnsRegistration(newService, mdnsDiscoveryOptions);
-    expect(result.getMetadata()).toEqual(null);
+    expect(result.getMetadata()).toEqual({ serviceId: "consul-service"});
   });
 });

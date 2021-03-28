@@ -22,8 +22,13 @@ import { Test } from '@nestjs/testing';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreBroker } from './event-store.broker';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreBrokerTypes, EventStoreFeatureOptions, EventStoreModuleOptions } from '../interface';
+import {
+  EventStoreBrokerTypes,
+  EventStoreFeatureOptions,
+  EventStoreModuleOptions,
+} from '../interface';
 import { EventStoreClient } from '../client';
+import { EventStoreConfig } from '../event-store.config';
 
 describe('EventStoreBroker', () => {
   let service: EventStoreBroker;
@@ -38,17 +43,18 @@ describe('EventStoreBroker', () => {
             broker: {
               type: EventStoreBrokerTypes.EventStore,
               channelCredentials: {
-                insecure: true
+                insecure: true,
               },
               connectionSettings: {
                 endpoint: {
                   address: 'localhost',
                   port: 2113,
-                }
-              }
-            }
+                },
+              },
+            },
           } as EventStoreModuleOptions,
         },
+        EventStoreConfig,
         {
           provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
           useValue: {

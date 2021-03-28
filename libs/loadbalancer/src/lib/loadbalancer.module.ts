@@ -53,8 +53,9 @@ export class LoadBalancerModule {
       providers: [
         {
           provide: LOAD_BALANCE_CONFIG_OPTIONS,
-          useValue: new LoadbalancerConfig(options),
+          useValue: options || {},
         },
+        LoadbalancerConfig,
         StrategyDiscovery,
         RoundRobinStrategy,
         RandomStrategy,
@@ -76,9 +77,9 @@ export class LoadBalancerModule {
       provide: LOAD_BALANCE_CONFIG_OPTIONS,
       useFactory: async (modOptions: LoadBalancerModuleOptions) => {
         customStrategies = modOptions.customStrategies;
-        return new LoadbalancerConfig(modOptions || { strategy: 'RoundRobin' });
+        return modOptions;
       },
-      inject: [LOAD_BALANCE_CONFIG_OPTIONS],
+      inject: [LOAD_BALANCE_MODULE_OPTIONS],
     };
 
     const asyncProviders = this.createAsyncProviders(options);
@@ -95,6 +96,7 @@ export class LoadBalancerModule {
         WeightedRoundRobinStrategy,
         WeightedRandomStrategy,
         ...(customStrategies || []),
+        LoadbalancerConfig,
         LoadBalancerClient,
         StrategyRegistry,
       ],

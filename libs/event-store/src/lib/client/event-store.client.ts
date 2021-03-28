@@ -18,36 +18,33 @@
  * Last modified:     14/02/2021, 15:55
  ******************************************************************************/
 
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EventStoreDBClient } from '@eventstore/db-client';
-import {
-  EventStoreClientOptions,
-  EventStoreModuleOptions,
-  IBrokerClient,
-} from '../interface';
-import { ProvidersConstants } from '../event-store.constant';
+import { EventStoreClientOptions, IBrokerClient } from '../interface';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { defer } from 'rxjs';
+import { EventStoreConfig } from '../event-store.config';
 
 /**
  * @description Event store setup from eventstore.org
  */
 @Injectable()
-export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnModuleInit, OnModuleDestroy {
+export class EventStoreClient
+  implements IBrokerClient<EventStoreDBClient>, OnModuleInit, OnModuleDestroy {
   _client: EventStoreDBClient;
   connected = false;
 
-  private logger = new LoggerUtil('EventStoreClient');
+  private logger = new LoggerUtil(EventStoreClient.name);
 
-  constructor(
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions
-  ) {
-    this.logger = new LoggerUtil(this.constructor.name, options.debug);
-  }
+  constructor(private readonly options: EventStoreConfig) {}
 
-  onModuleInit() {
-    this.connect();
+  async onModuleInit() {
+    this.logger = new LoggerUtil(
+      EventStoreClient.name,
+      this.options.config?.debug
+    );
+
+    await this.connect();
   }
 
   public client(): EventStoreDBClient {
@@ -61,15 +58,21 @@ export class EventStoreClient implements IBrokerClient<EventStoreDBClient>, OnMo
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        const broker = this.options.broker as EventStoreClientOptions;
-        this._client = new EventStoreDBClient(broker.connectionSettings as any, broker.channelCredentials, broker.defaultUserCredentials);
+        this.logger.log('EventStoreClient client is connecting');
+        const broker = this.options.config?.broker as EventStoreClientOptions;
+        this._client = new EventStoreDBClient(
+          broker.connectionSettings as any,
+          broker.channelCredentials,
+          broker.defaultUserCredentials
+        );
         this.connected = true;
+        this.logger.log('EventStoreClient client connected successfully');
       })
         .pipe(
           handleRetry(
-            this.options.retryAttempts,
-            this.options.retryDelays,
-            'EventStoreClient'
+            this.options.config?.retryAttempts,
+            this.options.config?.retryDelays,
+            EventStoreClient.name
           )
         )
         .toPromise();

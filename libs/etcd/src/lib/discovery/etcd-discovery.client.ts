@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import { EtcdClient } from '../etcd.client';
 import { Injectable, Logger } from '@nestjs/common';
-import { DiscoveryClient, PlainObject, ServiceInstance } from '@ultimate-backend/common';
+import {
+  DiscoveryClient,
+  PlainObject,
+  ServiceInstance,
+} from '@ultimate-backend/common';
 import { EtcdServiceInstance } from './etcd-service.instance';
 
 @Injectable()
@@ -71,7 +75,7 @@ export class EtcdDiscoveryClient implements DiscoveryClient {
   }
 
   private getMetadata(tags: string[]): PlainObject {
-    return {}
+    return {};
   }
 
   async getAllInstances(): Promise<ServiceInstance[]> {
@@ -84,7 +88,10 @@ export class EtcdDiscoveryClient implements DiscoveryClient {
   }
 
   async getServices(): Promise<string[]> {
-    const services = await this.etcd.namespace(this.namespace).getAll().buffers();
+    const services = await this.etcd.client
+      .namespace(this.namespace)
+      .getAll()
+      .buffers();
     return Object.keys(services);
   }
 }

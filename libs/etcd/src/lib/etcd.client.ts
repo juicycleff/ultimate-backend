@@ -18,31 +18,56 @@
  * Last modified:     07/02/2021, 12:15
  ******************************************************************************/
 
-import { BeforeApplicationShutdown, Inject, Injectable } from '@nestjs/common';
-import { IReactiveClient } from '@ultimate-backend/common';
+import {
+  BeforeApplicationShutdown,
+  Injectable,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
+import { handleRetry, IReactiveClient } from '@ultimate-backend/common';
 import { Etcd3 } from 'etcd3';
-import { ETCD_CONFIG_OPTIONS } from './etcd.constant';
-import { EtcdModuleOptions } from './etcd-module.options';
+import { EtcdConfig } from './etcd.config';
+import { defer } from 'rxjs';
 
 @Injectable()
 export class EtcdClient
-  extends Etcd3
-  implements IReactiveClient<Etcd3>, BeforeApplicationShutdown {
-  constructor(
-    @Inject(ETCD_CONFIG_OPTIONS) private readonly opts: EtcdModuleOptions
-  ) {
-    super(opts.etcdOptions);
-  }
+  implements IReactiveClient<Etcd3>, OnModuleInit, BeforeApplicationShutdown {
+  private logger = new Logger(EtcdClient.name);
+  client: Etcd3;
+
+  constructor(private readonly opts: EtcdConfig) {}
 
   close(): any | Promise<void> {
-    super.close();
+    if (this.client) {
+      this.client.close();
+    }
   }
 
   async connect(): Promise<void> {
-    throw new Error('not implemented');
+    try {
+      return await defer(() => {
+        this.logger.log('EtcdClient client started');
+        this.client = new Etcd3(this.opts.config.etcdOptions);
+        this.logger.log('EtcdClient client connected successfully');
+      })
+        .pipe(
+          handleRetry(
+            this.opts.config.retryAttempts,
+            this.opts.config.retryDelays,
+            EtcdClient.name
+          )
+        )
+        .toPromise();
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 
   beforeApplicationShutdown(signal?: string): any {
     this.close();
+  }
+
+  async onModuleInit() {
+    await this.connect();
   }
 }

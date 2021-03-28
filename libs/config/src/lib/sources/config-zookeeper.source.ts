@@ -17,40 +17,40 @@
  * File name:         config-zookeeper.source.ts
  * Last modified:     07/02/2021, 11:31
  ******************************************************************************/
-
 import { ZookeeperConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { InjectConfigOptions } from '../decorators/inject-config.decorator';
+import {
+  LoggerUtil,
+  objectToStringFormat,
+  stringToObjectType,
+} from '@ultimate-backend/common';
 import { ConfigOptions } from '../config-options';
 import { ConfigSource, ConfigStore } from '@ultimate-backend/config';
 import { ZookeeperClient, Zookeeper } from '@ultimate-backend/zookeeper';
-import { objectToStringFormat, stringToObjectType } from '../utils';
 import { ConfigSetException } from '../exceptions';
 
 @Injectable()
 export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, any> = new Map();
-  private readonly logger = new LoggerUtil(ConfigZookeeperSource.name);
+  private logger = new LoggerUtil(ConfigZookeeperSource.name);
   private defaultNamespace: string;
 
   constructor(
     private readonly zookeeper: ZookeeperClient,
-    @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
   ) {
-    this.logger = new LoggerUtil(
-      ConfigZookeeperSource.name,
-      options.config.debug
-    );
-    this.defaultNamespace = options.config.namespace;
-
     this.storeUpdate.bind(this);
   }
 
   async onModuleInit() {
+    this.logger = new LoggerUtil(
+      ConfigZookeeperSource.name,
+      this.options.config.debug
+    );
+    this.defaultNamespace = this.options.config.namespace;
+
     this.zookeeper.once('connect', async () => {
       await this.watchAllConfigs();
     });

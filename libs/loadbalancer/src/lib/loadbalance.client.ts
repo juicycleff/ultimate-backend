@@ -2,12 +2,12 @@ import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
   BaseStrategy,
+  HttpClientExecuteException,
   ServerCriticalException,
   ServiceInstance,
   ServiceStore,
 } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from './core';
-import { InjectLoadbalancerConfig } from './decorators';
 import { LoadbalancerConfig } from './loadbalancer.config';
 import { StrategyRegistry } from './strategy.registry';
 import { ServiceInstancePool } from './service-instance-pool';
@@ -17,7 +17,6 @@ import { Observable } from 'rxjs';
 export class LoadBalancerClient
   implements ILoadBalancerClient, ServiceInstanceChooser, OnModuleInit {
   constructor(
-    @InjectLoadbalancerConfig()
     private readonly properties: LoadbalancerConfig,
     private readonly serviceStore: ServiceStore,
     private readonly registry: StrategyRegistry
@@ -116,6 +115,10 @@ export class LoadBalancerClient
 
     const startTime = new Date().getTime();
     try {
+      if (req.arguments.length === 0) {
+        throw new HttpClientExecuteException('missing http request');
+      }
+
       const firstReq = req.arguments[0];
       const path = req.arguments[1];
       const opts = req.arguments[2];

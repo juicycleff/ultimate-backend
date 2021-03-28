@@ -17,14 +17,23 @@
  * File name:         loadbalancer.config.ts
  * Last modified:     19/03/2021, 12:08
  ******************************************************************************/
-import { LoadBalancerModuleOptions } from '@ultimate-backend/loadbalancer';
-import { OnModuleInit } from '@nestjs/common';
+import { BootConfig } from '@ultimate-backend/boostrap';
+import { LoadBalancerModuleOptions } from './loadbalancer-module.options';
+import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
+import { merge, isPlainObject, isEmpty } from 'lodash';
+import { InjectLoadbalancerOption } from './decorators';
 
+@Injectable()
 export class LoadbalancerConfig implements OnModuleInit {
-  private options: LoadBalancerModuleOptions;
-  private CONFIG_PREFIX = 'loadbalance';
+  private options: LoadBalancerModuleOptions = {
+    strategy: 'RandomStrategy',
+  };
+  private CONFIG_PREFIX = 'loadbalancer';
 
-  constructor(private readonly opts: LoadBalancerModuleOptions) {}
+  constructor(
+    @InjectLoadbalancerOption() private opts: LoadBalancerModuleOptions,
+    @Optional() private readonly bootConfig: BootConfig
+  ) {}
 
   get config(): LoadBalancerModuleOptions {
     return this.options;
@@ -51,8 +60,22 @@ export class LoadbalancerConfig implements OnModuleInit {
   }
 
   onModuleInit(): any {
+    let _tempConfig = {};
+    if (this.bootConfig) {
+      _tempConfig = this.bootConfig.get<LoadBalancerModuleOptions>(
+        this.CONFIG_PREFIX,
+        this.opts
+      );
+    }
+
     if (this.opts) {
-      this.options = Object.assign(this.opts, this.options);
+      this.options = merge(this.opts, this.options, _tempConfig);
+    }
+
+    if (!isPlainObject(this.options) || isEmpty(this.options)) {
+      throw new Error(
+        'loadbalancer configuration option is missing in bootstrap and module config'
+      );
     }
   }
 }

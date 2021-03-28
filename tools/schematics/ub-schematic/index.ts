@@ -18,7 +18,7 @@ function generateNestApplication(schema: any): Rule {
 
 function generateServiceStructure(schema: any): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    context.logger.info('adding NOTES.md to lib');
+    context.logger.info('adding NOTES.md to bin');
 
     const templateSource = apply(url('./files'), [
       move(getProjectConfig(tree, schema.name).root),

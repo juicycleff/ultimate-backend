@@ -24,9 +24,7 @@ import {
   IReactiveClient,
   LoggerUtil,
 } from '@ultimate-backend/common';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ConsulModuleOptions } from './consul-module.options';
-import { CONSUL_CONFIG_OPTIONS } from './consul.constant';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import {
   Acl,
   Agent,
@@ -40,6 +38,7 @@ import {
   Watch,
 } from 'consul';
 import { defer } from 'rxjs';
+import { ConsulConfig } from './consul.config';
 
 @Injectable()
 export class ConsulClient
@@ -64,12 +63,7 @@ export class ConsulClient
    * Creates an instance of ConsulClient.
    * @memberof ConsulClient
    */
-  constructor(
-    @Inject(CONSUL_CONFIG_OPTIONS)
-    public readonly options: ConsulModuleOptions
-  ) {
-    this.logger = new LoggerUtil('ConsulService', this.options.debug);
-  }
+  constructor(public readonly options: ConsulConfig) {}
 
   /**
    * Lock helper.
@@ -120,8 +114,8 @@ export class ConsulClient
       })
         .pipe(
           handleRetry(
-            this.options.retryAttempts,
-            this.options.retryDelays,
+            this.options.config.retryAttempts,
+            this.options.config.retryDelays,
             ConsulClient.name
           )
         )
@@ -132,6 +126,7 @@ export class ConsulClient
   }
 
   async onModuleInit(): Promise<void> {
+    this.logger = new LoggerUtil(ConsulClient.name, this.options.config?.debug);
     await this.connect();
   }
 }

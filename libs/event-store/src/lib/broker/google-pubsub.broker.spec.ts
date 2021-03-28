@@ -21,9 +21,14 @@
 import { Test } from '@nestjs/testing';
 import { GooglePubsubBroker } from './google-pubsub.broker';
 import { ProvidersConstants } from '../event-store.constant';
-import { EventStoreBrokerTypes, EventStoreFeatureOptions, EventStoreModuleOptions } from '../interface';
+import {
+  EventStoreBrokerTypes,
+  EventStoreFeatureOptions,
+  EventStoreModuleOptions,
+} from '../interface';
 import { GooglePubsubClient } from '../client';
 import { CqrsModule } from '@nestjs/cqrs';
+import { EventStoreConfig } from '../event-store.config';
 
 describe('GooglePubsubBroker', () => {
   let service: GooglePubsubBroker;
@@ -39,11 +44,12 @@ describe('GooglePubsubBroker', () => {
             broker: {
               type: EventStoreBrokerTypes.GOOGLE_PUB_SUB,
               options: {
-                projectId: 'some-id'
-              }
-            }
+                projectId: 'some-id',
+              },
+            },
           } as EventStoreModuleOptions,
         },
+        EventStoreConfig,
         {
           provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
           useValue: {

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 
 import { AppService } from './app.service';
 import { HttpClient, HttpServiceClient } from '@ultimate-backend/client';
@@ -11,8 +11,10 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getData() {
-    return this.appService.getData();
+  getData(@Req() request: Request) {
+    const username = request.headers['username'];
+    const resId = parseInt(request.headers['res-id']);
+    return this.appService.getData(username, 'GET', resId);
   }
 
   @Get('/example')

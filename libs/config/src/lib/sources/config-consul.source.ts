@@ -25,9 +25,11 @@ import { consul, ConsulClient } from '@ultimate-backend/consul';
 import { ConfigOptions } from '../config-options';
 import { ConfigStore } from '../config.store';
 import { ConfigSource } from '../config.enum';
-import { objectToStringFormat, stringToObjectType } from '../utils';
-import { InjectConfigOptions } from '../decorators/inject-config.decorator';
-import { LoggerUtil } from '@ultimate-backend/common';
+import {
+  LoggerUtil,
+  objectToStringFormat,
+  stringToObjectType,
+} from '@ultimate-backend/common';
 import { ConfigSetException } from '../exceptions';
 
 interface KVResult {
@@ -46,18 +48,19 @@ interface KVResult {
 @Injectable()
 export class ConfigConsulSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, consul.Watch> = new Map();
-  private readonly logger = new LoggerUtil(ConfigConsulSource.name);
+  private logger = new LoggerUtil(ConfigConsulSource.name);
 
   constructor(
     private readonly client: ConsulClient,
-    @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
-  ) {
-    this.logger = new LoggerUtil(ConfigConsulSource.name, options.config.debug);
-  }
+  ) {}
 
   onModuleInit(): any {
+    this.logger = new LoggerUtil(
+      ConfigConsulSource.name,
+      this.options.config.debug
+    );
     this.watchAllConfigs();
   }
 
@@ -140,9 +143,11 @@ export class ConfigConsulSource implements IConfigSource, OnModuleInit {
 
       const watcher = this.watchers[key];
       watcher.on('change', (data: KVResult) => {
-        const parsedData = stringToObjectType(data.Value);
-        if (isPlainObject(parsedData)) {
-          this.store.merge(parsedData);
+        if (data?.Value) {
+          const parsedData = stringToObjectType(data.Value);
+          if (isPlainObject(parsedData)) {
+            this.store.merge(parsedData);
+          }
         }
       });
       watcher.on('error', () => {

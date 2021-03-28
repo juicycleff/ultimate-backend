@@ -42,6 +42,9 @@
     "event-store-example": { "tags": [] },
     "workspace": { "tags": [] },
     "plugin-nx": { "tags": [] },
-    "plugin-nx-e2e": { "tags": [], "implicitDependencies": ["plugin-nx"] }
+    "plugin-nx-e2e": { "tags": [], "implicitDependencies": ["plugin-nx"] },
+    "gateway": { "tags": [] },
+    "create-ub-project": { "tags": [] },
+    "bootstrap": { "tags": [] }
   }
 }

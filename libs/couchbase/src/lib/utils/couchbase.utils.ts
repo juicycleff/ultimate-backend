@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         couchbase.utils.ts
+ * File name:         couchbase.find-type.utils.ts
  * Last modified:     20/01/2021, 11:17
  ******************************************************************************/
 
@@ -24,38 +24,38 @@ import { Logger } from '@nestjs/common';
 import { delay, retryWhen, scan } from 'rxjs/operators';
 
 export function getModelToken(model: string) {
-    return `${model}Model`;
+  return `${model}Model`;
 }
 
 export function getConnectionToken(name?: string) {
-    return name && name !== DEFAULT_CLUSTER_CONNECTION
-        ? `${name}Connection`
-        : DEFAULT_CLUSTER_CONNECTION;
+  return name && name !== DEFAULT_CLUSTER_CONNECTION
+    ? `${name}Connection`
+    : DEFAULT_CLUSTER_CONNECTION;
 }
 
 export function handleRetry(
-    retryAttempts = 9,
-    retryDelay = 3000,
+  retryAttempts = 9,
+  retryDelay = 3000
 ): <T>(source: Observable<T>) => Observable<T> {
-    const logger = new Logger('CouchbaseModule');
-    return <T>(source: Observable<T>) =>
-        source.pipe(
-            retryWhen((e) =>
-                e.pipe(
-                    scan((errorCount, error) => {
-                        logger.error(
-                            `Unable to connect to the database. Retrying (${
-                                errorCount + 1
-                            })...`,
-                            '',
-                        );
-                        if (errorCount + 1 >= retryAttempts) {
-                            throw error;
-                        }
-                        return errorCount + 1;
-                    }, 0),
-                    delay(retryDelay),
-                ),
-            ),
-        );
+  const logger = new Logger('CouchbaseModule');
+  return <T>(source: Observable<T>) =>
+    source.pipe(
+      retryWhen((e) =>
+        e.pipe(
+          scan((errorCount, error) => {
+            logger.error(
+              `Unable to connect to the database. Retrying (${
+                errorCount + 1
+              })...`,
+              ''
+            );
+            if (errorCount + 1 >= retryAttempts) {
+              throw error;
+            }
+            return errorCount + 1;
+          }, 0),
+          delay(retryDelay)
+        )
+      )
+    );
 }

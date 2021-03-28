@@ -17,7 +17,7 @@
  * File name:         pool.interface.ts
  * Last modified:     04/03/2021, 23:10
  ******************************************************************************/
-import { IService } from '@ultimate-backend/common';
+import { IService } from '../../interfaces/service.interface';
 
 export interface ServicePool {
   services: IService[];

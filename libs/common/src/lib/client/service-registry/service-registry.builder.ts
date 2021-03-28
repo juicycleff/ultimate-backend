@@ -1,7 +1,8 @@
 import { Registration } from './registration';
 import { DiscoveryOptions } from './discovery.interface';
 import { HeartbeatOptions } from './heartbeat.interface';
-import { PlainObject, ServiceRegistry } from '@ultimate-backend/common';
+import { ServiceRegistry } from '../service-registry/service-registry';
+import { PlainObject } from '../../utils';
 
 export interface ServiceRegistryBuilder {
   heartbeatOptions(options: HeartbeatOptions): ServiceRegistryBuilder;

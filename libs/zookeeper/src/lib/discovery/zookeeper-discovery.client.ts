@@ -17,10 +17,14 @@
  * File name:         zookeeper-discovery.client.ts
  * Last modified:     17/03/2021, 01:15
  ******************************************************************************/
-import { DiscoveryClient, PlainObject, ServiceInstance } from '@ultimate-backend/common';
+import {
+  DiscoveryClient,
+  PlainObject,
+  ServiceInstance,
+} from '@ultimate-backend/common';
 import { Injectable, Logger } from '@nestjs/common';
 import * as _ from 'lodash';
-import { ZookeeperClient } from '../../';
+import { ZookeeperClient } from '../zookeeper.client';
 import { ZookeeperServiceInstance } from './zookeeper-service.instance';
 
 @Injectable()
@@ -90,7 +94,7 @@ export class ZookeeperDiscoveryClient implements DiscoveryClient {
   }
 
   private getMetadata(tags: string[]): PlainObject {
-    return {}
+    return {};
   }
 
   async getAllInstances(): Promise<ServiceInstance[]> {

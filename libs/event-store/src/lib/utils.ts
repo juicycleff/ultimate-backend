@@ -14,28 +14,36 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         utils.ts
+ * File name:         find-type.utils.ts
  * Last modified:     14/02/2021, 18:14
  ******************************************************************************/
 
-import { EVENT_STORE_MODULE_OPTION, ProvidersConstants } from './event-store.constant';
+import {
+  EVENT_STORE_MODULE_OPTION,
+  ProvidersConstants,
+} from './event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from './interface';
 import { EventStoreClient, StanClient } from './client';
 import { Provider } from '@nestjs/common';
+import { EventStoreConfig } from './event-store.config';
 
 export function getClientProvider(option: EventStoreModuleOptions) {
+  const providers = [];
   switch (option.broker.type) {
     case EventStoreBrokerTypes.EventStore:
-      return EventStoreClient;
+      providers.push(EventStoreClient);
+      break;
     case EventStoreBrokerTypes.STAN:
-      return StanClient;
+      providers.push(StanClient);
+      break;
     default:
       throw new Error('event store broker type not supported');
   }
+  return providers;
 }
 
 export function getClientProviderAsync(): Provider {
-  return  {
+  return {
     provide: ProvidersConstants.EVENT_STORE_CLIENT,
     useFactory: (esOptions: EventStoreModuleOptions): any => {
       switch (esOptions.broker.type) {
@@ -47,6 +55,24 @@ export function getClientProviderAsync(): Provider {
           throw new Error('event store broker type not supported');
       }
     },
-    inject: [EVENT_STORE_MODULE_OPTION]
+    inject: [EVENT_STORE_MODULE_OPTION],
+  };
+}
+
+export function getClientProviderAsyncBoot(): Provider {
+  return {
+    provide: ProvidersConstants.EVENT_STORE_CLIENT,
+    useFactory: (option: EventStoreConfig): any => {
+      console.log('event store***********************', option);
+      switch (option.config.broker.type) {
+        case EventStoreBrokerTypes.EventStore:
+          return EventStoreClient;
+        case EventStoreBrokerTypes.STAN:
+          return StanClient;
+        default:
+          throw new Error('event store broker type not supported');
+      }
+    },
+    inject: [ProvidersConstants.EVENT_STORE_CONFIG],
   };
 }

@@ -29,7 +29,7 @@ export interface PolarFile {
 
 export interface PermissionsModuleOptions {
   oso?: Options;
-  polars: string | string[] | PolarFile | PolarFile[];
+  polars: PolarFile | PolarFile[];
   debug?: boolean;
 }
 

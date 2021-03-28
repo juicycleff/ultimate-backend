@@ -24,5 +24,8 @@ module.exports = {
     '<rootDir>/apps/event-store-example',
     '<rootDir>/libs/plugin-nx',
     '<rootDir>/apps/plugin-nx-e2e',
+    '<rootDir>/libs/gateway',
+    '<rootDir>/libs/create-ub-project',
+    '<rootDir>/libs/bootstrap',
   ],
 };

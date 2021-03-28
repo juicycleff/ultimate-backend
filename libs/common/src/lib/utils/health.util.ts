@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 import * as os from 'os';
-import { getIpList } from '@ultimate-backend/common';
+import { getIpList } from '../utils/iplist';
 
 const UB_VERSION = require('../package.json').version;
 

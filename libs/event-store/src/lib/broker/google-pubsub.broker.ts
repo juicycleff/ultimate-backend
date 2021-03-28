@@ -18,17 +18,17 @@
  * Last modified:     14/02/2021, 18:26
  ******************************************************************************/
 
-import { EventBus, IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
 import {
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
+  EventBus,
+  IEvent,
+  IEventPublisher,
+  IMessageSource,
+} from '@nestjs/cqrs';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Subject } from 'rxjs';
 import * as uuid from 'uuid';
 import {
   EventStoreFeatureOptions,
-  EventStoreModuleOptions,
   EventStoreSubscriptionType,
   ExtendedPersistentSubscription,
   ExtendedPubsubStandardSubscription,
@@ -43,32 +43,28 @@ import { GooglePubsubClient } from '../client';
 import { Topic } from '../external/gpubsub.types';
 
 @Injectable()
-export class GooglePubsubBroker extends BaseBroker
+export class GooglePubsubBroker
+  extends BaseBroker
   implements IEventPublisher, OnModuleInit, IMessageSource {
-
   private standardSubscriptions: ExtendedPubsubStandardSubscription[] = [];
   private standardSubscriptionsCount: number;
 
-  private _cachedTopics = new Map<string, Topic>()
+  private _cachedTopics = new Map<string, Topic>();
   /**
    * Construct an {EventStoreBroker}
    * Parameters are automatically injected
    *
    * @param pubsubClient {EventStoreClient}
-   * @param options {EventStoreModuleOptions}
    * @param featureStreamConfig {EventStoreFeatureOptions}
    * @param eventsBus {EventBus}
    */
   constructor(
     private readonly pubsubClient: GooglePubsubClient,
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions,
     @Inject(ProvidersConstants.EVENT_STORE_FEATURE_CONFIG)
     private readonly featureStreamConfig: EventStoreFeatureOptions,
-    private readonly eventsBus: EventBus,
+    private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, GooglePubsubBroker.name);
-    this.init(featureStreamConfig);
   }
 
   private async init(featureStreamConfig: EventStoreFeatureOptions) {
@@ -76,7 +72,8 @@ export class GooglePubsubBroker extends BaseBroker
       await this.pubsubClient.connect();
     }
 
-    const subs = (featureStreamConfig.subscriptions || []) as GooglePubsubSubscription[];
+    const subs = (featureStreamConfig.subscriptions ||
+      []) as GooglePubsubSubscription[];
 
     if (subs.length > 0) {
       const standardSubscriptions = subs.filter((sub) => {
@@ -100,7 +97,6 @@ export class GooglePubsubBroker extends BaseBroker
     );
   }
 
-
   get isLive(): boolean {
     return this.allStandardSubscriptionsLive;
   }
@@ -109,18 +105,19 @@ export class GooglePubsubBroker extends BaseBroker
     this.subject$ = subject;
   }
 
-  onModuleInit(): any {
+  async onModuleInit() {
+    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;
   }
 
-  async publish<T extends IEvent & {streamName?: string}>(event: T) {
+  async publish<T extends IEvent & { streamName?: string }>(event: T) {
     if (!event) {
       return;
     }
 
-    const config = this.featureStreamConfig as GooglePubsubBrokerFeature
+    const config = this.featureStreamConfig as GooglePubsubBrokerFeature;
 
     let topicId = this.getStreamId(this.streamName);
     if (!config.strictStreamName) {
@@ -131,22 +128,19 @@ export class GooglePubsubBroker extends BaseBroker
       id: uuid.v4(),
       type: event.constructor.name,
       data: event,
-    }
+    };
 
     let topic: Topic;
 
     try {
-      topic = await this.pubsubClient
-        .client().topic(topicId);
+      topic = await this.pubsubClient.client().topic(topicId);
 
-      if (!await topic.exists() && !this._cachedTopics.has(topicId)) {
-        const [_topic] = await this.pubsubClient
-          .client().createTopic(topicId);
+      if (!(await topic.exists()) && !this._cachedTopics.has(topicId)) {
+        const [_topic] = await this.pubsubClient.client().createTopic(topicId);
         topic = _topic;
       }
     } catch (e) {
-      const [_topic] = await this.pubsubClient
-        .client().createTopic(topicId);
+      const [_topic] = await this.pubsubClient.client().createTopic(topicId);
       topic = _topic;
     }
 
@@ -156,14 +150,14 @@ export class GooglePubsubBroker extends BaseBroker
 
     try {
       await topic.publishJSON(eventPayload, {
-        originalEvenType: event.constructor.name
+        originalEvenType: event.constructor.name,
       });
     } catch (e) {
       this.logger.error(e);
     }
   }
 
-  async publishAll<T extends IEvent& {streamName?: string}>(events: T[]) {
+  async publishAll<T extends IEvent & { streamName?: string }>(events: T[]) {
     if ((events || []).length === 0) {
       return;
     }
@@ -188,17 +182,18 @@ export class GooglePubsubBroker extends BaseBroker
     let subscription: ExtendedPubsubStandardSubscription;
 
     try {
-      topic = await this.pubsubClient
-        .client().topic(opts.topicName);
+      topic = await this.pubsubClient.client().topic(opts.topicName);
 
-      if (!await topic.exists() && !this._cachedTopics.has(opts.topicName)) {
+      if (!(await topic.exists()) && !this._cachedTopics.has(opts.topicName)) {
         const [_topic] = await this.pubsubClient
-          .client().createTopic(opts.topicName);
+          .client()
+          .createTopic(opts.topicName);
         topic = _topic;
       }
     } catch (e) {
       const [_topic] = await this.pubsubClient
-        .client().createTopic(opts.topicName);
+        .client()
+        .createTopic(opts.topicName);
       topic = _topic;
     }
 
@@ -207,27 +202,28 @@ export class GooglePubsubBroker extends BaseBroker
     }
 
     try {
-      subscription = await this.pubsubClient
-        .client().subscription(opts.subscriptionName) as ExtendedPubsubStandardSubscription
+      subscription = (await this.pubsubClient
+        .client()
+        .subscription(
+          opts.subscriptionName
+        )) as ExtendedPubsubStandardSubscription;
     } catch (e) {
-      const [_subscription] = await this.pubsubClient
+      const [
+        _subscription,
+      ] = await this.pubsubClient
         .client()
         .createSubscription(topic, opts.subscriptionName, opts.options);
       subscription = _subscription as ExtendedPubsubStandardSubscription;
     }
 
     try {
-      subscription
-        .on('message', (message) => this.handleEvent(message));
+      subscription.on('message', (message) => this.handleEvent(message));
 
-      subscription
-        .on('confirmation', () => this.onLiveProcessingStarted());
+      subscription.on('confirmation', () => this.onLiveProcessingStarted());
 
-      subscription
-        .on('error', (error) => this.handleError(null, error));
+      subscription.on('error', (error) => this.handleError(null, error));
 
-      subscription
-        .on('close', (error) => this.handleError(null, error));
+      subscription.on('close', (error) => this.handleError(null, error));
 
       subscription.isLive = true;
       return subscription;
@@ -262,12 +258,8 @@ export class GooglePubsubBroker extends BaseBroker
     this.logger.error('onDropped => ' + error.message);
   }
 
-
-  private async handleEvent(
-    payload: ResolvedEvent
-  ) {
+  private async handleEvent(payload: ResolvedEvent) {
     try {
-
       const { event } = payload;
 
       if (!event || !event.isJson) {
@@ -298,5 +290,4 @@ export class GooglePubsubBroker extends BaseBroker
       this.logger.error(e);
     }
   }
-
 }

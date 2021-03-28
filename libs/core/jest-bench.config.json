@@ -1,0 +1,8 @@
+{
+  "testEnvironment": "jest-bench/environment",
+  "testEnvironmentOptions": {
+    "testEnvironment": "jest-environment-jsdom"
+  },
+  "reporters": ["default", "jest-bench/reporter"],
+  "testRegex": "(/__benchmarks__/.*|\\.bench)\\.(ts|tsx|js)$"
+}

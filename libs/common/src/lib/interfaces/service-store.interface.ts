@@ -17,7 +17,7 @@
  * File name:         service-store.interface.ts
  * Last modified:     07/03/2021, 18:09
  ******************************************************************************/
-import { ServiceInstance } from '@ultimate-backend/common';
+import { ServiceInstance } from '../client/service-instance';
 
 export interface IServiceStore {
   getServices(): Map<string, ServiceInstance[]>;

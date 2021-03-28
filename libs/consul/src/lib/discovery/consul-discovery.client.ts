@@ -1,8 +1,12 @@
 import _ from 'lodash';
 import { consul, ConsulClient } from '@ultimate-backend/consul';
 import { Injectable, Logger } from '@nestjs/common';
-import { DiscoveryClient, PlainObject, ServiceInstance } from '@ultimate-backend/common';
-import { ConsulUtils } from '../utils';
+import {
+  DiscoveryClient,
+  PlainObject,
+  ServiceInstance,
+} from '@ultimate-backend/common';
+import { ConsulUtils } from '../utils/consul-utils';
 import { ConsulServiceInstance } from './consul-service.instance';
 
 @Injectable()
@@ -26,11 +30,11 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   private async addInstancesToList(
     serviceId: string
   ): Promise<ServiceInstance[]> {
-    const token = this.consul.options.aclToken;
+    const token = this.consul.options.config.aclToken;
 
     let serviceOptions: consul.Health.ServiceOptions = {
       service: serviceId,
-      passing: this.consul.options.passing,
+      passing: this.consul.options.config.passing,
     };
 
     if (token) {
@@ -87,7 +91,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   }
 
   async getServices(): Promise<string[]> {
-    const token = this.consul.options.aclToken;
+    const token = this.consul.options.config.aclToken;
 
     let services;
     if (token) {

@@ -18,33 +18,30 @@
  * Last modified:     14/02/2021, 16:40
  ******************************************************************************/
 
-import {
-  EventStoreModuleOptions,
-  GooglePubsubClientOptions,
-  IBrokerClient,
-} from '../interface';
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ProvidersConstants } from '../event-store.constant';
+import { GooglePubsubClientOptions, IBrokerClient } from '../interface';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { defer } from 'rxjs';
 import { PubSub } from '../external/gpubsub.types';
+import { EventStoreConfig } from '../event-store.config';
 
 let googlePubsubPackage: any = {};
 
 @Injectable()
-export class GooglePubsubClient implements IBrokerClient<PubSub>, OnModuleInit, OnModuleDestroy {
+export class GooglePubsubClient
+  implements IBrokerClient<PubSub>, OnModuleInit, OnModuleDestroy {
   _client: PubSub;
   connected = false;
 
   private logger = new LoggerUtil(this.constructor.name);
 
-  constructor(
-    @Inject(ProvidersConstants.EVENT_STORE_CONFIG)
-    private readonly options: EventStoreModuleOptions
-  ) {
-    googlePubsubPackage = loadPackage('@google-cloud/pubsub', GooglePubsubClient.name, () => require('@google-cloud/pubsub'));
-    this.logger = new LoggerUtil(this.constructor.name, options.debug);
+  constructor(private readonly options: EventStoreConfig) {
+    googlePubsubPackage = loadPackage(
+      '@google-cloud/pubsub',
+      GooglePubsubClient.name,
+      () => require('@google-cloud/pubsub')
+    );
   }
 
   public client(): PubSub {
@@ -58,14 +55,17 @@ export class GooglePubsubClient implements IBrokerClient<PubSub>, OnModuleInit, 
   async connect(): Promise<void> {
     try {
       await defer(async () => {
-        const broker = this.options.broker as GooglePubsubClientOptions;
+        this.logger.log('GooglePubsubClient client is connecting');
+        const broker = this.options.config?.broker as GooglePubsubClientOptions;
         this._client = new googlePubsubPackage.PubSub(broker.options);
+        this.connected = true;
+        this.logger.log('GooglePubsubClient client connected successfully');
       })
         .pipe(
           handleRetry(
-            this.options.retryAttempts,
-            this.options.retryDelays,
-            'GooglePubsubClient'
+            this.options.config?.retryAttempts,
+            this.options.config?.retryDelays,
+            GooglePubsubClient.name
           )
         )
         .toPromise();
@@ -80,6 +80,10 @@ export class GooglePubsubClient implements IBrokerClient<PubSub>, OnModuleInit, 
   }
 
   async onModuleInit() {
+    this.logger = new LoggerUtil(
+      this.constructor.name,
+      this.options.config?.debug
+    );
     await this.connect();
   }
 }

@@ -17,7 +17,7 @@
  * File name:         instance-converter.util.ts
  * Last modified:     15/03/2021, 18:01
  ******************************************************************************/
-import { DefaultServiceInstance, Service, ServiceInstance } from '@ultimate-backend/common';
+import { DefaultServiceInstance, Service, ServiceInstance } from '../client/';
 
 export function serviceToInstance(service: Service): ServiceInstance {
   return new DefaultServiceInstance({
@@ -29,6 +29,6 @@ export function serviceToInstance(service: Service): ServiceInstance {
     status: service.metadata.status,
     tags: service.tags || [],
     serviceId: service.name,
-    secure: (service.metadata.secure || false) as boolean
-  })
+    secure: (service.metadata.secure || false) as boolean,
+  });
 }

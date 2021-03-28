@@ -21,13 +21,12 @@ import { Test } from '@nestjs/testing';
 import { EventStoreClient } from './event-store.client';
 import { ProvidersConstants } from '../event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from '../interface';
-
+import { EventStoreConfig } from '../event-store.config';
 
 describe('EventStoreClient', () => {
   let service: EventStoreClient;
 
   beforeEach(async () => {
-
     const module = await Test.createTestingModule({
       providers: [
         {
@@ -37,17 +36,18 @@ describe('EventStoreClient', () => {
             broker: {
               type: EventStoreBrokerTypes.EventStore,
               channelCredentials: {
-                insecure: true
+                insecure: true,
               },
               connectionSettings: {
                 endpoint: {
                   address: 'localhost',
                   port: 2113,
-                }
-              }
-            }
+                },
+              },
+            },
           } as EventStoreModuleOptions,
         },
+        EventStoreConfig,
         EventStoreClient,
       ],
     }).compile();

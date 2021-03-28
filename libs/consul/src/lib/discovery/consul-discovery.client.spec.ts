@@ -1,4 +1,4 @@
-import { ConsulModule } from '../../';
+import { ConsulModule } from '../consul.module';
 import { Test } from '@nestjs/testing';
 import { ConsulDiscoveryClient } from './consul-discovery.client';
 

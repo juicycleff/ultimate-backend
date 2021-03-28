@@ -18,4 +18,4 @@
  * Last modified:     21/03/2021, 19:16
  ******************************************************************************/
 
-export * from './decorator';
+export * from './filterable.decorator';

@@ -38,10 +38,10 @@ import {
 } from '@ultimate-backend/common';
 import { isPlainObject } from 'lodash';
 import { ZookeeperRegistration } from './zookeeper-registration';
-import { ZookeeperClient } from '../../';
+import { ZookeeperClient } from '../zookeeper.client';
 import { ZookeeperRegistryOptions } from './zookeeper-registry.options';
 import { ZookeeperRegistrationBuilder } from './zookeeper-registration.builder';
-import { ZookeeperHeartbeatTask } from '../discovery';
+import { ZookeeperHeartbeatTask } from '../discovery/zookeeper-heartbeat.task';
 const Zookeeper = require('zookeeper');
 
 @Injectable()

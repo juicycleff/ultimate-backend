@@ -13,5 +13,5 @@ config_version = 4
   # List of directories containing applications, example: ['go/code', 'shop/']
   application_dirs = ["apps"]
 
-  # Descend at most SearchDepth levels to find application configs
+  # Descend at most SearchDepth levels to find service configs
   search_depth = 1

@@ -22,6 +22,7 @@ import { Test } from '@nestjs/testing';
 import { StanClient } from './stan.client';
 import { ProvidersConstants } from '../event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from '../interface';
+import { EventStoreConfig } from '../event-store.config';
 
 describe('StanClient', () => {
   let service: StanClient;
@@ -35,10 +36,11 @@ describe('StanClient', () => {
             broker: {
               type: EventStoreBrokerTypes.STAN,
               clientId: 'test-client-id',
-              clusterId: 'my-cluster'
-            }
+              clusterId: 'my-cluster',
+            },
           } as EventStoreModuleOptions,
         },
+        EventStoreConfig,
         StanClient,
       ],
     }).compile();

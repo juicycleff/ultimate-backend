@@ -18,22 +18,42 @@
  * Last modified:     14/03/2021, 17:37
  ******************************************************************************/
 import { ConfigModuleOptions } from './interfaces';
-import { OnModuleInit } from '@nestjs/common';
-import { assign } from 'lodash';
+import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
+import { merge, isPlainObject, isEmpty } from 'lodash';
+import { BootConfig } from '@ultimate-backend/boostrap';
+import { InjectConfigOptions } from './decorators/inject-config.decorator';
 
+@Injectable()
 export class ConfigOptions implements OnModuleInit {
   private CONFIG_PREFIX = 'config';
-  private options: Partial<ConfigModuleOptions> = {};
+  private options: ConfigModuleOptions;
 
-  constructor(private moduleOptions: ConfigModuleOptions) {}
+  constructor(
+    @InjectConfigOptions() private opts: ConfigModuleOptions,
+    @Optional() private readonly bootConfig: BootConfig
+  ) {}
 
   get config(): ConfigModuleOptions {
-    return <ConfigModuleOptions>this.options;
+    return this.options;
   }
 
-  onModuleInit(): any {
-    if (this.moduleOptions) {
-      this.options = assign(this.moduleOptions, this.options);
+  onModuleInit() {
+    let _tempConfig = {};
+    if (this.bootConfig) {
+      _tempConfig = this.bootConfig.get<ConfigModuleOptions>(
+        this.CONFIG_PREFIX,
+        this.opts
+      );
+    }
+
+    if (this.opts) {
+      this.options = merge({}, this.opts, this.options, _tempConfig);
+    }
+
+    if (!isPlainObject(this.options) || isEmpty(this.options)) {
+      throw new Error(
+        'etcd configuration option is missing in bootstrap and module config'
+      );
     }
   }
 }

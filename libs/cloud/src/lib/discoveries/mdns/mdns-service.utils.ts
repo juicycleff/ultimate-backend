@@ -14,13 +14,18 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         mdns-service.utils.ts
+ * File name:         mdns-service.find-type.utils.ts
  * Last modified:     13/03/2021, 23:34
  ******************************************************************************/
 import { RemoteService } from 'bonjour';
-import { DefaultServiceInstance, ServiceInstance } from '@ultimate-backend/common';
+import {
+  DefaultServiceInstance,
+  ServiceInstance,
+} from '@ultimate-backend/common';
 
-export function mdnsToServicesInstance(services: RemoteService[]): ServiceInstance[] {
+export function mdnsToServicesInstance(
+  services: RemoteService[]
+): ServiceInstance[] {
   const instances: ServiceInstance[] = [];
 
   for (const service of services) {
@@ -29,7 +34,6 @@ export function mdnsToServicesInstance(services: RemoteService[]): ServiceInstan
 
   return instances;
 }
-
 
 export function mdnsToServiceInstance(service: RemoteService): ServiceInstance {
   return new DefaultServiceInstance({

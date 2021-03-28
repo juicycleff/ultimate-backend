@@ -1,52 +1,57 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import {
-  EventStoreBrokerTypes, EventStoreFeatureAsyncOptions,
-  EventStoreFeatureOptions, EventStoreFeatureOptionsFactory,
+  EventStoreBrokerTypes,
+  EventStoreFeatureAsyncOptions,
+  EventStoreFeatureOptions,
+  EventStoreFeatureOptionsFactory,
   EventStoreModuleAsyncOptions,
   EventStoreModuleOptions,
   EventStoreModuleOptionsFactory,
 } from './interface';
-import { EVENT_STORE_FEATURE_OPTION, EVENT_STORE_MODULE_OPTION, ProvidersConstants } from './event-store.constant';
+import {
+  EVENT_STORE_FEATURE_OPTION,
+  EVENT_STORE_MODULE_OPTION,
+  ProvidersConstants,
+} from './event-store.constant';
 import { getClientProvider, getClientProviderAsync } from './utils';
 import { StanBroker } from './broker/stan.broker';
 import { EventStoreBroker } from './broker/event-store.broker';
 import { ExplorerService } from '@nestjs/cqrs/dist/services/explorer.service';
+import { EventStoreConfig } from './event-store.config';
+import { GooglePubsubBroker } from './broker';
 
 @Module({
   imports: [CqrsModule],
 })
 export class EventStoreModule {
-
-  static forRoot(options: EventStoreModuleOptions): DynamicModule {
-    const clientProvider = getClientProvider(options);
-
-    const configProvider = {
+  static forRoot(options?: EventStoreModuleOptions): DynamicModule {
+    const configOptionProvider = {
       provide: ProvidersConstants.EVENT_STORE_CONFIG,
-      useValue: {
-        ...options
-      }
+      useValue: options,
     };
+
+    const clientProvider = getClientProvider(options);
 
     return {
       module: EventStoreModule,
       imports: [CqrsModule],
-      providers: [clientProvider, configProvider],
-      exports: [CqrsModule, clientProvider, configProvider],
-      global: options.global || true,
-    }
+      providers: [configOptionProvider, EventStoreConfig, ...clientProvider],
+      exports: [CqrsModule, EventStoreConfig, ...clientProvider],
+      global: options?.global || true,
+    };
   }
 
   static forRootAsync(options: EventStoreModuleAsyncOptions): DynamicModule {
     const clientProvider = getClientProviderAsync();
-    const configProvider: Provider = {
+    const configOptionProvider: Provider = {
       provide: ProvidersConstants.EVENT_STORE_CONFIG,
       useFactory: async (esOptions: EventStoreModuleOptions) => {
         return {
-          ...esOptions
+          ...esOptions,
         };
       },
-      inject: [EVENT_STORE_MODULE_OPTION]
+      inject: [EVENT_STORE_MODULE_OPTION],
     };
 
     const asyncProviders = this.createAsyncProviders(options);
@@ -54,17 +59,30 @@ export class EventStoreModule {
     return {
       module: EventStoreModule,
       imports: [CqrsModule],
-      providers: [...asyncProviders, clientProvider, configProvider],
-      exports: [CqrsModule, clientProvider, configProvider],
-      global: options.global || true
-    }
+      providers: [
+        ...asyncProviders,
+        configOptionProvider,
+        EventStoreConfig,
+        clientProvider,
+      ],
+      exports: [CqrsModule, clientProvider],
+      global: options.global || true,
+    };
   }
 
   static forFeature(options: EventStoreFeatureOptions): DynamicModule {
     if (options === undefined || options === null) {
       throw new Error('for feature options missing');
     }
-    const CurrentStore = options.type === EventStoreBrokerTypes.STAN ? StanBroker : EventStoreBroker;
+
+    let CurrentStore;
+    if (options.type === EventStoreBrokerTypes.STAN) {
+      CurrentStore = StanBroker;
+    } else if (options.type === EventStoreBrokerTypes.GOOGLE_PUB_SUB) {
+      CurrentStore = GooglePubsubBroker;
+    } else if (options.type === EventStoreBrokerTypes.EventStore) {
+      CurrentStore = EventStoreBroker;
+    }
 
     return {
       module: EventStoreModule,
@@ -72,15 +90,17 @@ export class EventStoreModule {
         ExplorerService,
         {
           provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
-          useValue: options
+          useValue: options,
         },
-        CurrentStore
+        CurrentStore,
       ],
-      exports: [CurrentStore, ExplorerService]
+      exports: [CurrentStore, ExplorerService],
     };
   }
 
-  static forFeatureAsync(options: EventStoreFeatureAsyncOptions): DynamicModule {
+  static forFeatureAsync(
+    options: EventStoreFeatureAsyncOptions
+  ): DynamicModule {
     if (options === undefined || options === null) {
       throw new Error('for feature options missing');
     }
@@ -89,16 +109,23 @@ export class EventStoreModule {
       useFactory: async (config: EventStoreFeatureOptions) => {
         return config;
       },
-      inject: [EVENT_STORE_FEATURE_OPTION]
+      inject: [EVENT_STORE_FEATURE_OPTION],
     };
 
     const asyncProviders = this.createFeatureAsyncProviders(options);
-    const CurrentStore = options.type === EventStoreBrokerTypes.STAN ? StanBroker : EventStoreBroker;
+    let CurrentStore;
+    if (options.type === EventStoreBrokerTypes.STAN) {
+      CurrentStore = StanBroker;
+    } else if (options.type === EventStoreBrokerTypes.GOOGLE_PUB_SUB) {
+      CurrentStore = GooglePubsubBroker;
+    } else if (options.type === EventStoreBrokerTypes.EventStore) {
+      CurrentStore = EventStoreBroker;
+    }
 
     return {
       module: EventStoreModule,
       providers: [...asyncProviders, ExplorerService, configProv, CurrentStore],
-      exports: [CurrentStore, ExplorerService]
+      exports: [CurrentStore, ExplorerService],
     };
   }
 
@@ -154,8 +181,8 @@ export class EventStoreModule {
       this.createFeatureAsyncOptionsProvider(options),
       {
         provide: useClass,
-        useClass
-      }
+        useClass,
+      },
     ];
   }
 
@@ -166,19 +193,18 @@ export class EventStoreModule {
       return {
         provide: EVENT_STORE_FEATURE_OPTION,
         useFactory: options.useFactory,
-        inject: options.inject || []
+        inject: options.inject || [],
       };
     }
     const inject = [
-      (options.useClass || options.useExisting) as Type<
-        EventStoreFeatureOptionsFactory
-        >
+      (options.useClass ||
+        options.useExisting) as Type<EventStoreFeatureOptionsFactory>,
     ];
     return {
       provide: EVENT_STORE_FEATURE_OPTION,
       useFactory: async (optionsFactory: EventStoreFeatureOptionsFactory) =>
         await optionsFactory.createFeatureOptions(options.name),
-      inject
+      inject,
     };
   }
 }

@@ -26,22 +26,24 @@ import {
 } from './etcd-module.options';
 import { ETCD_CONFIG_OPTIONS, ETCD_MODULE_OPTIONS } from './etcd.constant';
 import { EtcdClient } from './etcd.client';
+import { EtcdConfig } from './etcd.config';
 
 @Global()
 @Module({})
 export class EtcdModule {
-  static forRoot(options: EtcdModuleOptions): DynamicModule {
+  static forRoot(options?: EtcdModuleOptions): DynamicModule {
     return {
       module: EtcdModule,
       providers: [
-        EtcdClient,
         {
           provide: ETCD_CONFIG_OPTIONS,
           useValue: options,
         },
+        EtcdConfig,
+        EtcdClient,
       ],
       exports: [EtcdClient],
-      global: options.global || true,
+      global: options?.global || true,
     };
   }
 
@@ -61,7 +63,13 @@ export class EtcdModule {
     return {
       module: EtcdModule,
       imports: options.imports,
-      providers: [...asyncProviders, ...providers, configProvider, EtcdClient],
+      providers: [
+        ...asyncProviders,
+        ...providers,
+        configProvider,
+        EtcdConfig,
+        EtcdClient,
+      ],
       exports: providers,
       global: true,
     };

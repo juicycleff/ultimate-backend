@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ConsulClient } from './consul.client';
 import { ConsulModuleOptions } from './consul-module.options';
 import { CONSUL_CONFIG_OPTIONS } from './consul.constant';
+import { ConsulConfig } from './consul.config';
 
 describe('ConsulClient', () => {
   let service: ConsulClient;
@@ -18,6 +19,7 @@ describe('ConsulClient', () => {
             port: '8500',
           } as ConsulModuleOptions,
         },
+        ConsulConfig,
         ConsulClient,
       ],
     }).compile();

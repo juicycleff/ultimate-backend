@@ -26,9 +26,11 @@ import {
   ZookeeperModuleOptionsFactory,
 } from './zookeeper-module.options';
 import {
+  ZOOKEEPER_CONFIG,
   ZOOKEEPER_CONFIG_OPTIONS,
   ZOOKEEPER_MODULE_OPTIONS,
 } from './zookeeper.constant';
+import { ZookeeperConfig } from './zookeeper.config';
 
 @Global()
 @Module({})
@@ -37,11 +39,12 @@ export class ZookeeperModule {
     return {
       module: ZookeeperModule,
       providers: [
-        ZookeeperClient,
         {
           provide: ZOOKEEPER_CONFIG_OPTIONS,
           useValue: options,
         },
+        ZookeeperConfig,
+        ZookeeperClient,
       ],
       exports: [ZookeeperClient],
       global: true,
@@ -62,7 +65,12 @@ export class ZookeeperModule {
     return {
       module: ZookeeperModule,
       imports: options.imports,
-      providers: [...asyncProviders, configProvider, ZookeeperClient],
+      providers: [
+        ...asyncProviders,
+        configProvider,
+        ZookeeperConfig,
+        ZookeeperClient,
+      ],
       exports: [ZookeeperClient],
       global: true,
     };

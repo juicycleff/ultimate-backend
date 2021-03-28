@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { ConsulClient } from '../../';
+import { ConsulClient } from '../consul.client';
 import { HeartbeatTask } from '@ultimate-backend/common';
 
 export class ConsulHeartbeatTask implements HeartbeatTask {

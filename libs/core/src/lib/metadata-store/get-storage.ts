@@ -25,6 +25,8 @@ export function getCoreMetadataStorage(): CoreMetadataStorage {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     global.CoreMetadataStorage ||
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     (global.CoreMetadataStorage = new CoreMetadataStorage())
   );
 }

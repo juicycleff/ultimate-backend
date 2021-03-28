@@ -1,36 +1,38 @@
 import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
-import { RedisService } from './redis.service';
+import { RedisClient } from './redis.client';
 import {
   RedisModuleAsyncOptions,
   RedisModuleOptions,
   RedisModuleOptionsFactory,
 } from './redis-module.options';
 import { REDIS_CONFIG_OPTIONS, REDIS_MODULE_OPTIONS } from './redis.constant';
-import { RedisClusterService } from './redis-cluster.service';
+import { RedisClusterClient } from './redis-cluster.client';
+import { RedisConfig } from './redis.config';
 
 @Module({})
 export class RedisModule {
-  static forRoot(options: RedisModuleOptions): DynamicModule {
+  static forRoot(options?: RedisModuleOptions): DynamicModule {
     if (options.useCluster && !options.nodes) {
-      throw new Error('Please provide the the [nodes] field');
+      throw new Error('Please provide the [nodes] option');
     }
 
     const providers: Provider[] = [];
 
     if (options.useCluster) {
-      providers.push(RedisClusterService);
+      providers.push(RedisClusterClient);
     } else {
-      providers.push(RedisService);
+      providers.push(RedisClient);
     }
 
     return {
       module: RedisModule,
       providers: [
-        ...providers,
         {
           provide: REDIS_CONFIG_OPTIONS,
           useValue: options,
         },
+        RedisConfig,
+        ...providers,
       ],
       exports: providers,
       global: options.global || true,
@@ -44,9 +46,9 @@ export class RedisModule {
       provide: REDIS_CONFIG_OPTIONS,
       useFactory: async (modOptions: RedisModuleOptions) => {
         if (modOptions.useCluster) {
-          providers.push(RedisClusterService);
+          providers.push(RedisClusterClient);
         } else {
-          providers.push(RedisService);
+          providers.push(RedisClient);
         }
         return modOptions;
       },
@@ -62,7 +64,8 @@ export class RedisModule {
         ...asyncProviders,
         ...providers,
         configProvider,
-        RedisService,
+        RedisConfig,
+        RedisClient,
       ],
       exports: providers,
       global: true,

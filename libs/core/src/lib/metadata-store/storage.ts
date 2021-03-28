@@ -24,13 +24,16 @@ import {
   ensureReflectMetadataExists,
   TypeValueThunk,
 } from '@ultimate-backend/common';
+import { FieldOptions } from '@nestjs/graphql/dist/decorators/field.decorator';
 
 export class CoreMetadataStorage {
   instances: InstanceMetadata[] = [];
 
   filterableGraphqlFields: FilterableFieldMetadata[] = [];
 
-  filterableGraphqlSchema: FilterableFieldMetadata[] = [];
+  generatedFilters: Map<string, InstanceMetadata> = new Map();
+
+  filterableGraphqlSchema: Map<string, InstanceMetadata> = new Map();
 
   constructor() {
     ensureReflectMetadataExists();
@@ -40,21 +43,30 @@ export class CoreMetadataStorage {
     this.filterableGraphqlFields.push(field);
   }
 
-  collectFilterableGraphqlSchemaMetadata(field: FilterableFieldMetadata) {
-    this.filterableGraphqlSchema.push(field);
+  collectFilterableGraphqlSchemaMetadata(field: InstanceMetadata) {
+    if (!this.filterableGraphqlSchema.has(field.name)) {
+      this.filterableGraphqlSchema.set(field.name, field);
+    }
+  }
+
+  collectGeneratedFiltersMetadata(field: InstanceMetadata) {
+    if (!this.generatedFilters.has(field.name)) {
+      this.generatedFilters.set(field.name, field);
+    }
   }
 
   clear() {
     this.instances = [];
     this.filterableGraphqlFields = [];
-    this.filterableGraphqlSchema = [];
+    this.filterableGraphqlSchema.clear();
   }
 }
 
-export interface TypeOptions extends DecoratorTypeOptions {
+export interface FilterTypeOptions extends DecoratorTypeOptions {
   array?: boolean;
   isEnum?: boolean;
   arrayDepth?: number;
+  field?: FieldOptions;
 }
 
 export interface InstanceMetadata {
@@ -66,7 +78,7 @@ export interface InstanceMetadata {
 
 export interface FilterableFieldMetadata {
   getType?: TypeValueThunk;
-  typeOptions?: TypeOptions;
+  typeOptions?: FilterTypeOptions;
   getObjectType?: ClassTypeResolver;
   methodName: string;
   fieldType: string | ClassType<any>;
@@ -74,4 +86,11 @@ export interface FilterableFieldMetadata {
   target: Function;
   objectType: any;
   filterSchema?: any;
+
+  schemaName?: string;
+  fieldName?: string;
+  typeFn?: TypeValueThunk;
+  filterType?: ClassType<any>;
+  parentType?: ClassType<any>;
+  options?: FilterTypeOptions;
 }

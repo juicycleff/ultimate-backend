@@ -1,0 +1,15 @@
+name: adv-service
+port: 9000
+
+clients:
+  etcd:
+    retryAttempts: 6000
+  zookeeper:
+    retryAttempts: 6000
+
+loadbalancer:
+  services:
+    - strategy: 'RoundRobinStrategy'
+      name: 'example'
+    - strategy: 'RoundRobinStrategy'
+      name: 'adv-example'

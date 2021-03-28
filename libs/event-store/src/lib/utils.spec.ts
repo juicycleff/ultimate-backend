@@ -14,11 +14,14 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         utils.ts
+ * File name:         find-type.utils.ts
  * Last modified:     14/02/2021, 18:14
  ******************************************************************************/
 import { getClientProvider, getClientProviderAsync } from './utils';
-import { EventStoreBrokerTypes, EventStoreModuleOptions } from '@ultimate-backend';
+import {
+  EventStoreBrokerTypes,
+  EventStoreModuleOptions,
+} from '@ultimate-backend';
 import { Test } from '@nestjs/testing';
 import { ProvidersConstants } from './event-store.constant';
 
@@ -29,7 +32,7 @@ describe('Utils', () => {
       clientId: 'test-client-id',
       clusterId: 'my-cluster',
       options: null,
-    }
+    },
   };
 
   const esOpts: EventStoreModuleOptions = {
@@ -38,7 +41,7 @@ describe('Utils', () => {
       clientId: 'test-client-id',
       clusterId: 'my-cluster',
       options: null,
-    }
+    },
   };
 
   it('successfully returns stan client', () => {
@@ -58,12 +61,14 @@ describe('Utils', () => {
   });
 
   it('throws error for unsupported client', () => {
-    expect(() => getClientProvider({
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      broker: {
-        type: undefined
-      }
-    })).toThrowError('event store broker type not supported');
+    expect(() =>
+      getClientProvider({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        broker: {
+          type: undefined,
+        },
+      })
+    ).toThrowError('event store broker type not supported');
   });
 });

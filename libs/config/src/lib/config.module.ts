@@ -46,8 +46,9 @@ export class ConfigModule {
     const providers = [
       {
         provide: CONFIG_CONFIGURATION_OPTIONS,
-        useValue: new ConfigOptions(options),
+        useValue: options,
       },
+      ConfigOptions,
       ...configSourceProviders(options),
       ConfigDiscovery,
       ConfigStore,
@@ -67,7 +68,7 @@ export class ConfigModule {
       provide: CONFIG_CONFIGURATION_OPTIONS,
       useFactory: async (modOptions: ConfigModuleOptions) => {
         providers = configSourceProviders(modOptions);
-        return new ConfigOptions(modOptions);
+        return modOptions;
       },
       inject: [CONFIG_MODULE_OPTIONS],
     };
@@ -80,6 +81,7 @@ export class ConfigModule {
         ...asyncProviders,
         ...providers,
         configProvider,
+        ConfigOptions,
         ConfigDiscovery,
         ConfigStore,
       ],

@@ -17,15 +17,11 @@ export class LoggerUtil implements LoggerService {
   }
 
   error(message: any, trace?: string, context?: string, show?: boolean): any {
-    if (this.enabled || show) {
-      this.logger.error(message, context);
-    }
+    this.logger.error(message, context);
   }
 
   log(message: any, context?: string, show?: boolean): any {
-    if (this.enabled || show) {
-      this.logger.log(message, context);
-    }
+    this.logger.log(message, context);
   }
 
   verbose(message: any, context?: string, show?: boolean): any {
@@ -35,8 +31,6 @@ export class LoggerUtil implements LoggerService {
   }
 
   warn(message: any, context?: string, show?: boolean): any {
-    if (this.enabled || show) {
-      this.logger.warn(message, context);
-    }
+    this.logger.warn(message, context);
   }
 }

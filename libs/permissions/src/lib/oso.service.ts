@@ -35,7 +35,6 @@ export class OsoService extends Oso implements OnModuleInit {
     private readonly options: PermissionsModuleOptions
   ) {
     super(options.oso);
-    this.logger = new LoggerUtil('OsoService', options.debug);
   }
 
   private async setup() {
@@ -51,7 +50,12 @@ export class OsoService extends Oso implements OnModuleInit {
     this.logger.log('Initializing started... [Permission]');
     for (const os of TypeMetadataStorage.getOsoMetadata()) {
       this.logger.log(`register ${os.target.name}...`);
-      this.registerClass(os.target as Class);
+
+      if (os.options.name) {
+        this.registerClass(os.target as Class, os.options.name);
+      } else {
+        this.registerClass(os.target as Class);
+      }
     }
   }
 
@@ -81,6 +85,7 @@ export class OsoService extends Oso implements OnModuleInit {
   }
 
   async onModuleInit(): Promise<void> {
+    this.logger = new LoggerUtil(OsoService.name, this.options.debug);
     await this.setup();
   }
 }

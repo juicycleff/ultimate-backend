@@ -17,7 +17,7 @@
  * File name:         service-instance.state.ts
  * Last modified:     21/03/2021, 14:09
  ******************************************************************************/
-import { ServiceStatus } from '@ultimate-backend/common';
+import { ServiceStatus } from '../constants/service-status.constants';
 
 export class ServiceInstanceState {
   status: ServiceStatus = ServiceStatus.CRITICAL;

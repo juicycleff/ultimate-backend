@@ -15,11 +15,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  * File name:         find-type.utils.ts
- * Last modified:     22/03/2021, 16:04
+ * Last modified:     22/03/2021, 16:09
  ******************************************************************************/
 import { TypeValueThunk } from '@ultimate-backend/common';
-import { TypeOptions } from '../../metadata-store';
 import { ReturnTypeFunc } from '@nestjs/graphql';
+import { FilterTypeOptions } from '../../../metadata-store';
 
 export type MetadataKey =
   | 'design:type'
@@ -30,33 +30,34 @@ export const bannedTypes: Function[] = [Promise, Array, Object, Function];
 
 export interface TypeInfo {
   getType: TypeValueThunk;
-  typeOptions: TypeOptions;
+  typeOptions: FilterTypeOptions;
 }
 
 export interface GetTypeParams {
   metadataKey: MetadataKey;
   prototype: Object;
   propertyKey: string;
-  typeOptions?: TypeOptions;
+  typeOptions?: FilterTypeOptions;
   returnTypeFunc?: ReturnTypeFunc;
   parameterIndex?: number;
 }
 export function findType({
-                           metadataKey,
-                           prototype,
-                           propertyKey,
-                           typeOptions = {},
-                           parameterIndex,
-                           returnTypeFunc,
-                         }: GetTypeParams): TypeInfo {
-  const options: TypeOptions = { ...typeOptions };
+  metadataKey,
+  prototype,
+  propertyKey,
+  typeOptions = {},
+  parameterIndex,
+  returnTypeFunc,
+}: GetTypeParams): TypeInfo {
+  const options: FilterTypeOptions = { ...typeOptions };
   let metadataDesignType: Function | undefined;
 
   const reflectedType: Function[] | Function | undefined = Reflect.getMetadata(
     metadataKey,
     prototype,
-    propertyKey,
+    propertyKey
   );
+
   if (metadataKey === 'design:paramtypes') {
     metadataDesignType = (reflectedType as Function[])[parameterIndex!];
   } else {
@@ -80,7 +81,7 @@ export function findType({
     throw new CannotDetermineTypeError(
       prototype.constructor.name,
       propertyKey,
-      parameterIndex,
+      parameterIndex
     );
   }
 }

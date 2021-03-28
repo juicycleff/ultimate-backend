@@ -8,13 +8,6 @@ describe('MdnsRegistrationBuilder', () => {
     expect(t).toThrow('serviceName is required');
   });
 
-  it('throw error if discoveryOptions is missing', async () => {
-    const t = () => {
-      client.serviceName('service-name').build();
-    };
-    expect(t).toThrow('discoveryOptions is required.');
-  });
-
   it('successfully build', async () => {
     const t = client
       .serviceName('service-name')

@@ -3,7 +3,7 @@ import {
   ServiceInstance,
   ServiceStatus,
 } from '@ultimate-backend/common';
-import { ConsulServiceInstance } from '../../';
+import { ConsulServiceInstance } from '../discovery/consul-service.instance';
 
 export class ConsulUtils {
   static getMetadata(tags: string[]): PlainObject {

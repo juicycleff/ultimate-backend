@@ -29,6 +29,7 @@ import {
   CONSUL_CONFIG_OPTIONS,
   CONSUL_MODULE_OPTIONS,
 } from './consul.constant';
+import { ConsulConfig } from './consul.config';
 
 @Global()
 @Module({})
@@ -39,6 +40,7 @@ export class ConsulModule {
         provide: CONSUL_CONFIG_OPTIONS,
         useValue: options,
       },
+      ConsulConfig,
       ConsulClient,
     ];
 
@@ -64,7 +66,12 @@ export class ConsulModule {
     return {
       module: ConsulModule,
       imports: options.imports,
-      providers: [...asyncProviders, configProvider, ConsulClient],
+      providers: [
+        ...asyncProviders,
+        configProvider,
+        ConsulConfig,
+        ConsulClient,
+      ],
       exports: [ConsulClient],
       global: true,
     };

@@ -717,6 +717,21 @@
               },
               {
                 "input": "./libs/plugin-nx",
+                "glob": "builders.json",
+                "output": "."
+              },
+              {
+                "input": "./libs/plugin-nx",
+                "glob": "collection.json",
+                "output": "."
+              },
+              {
+                "input": "./libs/plugin-nx",
+                "glob": "migrations.json",
+                "output": "."
+              },
+              {
+                "input": "./libs/plugin-nx",
                 "glob": "executors.json",
                 "output": "."
               }
@@ -737,6 +752,102 @@
             "npmPackageName": "@ultimate-backend/plugin-nx",
             "pluginOutputPath": "dist/libs/plugin-nx",
             "jestConfig": "apps/plugin-nx-e2e/jest.config.js"
+          }
+        }
+      }
+    },
+    "gateway": {
+      "root": "libs/gateway",
+      "sourceRoot": "libs/gateway/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/gateway/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/gateway"],
+          "options": {
+            "jestConfig": "libs/gateway/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/gateway",
+            "tsConfig": "libs/gateway/tsconfig.lib.json",
+            "packageJson": "libs/gateway/package.json",
+            "main": "libs/gateway/src/index.ts",
+            "assets": ["libs/gateway/*.md"]
+          }
+        }
+      }
+    },
+    "create-ub-project": {
+      "root": "libs/create-ub-project",
+      "sourceRoot": "libs/create-ub-project/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/create-ub-project/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/create-ub-project"],
+          "options": {
+            "jestConfig": "libs/create-ub-project/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/create-ub-project",
+            "tsConfig": "libs/create-ub-project/tsconfig.lib.json",
+            "packageJson": "libs/create-ub-project/package.json",
+            "main": "libs/create-ub-project/src/index.ts",
+            "assets": ["libs/create-ub-project/*.md"]
+          }
+        }
+      }
+    },
+    "bootstrap": {
+      "root": "libs/bootstrap",
+      "sourceRoot": "libs/bootstrap/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/bootstrap/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/bootstrap"],
+          "options": {
+            "jestConfig": "libs/bootstrap/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/bootstrap",
+            "tsConfig": "libs/bootstrap/tsconfig.lib.json",
+            "packageJson": "libs/bootstrap/package.json",
+            "main": "libs/bootstrap/src/index.ts",
+            "assets": ["libs/bootstrap/*.md"]
           }
         }
       }

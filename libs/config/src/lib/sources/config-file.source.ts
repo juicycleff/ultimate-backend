@@ -19,14 +19,12 @@
  ******************************************************************************/
 import * as fs from 'fs';
 import * as util from 'util';
-import {isPlainObject} from 'lodash';
+import { isPlainObject } from 'lodash';
 import { FileConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InjectConfigOptions } from '../decorators/inject-config.decorator';
 import { ConfigOptions } from '../config-options';
 import { ConfigSource, ConfigStore } from '@ultimate-backend/config';
-import { stringToObjectType } from '../utils';
-import { LoggerUtil } from '@ultimate-backend/common';
+import { LoggerUtil, stringToObjectType } from '@ultimate-backend/common';
 
 // Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
@@ -34,17 +32,18 @@ const readFile = util.promisify(fs.readFile);
 @Injectable()
 export class ConfigFileSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, fs.FSWatcher> = new Map();
-  private readonly logger = new LoggerUtil(ConfigFileSource.name);
+  private logger = new LoggerUtil(ConfigFileSource.name);
 
   constructor(
-    @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
-  ) {
-    this.logger = new LoggerUtil(ConfigFileSource.name, options.config.debug);
-  }
+  ) {}
 
   async onModuleInit() {
+    this.logger = new LoggerUtil(
+      ConfigFileSource.name,
+      this.options.config.debug
+    );
     await this.watchAllConfigs();
   }
 

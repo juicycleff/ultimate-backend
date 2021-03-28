@@ -24,11 +24,21 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
-  testEnvironment: 'node',
+  testEnvironment: 'jest-bench/environment',
+  testEnvironmentOptions: {
+    testEnvironment: 'node',
+  },
+  // testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
-  collectCoverage: NO_COVERAGE === true,
+  testMatch: [
+    '**/__benchmarks__/**/*.[jt]s?(x)',
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)',
+    '**/?(*.)+(bench|benchmark).[jt]s?(x)',
+  ],
+  collectCoverage: true,
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/core',

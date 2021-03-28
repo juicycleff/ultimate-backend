@@ -52,7 +52,7 @@ export class EtcdServiceRegistry
   private watchers: Map<string, Watcher> = new Map();
 
   constructor(
-    private readonly client: EtcdClient,
+    private readonly etcd: EtcdClient,
     @Inject(SERVICE_REGISTRY_CONFIG)
     private readonly options: EtcdRegistryOptions,
     private readonly serviceStore: ServiceStore
@@ -80,7 +80,7 @@ export class EtcdServiceRegistry
 
     if (this.options.heartbeat.enabled) {
       const task = new EtcdHeartbeatTask(
-        this.client,
+        this.etcd.client,
         this.registration.getInstanceId()
       );
       this.ttlScheduler = new TtlScheduler(this.options.heartbeat, task);
@@ -126,7 +126,7 @@ export class EtcdServiceRegistry
     try {
       this.ttlScheduler?.remove(this.registration.getInstanceId());
 
-      await this.client
+      await this.etcd.client
         .namespace(this.namespace)
         .delete()
         .key(this.registration.getInstanceId());
@@ -148,7 +148,7 @@ export class EtcdServiceRegistry
 
       while (loop) {
         try {
-          const lease = await this.client
+          const lease = await this.etcd.client
             .namespace(this.namespace)
             .lease(this.options.heartbeat.ttlInSeconds || 200);
           await lease
@@ -238,7 +238,7 @@ export class EtcdServiceRegistry
       // this.watchers[serviceName].
     }
 
-    this.watchers[key] = await this.client
+    this.watchers[key] = await this.etcd.client
       .namespace(this.namespace)
       .watch()
       .key(key)
@@ -273,7 +273,7 @@ export class EtcdServiceRegistry
   }
 
   private async watchAll() {
-    const services = await this.client
+    const services = await this.etcd.client
       .namespace(this.namespace)
       .getAll()
       .json();
@@ -290,7 +290,7 @@ export class EtcdServiceRegistry
       }
     }
 
-    this.watcher = await this.client
+    this.watcher = await this.etcd.client
       .namespace(this.namespace)
       .watch()
       .prefix('')

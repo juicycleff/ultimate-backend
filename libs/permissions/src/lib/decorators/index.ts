@@ -18,4 +18,5 @@
  * Last modified:     16/01/2021, 21:45
  ******************************************************************************/
 
-export * from './resource.metadata';
+export * from './resource.decorator';
+export * from './oso.decorator';

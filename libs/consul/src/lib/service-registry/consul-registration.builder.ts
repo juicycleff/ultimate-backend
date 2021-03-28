@@ -139,7 +139,7 @@ export class ConsulRegistrationBuilder implements RegistrationBuilder {
       this._heartbeatOptions.enabled &&
       !this._heartbeatOptions.ttlInSeconds
     ) {
-      this._heartbeatOptions.ttlInSeconds = 30;
+      this._heartbeatOptions.ttlInSeconds = 120;
     }
 
     const check: Check = this.createCheck(this._discoveryOptions);

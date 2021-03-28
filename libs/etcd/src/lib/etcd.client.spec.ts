@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { EtcdClient } from './etcd.client';
 import { ETCD_CONFIG_OPTIONS } from './etcd.constant';
 import { EtcdModuleOptions } from './etcd-module.options';
+import { EtcdConfig } from './etcd.config';
 
 describe('EtcdClient', () => {
   let service: EtcdClient;
@@ -12,14 +13,20 @@ describe('EtcdClient', () => {
       providers: [
         {
           provide: ETCD_CONFIG_OPTIONS,
-          useValue: {} as EtcdModuleOptions,
+          useValue: {
+            etcdOptions: {
+              hosts: 'localhost:2379',
+            }
+          } as EtcdModuleOptions,
         },
+        EtcdConfig,
         EtcdClient,
       ],
     }).compile();
 
+    await module.init();
     service = module.get(EtcdClient);
-    mock = service.mock({ exec: jest.fn() });
+    mock = service.client.mock({ exec: jest.fn() });
 
     mock.exec.mockResolvedValue({ kvs: [{ key: 'foo', value: 'bar' }] });
   });
@@ -29,6 +36,8 @@ describe('EtcdClient', () => {
   });
 
   afterAll(() => {
-    service.unmock();
+    if (service.client) {
+      service.client.unmock();
+    }
   });
 });

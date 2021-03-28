@@ -22,57 +22,33 @@
 import * as ZooKeeper from 'zookeeper';
 import {
   BeforeApplicationShutdown,
-  Inject,
   Injectable,
+  Logger,
   OnModuleInit,
 } from '@nestjs/common';
 import { defer } from 'rxjs';
 import { merge } from 'lodash';
-import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
-import { ZookeeperModuleOptions } from './zookeeper-module.options';
-import { ZOOKEEPER_CONFIG_OPTIONS } from './zookeeper.constant';
+import { handleRetry } from '@ultimate-backend/common';
+import { ZookeeperConfig } from './zookeeper.config';
 
 @Injectable()
 export class ZookeeperClient
   extends ZooKeeper
   implements BeforeApplicationShutdown, OnModuleInit {
   private opts = {};
-  private logg = new LoggerUtil(ZookeeperClient.name);
+  private logg = new Logger(ZookeeperClient.name);
   public connected = false;
 
-  constructor(
-    @Inject(ZOOKEEPER_CONFIG_OPTIONS)
-    private readonly options: ZookeeperModuleOptions
-  ) {
-    super(
-      merge(
-        {
-          debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
-          host_order_deterministic: false,
-        },
-        {
-          connect: options.host,
-          timeout: options.timeout,
-          debug_level: options.logLevel,
-          host_order_deterministic: false,
-        }
-      )
-    );
+  constructor(private readonly options: ZookeeperConfig) {
+    super({
+      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+      host_order_deterministic: false,
+    });
 
-    this.opts = merge(
-      {
-        debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
-        host_order_deterministic: false,
-      },
-      {
-        connect: options.host,
-        timeout: options.timeout,
-        debug_level: options.logLevel,
-        host_order_deterministic: false,
-      }
-    );
-
-    this.logg = new LoggerUtil(ZookeeperClient.name, options.debug);
+    this.opts = {
+      debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN,
+      host_order_deterministic: false,
+    };
   }
 
   close(): any | Promise<void> {
@@ -80,6 +56,13 @@ export class ZookeeperClient
   }
 
   async connect(): Promise<void> {
+    this.opts = merge({}, this.opts, {
+      connect: this.options.config.host,
+      timeout: this.options.config.timeout,
+      debug_level: this.options.config.logLevel,
+      host_order_deterministic: false,
+    });
+
     try {
       await defer(async () => {
         this.once('connect', () => {
@@ -88,13 +71,12 @@ export class ZookeeperClient
         });
         super.connect(this.opts, () => {
           this.connected = true;
-          // this.logg.log('Zookeeper client connected successfully');
         });
       })
         .pipe(
           handleRetry(
-            this.options.retryAttempts,
-            this.options.retryDelays,
+            this.options.config.retryAttempts,
+            this.options.config.retryDelays,
             ZookeeperClient.name
           )
         )

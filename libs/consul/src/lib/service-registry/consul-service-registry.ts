@@ -15,7 +15,9 @@ import {
   ServiceStore,
   TtlScheduler,
 } from '@ultimate-backend/common';
-import { consul, ConsulClient, ConsulHeartbeatTask } from '../../';
+import { ConsulHeartbeatTask } from '../discovery/consul-heartbeat.task';
+import { ConsulClient } from '../consul.client';
+import * as consul from 'consul';
 import { ConsulRegistryOptions } from './consul-registry.options';
 import { ConsulRegistrationBuilder } from './consul-registration.builder';
 import { Watch } from 'consul';
@@ -77,8 +79,8 @@ export class ConsulServiceRegistry
   }
 
   private getToken(): { token?: string } {
-    return this.client.options.aclToken
-      ? { token: this.client.options.aclToken }
+    return this.client.options.config.aclToken
+      ? { token: this.client.options.config.aclToken }
       : {};
   }
 

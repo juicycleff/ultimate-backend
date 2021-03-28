@@ -19,3 +19,4 @@
  ******************************************************************************/
 
 export * from './server-critical.exception';
+export * from './http-client-execute.exception';

@@ -18,4 +18,8 @@
  * Last modified:     21/03/2021, 19:16
  ******************************************************************************/
 
+export * from './inputs';
+export * from './utils';
+export * from './scalers';
+export * from './types';
 export * from './decorator';

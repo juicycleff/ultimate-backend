@@ -32,7 +32,12 @@
       "@ultimate-backend/couchbase": ["libs/couchbase/src/index.ts"],
       "@ultimate-backend/client": ["libs/client/src/index.ts"],
       "@ultimate-backend/brakes": ["libs/brakes/src/index.ts"],
-      "@ultimate-backend/nx-plugin": ["libs/plugin-nx/src/index.ts"]
+      "@ultimate-backend/nx-plugin": ["libs/plugin-nx/src/index.ts"],
+      "@ultimate-backend/gateway": ["libs/gateway/src/index.ts"],
+      "@ultimate-backend/create-ub-project": [
+        "libs/create-ub-project/src/index.ts"
+      ],
+      "@ultimate-backend/boostrap": ["libs/bootstrap/src/index.ts"]
     },
     "plugins": [
       {

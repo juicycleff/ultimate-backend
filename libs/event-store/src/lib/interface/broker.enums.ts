@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2021. Rex Isaac Raphael
  *
@@ -20,7 +19,7 @@
  ******************************************************************************/
 
 export enum EventStoreBrokerTypes {
-  EventStore,
-  STAN,
-  GOOGLE_PUB_SUB
+  EventStore = 'EventStore',
+  STAN = 'STAN',
+  GOOGLE_PUB_SUB = 'GOOGLE_PUB_SUB',
 }

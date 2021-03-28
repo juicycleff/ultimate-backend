@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         metadata.utils.ts
+ * File name:         metadata.find-type.utils.ts
  * Last modified:     14/03/2021, 20:21
  ******************************************************************************/
 

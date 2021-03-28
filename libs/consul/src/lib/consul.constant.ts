@@ -1,3 +1,5 @@
+import { LOAD_BALANCE_CONFIG_OPTIONS } from '@ultimate-backend/loadbalancer';
+
 /*******************************************************************************
  * Copyright (c) 2021. Rex Isaac Raphael
  *
@@ -20,3 +22,4 @@
 
 export const CONSUL_MODULE_OPTIONS = 'CONSUL_MODULE_OPTIONS';
 export const CONSUL_CONFIG_OPTIONS = 'CONSUL_CONFIG_OPTIONS';
+export const CONSUL_CONFIG = 'CONSUL_SHARED_CONFIG';

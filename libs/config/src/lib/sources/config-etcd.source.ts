@@ -21,13 +21,15 @@ import { EtcdConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
 import { EtcdClient, etcd, IWatchResponse } from '@ultimate-backend/etcd';
-import { LoggerUtil } from '@ultimate-backend/common';
+import {
+  LoggerUtil,
+  objectToStringFormat,
+  stringToObjectType,
+} from '@ultimate-backend/common';
 import { ConfigSetException } from '../exceptions';
 import { ConfigSource } from '../config.enum';
 import { ConfigStore } from '../config.store';
-import { InjectConfigOptions } from '../decorators/inject-config.decorator';
 import { ConfigOptions } from '../config-options';
-import { objectToStringFormat, stringToObjectType } from '../utils';
 
 /**
  * This is a client implementation of config for ETCD
@@ -36,20 +38,21 @@ import { objectToStringFormat, stringToObjectType } from '../utils';
 @Injectable()
 export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, etcd.Watcher> = new Map();
-  private readonly logger = new LoggerUtil(ConfigEtcdSource.name);
+  private logger = new LoggerUtil(ConfigEtcdSource.name);
   private defaultNamespace: string;
 
   constructor(
     private readonly etcd: EtcdClient,
-    @InjectConfigOptions()
     private readonly options: ConfigOptions,
     private readonly store: ConfigStore
-  ) {
-    this.logger = new LoggerUtil(ConfigEtcdSource.name, options.config.debug);
-    this.defaultNamespace = options.config.namespace;
-  }
+  ) {}
 
   async onModuleInit() {
+    this.logger = new LoggerUtil(
+      ConfigEtcdSource.name,
+      this.options.config.debug
+    );
+    this.defaultNamespace = this.options.config.namespace;
     await this.watchAllConfigs();
   }
 
@@ -78,13 +81,13 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
 
   async set(path: string, value: any): Promise<void> {
     try {
-      const result = await this.etcd
+      const result = await this.etcd.client
         .namespace(this.defaultNamespace || '')
         .get(path);
 
       if (result) {
         const payStr = objectToStringFormat(result, value);
-        await this.etcd
+        await this.etcd.client
           .namespace(this.defaultNamespace || '')
           .put(path)
           .value(payStr);
@@ -116,7 +119,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
       }
 
       try {
-        let curConfig = await this.etcd
+        let curConfig = await this.etcd.client
           .namespace(load.namespace || this.defaultNamespace || '')
           .get(key);
 
@@ -128,7 +131,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
         // ignore
       }
 
-      this.watchers[key] = await this.etcd
+      this.watchers[key] = await this.etcd.client
         .namespace(load.namespace || this.defaultNamespace || '')
         .watch()
         .key(load.key)
@@ -162,7 +165,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
   }
 
   async watch<T extends any>(path: string, callback: (value: T) => void) {
-    const watcher = await this.etcd
+    const watcher = await this.etcd.client
       .namespace(this.defaultNamespace || '')
       .watch()
       .key(path)
