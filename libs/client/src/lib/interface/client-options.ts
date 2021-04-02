@@ -20,6 +20,7 @@
 import { ChannelOptions } from '@nestjs/microservices/external/grpc-options.interface';
 import { GotBodyOptions, Hooks, RetryOptions, TimeoutOptions } from 'got';
 import * as nodeStream from 'stream';
+import * as Dom from 'graphql-request/dist/types.dom';
 
 export interface IGrpcServiceClient {
   transport: 'grpc';
@@ -78,5 +79,11 @@ export interface IHttpServiceClient extends HttpGotOptions {
   service?: string;
   url?: string;
 }
+export interface IGraphQLServiceClient extends Dom.RequestInit {
+  transport: 'graphql';
+  service?: string;
+  path: string;
+  url?: string;
+}
 
-export type ClientOptions = IGrpcServiceClient | IHttpServiceClient;
+export type ClientOptions = IGrpcServiceClient | IHttpServiceClient | IGraphQLServiceClient;

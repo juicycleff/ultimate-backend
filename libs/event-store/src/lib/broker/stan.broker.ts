@@ -56,6 +56,13 @@ export class StanBroker
     private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, StanBroker.name);
+    this.watchClient();
+  }
+
+  private watchClient() {
+    this.stan.on('connected', async () => {
+      await this.init(this.featureStreamConfig);
+    });
   }
 
   private async init(featureStreamConfig: EventStoreFeatureOptions) {
@@ -116,7 +123,6 @@ export class StanBroker
   }
 
   async onModuleInit() {
-    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;

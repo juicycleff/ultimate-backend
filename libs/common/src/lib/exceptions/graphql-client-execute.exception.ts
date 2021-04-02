@@ -18,7 +18,7 @@
  * Last modified:     21/03/2021, 15:23
  ******************************************************************************/
 
-export class HttpClientExecuteException extends Error {
+export class GraphqlClientExecuteException extends Error {
   constructor(message: string) {
     super(message);
   }

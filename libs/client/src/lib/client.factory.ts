@@ -21,9 +21,10 @@ import { LoadBalancerClient } from '@ultimate-backend/loadbalancer';
 import { ClientOptions } from './interface';
 import { GrpcClient, HttpClient } from './transports';
 import { Brakes } from '@ultimate-backend/brakes';
+import { GraphQLClient } from './transports/graphql.client';
 
 export class ClientFactory {
-  private static cache = new Map<string, HttpClient | GrpcClient>();
+  private static cache = new Map<string, HttpClient | GrpcClient | GraphQLClient>();
 
   static create(
     lb: LoadBalancerClient,
@@ -41,6 +42,10 @@ export class ClientFactory {
         const client = new HttpClient(lb, config, brakes);
         this.cache.set(key, client);
         return client;
+      } else if (config.transport === 'graphql') {
+        const client = new GraphQLClient(lb, config, brakes);
+        this.cache.set(key, client);
+        return client;
       }
     }
 
@@ -51,6 +56,8 @@ export class ClientFactory {
     const service = config.service || config.url;
     if (config.transport === 'grpc') {
       return `${service}/grpc/${config.package}/${config.protoPath}`;
+    } else if (config.transport === 'graphql') {
+      return `${service}/graphql/${config.path}/${config.url}`;
     }
 
     return `${service}/http/${config.url || ''}`;

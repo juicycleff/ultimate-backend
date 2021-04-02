@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CloudModule } from '@ultimate-backend/cloud';
 import { ConsulModule } from '@ultimate-backend/consul';
 import { ClientModule } from '@ultimate-backend/client';
 import { LoadBalancerModule } from '@ultimate-backend/loadbalancer';
 import { BrakesModule } from '@ultimate-backend/brakes';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [

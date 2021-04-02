@@ -26,11 +26,12 @@ import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { Stan } from '../external/stan.types';
 import { defer } from 'rxjs';
 import { EventStoreConfig } from '../event-store.config';
+import { EventEmitter } from 'events';
 
 let stanPackage: any = {};
 
 @Injectable()
-export class StanClient
+export class StanClient extends EventEmitter
   implements IBrokerClient<Stan>, OnModuleInit, OnModuleDestroy {
   _client: Stan;
   connected = false;
@@ -38,6 +39,7 @@ export class StanClient
   private logger = new LoggerUtil(this.constructor.name);
 
   constructor(private readonly options: EventStoreConfig) {
+    super();
     stanPackage = loadPackage('node-nats-streaming', StanClient.name, () =>
       require('node-nats-streaming')
     );
@@ -69,6 +71,7 @@ export class StanClient
         this._client.on('connect', () => {
           this.connected = true;
           this.logger.log('STAN Event Store client connected!');
+          this.emit('connected');
         });
         this._client.on('disconnect:', () => {
           this.connected = false;

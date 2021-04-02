@@ -67,6 +67,13 @@ export class EventStoreBroker
     private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, EventStoreBroker.name);
+    this.watchClient();
+  }
+
+  private watchClient() {
+    this.eventStore.on('connected', async () => {
+      await this.init(this.featureStreamConfig);
+    });
   }
 
   private async init(featureStreamConfig: EventStoreFeatureOptions) {
@@ -127,7 +134,6 @@ export class EventStoreBroker
   }
 
   async onModuleInit() {
-    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;

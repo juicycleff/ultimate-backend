@@ -14,144 +14,99 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         http.client.ts
+ * File name:         graphql.client.ts
  * Last modified:     18/03/2021, 23:08
  ******************************************************************************/
-import * as got from 'got';
 import {
   LoadBalancerClient,
   LoadBalancerRequest,
 } from '@ultimate-backend/loadbalancer';
-import { HttpGotOptions, IHttpServiceClient } from '../interface';
+import { IGraphQLServiceClient } from '../interface';
 import { Brakes } from '@ultimate-backend/brakes';
-import { merge } from 'lodash';
-import { ServiceInstance } from '@ultimate-backend/common';
+import { GraphqlClientExecuteException, ServiceInstance } from '@ultimate-backend/common';
 import { HttpException, Logger, Optional } from '@nestjs/common';
+import { GraphQLClient as GqlClient } from 'graphql-request';
+import * as Dom from 'graphql-request/dist/types.dom';
+import { GraphQLError, RequestDocument, Variables } from 'graphql-request/dist/types';
 
-export class HttpClient {
-  logger = new Logger(HttpClient.name);
+export class GraphQLClient {
+  logger = new Logger(GraphQLClient.name);
   private serviceId: string;
   private node: ServiceInstance;
-  private httpOpts: HttpGotOptions & {
-    baseUrl?: string;
-    responseType?: 'json';
-  } = {
-    responseType: 'json',
-  };
-  private instance: got.GotInstance<got.GotBodyFn<string>>;
+  private instance: GqlClient;
 
   constructor(
     private readonly lb: LoadBalancerClient,
-    options: IHttpServiceClient,
+    private readonly options: IGraphQLServiceClient,
     @Optional() private readonly brakes: Brakes
   ) {
-    this.init(options);
+    this.init();
   }
 
-  init(options: IHttpServiceClient) {
+  init() {
     try {
-      this.serviceId = options.service;
+      const { service, path, url, transport, ...rest } = this.options;
+      if (!service) {
+        throw new GraphqlClientExecuteException('missing service id/name')
+      }
+
+      this.serviceId = service;
+
       const { baseUrl } = this.getServiceAddress();
-      this.httpOpts = this.mergeOptions(options, {
-        responseType: 'json',
-        baseUrl,
-      });
-      this.instance = got.extend({
-        ...this.httpOpts,
-      });
+      const endpoint = baseUrl + this.options.path;
+
+      this.instance = new GqlClient(endpoint, rest);
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
 
-  async get<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'GET', options);
+  async request<T, V = Variables>(document: RequestDocument, variables?: V, requestHeaders?: Dom.RequestInit['headers']): Promise<T> {
+    const raw = false;
+    return this.initiateRequest<T, V>([raw, document, variables, requestHeaders]);
   }
 
-  async head<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'HEAD', options);
+  async rawRequest<T, V = Variables>(query: string, variables?: V, requestHeaders?: Dom.RequestInit['headers']): Promise<{
+    data?: T;
+    extensions?: any;
+    headers: Dom.Headers;
+    status: number;
+    errors?: GraphQLError[];
+  }> {
+    const raw = true;
+    return this.initiateRequest<T, V>([raw, query, variables, requestHeaders]);
   }
 
-  async delete<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'DELETE', options);
+  setHeader(key: string, value: string) {
+    return this.instance.setHeader(key, value);
   }
 
-  async post<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'POST', options);
+  setHeaders(headers: Dom.RequestInit['headers']) {
+    return this.instance.setHeaders(headers);
   }
 
-  async options<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'OPTIONS', options);
-  }
-
-  async trace<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'TRACE', options);
-  }
-
-  async put<T>(
-    path: string,
-    options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'PUT', options);
-  }
-
-  private doRequest(
-    path: string,
-    method: string,
-    options?: Partial<HttpGotOptions>
-  ): got.GotPromise<string> {
-    return this.lb.execute(
+  private doRequest<T, V>(args: any[]): T {
+    return this.lb.executeGraphql<T, V>(
       this.serviceId,
       this.node,
-      new LoadBalancerRequest<
-        Promise<got.Response<string>> & { cancel(): void }
-      >(this.instance, path, {
-        ...options,
-        method,
-      })
+      new LoadBalancerRequest(this.instance, args)
     );
   }
 
-  public request(
-    path: string,
-    method: 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'OPTIONS' | 'TRACE',
-    options?: Partial<HttpGotOptions>
-  ) {
+  public initiateRequest<T, V>(args: any[]) {
     if (this.brakes) {
-      return this.requestWithBrakes(path, method, options);
+      return this.requestWithBrakes<T, V>(args);
     }
 
-    return this.doRequest(path, method, options);
+    return this.doRequest<T, V>(args);
   }
 
-  private async requestWithBrakes(
-    path: string,
-    method: string,
-    options?: Partial<HttpGotOptions>
-  ) {
+  private async requestWithBrakes<T, V>(args: any[]) {
     let err: HttpException = null;
     const ref = this.brakes.prepare(this.serviceId, async () => {
       try {
-        return await this.doRequest(path, method, options);
+        return await this.doRequest<T, V>(args);
       } catch (e) {
         err = e;
         if (e instanceof HttpException) {
@@ -160,19 +115,12 @@ export class HttpClient {
         throw e;
       }
     });
-    const response = await ref(options);
+    const response = await ref(args);
 
     if (err) {
       throw err;
     }
     return response;
-  }
-
-  private mergeOptions(
-    target: HttpGotOptions & { baseUrl?: string; responseType?: 'json' },
-    source?: HttpGotOptions & { baseUrl?: string; responseType?: 'json' }
-  ) {
-    return merge({}, target, source);
   }
 
   private getServiceAddress<T extends {}>(): {

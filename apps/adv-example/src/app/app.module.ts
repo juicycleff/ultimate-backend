@@ -40,9 +40,6 @@ import * as path from 'path';
           address: 'localhost',
           name: 'adv-example',
         },
-        heartbeat: {
-          enabled: false,
-        },
       },
     }),
     ConfigModule.forRoot({
@@ -70,9 +67,6 @@ import * as path from 'path';
       etcdOptions: {
         hosts: 'localhost:2379',
       },
-    }),
-    ZookeeperModule.forRoot({
-      host: 'localhost:2181',
     }),
     LoadBalancerModule.forRoot({
       services: [{ strategy: 'RoundRobinStrategy', name: 'example' }],

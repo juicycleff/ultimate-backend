@@ -19,4 +19,5 @@
  ******************************************************************************/
 export * from './http-service.decorator';
 export * from './grpc-service.decorator';
+export * from './graphql-service.decorator';
 export * from './service.decorator';

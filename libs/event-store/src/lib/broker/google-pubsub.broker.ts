@@ -65,6 +65,13 @@ export class GooglePubsubBroker
     private readonly eventsBus: EventBus
   ) {
     super(featureStreamConfig, GooglePubsubBroker.name);
+    this.watchClient();
+  }
+
+  private watchClient() {
+    this.pubsubClient.on('connected', async () => {
+      await this.init(this.featureStreamConfig);
+    });
   }
 
   private async init(featureStreamConfig: EventStoreFeatureOptions) {
@@ -106,7 +113,6 @@ export class GooglePubsubBroker
   }
 
   async onModuleInit() {
-    await this.init(this.featureStreamConfig);
     this.subject$ = (this.eventsBus as any).subject$;
     this.bridgeEventsTo((this.eventsBus as any).subject$);
     this.eventsBus.publisher = this;

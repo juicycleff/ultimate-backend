@@ -1,11 +1,12 @@
 import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
+import { debounce } from 'lodash';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
-  BaseStrategy,
+  BaseStrategy, GraphqlClientExecuteException,
   HttpClientExecuteException,
   ServerCriticalException,
   ServiceInstance,
-  ServiceStore,
+  ServiceStore
 } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from './core';
 import { LoadbalancerConfig } from './loadbalancer.config';
@@ -29,7 +30,6 @@ export class LoadBalancerClient
 
   private init() {
     this.updateServices();
-
     this.serviceStore.watch(() => {
       this.updateServices();
     });
@@ -40,11 +40,12 @@ export class LoadBalancerClient
     for (const service of services) {
       const nodes = this.serviceStore.getServiceNodes(service);
       if (!service || this.serviceStrategies.has(service)) {
-        return;
+        continue;
       }
 
       const strategyName = this.properties.getStrategy(service);
       const strategy = this.registry.getStrategy(strategyName);
+
       if (strategy) {
         this.createStrategy(service, nodes, strategy);
       }
@@ -119,10 +120,89 @@ export class LoadBalancerClient
         throw new HttpClientExecuteException('missing http request');
       }
 
+      if (req.arguments[0] === undefined) {
+        throw new HttpClientExecuteException('service not found');
+      }
+
       const firstReq = req.arguments[0];
       const path = req.arguments[1];
       const opts = req.arguments[2];
       const response = await firstReq(path, opts);
+
+      if (node) {
+        const endTime = new Date().getTime();
+        node.getState().setResponseTime(endTime - startTime);
+        node.getState().decrementActiveRequests();
+      }
+      return response;
+    } catch (e) {
+      if (node) {
+        node.getState().decrementActiveRequests();
+      }
+      if (e.response) {
+        throw new HttpException(e.response.data, e.response.status);
+      } else if (e.request) {
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
+        throw new ServerCriticalException(e.message);
+      } else {
+        if (node) {
+          node.getState().incrementFailureCounts();
+          node.getState().setConnectionFailedTime(e.message);
+        }
+        throw new ServerCriticalException(e.message);
+      }
+    }
+  }
+
+  /**
+   * Execute request
+   *
+   * @param serviceId
+   * @param request
+   */
+  executeGraphql<T, V>(serviceId: string, request: LoadBalancerRequest<T>): T;
+  executeGraphql<T, V>(
+    serviceId: string,
+    node: ServiceInstance,
+    request: LoadBalancerRequest<T>
+  ): T;
+  async executeGraphql<T, V>(
+    serviceId: string,
+    nodeOrRequest: LoadBalancerRequest<T> | ServiceInstance,
+    request?: LoadBalancerRequest<T>
+  ): Promise<T> {
+    if (!serviceId) {
+      throw new Error('serviceId is missing');
+    }
+
+    const [req, node] = request
+      ? [request as LoadBalancerRequest<T>, nodeOrRequest as ServiceInstance]
+      : [undefined, nodeOrRequest as ServiceInstance];
+
+    if (node) {
+      node.getState().incrementActiveRequests();
+      node.getState().incrementRequestCounts();
+      if (!node.getState().firstConnectionTimestamp) {
+        node.getState().setFirstConnectionTime();
+      }
+    }
+
+    const startTime = new Date().getTime();
+    try {
+      if (req.arguments.length === 0) {
+        throw new GraphqlClientExecuteException('missing http request');
+      }
+
+      if (req.arguments[0] === undefined) {
+        throw new GraphqlClientExecuteException('service not found');
+      }
+
+      const [client, rest] = req.arguments;
+      const [raw, ...options] = rest;
+      const response = raw ? await client.rawRequest(...options) : await client.request(...options);
 
       if (node) {
         const endTime = new Date().getTime();

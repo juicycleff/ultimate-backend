@@ -36,7 +36,7 @@ export class CreateProjectCommand implements ICommand {
     try {
       ora.promise(
         exec(
-          `npx create-nx-workspace ${buildTarget} --preset=nest --interactive=false --appName=demo-service --nx-cloud=true --packageManager=npm`
+          `create-ub-project ${buildTarget} --preset=nest --interactive=false --appName=demo-service --nx-cloud=true --packageManager=npm`
         ),
         'Setup NX: '
       );

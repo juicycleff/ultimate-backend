@@ -26,7 +26,7 @@ import { HttpGotOptions, IHttpServiceClient } from '../interface';
 import { Brakes } from '@ultimate-backend/brakes';
 import { merge } from 'lodash';
 import { ServiceInstance } from '@ultimate-backend/common';
-import { HttpException, Logger } from '@nestjs/common';
+import { HttpException, Logger, Optional } from '@nestjs/common';
 
 export class HttpClient {
   logger = new Logger(HttpClient.name);
@@ -43,7 +43,7 @@ export class HttpClient {
   constructor(
     private readonly lb: LoadBalancerClient,
     options: IHttpServiceClient,
-    private readonly brakes: Brakes
+    @Optional() private readonly brakes: Brakes
   ) {
     this.init(options);
   }
@@ -61,6 +61,7 @@ export class HttpClient {
       });
     } catch (e) {
       this.logger.error(e);
+      throw e;
     }
   }
 

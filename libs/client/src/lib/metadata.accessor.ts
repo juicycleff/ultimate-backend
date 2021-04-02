@@ -18,13 +18,13 @@
  * Last modified:     18/03/2021, 23:19
  ******************************************************************************/
 import { Reflector } from '@nestjs/core';
+import { Injectable } from '@nestjs/common';
 import { ClientMetadata } from './interface/client-metdata.interface';
 import {
-  CLIENT_SERVICE,
+  CLIENT_SERVICE, GRAPHQL_CLIENT_SERVICE,
   GRPC_CLIENT_SERVICE,
-  HTTP_CLIENT_SERVICE,
+  HTTP_CLIENT_SERVICE
 } from './client.constants';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MetadataAccessor {
@@ -38,6 +38,10 @@ export class MetadataAccessor {
     return this.reflector.get(HTTP_CLIENT_SERVICE, target);
   }
 
+  getGraphQLServices(target: Function): ClientMetadata[] | undefined {
+    return this.reflector.get(GRAPHQL_CLIENT_SERVICE, target);
+  }
+
   getClientServices(target: Function): ClientMetadata[] | undefined {
     return this.reflector.get(CLIENT_SERVICE, target);
   }
@@ -49,6 +53,11 @@ export class MetadataAccessor {
     }
 
     c = this.getGrpcServices(target);
+    if (c) {
+      return c;
+    }
+
+    c = this.getGraphQLServices(target);
     if (c) {
       return c;
     }

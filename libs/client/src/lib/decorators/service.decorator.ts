@@ -25,7 +25,7 @@ import { ClientOptions } from '../interface';
 export function ServiceClient(name: string, options: ClientOptions) {
   return applyDecorators((target, property) => {
     return ExtendMetadata(CLIENT_SERVICE, {
-      name,
+      service: name,
       property,
       options,
     })(target, property);

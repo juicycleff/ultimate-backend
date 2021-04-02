@@ -24,19 +24,22 @@ import { EventStoreClientOptions, IBrokerClient } from '../interface';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { defer } from 'rxjs';
 import { EventStoreConfig } from '../event-store.config';
+import { EventEmitter } from 'events';
 
 /**
  * @description Event store setup from eventstore.org
  */
 @Injectable()
-export class EventStoreClient
+export class EventStoreClient extends EventEmitter
   implements IBrokerClient<EventStoreDBClient>, OnModuleInit, OnModuleDestroy {
   _client: EventStoreDBClient;
   connected = false;
 
   private logger = new LoggerUtil(EventStoreClient.name);
 
-  constructor(private readonly options: EventStoreConfig) {}
+  constructor(private readonly options: EventStoreConfig) {
+    super();
+  }
 
   async onModuleInit() {
     this.logger = new LoggerUtil(
@@ -66,6 +69,7 @@ export class EventStoreClient
           broker.defaultUserCredentials
         );
         this.connected = true;
+        this.emit('connected');
         this.logger.log('EventStoreClient client connected successfully');
       })
         .pipe(

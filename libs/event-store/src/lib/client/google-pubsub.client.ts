@@ -25,11 +25,12 @@ import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { defer } from 'rxjs';
 import { PubSub } from '../external/gpubsub.types';
 import { EventStoreConfig } from '../event-store.config';
+import { EventEmitter } from 'events';
 
 let googlePubsubPackage: any = {};
 
 @Injectable()
-export class GooglePubsubClient
+export class GooglePubsubClient extends EventEmitter
   implements IBrokerClient<PubSub>, OnModuleInit, OnModuleDestroy {
   _client: PubSub;
   connected = false;
@@ -37,6 +38,7 @@ export class GooglePubsubClient
   private logger = new LoggerUtil(this.constructor.name);
 
   constructor(private readonly options: EventStoreConfig) {
+    super();
     googlePubsubPackage = loadPackage(
       '@google-cloud/pubsub',
       GooglePubsubClient.name,
@@ -59,6 +61,7 @@ export class GooglePubsubClient
         const broker = this.options.config?.broker as GooglePubsubClientOptions;
         this._client = new googlePubsubPackage.PubSub(broker.options);
         this.connected = true;
+        this.emit('connected');
         this.logger.log('GooglePubsubClient client connected successfully');
       })
         .pipe(

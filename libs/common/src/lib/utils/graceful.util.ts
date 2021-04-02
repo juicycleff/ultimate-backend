@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 
-export const enableKillGrace = (app: INestApplication) => {
+export const enableKillGracefully = (app: INestApplication) => {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
 

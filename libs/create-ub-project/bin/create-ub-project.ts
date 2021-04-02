@@ -22,16 +22,19 @@ import { exec, execSync } from 'child_process';
 import { writeFileSync } from 'fs';
 import * as inquirer from 'inquirer';
 import * as path from 'path';
+import * as util from 'util';
 import { dirSync } from 'tmp';
 import * as yargsParser from 'yargs-parser';
+import * as ora from 'ora';
 import { showNxWarning, unparse } from './shared';
 import { output } from '../src';
-import * as ora from 'ora';
 
 import {
   getPackageManagerCommand,
   getPackageManagerVersion,
 } from './package-manager';
+
+const execAsync = util.promisify(execSync)
 
 export enum Preset {
   Empty = 'empty',
@@ -275,7 +278,7 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
   const args = unparse(restArgs).join(' ');
 
   const pmc = getPackageManagerCommand(packageManager);
-  const command = `new ${name} ${args} --preset=nest --collection=@nrwl/workspace`;
+  const command = `new ${name} ${args} --preset=empty --collection=@nrwl/workspace`;
 
   let nxWorkspaceRoot = `"${process.cwd().replace(/\\/g, '/')}"`;
 
@@ -294,8 +297,12 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
   const fullCommand = `${pmc.exec} tao ${command}/collection.json --cli=${cli} --nxWorkspaceRoot=${nxWorkspaceRoot}`;
   const spinner = ora('Creating your Nx workspace').start();
 
+  const createServiceCommand = `cd ${name} && npm link @ultimate-backend/plugin-nx && ${pmc.exec} nx g @ultimate-backend/plugin-nx:service ${restArgs.appName} && cd ..`;
   try {
     await execAndWait(fullCommand, tmpDir);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await execAsync(createServiceCommand, { stdio: [0, 1, 2]});
   } catch (e) {
     output.error({
       title:
