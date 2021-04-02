@@ -1,1 +1,2 @@
-export * from './lib/cli';
+export * from './interfaces';
+export * from './writer';

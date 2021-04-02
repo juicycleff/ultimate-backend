@@ -1,0 +1,113 @@
+{
+  "name": "nx/nest",
+  "version": "0.1",
+  "extends": ["@nrwl/workspace"],
+  "schematics": {
+    "init": {
+      "factory": "./src/schematics/init/init",
+      "schema": "./src/schematics/init/schema.json",
+      "description": "Initialize the @nrwl/nest plugin",
+      "aliases": ["ng-add"],
+      "hidden": true
+    },
+    "service": {
+      "factory": "./src/schematics/service/service",
+      "schema": "./src/schematics/service/schema.json",
+      "aliases": ["svc"],
+      "description": "Create a ultimate backend service"
+    },
+    "library": {
+      "factory": "./src/schematics/library/library",
+      "schema": "./src/schematics/library/schema.json",
+      "aliases": ["lib"],
+      "description": "Create a new nest library"
+    },
+    "nest-class": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#classSchematic",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'class' NestJs generator with Nx project support"
+    },
+    "nest-controller": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#controller",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'controller' NestJs generator with Nx project support"
+    },
+    "nest-decorator": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#decorator",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'decorator' NestJs generator with Nx project support"
+    },
+    "nest-filter": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#filter",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'filter' NestJs generator with Nx project support"
+    },
+    "nest-gateway": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#gateway",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'gateway' NestJs generator with Nx project support"
+    },
+    "nest-guard": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#guard",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'guard' NestJs generator with Nx project support"
+    },
+    "nest-interceptor": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#interceptor",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'interceptor' NestJs generator with Nx project support"
+    },
+    "nest-interface": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#interfaceSchematic",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'interface' NestJs generator with Nx project support"
+    },
+    "nest-middleware": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#middleware",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'middleware' NestJs generator with Nx project support"
+    },
+    "nest-module": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#module",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'module' NestJs generator with Nx project support"
+    },
+    "nest-pipe": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#pipe",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'pipe' NestJs generator with Nx project support"
+    },
+    "nest-provider": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#provider",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'provider' NestJs generator with Nx project support"
+    },
+    "nest-resolver": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#resolver",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'resolver' NestJs generator with Nx project support"
+    },
+    "nest-service": {
+      "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#service",
+      "schema": "./src/schematics/nestjs-schematics/schema.json",
+      "description": "Run the 'service' NestJs generator with Nx project support"
+    },
+    "convert-tslint-to-eslint": {
+      "factory": "./src/generators/convert-tslint-to-eslint/convert-tslint-to-eslint#conversionSchematic",
+      "schema": "./src/generators/convert-tslint-to-eslint/schema.json",
+      "description": "Convert a project from TSLint to ESLint"
+    }
+  },
+  "generators": {
+    "convert-tslint-to-eslint": {
+      "factory": "./src/generators/convert-tslint-to-eslint/convert-tslint-to-eslint#conversionGenerator",
+      "schema": "./src/generators/convert-tslint-to-eslint/schema.json",
+      "description": "Convert a project from TSLint to ESLint"
+    },
+    "plugin-nx": {
+      "factory": "./src/generators/plugin-nx/generator",
+      "schema": "./src/generators/plugin-nx/schema.json",
+      "description": "plugin-nx generator"
+    }
+  }
+}

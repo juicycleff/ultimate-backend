@@ -1,7 +1,12 @@
 {
   "name": "@ultimate-backend/plugin-nx",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "src/index.js",
-  "generators": "./generators.json",
-  "executors": "./executors.json"
+  "executors": "./executors.json",
+  "schematics": "./collection.json",
+  "builders": "./builders.json",
+  "ng-update": {
+    "requirements": {},
+    "migrations": "./migrations.json"
+  }
 }
