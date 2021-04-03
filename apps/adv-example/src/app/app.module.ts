@@ -7,7 +7,7 @@ import { ClientModule } from '@ultimate-backend/client';
 import { LoadBalancerModule } from '@ultimate-backend/loadbalancer';
 import { BrakesModule } from '@ultimate-backend/brakes';
 import { GraphQLModule } from '@nestjs/graphql';
-import { BootstrapModule } from '@ultimate-backend/boostrap';
+import { BootstrapModule } from '@ultimate-backend/bootstrap';
 import { EtcdModule } from '@ultimate-backend/etcd';
 import { ZookeeperModule } from '@ultimate-backend/zookeeper';
 import { UsersModule } from './users/users.module';
