@@ -19,23 +19,38 @@
  ******************************************************************************/
 import { Transport } from '@nestjs/microservices';
 import { GrpcOpts, SwaggerConfig } from './grpc-opts';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { OpenAPIObject } from '@nestjs/swagger/dist/interfaces';
-import { BootConfig } from '@ultimate-backend/boostrap';
+import { BootConfig } from '@ultimate-backend/bootstrap';
+import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
+import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
+import { bloodTearsMiddleware } from './blood-tears.middleware';
 
-export class UbServiceBuilder {
+export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
   private _swaggerObject: OpenAPIObject;
   private _swaggerPath = 'docs';
   private boot: BootConfig;
+  private _prefix: string;
 
   constructor(private readonly app: INestApplication) {
     this.boot = app.get<BootConfig>(BootConfig);
   }
 
-  withMultiTenancy() {
+  withPrefix(prefix: string) {
+    this._prefix = prefix;
+    return this;
+  }
+
+  withPoweredBy() {
+    this.app.use(bloodTearsMiddleware)
+    return this;
+  }
+
+  withMultiTenancy(option: MultiTenancyConfig) {
+    this.app.use(enableMultiTenancy(option));
     return this;
   }
 
@@ -44,10 +59,10 @@ export class UbServiceBuilder {
       this._swaggerPath = path;
     }
 
-    const title = options?.title || this.boot.get('app.name');
-    const description = options?.description || this.boot.get('app.description', 'ultimate backend service');
-    const version = options?.version || this.boot.get('app.version', 'latest');
-    const tag = options?.description || this.boot.get('app.tag', 'service');
+    const title = options?.title || this.boot.get('name', 'ub-service');
+    const description = options?.description || this.boot.get('description', 'ultimate backend service');
+    const version = options?.version || this.boot.get('version', 'latest');
+    const tag = options?.description || this.boot.get('tag', 'service');
     this._swaggerObject = new DocumentBuilder()
       .setTitle(title)
       .setDescription(description)
@@ -57,9 +72,43 @@ export class UbServiceBuilder {
     return this;
   }
 
-  withGrpc(options: GrpcOpts) {
-    this._grpcOptions = options;
+  withGrpc(options?: GrpcOpts) {
+    if (!options) {
+      this._grpcOptions = this.boot.get('transport.grpc');
+    } else {
+      this._grpcOptions = options;
+    }
+
+    if (!this._grpcOptions) {
+      throw new Error('grpc transport options must be provide in boot config or by options');
+    }
+
     return this;
+  }
+
+  private printGrpcInfo() {
+    if (this._grpcOptions) {
+      Logger.log(
+        `GRPC listening on host: ${this._grpcOptions.url}`,
+        'UBService',
+      );
+    }
+  }
+
+  private printRestInfo(port: number) {
+    Logger.log(
+      `REST api listening on host: http://localhost:${port}${this._prefix ? '/'+this._prefix : ''}`,
+      'UBService',
+    );
+  }
+
+  private printSwaggerInfo(port: number) {
+    if (this._swaggerObject) {
+      Logger.log(
+        `Swagger Docs for service available at: http://localhost:${port}/${this._swaggerPath}`,
+        'UBService',
+      );
+    }
   }
 
   private connectGrpc() {
@@ -77,10 +126,21 @@ export class UbServiceBuilder {
     }
   }
 
-  start() {
+  async start(port?: number) {
+    if (this._prefix) {
+      this.app.setGlobalPrefix(this._prefix);
+    }
+
     enableKillGracefully(this.app);
     this.createSwaggerDocument();
-
     this.connectGrpc();
+
+    const appPort = port || this.boot.get('port', 3000);
+    await this.app.listen(appPort);
+
+    // print messages to console
+    this.printSwaggerInfo(appPort);
+    this.printRestInfo(appPort);
+    this.printGrpcInfo();
   }
 }

@@ -1,3 +1,5 @@
+import { MultiTenancyConfig, MultiTenantInfo } from './multi-tenant.config';
+import { IRequest } from '@ultimate-backend/common';
 
 export class BuildTenantInfoHelper {
   private addOptions = true;
@@ -16,7 +18,7 @@ export class BuildTenantInfoHelper {
     tenantId: string,
     config: MultiTenancyConfig,
     accessToken: any = null,
-  ): TenantInfo {
+  ): MultiTenantInfo {
     return {
       tenantId,
       config,
@@ -24,7 +26,7 @@ export class BuildTenantInfoHelper {
     };
   }
 
-  private init(): TenantInfo {
+  private init(): MultiTenantInfo {
     let accessToken = {};
     let tenantId = '';
 
@@ -92,7 +94,7 @@ export class BuildTenantInfoHelper {
     );
   }
 
-  build(): TenantInfo {
+  build(): MultiTenantInfo {
     return this.init();
   }
 }

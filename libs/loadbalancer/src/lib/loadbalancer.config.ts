@@ -17,7 +17,7 @@
  * File name:         loadbalancer.config.ts
  * Last modified:     19/03/2021, 12:08
  ******************************************************************************/
-import { BootConfig } from '@ultimate-backend/boostrap';
+import { BootConfig } from '@ultimate-backend/bootstrap';
 import { LoadBalancerModuleOptions } from './loadbalancer-module.options';
 import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
 import { merge, isPlainObject, isEmpty } from 'lodash';

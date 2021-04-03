@@ -41,7 +41,7 @@ function command() {
   // Build
   for (let key in rootProjects) {
     const value = rootProjects[key];
-    if (value.projectType === 'library' && key !== 'core') {
+    if (value.projectType === 'library') {
       shell.exec(`nx run ${key}:build --with-deps`);
     }
   }
@@ -50,8 +50,7 @@ function command() {
   for (let key in rootProjects) {
     const value = rootProjects[key];
     if (
-      value.projectType === 'library' &&
-      (key !== 'core' || key !== 'gateway')
+      value.projectType === 'library' && key !== 'gateway'
     ) {
       shell.exec(`cd dist/libs/${key} && npm publish --access public`);
       shell.exec('cd ../../../');

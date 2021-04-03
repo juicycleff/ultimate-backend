@@ -19,3 +19,5 @@
  ******************************************************************************/
 
 export * from './graphql';
+export * from './app-setup';
+export * from './multitenancy';

@@ -18,7 +18,7 @@
  * Last modified:     26/03/2021, 16:51
  ******************************************************************************/
 import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
-import { BootConfig } from '@ultimate-backend/boostrap';
+import { BootConfig } from '@ultimate-backend/bootstrap';
 import { InjectConsulOption } from './decorators';
 import { ConsulModuleOptions } from './consul-module.options';
 import { merge, isPlainObject, isEmpty } from 'lodash';

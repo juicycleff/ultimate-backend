@@ -20,7 +20,7 @@
 import { ConfigModuleOptions } from './interfaces';
 import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
 import { merge, isPlainObject, isEmpty } from 'lodash';
-import { BootConfig } from '@ultimate-backend/boostrap';
+import { BootConfig } from '@ultimate-backend/bootstrap';
 import { InjectConfigOptions } from './decorators/inject-config.decorator';
 
 @Injectable()

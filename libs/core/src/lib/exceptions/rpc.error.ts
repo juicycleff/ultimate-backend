@@ -1,24 +1,26 @@
 /* tslint:disable:max-classes-per-file */
 
 import { RpcException } from '@nestjs/microservices';
+import { ServiceError } from './grpc.error';
 
 export enum GrpcExceptionStatus {
-  NOT_FOUND_EXCEPTION,
-  BAD_REQUEST_EXCEPTION,
-  UNSUPPORTED_MEDIATYPE_EXCEPTION,
-  VALIDATION_EXCEPTION,
-  PAYLOAD_TOO_LARGE_EXCEPTION,
-  NOT_IMPLEMENTED_EXCEPTION,
-  UNAUTHORIZED_EXCEPTION,
-  REQUEST_TIMEOUT_EXCEPTION,
-  METHOD_NOT_ALLOWED_EXCEPTION,
-  FORBIDDEN_EXCEPTION,
-  CONFLICT_EXCEPTION,
+  NOT_FOUND_EXCEPTION = 'NOT_FOUND_EXCEPTION',
+  BAD_REQUEST_EXCEPTION = 'BAD_REQUEST_EXCEPTION',
+  UNSUPPORTED_MEDIATYPE_EXCEPTION = 'UNSUPPORTED_MEDIATYPE_EXCEPTION',
+  VALIDATION_EXCEPTION = 'VALIDATION_EXCEPTION',
+  PAYLOAD_TOO_LARGE_EXCEPTION = 'PAYLOAD_TOO_LARGE_EXCEPTION',
+  NOT_IMPLEMENTED_EXCEPTION = 'NOT_IMPLEMENTED_EXCEPTION',
+  UNAUTHORIZED_EXCEPTION = 'UNAUTHORIZED_EXCEPTION',
+  REQUEST_TIMEOUT_EXCEPTION = 'REQUEST_TIMEOUT_EXCEPTION',
+  METHOD_NOT_ALLOWED_EXCEPTION = 'METHOD_NOT_ALLOWED_EXCEPTION',
+  FORBIDDEN_EXCEPTION = 'FORBIDDEN_EXCEPTION',
+  CONFLICT_EXCEPTION = 'CONFLICT_EXCEPTION',
 }
 
-export class NotFoundRpcException extends RpcException {
-  constructor(message: string) {
-    super({ message, code: GrpcExceptionStatus.NOT_FOUND_EXCEPTION });
+export class NotFoundRpcException extends ServiceError {
+  constructor(message: string, properties?: { [key: string]: any }) {
+    super(message, GrpcExceptionStatus.NOT_FOUND_EXCEPTION, properties);
+    Object.defineProperty(this, 'name', { value: GrpcExceptionStatus.NOT_FOUND_EXCEPTION });
   }
 }
 

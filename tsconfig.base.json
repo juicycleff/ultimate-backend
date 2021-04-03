@@ -37,7 +37,7 @@
       "@ultimate-backend/create-ub-project": [
         "libs/create-ub-project/src/index.ts"
       ],
-      "@ultimate-backend/boostrap": ["libs/bootstrap/src/index.ts"]
+      "@ultimate-backend/bootstrap": ["libs/bootstrap/src/index.ts"]
     },
     "plugins": [
       {

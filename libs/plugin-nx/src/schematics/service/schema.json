@@ -17,6 +17,12 @@
       "description": "The directory of the new service.",
       "type": "string"
     },
+    "port": {
+      "x-prompt": "What is the service port?",
+      "description": "The default port is 3000.",
+      "type": "number",
+      "default": 3000
+    },
     "kind": {
       "type": "string",
       "description": "Provide the ub app type",
@@ -41,7 +47,7 @@
       }
     },
     "transport": {
-      "type": "string",
+      "type": "array",
       "description": "What kind of service to service communication",
       "x-prompt": {
         "message": "What transport protocol for service to service communication?",
@@ -64,7 +70,7 @@
       }
     },
     "features": {
-      "type": "string",
+      "type": "array",
       "description": "What UB features do you need in app",
       "x-prompt": {
         "message": "What features do you want to add in app. (can do it later)?",
@@ -98,10 +104,6 @@
     "tags": {
       "type": "string",
       "description": "Add tags to the application (used for linting)"
-    },
-    "frontendProject": {
-      "type": "string",
-      "description": "Frontend project that needs to access this application. This sets up proxy configuration."
     }
   },
   "required": []

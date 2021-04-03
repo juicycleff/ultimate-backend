@@ -18,7 +18,7 @@
  * Last modified:     26/03/2021, 18:16
  ******************************************************************************/
 import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
-import { BootConfig } from '@ultimate-backend/boostrap';
+import { BootConfig } from '@ultimate-backend/bootstrap';
 import { merge, isPlainObject, isEmpty } from 'lodash';
 import { InjectRedisOptions } from './decorators';
 import { RedisModuleOptions } from './redis-module.options';

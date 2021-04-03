@@ -65,10 +65,11 @@ const presetOptions: { value: Preset; name: string }[] = [
 ];
 
 const tsVersion = '~4.0.3';
-const cliVersion = '^11.5.2';
-const nxVersion = '^11.5.2';
+const cliVersion = '^11.6.0-beta.4';
+const nxVersion = '^11.6.0-beta.4';
 const ubVersion = 'UB_VERSION';
 const prettierVersion = '^2.2.1';
+const angularVersion = '^11.2.7';
 
 const parsedArgs: any = yargsParser(process.argv.slice(2), {
   string: [
@@ -243,6 +244,13 @@ function determineLinter(preset: Preset, parsedArgs: any) {
   }
 }
 
+async function installUBPackages(name: string, cmd: string) {
+  const fullCmd = `${cmd} @ultimate-backend/bootstrap @ultimate-backend/cloud @ultimate-backend/event-store @ultimate-backend/core`;
+  console.log(name, cmd);
+  console.log(fullCmd);
+  await execAndWait(fullCmd, path.join(process.cwd(), name));
+}
+
 function createSandbox(packageManager: string) {
   output.log({
     title: 'UB is creating your project.',
@@ -260,6 +268,7 @@ function createSandbox(packageManager: string) {
         '@nrwl/tao': cliVersion,
         typescript: tsVersion,
         prettier: prettierVersion,
+        '@angular-devkit/core': angularVersion,
       },
       license: 'MIT',
     })
@@ -294,15 +303,20 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
       nxWorkspaceRoot = `\\"${nxWorkspaceRoot.slice(1, -1)}\\"`;
     }
   }
+  const projectPath = path.join(process.cwd(), name);
+
   const fullCommand = `${pmc.exec} tao ${command}/collection.json --cli=${cli} --nxWorkspaceRoot=${nxWorkspaceRoot}`;
+  const createServiceCommand = `nx g @ultimate-backend/plugin-nx:service ${restArgs.appName}`;
   const spinner = ora('Creating your Nx workspace').start();
 
-  const createServiceCommand = `cd ${name} && npm link @ultimate-backend/plugin-nx && ${pmc.exec} nx g @ultimate-backend/plugin-nx:service ${restArgs.appName} && cd ..`;
   try {
     await execAndWait(fullCommand, tmpDir);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    await execAsync(createServiceCommand, { stdio: [0, 1, 2]});
+
+    spinner.text = 'Creating your default ultimate-backend service';
+
+    await execAndWait(`${pmc.addDev} @angular-devkit/core @angular-devkit/schematics --silent`, projectPath);
+    await execAndWait(`${pmc.add} @ultimate-backend/bootstrap @ultimate-backend/cloud @ultimate-backend/common @ultimate-backend/event-store @ultimate-backend/core`, projectPath);
+    await execAndWait(createServiceCommand, projectPath);
   } catch (e) {
     output.error({
       title:
@@ -316,6 +330,7 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
     spinner.stop();
   }
 
+  spinner.stop();
   output.success({
     title: 'ultimate-backend project was successfully created.',
   });

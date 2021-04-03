@@ -14,7 +14,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         boot-config.class.ts
+ * File name:         app-setup-config.class.ts
  * Last modified:     26/03/2021, 14:08
  ******************************************************************************/
 import { Injectable } from '@nestjs/common';
