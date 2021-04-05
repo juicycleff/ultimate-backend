@@ -317,7 +317,7 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
     spinner.text = 'Creating your default ultimate-backend service';
 
     await execAndWait(`${pmc.addDev} @angular-devkit/core @angular-devkit/schematics --silent`, projectPath);
-    if (restArgs.preset === 'empty') {
+    if (restArgs.preset !== 'empty') {
       await execAndWait(createServiceCommand, projectPath);
     }
   } catch (e) {
