@@ -1,0 +1,10 @@
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { <%= classify(name) %>Command } from '../impl';
+
+@CommandHandler(<%= classify(name) %>Command)
+export class <%= classify(name) %>Handler implements ICommandHandler<<%= classify(name) %>Command> {
+  async execute(command: <%= classify(name) %>Command): Promise<string> {
+    return 'Hello Command';
+  }
+}

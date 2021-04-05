@@ -14,19 +14,15 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         list-module.command.ts
- * Last modified:     24/03/2021, 19:42
+ * File name:         index.ts
+ * Last modified:     24/03/2021, 20:18
  ******************************************************************************/
-import { ArrayOption, ICommand } from '../../interfaces';
+import { GenerateCqrsCommand } from './generate-cqrs.command';
+const { Command } = require('commander');
 
-export class ListModuleCommand implements ICommand {
-  command = 'list [actions...]';
+const moduleCommand = new Command('generate');
+moduleCommand.description('generate ultimate backend modules');
 
-  option: ArrayOption = [];
+const commands = [new GenerateCqrsCommand(moduleCommand)];
 
-  description = 'list available modules';
-
-  action(buildTarget, options, command): void {
-    console.log(command);
-  }
-}
+export const generateCommands = moduleCommand;

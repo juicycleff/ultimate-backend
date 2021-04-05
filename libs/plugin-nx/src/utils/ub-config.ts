@@ -14,19 +14,20 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         list-module.command.ts
- * Last modified:     24/03/2021, 19:42
+ * File name:         ub-config.ts
+ * Last modified:     05/04/2021, 19:31
  ******************************************************************************/
-import { ArrayOption, ICommand } from '../../interfaces';
 
-export class ListModuleCommand implements ICommand {
-  command = 'list [actions...]';
+interface UBConfigService {
+  name: string;
+  port: number;
+  language?: string;
+  type: string;
+  docker?: boolean;
+  kubernetes?: boolean;
+}
 
-  option: ArrayOption = [];
-
-  description = 'list available modules';
-
-  action(buildTarget, options, command): void {
-    console.log(command);
-  }
+export interface UBConfig {
+  name: string;
+  services?: {[name: string]: UBConfigService};
 }

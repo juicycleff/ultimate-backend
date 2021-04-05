@@ -1,0 +1,5 @@
+import { IEvent } from '@nestjs/cqrs';
+
+export class <%= classify(name) %>Event implements IEvent  {
+  // start writing
+}

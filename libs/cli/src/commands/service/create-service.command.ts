@@ -18,21 +18,19 @@
  * Last modified:     24/03/2021, 19:42
  ******************************************************************************/
 import { execSync } from 'child_process';
-import { ICommand } from '../../interfaces';
+import { ArrayOption, ICommand } from '../../interfaces';
 import { output } from '../../utils';
-import * as path from 'path';
 
 export class CreateServiceCommand implements ICommand {
   command = 'create [service-name] [actions...]';
 
-  option: [string?, string?, string?] = [];
+  option: ArrayOption = [];
 
   description = 'create a new ultimate-backend service';
 
   action(serviceName, actions, options, command): void {
-    console.log('serviceName => ', serviceName);
     try {
-      execSync(`nx g @ultimate-backend/plugin-nx:service`, {
+      execSync(`npx nx g @ultimate-backend/plugin-nx:service`, {
         stdio: [0, 1, 2],
       });
     } catch (e) {

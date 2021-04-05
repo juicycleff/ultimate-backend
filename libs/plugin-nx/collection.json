@@ -22,6 +22,12 @@
       "aliases": ["lib"],
       "description": "Create a new nest library"
     },
+    "cqrs": {
+      "factory": "./src/schematics/ub-cqrs/ub-cqrs",
+      "schema": "./src/schematics/ub-cqrs/schema.json",
+      "aliases": ["cq"],
+      "description": "Create a CQRS handler for service"
+    },
     "nest-class": {
       "factory": "./src/schematics/nestjs-schematics/nestjs-schematics#classSchematic",
       "schema": "./src/schematics/nestjs-schematics/schema.json",

@@ -20,4 +20,5 @@
 
 export * from './find-project-root';
 export * from './build-commands';
+export * from './build-command';
 export * from './output';

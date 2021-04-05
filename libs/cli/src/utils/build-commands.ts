@@ -17,16 +17,21 @@
  * File name:         build-commands.ts
  * Last modified:     24/03/2021, 20:58
  ******************************************************************************/
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import { ICommand } from '../interfaces';
 
 export function buildCommands(program: Command, commands: ICommand[]): Command {
   for (const c of commands) {
-    program.command(c.command).description(c.description).action(c.action);
+    program
+      .description(c.description);
 
     if (c.option && c.option.length > 0) {
-      program.option(...c.option);
+      for (const cElement of c.option) {
+        program.addOption(new Option(cElement[0], cElement[1]));
+      }
     }
+    program.action(c.action)
+    .command(c.command);
   }
 
   return program;

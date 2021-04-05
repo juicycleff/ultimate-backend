@@ -20,11 +20,12 @@
 
 import { ICommand } from '../interfaces';
 import { projectCommands } from './project';
-import { moduleCommands } from './modules';
+// import { moduleCommands } from './modules';
 import { serviceCommands } from './service';
+import { generateCommands } from './generate';
 
 export const commands: ICommand[] = [
   projectCommands,
   serviceCommands,
-  moduleCommands,
+  generateCommands,
 ];

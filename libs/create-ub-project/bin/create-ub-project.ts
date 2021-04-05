@@ -33,6 +33,7 @@ import {
   getPackageManagerCommand,
   getPackageManagerVersion,
 } from './package-manager';
+import { createUBConfig } from './bootstrap-ub';
 
 const execAsync = util.promisify(execSync)
 
@@ -306,17 +307,19 @@ async function createApp(tmpDir: string, name: string, parsedArgs: any) {
   const projectPath = path.join(process.cwd(), name);
 
   const fullCommand = `${pmc.exec} tao ${command}/collection.json --cli=${cli} --nxWorkspaceRoot=${nxWorkspaceRoot}`;
-  const createServiceCommand = `nx g @ultimate-backend/plugin-nx:service ${restArgs.appName}`;
+  const createServiceCommand = `npx nx g @ultimate-backend/plugin-nx:service ${restArgs.appName}`;
   const spinner = ora('Creating your Nx workspace').start();
 
   try {
     await execAndWait(fullCommand, tmpDir);
+    await createUBConfig(name);
 
     spinner.text = 'Creating your default ultimate-backend service';
 
     await execAndWait(`${pmc.addDev} @angular-devkit/core @angular-devkit/schematics --silent`, projectPath);
-    await execAndWait(`${pmc.add} @ultimate-backend/bootstrap @ultimate-backend/cloud @ultimate-backend/common @ultimate-backend/event-store @ultimate-backend/core`, projectPath);
-    await execAndWait(createServiceCommand, projectPath);
+    if (restArgs.preset === 'empty') {
+      await execAndWait(createServiceCommand, projectPath);
+    }
   } catch (e) {
     output.error({
       title:

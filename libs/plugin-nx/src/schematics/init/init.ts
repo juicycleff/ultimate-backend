@@ -12,7 +12,7 @@ import {
   nestJsVersion,
   nxVersion,
   reflectMetadataVersion,
-  rxjsVersion,
+  rxjsVersion, ubVersion
 } from '../../utils/versions';
 
 export const updateDependencies = addDepsToPackageJson(
@@ -20,6 +20,10 @@ export const updateDependencies = addDepsToPackageJson(
     '@nestjs/common': nestJsVersion,
     '@nestjs/core': nestJsVersion,
     '@nestjs/platform-express': nestJsVersion,
+    '@ultimate-backend/core': ubVersion,
+    '@ultimate-backend/cloud': ubVersion,
+    '@ultimate-backend/bootstrap': ubVersion,
+    '@ultimate-backend/common ': ubVersion,
     'reflect-metadata': reflectMetadataVersion,
     rxjs: rxjsVersion,
     tslib: '^2.0.0',

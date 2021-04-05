@@ -5,10 +5,10 @@ import {
   mergeWith,
   move,
   Rule,
-  SchematicContext,
+  SchematicContext, SchematicsException,
   template,
   Tree,
-  url,
+  url
 } from '@angular-devkit/schematics';
 import { join, normalize, Path } from '@angular-devkit/core';
 import { Schema } from './schema';
@@ -18,10 +18,39 @@ import { appsDir } from '@nrwl/workspace/src/utils/ast-utils';
 import { names } from '@nrwl/devkit';
 import { camelCase, upperFirst } from 'lodash';
 import { wrapAngularDevkitSchematic } from '@nrwl/devkit/ngcli-adapter';
+import { UBConfig } from '../../utils/ub-config';
 
 interface NormalizedSchema extends Schema {
   appProjectRoot: Path;
 }
+
+function updateUBWorkspace(schema: NormalizedSchema): Rule {
+  return (host: Tree) => {
+    const configPath = 'ub.json';
+    const ubConfigFile = host.read(configPath);
+
+    if (!ubConfigFile) {
+      throw new SchematicsException('Unable to find ub workspace configuration');
+    }
+    const ubConfig: UBConfig = JSON.parse(ubConfigFile.toString());
+
+    if (!ubConfig.services) {
+      ubConfig.services = {}
+    }
+
+    ubConfig.services[schema.name] = {
+      type: schema.kind,
+      docker: true,
+      kubernetes: false,
+      language: 'typescript',
+      name: schema.name,
+      port: schema.port
+    }
+
+    host.overwrite(configPath, JSON.stringify(ubConfig, null, 2));
+  };
+}
+
 
 function addProtoFile(options: NormalizedSchema): Rule {
   if (options.transport.findIndex(value => value === 'grpc') === -1) {
@@ -105,6 +134,7 @@ export default function (schema: Schema): Rule {
       addMainFile(options),
       addProtoFile(options),
       addAppFiles(options),
+      updateUBWorkspace(options),
       updateJsonInTree(
         join(options.appProjectRoot, 'tsconfig.app.json'),
         (json) => {

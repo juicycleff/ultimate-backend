@@ -1,0 +1,10 @@
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+
+import { <%= classify(name) %>Event } from '../impl';
+
+@EventsHandler(<%= classify(name) %>Event)
+export class <%= classify(name) %>Handler implements IEventHandler<<%= classify(name) %>Event> {
+  handle(event: <%= classify(name) %>Event): string {
+    return 'Hello Command';
+  }
+}

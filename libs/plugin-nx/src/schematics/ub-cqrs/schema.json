@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "UBCQRSSchematics",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of generated generator",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The ub service to target",
+      "$default": {
+        "$source": "projectName"
+      },
+      "alias": "p",
+      "x-prompt": "What UB service would you like to target?"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["command", "query", "event"],
+      "description": "CQRS function to create",
+      "default": "command",
+      "x-prompt": {
+        "message": "Please select you CQRS handler type?",
+        "type": "list",
+        "items": ["command", "query", "event"]
+      }
+    },
+    "unitTestRunner": {
+      "type": "string",
+      "enum": ["jest", "none"],
+      "description": "Test runner to use for unit tests",
+      "default": "jest"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the generated files are placed",
+      "aliases": ["d", "path"]
+    },
+    "flat": {
+      "type": "boolean",
+      "default": false,
+      "description": "Flag to indicate if a directory is created."
+    }
+  },
+  "additionalProperties": true,
+  "required": ["name", "project"]
+}

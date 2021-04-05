@@ -17,19 +17,60 @@
  * File name:         add-module.command.ts
  * Last modified:     24/03/2021, 19:42
  ******************************************************************************/
-import { ArrayOption, ICommand } from '../../interfaces';
+import { ICommand } from '../../interfaces';
+import { Command } from 'commander';
+import { execSync } from 'child_process';
+import { output } from '../../utils';
 
-export class AddModuleCommand implements ICommand {
-  command = 'add <module-name> [actions...]';
+export class GenerateCqrsCommand implements ICommand {
 
-  option: ArrayOption = [[
-    '-s, --services <services...>',
-    'services to add module',
-  ]];
+  constructor(program: Command) {
+    program
+      .command(this.command)
+      .action(this.action)
+      .description(this.description)
+      .option(...this.option[0])
+      .option(...this.option[1])
+      .option(...this.option[2])
+  }
 
-  description = 'add module to service';
+  command = 'cqrs <handler-name>';
 
-  action(buildTarget, options, command): void {
-    console.log(command);
+  option: Array<[string?, string?, string?]> = [
+    [
+      '-s, --service <service>',
+      'services to generate module',
+    ],
+    [
+      '-d, --directory <directory>',
+      'directory/path to generate module',
+    ],
+    [
+      '-p, --path <path>',
+      'directory/path to generate module',
+    ],
+  ];
+
+  description = 'generate cqrs handlers for service';
+
+  action(handlerName, options, command, ...rest): void {
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:cqrs ${handlerName}`;
+    if (options.service) {
+      cmd = cmd + ` -p ${options.service}`
+    }
+    if (options.directory) {
+      cmd = cmd + ` -d ${options.directory}`
+    }
+
+    try {
+      execSync(cmd, {
+        stdio: [0, 1, 2],
+      });
+    } catch (e) {
+      output.error({
+        title: 'Error creating service',
+        bodyLines: [e],
+      });
+    }
   }
 }

@@ -20,7 +20,7 @@
 import * as ora from 'ora';
 import * as shell from 'shelljs';
 import * as util from 'util';
-import { ICommand } from '../../interfaces';
+import { ArrayOption, ICommand } from '../../interfaces';
 import { output } from '../../utils/output';
 
 const exec = util.promisify(shell.exec);
@@ -28,7 +28,7 @@ const exec = util.promisify(shell.exec);
 export class CreateProjectCommand implements ICommand {
   command = 'create <project-name> [actions...]';
 
-  option: [string?, string?, string?] = [];
+  option: ArrayOption = [];
 
   description = 'create a new ultimate-backend project/workspace';
 

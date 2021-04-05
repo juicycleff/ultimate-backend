@@ -14,19 +14,11 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         list-module.command.ts
- * Last modified:     24/03/2021, 19:42
+ * File name:         classify.ts
+ * Last modified:     04/04/2021, 03:26
  ******************************************************************************/
-import { ArrayOption, ICommand } from '../../interfaces';
+import {upperFirst, camelCase} from 'lodash';
 
-export class ListModuleCommand implements ICommand {
-  command = 'list [actions...]';
-
-  option: ArrayOption = [];
-
-  description = 'list available modules';
-
-  action(buildTarget, options, command): void {
-    console.log(command);
-  }
+export function classify(str: string){
+  return upperFirst(camelCase(str))
 }

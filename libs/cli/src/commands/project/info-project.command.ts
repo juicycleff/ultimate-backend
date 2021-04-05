@@ -17,12 +17,12 @@
  * File name:         create-project.command.ts
  * Last modified:     24/03/2021, 19:42
  ******************************************************************************/
-import { ICommand } from '../../interfaces';
+import { ArrayOption, ICommand } from '../../interfaces';
 
 export class InfoProjectCommand implements ICommand {
   command = 'info';
 
-  option: [string?, string?, string?] = [];
+  option: ArrayOption = [];
 
   description = 'ultimate-backend project/workspace info';
 

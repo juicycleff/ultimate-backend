@@ -14,19 +14,27 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         list-module.command.ts
- * Last modified:     24/03/2021, 19:42
+ * File name:         build-commands.ts
+ * Last modified:     24/03/2021, 20:58
  ******************************************************************************/
-import { ArrayOption, ICommand } from '../../interfaces';
+import { Command, Option } from 'commander';
+import { ICommand } from '../interfaces';
 
-export class ListModuleCommand implements ICommand {
-  command = 'list [actions...]';
+export function buildCommand(program: Command, commands: ICommand[]): Command {
+  for (const c of commands) {
+    const command = new Command(c.command);
+    command.command(c.command);
+    command.description(c.description);
 
-  option: ArrayOption = [];
-
-  description = 'list available modules';
-
-  action(buildTarget, options, command): void {
-    console.log(command);
+    if (c.option && c.option.length > 0) {
+      for (const cElement of c.option) {
+        command.addOption(new Option(cElement[0], cElement[1]));
+      }
+    }
+    command.action(c.action);
+    program.addCommand(command);
   }
+
+
+  return program;
 }

@@ -23,7 +23,9 @@ export interface ICommand {
 
   description: string;
 
-  option: [string?, string?, string?];
+  option: Array<[string?, string?, string?]>;
 
   action(...args): void;
 }
+
+export type ArrayOption = Array<[string?, string?, string?]>;

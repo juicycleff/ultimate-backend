@@ -40,8 +40,6 @@ if (!project) {
   process.exit(1);
 }
 
-console.log(project);
-
 const program = new commander.Command();
 program.version(
   npmPackage.version,
