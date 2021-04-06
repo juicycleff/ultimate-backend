@@ -20,7 +20,7 @@
     "port": {
       "x-prompt": "What is the service port?",
       "description": "The default port is 3000.",
-      "type": "number",
+      "type": "integer",
       "default": 3000
     },
     "kind": {

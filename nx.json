@@ -26,7 +26,7 @@
     "cloud": { "tags": [] },
     "loadbalancer": { "tags": [] },
     "permissions": { "tags": [] },
-    "cli": { "tags": [] },
+    "cli": { "tags": [], "implicitDependencies": ["plugin-nx"] },
     "example": { "tags": [] },
     "adv-example": { "tags": [] },
     "consul": { "tags": [], "implicitDependencies": ["common"] },

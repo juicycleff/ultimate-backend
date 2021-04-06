@@ -22,7 +22,6 @@ import { exec, execSync } from 'child_process';
 import { writeFileSync } from 'fs';
 import * as inquirer from 'inquirer';
 import * as path from 'path';
-import * as util from 'util';
 import { dirSync } from 'tmp';
 import * as yargsParser from 'yargs-parser';
 import * as ora from 'ora';
@@ -34,8 +33,6 @@ import {
   getPackageManagerVersion,
 } from './package-manager';
 import { createUBConfig } from './bootstrap-ub';
-
-const execAsync = util.promisify(execSync)
 
 export enum Preset {
   Empty = 'empty',

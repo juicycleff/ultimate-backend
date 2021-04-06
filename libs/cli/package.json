@@ -3,5 +3,8 @@
   "version": "0.1.2",
   "bin": {
     "ub": "./bin/ub.js"
+  },
+  "dependencies": {
+    "tslib": "^2.2.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -85,13 +85,14 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
     "swagger-ui-express": "^4.1.6",
-    "tslib": "^2.0.0",
     "uuid": "^8.3.2",
     "vhost": "^3.0.2",
     "yaml": "^1.10.0",
     "yaml-schema-validator": "^1.2.2",
     "yaml-validator": "^3.0.0",
-    "zookeeper": "^4.8.1"
+    "zookeeper": "^4.8.1",
+    "shelljs": "^0.8.4",
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@jscutlery/semver": "^1.3.2",
@@ -127,11 +128,9 @@
     "jest-ts-auto-mock": "^1.0.12",
     "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
-    "shelljs": "^0.8.4",
     "ts-auto-mock": "^3.1.0",
     "ts-jest": "^26.4.4",
     "ts-node": "~7.0.0",
-    "tslib": "^2.0.0",
     "tslint": "~6.0.0",
     "tslint-to-eslint-config": "^2.2.0",
     "ttypescript": "^1.5.12",

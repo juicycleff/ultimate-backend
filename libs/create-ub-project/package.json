@@ -1,5 +1,5 @@
 {
-  "name": "create-ub-project",
+  "name": "@ultimate-backend/create-ub-project",
   "version": "0.1.2",
   "bin": {
     "create-ub-project": "./bin/create-ub-project.js"
