@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.12](https://github.com/juicycleff/ultimate-backend/compare/v0.1.11...v0.1.12) (2021-04-07)
+
+
+### Bug Fixes
+
+* **plugin-nx:** added camelCase function ([51848ea](https://github.com/juicycleff/ultimate-backend/commit/51848ea6a78620400c9e62677684233ddf4be24a))
+
+
+
 ## [0.1.11](https://github.com/juicycleff/ultimate-backend/compare/v0.1.10...v0.1.11) (2021-04-07)
 
 
