@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.10](https://github.com/juicycleff/ultimate-backend/compare/v0.1.9...v0.1.10) (2021-04-07)
+
+
+### Bug Fixes
+
+* **plugin-nx,bootstrap,core:** fix bad path resolution ([305c774](https://github.com/juicycleff/ultimate-backend/commit/305c774e88344557ddb4db0bfb98df24dd64d063))
+
+
+
 ## [0.1.9](https://github.com/juicycleff/ultimate-backend/compare/v0.1.8...v0.1.9) (2021-04-07)
 
 
