@@ -117,6 +117,7 @@ function addAppFiles(options: NormalizedSchema): Rule {
         port: options.port,
         root: options.appProjectRoot,
         ...strings,
+        camelCase,
       }),
       move(join(options.appProjectRoot, 'src')),
     ])
