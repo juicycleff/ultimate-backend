@@ -27,6 +27,7 @@ import { BootConfig } from '@ultimate-backend/bootstrap';
 import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
 import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
 import { bloodTearsMiddleware } from './blood-tears.middleware';
+import * as path from 'path';
 
 export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
@@ -75,6 +76,19 @@ export class UBServiceBuilder {
   withGrpc(options?: GrpcOpts) {
     if (!options) {
       this._grpcOptions = this.boot.get('transport.grpc');
+      if(this._grpcOptions && this._grpcOptions.protoPath) {
+        if (Array.isArray(this._grpcOptions.protoPath)) {
+          const protoPath = []
+          for (const proto of this._grpcOptions.protoPath) {
+            if (proto.startsWith('dist/apps')) {
+              protoPath.push(path.resolve(process.cwd(), proto));
+            }
+          }
+          this._grpcOptions.protoPath = protoPath;
+        } else if (this._grpcOptions.protoPath.startsWith('dist/apps')) {
+          this._grpcOptions.protoPath = path.resolve(process.cwd(), this._grpcOptions.protoPath);
+        }
+      };
     } else {
       this._grpcOptions = options;
     }

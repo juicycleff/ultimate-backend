@@ -49,9 +49,9 @@ export class BootstrapModule {
       provide: BOOTSTRAP_CONFIGURATION_OPTIONS,
       useValue: assign(
         {
-          filePath: path.resolve(__dirname, 'assets/bootstrap.yaml'),
+          filePath: path.resolve(process.cwd(), 'assets/bootstrap.yaml'),
           debug: false,
-          disableEnv: true,
+          enableEnv: false,
         },
         options
       ),

@@ -74,16 +74,18 @@ export class BootConfigSourceLoader {
     const tokens = /(.+)\.(.+)/.exec(filename);
     if (tokens) {
       tokens.reverse().pop();
-      filenames.push(path.resolve(dirname, `${tokens[1]}.${tokens[0]}`));
-      if (!this.options.disableEnv) {
+      if (this.options.enableEnv) {
         filenames.push(
           path.resolve(dirname, `${tokens[1]}.${env}.${tokens[0]}`)
         );
+      } else {
+        filenames.push(path.resolve(dirname, `${tokens[1]}.${tokens[0]}`));
       }
     } else {
-      filenames.push(path.resolve(dirname, filename));
-      if (!this.options.disableEnv) {
+      if (this.options.enableEnv) {
         filenames.push(path.resolve(dirname, `${filename}.${env}`));
+      } else {
+        filenames.push(path.resolve(dirname, filename));
       }
     }
 

@@ -21,9 +21,9 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
 
 export interface BootstrapModuleOptions {
-  filePath?: string;
+  filePath: string;
   debug?: boolean;
-  disableEnv?: boolean;
+  enableEnv?: boolean;
 }
 
 export interface BootstrapModuleOptionsFactory {

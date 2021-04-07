@@ -10,7 +10,7 @@ import {
   Tree,
   url
 } from '@angular-devkit/schematics';
-import { join, normalize, Path } from '@angular-devkit/core';
+import { join, normalize, Path, strings } from '@angular-devkit/core';
 import { Schema } from './schema';
 import { formatFiles, updateJsonInTree } from '@nrwl/workspace';
 import init from '../init/init';
@@ -62,7 +62,7 @@ function addProtoFile(options: NormalizedSchema): Rule {
       join(options.appProjectRoot, 'src/assets/service.proto'),
       `
 syntax = "proto3";
-package ultimate-backend.${options.name};
+package ultimate_backend.${options.name};
 
 message Message {
   string body = 1;
@@ -116,6 +116,7 @@ function addAppFiles(options: NormalizedSchema): Rule {
         name: options.name,
         port: options.port,
         root: options.appProjectRoot,
+        ...strings,
       }),
       move(join(options.appProjectRoot, 'src')),
     ])

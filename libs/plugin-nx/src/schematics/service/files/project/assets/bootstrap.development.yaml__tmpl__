@@ -1,2 +1,7 @@
 name: <%= name %>
 port: <%= port %>
+
+grpc:
+  url: 0.0.0.0:<%= port %>
+  package: ultimate_backend.<%= camelCase(name) %>
+  protoPath: dist/apps/<%= name %>/assets/service.proto

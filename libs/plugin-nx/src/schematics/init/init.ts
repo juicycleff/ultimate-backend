@@ -24,6 +24,7 @@ export const updateDependencies = addDepsToPackageJson(
     '@ultimate-backend/cloud': ubVersion,
     '@ultimate-backend/bootstrap': ubVersion,
     '@ultimate-backend/common': ubVersion,
+    '@ultimate-backend/config': ubVersion,
     'reflect-metadata': reflectMetadataVersion,
     rxjs: rxjsVersion,
     tslib: '^2.0.0',
