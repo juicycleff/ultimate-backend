@@ -2,6 +2,24 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.9](https://github.com/juicycleff/ultimate-backend/compare/v0.1.8...v0.1.9) (2021-04-07)
+
+
+### Bug Fixes
+
+* **config:** make forRoot argument optional ([edc7dd4](https://github.com/juicycleff/ultimate-backend/commit/edc7dd4faccfd9256ec45d38de5bf671bff0b28a))
+
+
+
+## [0.1.9](https://github.com/juicycleff/ultimate-backend/compare/v0.1.8...v0.1.9) (2021-04-07)
+
+
+### Bug Fixes
+
+* **config:** make forRoot argument optional ([edc7dd4](https://github.com/juicycleff/ultimate-backend/commit/edc7dd4faccfd9256ec45d38de5bf671bff0b28a))
+
+
+
 ## [0.1.8](https://github.com/juicycleff/ultimate-backend/compare/v0.1.7...v0.1.8) (2021-04-06)
 
 
