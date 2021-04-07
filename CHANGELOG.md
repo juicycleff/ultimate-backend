@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.11](https://github.com/juicycleff/ultimate-backend/compare/v0.1.10...v0.1.11) (2021-04-07)
+
+
+### Bug Fixes
+
+* **event-store:** bump event-store version ([e654baf](https://github.com/juicycleff/ultimate-backend/commit/e654bafb51d81b81d0288f6800467861aa068a84))
+
+
+
 ## [0.1.10](https://github.com/juicycleff/ultimate-backend/compare/v0.1.9...v0.1.10) (2021-04-07)
 
 
