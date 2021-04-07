@@ -1,4 +1,11 @@
-import { Args, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import * as faker from 'faker';
 import { BioSex, UserSchema } from '../models/user.schema';
 import { UserFilterInput, UserNewFilterInput } from './user.input';
@@ -13,7 +20,7 @@ export class UsersResolver {
 
   seedUser() {
     let count = 0;
-    while(count < 10) {
+    while (count < 10) {
       this.allUsers.push({
         firstName: faker.name.firstName(1),
         lastName: faker.name.lastName(1),

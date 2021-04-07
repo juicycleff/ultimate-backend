@@ -23,26 +23,26 @@ import { execSync } from 'child_process';
 import { output } from '../../utils';
 
 export class GenerateCqrsCommand implements ICommand {
-
   constructor(program: Command) {
     program
       .command(this.command)
       .action(this.action)
       .description(this.description)
       .option(...this.option[0])
-      .option(...this.option[1])
+      .option(...this.option[1]);
   }
 
   command = 'cqrs <handler-name>';
 
   option: ArrayOption = [
-    [
-      '-s, --service <service>',
-      'the ub service to target',
-    ],
+    ['-s, --service <service>', 'the ub service to target'],
     [
       '-d, --directory <directory>',
       'directory where the generated files are placed',
+    ],
+    [
+      '-g, --group <group>',
+      'group generated file by folder',
     ],
   ];
 
@@ -51,10 +51,13 @@ export class GenerateCqrsCommand implements ICommand {
   action(handlerName, options, command, ...rest): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:cqrs ${handlerName}`;
     if (options.service) {
-      cmd = cmd + ` -p ${options.service}`
+      cmd = cmd + ` -p ${options.service}`;
     }
     if (options.directory) {
-      cmd = cmd + ` -d ${options.directory}`
+      cmd = cmd + ` -d ${options.directory}`;
+    }
+    if (options.group) {
+      cmd = cmd + ` -g ${options.group}`;
     }
 
     try {

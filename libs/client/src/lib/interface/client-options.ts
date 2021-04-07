@@ -86,4 +86,7 @@ export interface IGraphQLServiceClient extends Dom.RequestInit {
   url?: string;
 }
 
-export type ClientOptions = IGrpcServiceClient | IHttpServiceClient | IGraphQLServiceClient;
+export type ClientOptions =
+  | IGrpcServiceClient
+  | IHttpServiceClient
+  | IGraphQLServiceClient;

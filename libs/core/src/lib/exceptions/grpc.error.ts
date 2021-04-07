@@ -16,13 +16,13 @@ export class ServiceError extends Error implements GrpcServiceError {
   constructor(
     message: string,
     code?: string,
-    extensions?: Record<string, any>,
+    extensions?: Record<string, any>
   ) {
     super(message);
     if (extensions) {
       Object.keys(extensions)
-        .filter(keyName => keyName !== 'message' && keyName !== 'extensions')
-        .forEach(key => {
+        .filter((keyName) => keyName !== 'message' && keyName !== 'extensions')
+        .forEach((key) => {
           this[key] = extensions[key];
         });
     }

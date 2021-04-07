@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
-const writeFileAsync = util.promisify(fs.writeFile)
+const writeFileAsync = util.promisify(fs.writeFile);
 
 interface UBConfigService {
   name: string;
@@ -15,14 +15,14 @@ interface UBConfigService {
 
 interface UBConfig {
   name: string;
-  services?: {[name: string]: UBConfigService};
+  services?: { [name: string]: UBConfigService };
 }
 
 export async function createUBConfig(project: string) {
   const ubConfig: UBConfig = {
     name: project,
-    services: {}
-  }
+    services: {},
+  };
 
   const configPath = path.join(process.cwd(), `${project}/ub.json`);
   await writeFileAsync(configPath, JSON.stringify(ubConfig, null, 2));

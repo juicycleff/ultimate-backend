@@ -22,6 +22,11 @@
       "alias": "p",
       "x-prompt": "What UB service would you like to target?"
     },
+    "group": {
+      "type": "string",
+      "description": "CQRS function group",
+      "alias": "g"
+    },
     "type": {
       "type": "string",
       "enum": ["command", "query", "event"],

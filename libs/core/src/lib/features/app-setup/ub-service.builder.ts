@@ -46,7 +46,7 @@ export class UBServiceBuilder {
   }
 
   withPoweredBy() {
-    this.app.use(bloodTearsMiddleware)
+    this.app.use(bloodTearsMiddleware);
     return this;
   }
 
@@ -61,7 +61,9 @@ export class UBServiceBuilder {
     }
 
     const title = options?.title || this.boot.get('name', 'ub-service');
-    const description = options?.description || this.boot.get('description', 'ultimate backend service');
+    const description =
+      options?.description ||
+      this.boot.get('description', 'ultimate backend service');
     const version = options?.version || this.boot.get('version', 'latest');
     const tag = options?.description || this.boot.get('tag', 'service');
     this._swaggerObject = new DocumentBuilder()
@@ -76,9 +78,9 @@ export class UBServiceBuilder {
   withGrpc(options?: GrpcOpts) {
     if (!options) {
       this._grpcOptions = this.boot.get('transport.grpc');
-      if(this._grpcOptions && this._grpcOptions.protoPath) {
+      if (this._grpcOptions && this._grpcOptions.protoPath) {
         if (Array.isArray(this._grpcOptions.protoPath)) {
-          const protoPath = []
+          const protoPath = [];
           for (const proto of this._grpcOptions.protoPath) {
             if (proto.startsWith('dist/apps')) {
               protoPath.push(path.resolve(process.cwd(), proto));
@@ -86,15 +88,20 @@ export class UBServiceBuilder {
           }
           this._grpcOptions.protoPath = protoPath;
         } else if (this._grpcOptions.protoPath.startsWith('dist/apps')) {
-          this._grpcOptions.protoPath = path.resolve(process.cwd(), this._grpcOptions.protoPath);
+          this._grpcOptions.protoPath = path.resolve(
+            process.cwd(),
+            this._grpcOptions.protoPath
+          );
         }
-      };
+      }
     } else {
       this._grpcOptions = options;
     }
 
     if (!this._grpcOptions) {
-      throw new Error('grpc transport options must be provide in boot config or by options');
+      throw new Error(
+        'grpc transport options must be provide in boot config or by options'
+      );
     }
 
     return this;
@@ -104,15 +111,17 @@ export class UBServiceBuilder {
     if (this._grpcOptions) {
       Logger.log(
         `GRPC listening on host: ${this._grpcOptions.url}`,
-        'UBService',
+        'UBService'
       );
     }
   }
 
   private printRestInfo(port: number) {
     Logger.log(
-      `REST api listening on host: http://localhost:${port}${this._prefix ? '/'+this._prefix : ''}`,
-      'UBService',
+      `REST api listening on host: http://localhost:${port}${
+        this._prefix ? '/' + this._prefix : ''
+      }`,
+      'UBService'
     );
   }
 
@@ -120,7 +129,7 @@ export class UBServiceBuilder {
     if (this._swaggerObject) {
       Logger.log(
         `Swagger Docs for service available at: http://localhost:${port}/${this._swaggerPath}`,
-        'UBService',
+        'UBService'
       );
     }
   }
@@ -130,7 +139,7 @@ export class UBServiceBuilder {
       this.app.connectMicroservice({
         transport: Transport.GRPC,
         options: this._grpcOptions,
-      })
+      });
     }
   }
 

@@ -1,6 +1,10 @@
-import { names, offsetFromRoot, } from '@nrwl/devkit';
+import { names, offsetFromRoot } from '@nrwl/devkit';
 import * as path from 'path';
-import { addDepsToPackageJson, formatFiles, getProjectConfig } from '@nrwl/workspace';
+import {
+  addDepsToPackageJson,
+  formatFiles,
+  getProjectConfig,
+} from '@nrwl/workspace';
 import {
   apply,
   chain,
@@ -25,10 +29,7 @@ interface NormalizedSchema extends UBCQRSSchema {
   projectDirectory: string;
 }
 
-function normalizeOptions(
-  host: Tree,
-  options: UBCQRSSchema
-): NormalizedSchema {
+function normalizeOptions(host: Tree, options: UBCQRSSchema): NormalizedSchema {
   if (options.directory && !options.path) {
     options.path = options.directory;
   }
@@ -64,7 +65,11 @@ function generateCQRSHandler(tree: Tree, options: NormalizedSchema): Rule {
   };
 
   let sourcePath = 'files/cqrs/commands';
-  const dirPath = options.directory ? options.directory : `${options.sourceRoot}/app/common/`;
+  const dirPath = options.directory
+    ? options.directory
+    : `${options.sourceRoot}/app${
+        options.group ? `/${options.group}/` : '/'
+      }common/`;
   let targetPath = `${dirPath}commands`;
 
   if (options.type == 'event') {
@@ -115,8 +120,11 @@ export default function (schema: NormalizedSchema): Rule {
 
     return chain([
       generateCQRSHandler(tree, normalizedOptions),
-      addDepsToPackageJson({'@nestjs/cqrs': '*', '@ultimate-backend/event-store': '*'}, {}),
+      addDepsToPackageJson(
+        { '@nestjs/cqrs': '*', '@ultimate-backend/event-store': '*' },
+        {}
+      ),
       formatFiles(),
     ]);
-  }
+  };
 }

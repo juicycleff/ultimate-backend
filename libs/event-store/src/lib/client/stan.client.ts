@@ -31,7 +31,8 @@ import { EventEmitter } from 'events';
 let stanPackage: any = {};
 
 @Injectable()
-export class StanClient extends EventEmitter
+export class StanClient
+  extends EventEmitter
   implements IBrokerClient<Stan>, OnModuleInit, OnModuleDestroy {
   _client: Stan;
   connected = false;

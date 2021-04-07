@@ -20,7 +20,9 @@ export enum GrpcExceptionStatus {
 export class NotFoundRpcException extends ServiceError {
   constructor(message: string, properties?: { [key: string]: any }) {
     super(message, GrpcExceptionStatus.NOT_FOUND_EXCEPTION, properties);
-    Object.defineProperty(this, 'name', { value: GrpcExceptionStatus.NOT_FOUND_EXCEPTION });
+    Object.defineProperty(this, 'name', {
+      value: GrpcExceptionStatus.NOT_FOUND_EXCEPTION,
+    });
   }
 }
 

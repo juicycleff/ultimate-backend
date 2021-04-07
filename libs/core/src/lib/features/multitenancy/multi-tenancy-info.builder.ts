@@ -6,7 +6,7 @@ export class BuildTenantInfoHelper {
 
   constructor(
     private readonly req: IRequest,
-    private readonly options: MultiTenancyConfig,
+    private readonly options: MultiTenancyConfig
   ) {}
 
   public withOptions(addOptions: boolean) {
@@ -17,7 +17,7 @@ export class BuildTenantInfoHelper {
   private makeTenantInfo(
     tenantId: string,
     config: MultiTenancyConfig,
-    accessToken: any = null,
+    accessToken: any = null
   ): MultiTenantInfo {
     return {
       tenantId,
@@ -90,7 +90,7 @@ export class BuildTenantInfoHelper {
     return this.makeTenantInfo(
       tenantId,
       this.addOptions ? this.options : null,
-      accessToken,
+      accessToken
     );
   }
 

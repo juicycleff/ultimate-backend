@@ -49,9 +49,7 @@ function command() {
   // Publish
   for (let key in rootProjects) {
     const value = rootProjects[key];
-    if (
-      value.projectType === 'library' && key !== 'gateway'
-    ) {
+    if (value.projectType === 'library' && key !== 'gateway') {
       shell.exec(`cd dist/libs/${key} && npm publish --access public`);
       shell.exec('cd ../../../');
     }

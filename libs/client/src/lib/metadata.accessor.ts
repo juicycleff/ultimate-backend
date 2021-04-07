@@ -21,9 +21,10 @@ import { Reflector } from '@nestjs/core';
 import { Injectable } from '@nestjs/common';
 import { ClientMetadata } from './interface/client-metdata.interface';
 import {
-  CLIENT_SERVICE, GRAPHQL_CLIENT_SERVICE,
+  CLIENT_SERVICE,
+  GRAPHQL_CLIENT_SERVICE,
   GRPC_CLIENT_SERVICE,
-  HTTP_CLIENT_SERVICE
+  HTTP_CLIENT_SERVICE,
 } from './client.constants';
 
 @Injectable()

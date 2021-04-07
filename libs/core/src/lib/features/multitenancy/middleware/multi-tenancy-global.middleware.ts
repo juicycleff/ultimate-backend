@@ -22,7 +22,6 @@ import { MultiTenancyConfig } from '../multi-tenant.config';
 import { IRequest } from '@ultimate-backend/common';
 import { BuildTenantInfoHelper } from '../multi-tenancy-info.builder';
 
-
 export function enableMultiTenancy(option: MultiTenancyConfig) {
   if (option.tenantResolver.resolverType === 'Domain') {
     return vhost('*.localhost', (req: IRequest, res, next) => {

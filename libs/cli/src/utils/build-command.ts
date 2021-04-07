@@ -35,6 +35,5 @@ export function buildCommand(program: Command, commands: ICommand[]): Command {
     program.addCommand(command);
   }
 
-
   return program;
 }

@@ -2,11 +2,12 @@ import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { debounce } from 'lodash';
 import { ServiceInstanceChooser, ILoadBalancerClient } from './interface';
 import {
-  BaseStrategy, GraphqlClientExecuteException,
+  BaseStrategy,
+  GraphqlClientExecuteException,
   HttpClientExecuteException,
   ServerCriticalException,
   ServiceInstance,
-  ServiceStore
+  ServiceStore,
 } from '@ultimate-backend/common';
 import { LoadBalancerRequest } from './core';
 import { LoadbalancerConfig } from './loadbalancer.config';
@@ -202,7 +203,9 @@ export class LoadBalancerClient
 
       const [client, rest] = req.arguments;
       const [raw, ...options] = rest;
-      const response = raw ? await client.rawRequest(...options) : await client.request(...options);
+      const response = raw
+        ? await client.rawRequest(...options)
+        : await client.request(...options);
 
       if (node) {
         const endTime = new Date().getTime();

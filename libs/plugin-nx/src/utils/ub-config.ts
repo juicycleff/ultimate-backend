@@ -29,5 +29,5 @@ interface UBConfigService {
 
 export interface UBConfig {
   name: string;
-  services?: {[name: string]: UBConfigService};
+  services?: { [name: string]: UBConfigService };
 }

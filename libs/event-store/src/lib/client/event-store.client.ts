@@ -30,7 +30,8 @@ import { EventEmitter } from 'events';
  * @description Event store setup from eventstore.org
  */
 @Injectable()
-export class EventStoreClient extends EventEmitter
+export class EventStoreClient
+  extends EventEmitter
   implements IBrokerClient<EventStoreDBClient>, OnModuleInit, OnModuleDestroy {
   _client: EventStoreDBClient;
   connected = false;

@@ -17,8 +17,8 @@
  * File name:         classify.ts
  * Last modified:     04/04/2021, 03:26
  ******************************************************************************/
-import {upperFirst, camelCase} from 'lodash';
+import { upperFirst, camelCase } from 'lodash';
 
-export function classify(str: string){
-  return upperFirst(camelCase(str))
+export function classify(str: string) {
+  return upperFirst(camelCase(str));
 }

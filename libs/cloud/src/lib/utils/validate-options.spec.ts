@@ -1,6 +1,10 @@
 import { validateOptions } from './validate-options';
 import { ConsulRegistryProviderOptions } from '../';
-import { DiscoveryOptions, HeartbeatOptions, Service } from '@ultimate-backend/common';
+import {
+  DiscoveryOptions,
+  HeartbeatOptions,
+  Service,
+} from '@ultimate-backend/common';
 
 const service: Service = {
   address: '127.0.0.1',

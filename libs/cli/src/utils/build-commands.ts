@@ -22,16 +22,14 @@ import { ICommand } from '../interfaces';
 
 export function buildCommands(program: Command, commands: ICommand[]): Command {
   for (const c of commands) {
-    program
-      .description(c.description);
+    program.description(c.description);
 
     if (c.option && c.option.length > 0) {
       for (const cElement of c.option) {
         program.addOption(new Option(cElement[0], cElement[1]));
       }
     }
-    program.action(c.action)
-    .command(c.command);
+    program.action(c.action).command(c.command);
   }
 
   return program;

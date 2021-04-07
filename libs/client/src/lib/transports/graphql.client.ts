@@ -23,11 +23,18 @@ import {
 } from '@ultimate-backend/loadbalancer';
 import { IGraphQLServiceClient } from '../interface';
 import { Brakes } from '@ultimate-backend/brakes';
-import { GraphqlClientExecuteException, ServiceInstance } from '@ultimate-backend/common';
+import {
+  GraphqlClientExecuteException,
+  ServiceInstance,
+} from '@ultimate-backend/common';
 import { HttpException, Logger, Optional } from '@nestjs/common';
 import { GraphQLClient as GqlClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
-import { GraphQLError, RequestDocument, Variables } from 'graphql-request/dist/types';
+import {
+  GraphQLError,
+  RequestDocument,
+  Variables,
+} from 'graphql-request/dist/types';
 
 export class GraphQLClient {
   logger = new Logger(GraphQLClient.name);
@@ -47,7 +54,7 @@ export class GraphQLClient {
     try {
       const { service, path, url, transport, ...rest } = this.options;
       if (!service) {
-        throw new GraphqlClientExecuteException('missing service id/name')
+        throw new GraphqlClientExecuteException('missing service id/name');
       }
 
       this.serviceId = service;
@@ -62,12 +69,25 @@ export class GraphQLClient {
     }
   }
 
-  async request<T, V = Variables>(document: RequestDocument, variables?: V, requestHeaders?: Dom.RequestInit['headers']): Promise<T> {
+  async request<T, V = Variables>(
+    document: RequestDocument,
+    variables?: V,
+    requestHeaders?: Dom.RequestInit['headers']
+  ): Promise<T> {
     const raw = false;
-    return this.initiateRequest<T, V>([raw, document, variables, requestHeaders]);
+    return this.initiateRequest<T, V>([
+      raw,
+      document,
+      variables,
+      requestHeaders,
+    ]);
   }
 
-  async rawRequest<T, V = Variables>(query: string, variables?: V, requestHeaders?: Dom.RequestInit['headers']): Promise<{
+  async rawRequest<T, V = Variables>(
+    query: string,
+    variables?: V,
+    requestHeaders?: Dom.RequestInit['headers']
+  ): Promise<{
     data?: T;
     extensions?: any;
     headers: Dom.Headers;

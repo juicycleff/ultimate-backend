@@ -16,7 +16,7 @@ describe('EtcdClient', () => {
           useValue: {
             etcdOptions: {
               hosts: 'localhost:2379',
-            }
+            },
           } as EtcdModuleOptions,
         },
         EtcdConfig,

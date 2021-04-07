@@ -12,10 +12,10 @@ import { catchError } from 'rxjs/operators';
 export class ErrorsInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,
-    next: CallHandler<any>,
+    next: CallHandler<any>
   ): Observable<any> {
     return next.handle().pipe(
-      catchError(error => {
+      catchError((error) => {
         if (error instanceof HttpException) {
           return Promise.resolve({
             code: error.getStatus(),
@@ -28,7 +28,7 @@ export class ErrorsInterceptor implements NestInterceptor {
             message: error.details,
           });
         }
-      }),
+      })
     );
   }
 }

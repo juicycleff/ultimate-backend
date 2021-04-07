@@ -24,7 +24,10 @@ import { Brakes } from '@ultimate-backend/brakes';
 import { GraphQLClient } from './transports/graphql.client';
 
 export class ClientFactory {
-  private static cache = new Map<string, HttpClient | GrpcClient | GraphQLClient>();
+  private static cache = new Map<
+    string,
+    HttpClient | GrpcClient | GraphQLClient
+  >();
 
   static create(
     lb: LoadBalancerClient,

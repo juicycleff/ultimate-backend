@@ -5,10 +5,11 @@ import {
   mergeWith,
   move,
   Rule,
-  SchematicContext, SchematicsException,
+  SchematicContext,
+  SchematicsException,
   template,
   Tree,
-  url
+  url,
 } from '@angular-devkit/schematics';
 import { join, normalize, Path, strings } from '@angular-devkit/core';
 import { Schema } from './schema';
@@ -30,12 +31,14 @@ function updateUBWorkspace(schema: NormalizedSchema): Rule {
     const ubConfigFile = host.read(configPath);
 
     if (!ubConfigFile) {
-      throw new SchematicsException('Unable to find ub workspace configuration');
+      throw new SchematicsException(
+        'Unable to find ub workspace configuration'
+      );
     }
     const ubConfig: UBConfig = JSON.parse(ubConfigFile.toString());
 
     if (!ubConfig.services) {
-      ubConfig.services = {}
+      ubConfig.services = {};
     }
 
     ubConfig.services[schema.name] = {
@@ -44,16 +47,15 @@ function updateUBWorkspace(schema: NormalizedSchema): Rule {
       kubernetes: false,
       language: 'typescript',
       name: schema.name,
-      port: schema.port
-    }
+      port: schema.port,
+    };
 
     host.overwrite(configPath, JSON.stringify(ubConfig, null, 2));
   };
 }
 
-
 function addProtoFile(options: NormalizedSchema): Rule {
-  if (options.transport.findIndex(value => value === 'grpc') === -1) {
+  if (options.transport.findIndex((value) => value === 'grpc') === -1) {
     return null;
   }
 
@@ -77,9 +79,12 @@ service ${upperFirst(camelCase(options.name))}Service {
 }
 
 function addMainFile(options: NormalizedSchema): Rule {
-  const isGrpc = options.transport.findIndex(value => value === 'grpc') !== -1;
-  const isRest = options.transport.findIndex(value => value === 'rest') !== -1;
-  const isMultiTenant = options.features.findIndex(value => value === 'multi-tenancy') !== -1;
+  const isGrpc =
+    options.transport.findIndex((value) => value === 'grpc') !== -1;
+  const isRest =
+    options.transport.findIndex((value) => value === 'rest') !== -1;
+  const isMultiTenant =
+    options.features.findIndex((value) => value === 'multi-tenancy') !== -1;
 
   return (host: Tree) => {
     host.overwrite(
@@ -110,7 +115,7 @@ async function bootstrap() {
 
 function addAppFiles(options: NormalizedSchema): Rule {
   return mergeWith(
-    apply(url(`./files/project`), [
+    apply(url('./files/project'), [
       template({
         tmpl: '',
         name: options.name,

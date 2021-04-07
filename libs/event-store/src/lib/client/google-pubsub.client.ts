@@ -30,7 +30,8 @@ import { EventEmitter } from 'events';
 let googlePubsubPackage: any = {};
 
 @Injectable()
-export class GooglePubsubClient extends EventEmitter
+export class GooglePubsubClient
+  extends EventEmitter
   implements IBrokerClient<PubSub>, OnModuleInit, OnModuleDestroy {
   _client: PubSub;
   connected = false;

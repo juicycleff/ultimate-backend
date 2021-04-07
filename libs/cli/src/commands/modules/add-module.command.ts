@@ -22,10 +22,9 @@ import { ArrayOption, ICommand } from '../../interfaces';
 export class AddModuleCommand implements ICommand {
   command = 'add <module-name> [actions...]';
 
-  option: ArrayOption = [[
-    '-s, --services <services...>',
-    'services to add module',
-  ]];
+  option: ArrayOption = [
+    ['-s, --services <services...>', 'services to add module'],
+  ];
 
   description = 'add module to service';
 

@@ -19,7 +19,7 @@ describe('LoadBalancerClient', () => {
         LoadbalancerConfig,
         ServiceStore,
         StrategyRegistry,
-        LoadBalancerClient
+        LoadBalancerClient,
       ],
     }).compile();
 

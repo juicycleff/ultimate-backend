@@ -29,16 +29,13 @@ export class GenDecoratorCommand implements ICommand {
       .action(this.action)
       .description(this.description)
       .option(...this.option[0])
-      .option(...this.option[1])
+      .option(...this.option[1]);
   }
 
   command = 'decorator [name] [actions...]';
 
   option: ArrayOption = [
-    [
-      '-s, --service <service>',
-      'the ub service to target',
-    ],
+    ['-s, --service <service>', 'the ub service to target'],
     [
       '-d, --directory <directory>',
       'directory where the generated files are placed',
@@ -50,14 +47,14 @@ export class GenDecoratorCommand implements ICommand {
   action(name, options, command, ...rest): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:decorator`;
     if (name) {
-      cmd = cmd + ` ${name}`
+      cmd = cmd + ` ${name}`;
     }
 
     if (options.service) {
-      cmd = cmd + ` -p ${options.service}`
+      cmd = cmd + ` -p ${options.service}`;
     }
     if (options.directory) {
-      cmd = cmd + ` -d ${options.directory}`
+      cmd = cmd + ` -d ${options.directory}`;
     }
 
     try {
