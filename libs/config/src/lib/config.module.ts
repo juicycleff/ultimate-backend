@@ -42,7 +42,7 @@ import { ConfigDiscovery } from './config.discovery';
   providers: [ConfigMetadataAccessor, ConfigOrchestrator],
 })
 export class ConfigModule {
-  static forRoot(options: ConfigModuleOptions): DynamicModule {
+  static forRoot(options?: ConfigModuleOptions): DynamicModule {
     const providers = [
       {
         provide: CONFIG_CONFIGURATION_OPTIONS,

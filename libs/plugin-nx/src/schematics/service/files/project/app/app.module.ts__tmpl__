@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
+import {BootstrapModule} from "@ultimate-backend/bootstrap";
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [],
+  imports: [
+    BootstrapModule.forRoot(),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
