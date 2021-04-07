@@ -20,7 +20,7 @@
 
 import { ICommand } from '../interfaces';
 import { projectCommands } from './project';
-// import { moduleCommands } from './modules';
+import { nestCommands } from './nest';
 import { serviceCommands } from './service';
 import { generateCommands } from './generate';
 
@@ -28,4 +28,5 @@ export const commands: ICommand[] = [
   projectCommands,
   serviceCommands,
   generateCommands,
+  nestCommands,
 ];

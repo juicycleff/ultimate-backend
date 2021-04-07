@@ -18,12 +18,11 @@
  * Last modified:     24/03/2021, 19:42
  ******************************************************************************/
 import { ArrayOption, ICommand } from '../../interfaces';
-import { Command } from 'commander';
 import { execSync } from 'child_process';
 import { output } from '../../utils';
+import { Command } from 'commander';
 
-export class GenerateCqrsCommand implements ICommand {
-
+export class GenGuardCommand implements ICommand {
   constructor(program: Command) {
     program
       .command(this.command)
@@ -33,7 +32,7 @@ export class GenerateCqrsCommand implements ICommand {
       .option(...this.option[1])
   }
 
-  command = 'cqrs <handler-name>';
+  command = 'guard [name] [actions...]';
 
   option: ArrayOption = [
     [
@@ -46,10 +45,14 @@ export class GenerateCqrsCommand implements ICommand {
     ],
   ];
 
-  description = 'generate cqrs handlers for service';
+  description = 'generate nestjs class for service';
 
-  action(handlerName, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:cqrs ${handlerName}`;
+  action(name, options, command, ...rest): void {
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:guard`;
+    if (name) {
+      cmd = cmd + ` ${name}`
+    }
+
     if (options.service) {
       cmd = cmd + ` -p ${options.service}`
     }
@@ -63,7 +66,7 @@ export class GenerateCqrsCommand implements ICommand {
       });
     } catch (e) {
       output.error({
-        title: 'Error creating service',
+        title: 'Error creating nestjs guard',
         bodyLines: [e],
       });
     }
