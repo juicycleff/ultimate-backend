@@ -29,7 +29,8 @@ export class GenerateCqrsCommand implements ICommand {
       .action(this.action)
       .description(this.description)
       .option(...this.option[0])
-      .option(...this.option[1]);
+      .option(...this.option[1])
+      .option(...this.option[2]);
   }
 
   command = 'cqrs <handler-name>';
