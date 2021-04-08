@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
+
+
+### Features
+
+* **cli:** support grouping cqrs commands ([2712fa0](https://github.com/juicycleff/ultimate-backend/commit/2712fa02ec29f4b8084719ec5c74a5072cad7d06))
+
+
+
 # [0.2.0](https://github.com/juicycleff/ultimate-backend/compare/v0.1.13...v0.2.0) (2021-04-07)
 
 
