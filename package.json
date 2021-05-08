@@ -73,6 +73,7 @@
     "handlebars": "^4.7.7",
     "ioredis": "^4.19.4",
     "js-yaml": "^4.0.0",
+    "kafkajs": "^1.15.0",
     "kubernetes-client": "^9.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

@@ -59,7 +59,7 @@ export class StanClient
       await defer(async () => {
         const broker = this.options.config?.broker as StanClientOptions;
         let clientId = uuid.v4();
-        if (clientId) {
+        if (broker.clientId) {
           clientId = broker.clientId;
         }
 
@@ -71,18 +71,18 @@ export class StanClient
 
         this._client.on('connect', () => {
           this.connected = true;
-          this.logger.log('STAN Event Store client connected!');
+          this.logger.log('Stan Event Store client connected!');
           this.emit('connected');
         });
         this._client.on('disconnect:', () => {
           this.connected = false;
-          this.logger.error('STAN Event Store client disconnected!');
-          throw new Error('STAN Event Store client disconnected!');
+          this.logger.error('Stan Event Store client disconnected!');
+          throw new Error('Stan Event Store client disconnected!');
         });
         this._client.on('close:', () => {
           this.connected = false;
-          this.logger.error('STAN Event Store client closed!');
-          throw new Error('STAN Event Store client closed!');
+          this.logger.error('Stan Event Store client closed!');
+          throw new Error('Stan Event Store client closed!');
         });
       })
         .pipe(

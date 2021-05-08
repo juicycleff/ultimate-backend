@@ -20,3 +20,4 @@
 export * from './stan.broker';
 export * from './google-pubsub.broker';
 export * from './event-store.broker';
+export * from './kafka.broker';

@@ -23,7 +23,7 @@ import {
   ProvidersConstants,
 } from './event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from './interface';
-import { EventStoreClient, StanClient } from './client';
+import { EventStoreClient, StanClient, KafkaClient, GooglePubsubClient } from './client';
 import { Provider } from '@nestjs/common';
 import { EventStoreConfig } from './event-store.config';
 
@@ -33,8 +33,14 @@ export function getClientProvider(option: EventStoreModuleOptions) {
     case EventStoreBrokerTypes.EventStore:
       providers.push(EventStoreClient);
       break;
-    case EventStoreBrokerTypes.STAN:
+    case EventStoreBrokerTypes.Stan:
       providers.push(StanClient);
+      break;
+    case EventStoreBrokerTypes.GooglePubSub:
+      providers.push(GooglePubsubClient);
+      break;
+    case EventStoreBrokerTypes.Kafka:
+      providers.push(KafkaClient);
       break;
     default:
       throw new Error('event store broker type not supported');
@@ -49,8 +55,12 @@ export function getClientProviderAsync(): Provider {
       switch (esOptions.broker.type) {
         case EventStoreBrokerTypes.EventStore:
           return EventStoreClient;
-        case EventStoreBrokerTypes.STAN:
+        case EventStoreBrokerTypes.GooglePubSub:
+          return GooglePubsubClient;
+        case EventStoreBrokerTypes.Stan:
           return StanClient;
+        case EventStoreBrokerTypes.Kafka:
+          return KafkaClient;
         default:
           throw new Error('event store broker type not supported');
       }
@@ -63,12 +73,15 @@ export function getClientProviderAsyncBoot(): Provider {
   return {
     provide: ProvidersConstants.EVENT_STORE_CLIENT,
     useFactory: (option: EventStoreConfig): any => {
-      console.log('event store***********************', option);
       switch (option.config.broker.type) {
         case EventStoreBrokerTypes.EventStore:
           return EventStoreClient;
-        case EventStoreBrokerTypes.STAN:
+        case EventStoreBrokerTypes.GooglePubSub:
+          return GooglePubsubClient;
+        case EventStoreBrokerTypes.Stan:
           return StanClient;
+        case EventStoreBrokerTypes.Kafka:
+          return KafkaClient;
         default:
           throw new Error('event store broker type not supported');
       }

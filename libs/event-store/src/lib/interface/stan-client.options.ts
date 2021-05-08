@@ -22,7 +22,7 @@ import { EventStoreBrokerTypes } from './broker.enums';
 import { ClientOpts } from '../external/stan.types';
 
 export interface StanClientOptions {
-  type: EventStoreBrokerTypes.STAN;
+  type: EventStoreBrokerTypes.Stan;
   clusterId: string;
   clientId?: string;
   groupId?: string;

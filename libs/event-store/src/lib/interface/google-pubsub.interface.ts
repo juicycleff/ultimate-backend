@@ -21,6 +21,6 @@ import { EventStoreBrokerTypes } from '@ultimate-backend';
 import { ClientConfig } from '../external/gpubsub.types';
 
 export interface GooglePubsubClientOptions {
-  type: EventStoreBrokerTypes.GOOGLE_PUB_SUB;
+  type: EventStoreBrokerTypes.GooglePubSub;
   options: ClientConfig;
 }

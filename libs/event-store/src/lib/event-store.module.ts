@@ -15,11 +15,9 @@ import {
   ProvidersConstants,
 } from './event-store.constant';
 import { getClientProvider, getClientProviderAsync } from './utils';
-import { StanBroker } from './broker/stan.broker';
-import { EventStoreBroker } from './broker/event-store.broker';
+import { StanBroker, EventStoreBroker, GooglePubsubBroker, KafkaBroker } from './broker';
 import { ExplorerService } from '@nestjs/cqrs/dist/services/explorer.service';
 import { EventStoreConfig } from './event-store.config';
-import { GooglePubsubBroker } from './broker';
 
 @Module({
   imports: [CqrsModule],
@@ -76,12 +74,14 @@ export class EventStoreModule {
     }
 
     let CurrentStore;
-    if (options.type === EventStoreBrokerTypes.STAN) {
+    if (options.type === EventStoreBrokerTypes.Stan) {
       CurrentStore = StanBroker;
-    } else if (options.type === EventStoreBrokerTypes.GOOGLE_PUB_SUB) {
+    } else if (options.type === EventStoreBrokerTypes.GooglePubSub) {
       CurrentStore = GooglePubsubBroker;
     } else if (options.type === EventStoreBrokerTypes.EventStore) {
       CurrentStore = EventStoreBroker;
+    } else if (options.type === EventStoreBrokerTypes.Kafka) {
+      CurrentStore = KafkaBroker;
     }
 
     return {
@@ -114,12 +114,14 @@ export class EventStoreModule {
 
     const asyncProviders = this.createFeatureAsyncProviders(options);
     let CurrentStore;
-    if (options.type === EventStoreBrokerTypes.STAN) {
+    if (options.type === EventStoreBrokerTypes.Stan) {
       CurrentStore = StanBroker;
-    } else if (options.type === EventStoreBrokerTypes.GOOGLE_PUB_SUB) {
+    } else if (options.type === EventStoreBrokerTypes.GooglePubSub) {
       CurrentStore = GooglePubsubBroker;
     } else if (options.type === EventStoreBrokerTypes.EventStore) {
       CurrentStore = EventStoreBroker;
+    } else if (options.type === EventStoreBrokerTypes.Kafka) {
+      CurrentStore = KafkaBroker;
     }
 
     return {

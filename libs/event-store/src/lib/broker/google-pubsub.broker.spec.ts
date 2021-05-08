@@ -42,7 +42,7 @@ describe('GooglePubsubBroker', () => {
           useValue: {
             debug: true,
             broker: {
-              type: EventStoreBrokerTypes.GOOGLE_PUB_SUB,
+              type: EventStoreBrokerTypes.GooglePubSub,
               options: {
                 projectId: 'some-id',
               },
@@ -53,7 +53,7 @@ describe('GooglePubsubBroker', () => {
         {
           provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
           useValue: {
-            type: EventStoreBrokerTypes.GOOGLE_PUB_SUB,
+            type: EventStoreBrokerTypes.GooglePubSub,
             streamName: 'pubsub-store',
           } as EventStoreFeatureOptions,
         },

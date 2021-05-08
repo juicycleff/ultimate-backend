@@ -20,6 +20,7 @@
 
 export enum EventStoreBrokerTypes {
   EventStore = 'EventStore',
-  STAN = 'STAN',
-  GOOGLE_PUB_SUB = 'GOOGLE_PUB_SUB',
+  Stan = 'Stan',
+  GooglePubSub = 'GooglePubSub',
+  Kafka = 'Kafka',
 }

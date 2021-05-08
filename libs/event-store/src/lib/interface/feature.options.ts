@@ -31,6 +31,7 @@ import {
 import { AppendToStreamOptions, SubscribeToStreamOptions } from '@eventstore/db-client/dist/streams';
 import { Subscription, SubscriptionOptions } from '../external/stan.types';
 import { CreateSubscriptionOptions, Subscription as PubsubSubscription } from '../external/gpubsub.types';
+import { ConsumerSubscribeTopic } from '../external/kafka.types';
 
 export interface IEventConstructors {
   [key: string]: (...args: any[]) => IEvent;
@@ -87,8 +88,11 @@ export interface GooglePubsubSubscription {
   options?: CreateSubscriptionOptions;
 }
 
-/***********************Real***********************/
+/*********************** Kafka ***********************/
 
+export type KafkaSubscription = ConsumerSubscribeTopic
+
+/***********************Real***********************/
 
 export interface BaseBrokerFeatureOption {
   streamName?: string;
@@ -108,14 +112,20 @@ export interface EventStoreBrokerFeature extends BaseBrokerFeatureOption {
 }
 
 export interface StanBrokerFeature extends BaseBrokerFeatureOption {
-  type: EventStoreBrokerTypes.STAN;
+  type: EventStoreBrokerTypes.Stan;
   subscriptions: StanSubscription[];
 }
 
 export interface GooglePubsubBrokerFeature extends BaseBrokerFeatureOption {
-  type: EventStoreBrokerTypes.GOOGLE_PUB_SUB;
+  type: EventStoreBrokerTypes.GooglePubSub;
   streamName: string;
   subscriptions: GooglePubsubSubscription[];
+}
+
+export interface KafkaBrokerFeature extends BaseBrokerFeatureOption {
+  type: EventStoreBrokerTypes.Kafka;
+  streamName: string;
+  subscriptions: KafkaSubscription[];
 }
 
 export interface ExtendedPersistentSubscription<E extends EventType = EventType>
@@ -145,10 +155,16 @@ export interface ExtendedPubsubStandardSubscription extends PubsubSubscription {
   isLive?: boolean | undefined;
 }
 
+export interface ExtendedKafkaStandardSubscription extends KafkaSubscription {
+  type: 'normal';
+  isLive?: boolean | undefined;
+}
+
 export type EventStoreFeatureOptions =
   | EventStoreBrokerFeature
   | GooglePubsubBrokerFeature
-  | StanBrokerFeature;
+  | StanBrokerFeature
+  | KafkaBrokerFeature;
 
 export interface EventStoreFeatureOptionsFactory {
   createFeatureOptions(

@@ -20,4 +20,5 @@
 
 export * from './event-store.client';
 export * from './stan.client';
+export * from './kafka.client';
 export * from './google-pubsub.client';

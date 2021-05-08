@@ -34,7 +34,7 @@ describe('StanClient', () => {
           provide: ProvidersConstants.EVENT_STORE_CONFIG,
           useValue: {
             broker: {
-              type: EventStoreBrokerTypes.STAN,
+              type: EventStoreBrokerTypes.Stan,
               clientId: 'test-client-id',
               clusterId: 'my-cluster',
             },

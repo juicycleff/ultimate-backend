@@ -29,10 +29,10 @@ import {
   EventStoreFeatureOptions,
   StanPersistentSubscription,
   StanStandardSubscription,
-  EventStoreSubscription,
   EventStoreSubscriptionType,
   ExtendedStanPersistentSubscription,
   ExtendedStanStandardSubscription,
+  StanSubscription
 } from '@ultimate-backend';
 import { StanClient } from '../client';
 import { BaseBroker } from './base.broker';
@@ -71,7 +71,7 @@ export class StanBroker
     }
 
     const subs = (featureStreamConfig.subscriptions ||
-      []) as EventStoreSubscription[];
+      []) as StanSubscription[];
 
     if (subs.length > 0) {
       const persistentSubscriptions = subs.filter((sub) => {

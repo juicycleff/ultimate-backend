@@ -19,8 +19,6 @@
  ******************************************************************************/
 
 export interface IBrokerClient<T> {
-  _client: T;
-
   connected: boolean;
 
   connect(broker: any): void;

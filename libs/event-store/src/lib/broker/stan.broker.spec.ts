@@ -42,7 +42,7 @@ describe('StanBroker', () => {
           useValue: {
             debug: true,
             broker: {
-              type: EventStoreBrokerTypes.STAN,
+              type: EventStoreBrokerTypes.Stan,
               clientId: 'test-client-id',
               clusterId: 'my-cluster',
             },
@@ -52,7 +52,7 @@ describe('StanBroker', () => {
         {
           provide: ProvidersConstants.EVENT_STORE_FEATURE_CONFIG,
           useValue: {
-            type: EventStoreBrokerTypes.STAN,
+            type: EventStoreBrokerTypes.Stan,
             streamName: 'stan-store',
           } as EventStoreFeatureOptions,
         },

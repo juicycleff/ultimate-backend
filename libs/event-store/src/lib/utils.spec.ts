@@ -28,7 +28,7 @@ import { ProvidersConstants } from './event-store.constant';
 describe('Utils', () => {
   const stanOpts: EventStoreModuleOptions = {
     broker: {
-      type: EventStoreBrokerTypes.STAN,
+      type: EventStoreBrokerTypes.Stan,
       clientId: 'test-client-id',
       clusterId: 'my-cluster',
       options: null,
@@ -37,7 +37,7 @@ describe('Utils', () => {
 
   const esOpts: EventStoreModuleOptions = {
     broker: {
-      type: EventStoreBrokerTypes.STAN,
+      type: EventStoreBrokerTypes.Stan,
       clientId: 'test-client-id',
       clusterId: 'my-cluster',
       options: null,
