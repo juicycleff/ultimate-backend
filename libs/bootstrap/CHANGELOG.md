@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.4.0](https://github.com/juicycleff/ultimate-backend/compare/v0.3.0...v0.4.0) (2021-05-08)
+
+
+### Features
+
+* **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
+
+
+
 # [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
 
 
