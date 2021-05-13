@@ -58,6 +58,7 @@ export class ConfigModule {
       module: ConfigModule,
       providers,
       global: options.global || true,
+      exports: [ConfigStore],
     };
   }
 
