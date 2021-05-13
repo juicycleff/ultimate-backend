@@ -2,6 +2,16 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* **core:** properly called swagger obj ([b8aefce](https://github.com/juicycleff/ultimate-backend/commit/b8aefce5bc8beac449c9d0394241c278a78a0dea))
+* export configstore to external modules ([f933caf](https://github.com/juicycleff/ultimate-backend/commit/f933cafd707aead210e663c2d27f5b712b570dc2))
+
+
+
 ## [0.4.1](https://github.com/juicycleff/ultimate-backend/compare/v0.4.0...v0.4.1) (2021-05-11)
 
 
