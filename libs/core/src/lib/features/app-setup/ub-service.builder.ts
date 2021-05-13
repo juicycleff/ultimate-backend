@@ -66,12 +66,13 @@ export class UBServiceBuilder {
       this.boot.get('description', 'ultimate backend service');
     const version = options?.version || this.boot.get('version', 'latest');
     const tag = options?.description || this.boot.get('tag', 'service');
-    this._swaggerObject = new DocumentBuilder()
+    const builder  = new DocumentBuilder()
       .setTitle(title)
       .setDescription(description)
       .setVersion(version)
       .addTag(tag)
-      .build() as OpenAPIObject;
+      .build();
+    this._swaggerObject = SwaggerModule.createDocument(this.app, builder);
     return this;
   }
 
