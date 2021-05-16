@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.5.0](https://github.com/juicycleff/ultimate-backend/compare/v0.4.2...v0.5.0) (2021-05-16)
+
+
+### Features
+
+* **core:** exposed more swagger options ([b945d00](https://github.com/juicycleff/ultimate-backend/commit/b945d00437afa78eaf1ca202886f473c3baa2d36))
+
+
+
 ## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
 
 ### Bug Fixes
