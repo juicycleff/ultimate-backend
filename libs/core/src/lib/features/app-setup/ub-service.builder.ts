@@ -22,7 +22,11 @@ import { GrpcOpts, SwaggerConfig } from './grpc-opts';
 import { INestApplication, Logger } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { OpenAPIObject, SwaggerCustomOptions, SwaggerDocumentOptions } from '@nestjs/swagger/dist/interfaces';
+import {
+  OpenAPIObject,
+  SwaggerCustomOptions,
+  SwaggerDocumentOptions,
+} from '@nestjs/swagger/dist/interfaces';
 import { BootConfig } from '@ultimate-backend/bootstrap';
 import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
 import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
@@ -43,6 +47,7 @@ export class UBServiceBuilder {
 
   withPrefix(prefix: string) {
     this._prefix = prefix;
+    this.app.setGlobalPrefix(prefix);
     return this;
   }
 
@@ -56,7 +61,12 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withSwagger(path?: string, options?: SwaggerConfig, customOpts?: SwaggerCustomOptions, docOpts?: SwaggerDocumentOptions) {
+  withSwagger(
+    path?: string,
+    options?: SwaggerConfig,
+    customOpts?: SwaggerCustomOptions,
+    docOpts?: SwaggerDocumentOptions
+  ) {
     if (path) {
       this._swaggerPath = path;
     }
@@ -77,7 +87,11 @@ export class UBServiceBuilder {
       .setVersion(version)
       .addTag(tag)
       .build();
-    this._swaggerObject = SwaggerModule.createDocument(this.app, builder, docOpts);
+    this._swaggerObject = SwaggerModule.createDocument(
+      this.app,
+      builder,
+      docOpts
+    );
     return this;
   }
 
@@ -151,7 +165,12 @@ export class UBServiceBuilder {
 
   private createSwaggerDocument() {
     if (this._swaggerObject) {
-      SwaggerModule.setup(this._swaggerPath, this.app, this._swaggerObject, this._swaggerCustomOpts);
+      SwaggerModule.setup(
+        this._swaggerPath,
+        this.app,
+        this._swaggerObject,
+        this._swaggerCustomOpts
+      );
     }
   }
 
