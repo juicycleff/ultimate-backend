@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
+
+
+### Bug Fixes
+
+* **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
+
+
+
 # [0.5.0](https://github.com/juicycleff/ultimate-backend/compare/v0.4.2...v0.5.0) (2021-05-16)
 
 ### Features
