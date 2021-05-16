@@ -2,6 +2,33 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
+
+
+### Features
+
+* **config:** support handlebar templates in config.store.ts ([540f753](https://github.com/juicycleff/ultimate-backend/commit/540f75347b4b14328601722da8051131ffba0e9b))
+
+
+
+# [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
+
+
+### Features
+
+* **config:** support handlebar templates in config.store.ts ([540f753](https://github.com/juicycleff/ultimate-backend/commit/540f75347b4b14328601722da8051131ffba0e9b))
+
+
+
+# [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
+
+
+### Features
+
+* **config:** support handlebar templates in config.store.ts ([540f753](https://github.com/juicycleff/ultimate-backend/commit/540f75347b4b14328601722da8051131ffba0e9b))
+
+
+
 ## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
 
 
