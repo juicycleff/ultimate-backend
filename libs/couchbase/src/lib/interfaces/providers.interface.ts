@@ -21,7 +21,7 @@
 import { ModelOptions } from 'ottoman/lib/types/model/interfaces/create-model.interface';
 
 export interface ModelDefinition {
-    name: string;
-    schema: any;
-    option?: ModelOptions;
+  name: string;
+  schema: any;
+  option?: ModelOptions;
 }

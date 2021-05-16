@@ -28,9 +28,15 @@ import {
   PersistentSubscription,
   StreamSubscription,
 } from '@eventstore/db-client/dist/types';
-import { AppendToStreamOptions, SubscribeToStreamOptions } from '@eventstore/db-client/dist/streams';
+import {
+  AppendToStreamOptions,
+  SubscribeToStreamOptions,
+} from '@eventstore/db-client/dist/streams';
 import { Subscription, SubscriptionOptions } from '../external/stan.types';
-import { CreateSubscriptionOptions, Subscription as PubsubSubscription } from '../external/gpubsub.types';
+import {
+  CreateSubscriptionOptions,
+  Subscription as PubsubSubscription,
+} from '../external/gpubsub.types';
 import { ConsumerSubscribeTopic } from '../external/kafka.types';
 
 export interface IEventConstructors {
@@ -77,7 +83,9 @@ export interface StanStandardSubscription extends BaseStanSubscription {
   type: EventStoreSubscriptionType.Standard;
 }
 
-export type StanSubscription = StanPersistentSubscription | StanStandardSubscription;
+export type StanSubscription =
+  | StanPersistentSubscription
+  | StanStandardSubscription;
 
 /***********************Google PubSub***********************/
 
@@ -90,7 +98,7 @@ export interface GooglePubsubSubscription {
 
 /*********************** Kafka ***********************/
 
-export type KafkaSubscription = ConsumerSubscribeTopic
+export type KafkaSubscription = ConsumerSubscribeTopic;
 
 /***********************Real***********************/
 
@@ -102,13 +110,13 @@ export interface BaseBrokerFeatureOption {
   notify?: {
     ignoreAck?: boolean;
     ignoreNack?: boolean;
-  }
+  };
 }
 
 export interface EventStoreBrokerFeature extends BaseBrokerFeatureOption {
   type: EventStoreBrokerTypes.EventStore;
   subscriptions: EventStoreSubscription[];
-  options?: AppendToStreamOptions
+  options?: AppendToStreamOptions;
 }
 
 export interface StanBrokerFeature extends BaseBrokerFeatureOption {

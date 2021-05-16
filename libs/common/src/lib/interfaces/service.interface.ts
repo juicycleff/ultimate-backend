@@ -27,8 +27,8 @@ export interface IService {
   region?: string;
   zone?: string;
 
-  host: string,
-  secure: boolean,
-  metadata?: Map<string, string>
+  host: string;
+  secure: boolean;
+  metadata?: Map<string, string>;
   state: IServiceState;
 }

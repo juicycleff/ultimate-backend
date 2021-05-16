@@ -22,7 +22,7 @@ import { GrpcOpts, SwaggerConfig } from './grpc-opts';
 import { INestApplication, Logger } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { OpenAPIObject } from '@nestjs/swagger/dist/interfaces';
+import { OpenAPIObject, SwaggerCustomOptions, SwaggerDocumentOptions } from '@nestjs/swagger/dist/interfaces';
 import { BootConfig } from '@ultimate-backend/bootstrap';
 import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
 import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
@@ -33,6 +33,7 @@ export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
   private _swaggerObject: OpenAPIObject;
   private _swaggerPath = 'docs';
+  private _swaggerCustomOpts;
   private boot: BootConfig;
   private _prefix: string;
 
@@ -55,9 +56,13 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withSwagger(path?: string, options?: SwaggerConfig) {
+  withSwagger(path?: string, options?: SwaggerConfig, customOpts?: SwaggerCustomOptions, docOpts?: SwaggerDocumentOptions) {
     if (path) {
       this._swaggerPath = path;
+    }
+
+    if (customOpts) {
+      this._swaggerCustomOpts = customOpts;
     }
 
     const title = options?.title || this.boot.get('name', 'ub-service');
@@ -66,13 +71,13 @@ export class UBServiceBuilder {
       this.boot.get('description', 'ultimate backend service');
     const version = options?.version || this.boot.get('version', 'latest');
     const tag = options?.description || this.boot.get('tag', 'service');
-    const builder  = new DocumentBuilder()
+    const builder = new DocumentBuilder()
       .setTitle(title)
       .setDescription(description)
       .setVersion(version)
       .addTag(tag)
       .build();
-    this._swaggerObject = SwaggerModule.createDocument(this.app, builder);
+    this._swaggerObject = SwaggerModule.createDocument(this.app, builder, docOpts);
     return this;
   }
 
@@ -146,7 +151,7 @@ export class UBServiceBuilder {
 
   private createSwaggerDocument() {
     if (this._swaggerObject) {
-      SwaggerModule.setup(this._swaggerPath, this.app, this._swaggerObject);
+      SwaggerModule.setup(this._swaggerPath, this.app, this._swaggerObject, this._swaggerCustomOpts);
     }
   }
 

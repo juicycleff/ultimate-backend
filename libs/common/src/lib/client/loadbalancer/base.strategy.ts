@@ -24,7 +24,6 @@ import { Type } from '@nestjs/common';
  * Base load-balance strategy
  */
 export abstract class BaseStrategy<T> {
-
   init(serviceName: string, list: any): void {
     throw new Error('Not Implemented');
   }

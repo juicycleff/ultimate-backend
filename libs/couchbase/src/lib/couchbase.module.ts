@@ -20,63 +20,60 @@
 
 import { DynamicModule, flatten, Module } from '@nestjs/common';
 import {
-    CouchbaseModuleAsyncOptions,
-    CouchbaseModuleOptions,
-    ModelDefinition,
+  CouchbaseModuleAsyncOptions,
+  CouchbaseModuleOptions,
+  ModelDefinition,
 } from './interfaces';
 import { CouchbaseCoreModule } from './couchbase-core.module';
 import { AsyncModelFactory } from './interfaces/async-model-factory.interface';
 import {
-    createCouchbaseAsyncProviders,
-    createCouchbaseProviders,
+  createCouchbaseAsyncProviders,
+  createCouchbaseProviders,
 } from './couchbase.provider';
 
 @Module({
-    imports: [CouchbaseCoreModule],
+  imports: [CouchbaseCoreModule],
 })
 export class CouchbaseModule {
-    static forRoot(options: CouchbaseModuleOptions): DynamicModule {
-        return {
-            module: CouchbaseCoreModule,
-            imports: [CouchbaseCoreModule.forRoot(options)],
-        };
-    }
+  static forRoot(options: CouchbaseModuleOptions): DynamicModule {
+    return {
+      module: CouchbaseCoreModule,
+      imports: [CouchbaseCoreModule.forRoot(options)],
+    };
+  }
 
-    static forRootAsync(options: CouchbaseModuleAsyncOptions): DynamicModule {
-        return {
-            module: CouchbaseCoreModule,
-            imports: [CouchbaseCoreModule.forRootAsync(options)],
-        };
-    }
+  static forRootAsync(options: CouchbaseModuleAsyncOptions): DynamicModule {
+    return {
+      module: CouchbaseCoreModule,
+      imports: [CouchbaseCoreModule.forRootAsync(options)],
+    };
+  }
 
-    static forFeature(
-        models: ModelDefinition[] = [],
-        connectionName?: string,
-    ): DynamicModule {
-        const providers = createCouchbaseProviders(connectionName, models);
-        return {
-            module: CouchbaseCoreModule,
-            providers: providers,
-            exports: providers,
-        };
-    }
+  static forFeature(
+    models: ModelDefinition[] = [],
+    connectionName?: string
+  ): DynamicModule {
+    const providers = createCouchbaseProviders(connectionName, models);
+    return {
+      module: CouchbaseCoreModule,
+      providers: providers,
+      exports: providers,
+    };
+  }
 
-    static forFeatureAsync(
-        factories: AsyncModelFactory[] = [],
-        connectionName?: string,
-    ): DynamicModule {
-        const providers = createCouchbaseAsyncProviders(
-            connectionName,
-            factories,
-        );
-        const imports = factories.map((factory) => factory.imports || []);
-        const uniqImports = new Set(flatten(imports));
+  static forFeatureAsync(
+    factories: AsyncModelFactory[] = [],
+    connectionName?: string
+  ): DynamicModule {
+    const providers = createCouchbaseAsyncProviders(connectionName, factories);
+    const imports = factories.map((factory) => factory.imports || []);
+    const uniqImports = new Set(flatten(imports));
 
-        return {
-            module: CouchbaseCoreModule,
-            imports: [...uniqImports],
-            providers: providers,
-            exports: providers,
-        };
-    }
+    return {
+      module: CouchbaseCoreModule,
+      imports: [...uniqImports],
+      providers: providers,
+      exports: providers,
+    };
+  }
 }

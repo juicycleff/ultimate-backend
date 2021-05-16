@@ -4,62 +4,37 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
 
-
+## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
 
 ## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
 
-
-
-## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
-
-
+## [0.4.1](https://github.com/juicycleff/ultimate-backend/compare/v0.4.0...v0.4.1) (2021-05-11)
 
 ## [0.4.1](https://github.com/juicycleff/ultimate-backend/compare/v0.4.0...v0.4.1) (2021-05-11)
 
-
-
-## [0.4.1](https://github.com/juicycleff/ultimate-backend/compare/v0.4.0...v0.4.1) (2021-05-11)
-
-
-
 # [0.4.0](https://github.com/juicycleff/ultimate-backend/compare/v0.3.0...v0.4.0) (2021-05-08)
-
 
 ### Features
 
-* **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
-
-
+- **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
 
 # [0.4.0](https://github.com/juicycleff/ultimate-backend/compare/v0.3.0...v0.4.0) (2021-05-08)
 
-
 ### Features
 
-* **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
-
-
+- **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
 
 # [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
 
-
-
 # [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
 
-
-
 # [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
-
-
 
 # [0.2.0](https://github.com/juicycleff/ultimate-backend/compare/v0.1.13...v0.2.0) (2021-04-07)
 
-
 ### Features
 
-* **cli:** support grouping cqrs commands ([50648a5](https://github.com/juicycleff/ultimate-backend/commit/50648a51958b73d0663d79be25a45df16d245df2))
-
-
+- **cli:** support grouping cqrs commands ([50648a5](https://github.com/juicycleff/ultimate-backend/commit/50648a51958b73d0663d79be25a45df16d245df2))
 
 ## [0.1.13](https://github.com/juicycleff/ultimate-backend/compare/v0.1.12...v0.1.13) (2021-04-07)
 

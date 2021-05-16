@@ -26,7 +26,7 @@ export interface RedisModuleOptions {
   useCluster?: boolean;
   retryAttempts?: number;
   retryDelays?: number;
-  redisOptions: RedisOptions;
+  redisOptions?: RedisOptions;
   nodes?: ClusterNode[];
   global?: boolean;
 }

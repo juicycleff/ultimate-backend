@@ -22,7 +22,9 @@ import { EventEmitter } from 'events';
 
 export declare type GetTopicsResponse = PagedResponse<Topic, any>;
 
-export declare type GetSubscriptionsResponse = any | GetTopicSubscriptionsResponse;
+export declare type GetSubscriptionsResponse =
+  | any
+  | GetTopicSubscriptionsResponse;
 
 export interface PageOptions {
   gaxOpts?: CallOptions;
@@ -39,19 +41,32 @@ export interface MessageStreamOptions {
   timeout?: number;
 }
 export interface ResourceCallback<Resource, Response> {
-  (err: any | null, resource?: Resource | null, response?: Response | null): void;
+  (
+    err: any | null,
+    resource?: Resource | null,
+    response?: Response | null
+  ): void;
 }
-export declare type RequestCallback<T, R = void> = R extends void ? NormalCallback<T> : PagedCallback<T, R>;
+export declare type RequestCallback<T, R = void> = R extends void
+  ? NormalCallback<T>
+  : PagedCallback<T, R>;
 export interface NormalCallback<TResponse> {
   (err: any | null, res?: TResponse | null): void;
 }
 export interface PagedCallback<Item, Response> {
-  (err: any | null, results?: Item[] | null, nextQuery?: {} | null, response?: Response | null): void;
+  (
+    err: any | null,
+    results?: Item[] | null,
+    nextQuery?: {} | null,
+    response?: Response | null
+  ): void;
 }
 export declare type DetachedResponse = [boolean];
 export declare type ExistsResponse = [boolean];
 
-export declare type PagedResponse<Item, Response> = [Item[]] | [Item[], {} | null, Response];
+export declare type PagedResponse<Item, Response> =
+  | [Item[]]
+  | [Item[], {} | null, Response];
 
 declare type SubscriptionResponse = [Subscription, any];
 export declare type CreateSubscriptionResponse = SubscriptionResponse;
@@ -70,7 +85,10 @@ declare type MetadataResponse = [TopicMetadata];
 export declare type SetTopicMetadataCallback = MetadataCallback;
 export declare type SetTopicMetadataResponse = MetadataResponse;
 
-export declare type GetTopicSubscriptionsResponse = PagedResponse<Subscription, any>;
+export declare type GetTopicSubscriptionsResponse = PagedResponse<
+  Subscription,
+  any
+>;
 export declare type MessageOptions = Record<string, any> & {
   json?: any;
 };
@@ -224,19 +242,31 @@ export declare class Topic {
   metadata?: TopicMetadata;
   flush(): Promise<void>;
   create(gaxOpts?: CallOptions): Promise<CreateTopicResponse>;
-  createSubscription(name: string, options?: CreateSubscriptionOptions): Promise<CreateSubscriptionResponse>;
+  createSubscription(
+    name: string,
+    options?: CreateSubscriptionOptions
+  ): Promise<CreateSubscriptionResponse>;
   delete(gaxOpts?: CallOptions): Promise<EmptyResponse>;
   exists(): Promise<ExistsResponse>;
   get(gaxOpts?: GetTopicOptions): Promise<GetTopicResponse>;
-  getSubscriptions(options?: PageOptions): Promise<GetTopicSubscriptionsResponse>;
+  getSubscriptions(
+    options?: PageOptions
+  ): Promise<GetTopicSubscriptionsResponse>;
   publish(data: Buffer, attributes?: Attributes): Promise<string>;
   publishJSON(json: object, attributes?: Attributes): Promise<string>;
   publishMessage(message: MessageOptions): Promise<[string]>;
 
   resumePublishing(orderingKey: string): void;
-  setMetadata(options: TopicMetadata, gaxOpts?: CallOptions): Promise<SetTopicMetadataResponse>;
+  setMetadata(
+    options: TopicMetadata,
+    gaxOpts?: CallOptions
+  ): Promise<SetTopicMetadataResponse>;
   setMetadata(options: TopicMetadata, callback: SetTopicMetadataCallback): void;
-  setMetadata(options: TopicMetadata, gaxOpts: CallOptions, callback: SetTopicMetadataCallback): void;
+  setMetadata(
+    options: TopicMetadata,
+    gaxOpts: CallOptions,
+    callback: SetTopicMetadataCallback
+  ): void;
 
   setPublishOptions(options: PublishOptions): void;
 
@@ -251,10 +281,19 @@ export declare class PubSub {
   isOpen: boolean;
   constructor(options?: ClientConfig);
   close(): Promise<void>;
-  createSubscription(topic: Topic | string, name: string, options?: CreateSubscriptionOptions): Promise<CreateSubscriptionResponse>;
-  createTopic(name: string, gaxOpts?: CallOptions): Promise<CreateTopicResponse>;
+  createSubscription(
+    topic: Topic | string,
+    name: string,
+    options?: CreateSubscriptionOptions
+  ): Promise<CreateSubscriptionResponse>;
+  createTopic(
+    name: string,
+    gaxOpts?: CallOptions
+  ): Promise<CreateTopicResponse>;
 
-  getSubscriptions(options?: GetSubscriptionsOptions): Promise<GetSubscriptionsResponse>;
+  getSubscriptions(
+    options?: GetSubscriptionsOptions
+  ): Promise<GetSubscriptionsResponse>;
   getTopics(options?: PageOptions): Promise<GetTopicsResponse>;
 
   subscription(name: string, options?: SubscriptionOptions): Subscription;
@@ -289,7 +328,9 @@ export declare class Subscription extends EventEmitter {
    */
   get projectId(): string;
   close(): Promise<void>;
-  create(options?: CreateSubscriptionOptions): Promise<CreateSubscriptionResponse>;
+  create(
+    options?: CreateSubscriptionOptions
+  ): Promise<CreateSubscriptionResponse>;
   delete(gaxOpts?: CallOptions): Promise<EmptyResponse>;
   detached(): Promise<DetachedResponse>;
   exists(): Promise<ExistsResponse>;
@@ -317,14 +358,16 @@ export declare class Subscription extends EventEmitter {
    * subscription.open();
    */
   open(): void;
-  setMetadata(metadata: any, gaxOpts?: CallOptions): Promise<SetSubscriptionMetadataResponse>;
+  setMetadata(
+    metadata: any,
+    gaxOpts?: CallOptions
+  ): Promise<SetSubscriptionMetadataResponse>;
   /**
    * Sets the Subscription options.
    *
    * @param {SubscriberOptions} options The options.
    */
   setOptions(options: SubscriberOptions): void;
-
 }
 
 export interface Credentials {

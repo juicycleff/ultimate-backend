@@ -6,7 +6,11 @@ import { StanClientOptions } from './stan-client.options';
 import { GooglePubsubClientOptions } from './google-pubsub.interface';
 import { KafkaClientOptions } from './kafka-client.options';
 
-export type BrokerOptions = EventStoreClientOptions | StanClientOptions | GooglePubsubClientOptions | KafkaClientOptions;
+export type BrokerOptions =
+  | EventStoreClientOptions
+  | StanClientOptions
+  | GooglePubsubClientOptions
+  | KafkaClientOptions;
 
 export interface EventStoreModuleOptions extends BaseClientOptions {
   broker: BrokerOptions;

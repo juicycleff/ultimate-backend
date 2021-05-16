@@ -26,10 +26,10 @@ import { SchemaOptions } from '../interfaces';
  * Only properties decorated with this decorator will be defined in the schema.
  */
 export function Schema(options?: SchemaOptions): ClassDecorator {
-    return (target: Function) => {
-        TypeMetadataStorage.addSchemaMetadata({
-            target,
-            options,
-        });
-    };
+  return (target: Function) => {
+    TypeMetadataStorage.addSchemaMetadata({
+      target,
+      options,
+    });
+  };
 }

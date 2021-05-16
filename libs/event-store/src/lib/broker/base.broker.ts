@@ -17,15 +17,16 @@
  * File name:         base.broker.ts
  * Last modified:     25/02/2021, 21:12
  ******************************************************************************/
-import { EventStoreFeatureOptions, IEventConstructors } from '@ultimate-backend';
+import {
+  EventStoreFeatureOptions,
+  IEventConstructors,
+} from '@ultimate-backend';
 import { Subject } from 'rxjs';
 import { IEvent } from '@nestjs/cqrs';
 import { IAdapterStore } from '../adapter.interface';
 import { Logger } from '@nestjs/common';
 
-
 export abstract class BaseBroker {
-
   // special adapter for optionally storing events in an external store
   protected readonly store: IAdapterStore;
 
@@ -39,13 +40,15 @@ export abstract class BaseBroker {
 
   protected logger = new Logger(this.constructor.name);
 
-  protected constructor(featureStreamConfig: EventStoreFeatureOptions, logContext: string) {
+  protected constructor(
+    featureStreamConfig: EventStoreFeatureOptions,
+    logContext: string
+  ) {
     this.logger = new Logger(logContext);
     this.streamName = featureStreamConfig.streamName;
     this.eventHandlers = featureStreamConfig.eventHandlers;
     this.store = featureStreamConfig.store;
   }
-
 
   protected addEventHandlers(eventHandlers: IEventConstructors) {
     this.eventHandlers = { ...this.eventHandlers, ...eventHandlers };

@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2021. Rex Isaac Raphael
  *
@@ -20,7 +19,11 @@
  ******************************************************************************/
 
 import { EventStoreBrokerTypes } from './broker.enums';
-import { ProducerConfig, KafkaConfig, ConsumerConfig } from '../external/kafka.types';
+import {
+  ProducerConfig,
+  KafkaConfig,
+  ConsumerConfig,
+} from '../external/kafka.types';
 
 export interface KafkaClientOptions {
   type: EventStoreBrokerTypes.Kafka;

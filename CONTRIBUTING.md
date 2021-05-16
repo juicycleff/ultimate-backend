@@ -17,24 +17,31 @@ Here is a summary of the steps to follow:
 
 1. Clone this repo with `$ git clone git@github.com:juicycleff/ultimate-backend.git`
 2. If you cloned a while ago, get the latest changes from upstream and update dependencies:
+
 ```bash
 $ git checkout master
 $ git pull upstream master
 $ rm -rf node_modules
 $ npm install
 ```
+
 3. Create a new topic branch (off the main project development branch) to contain your feature, change, or fix:
+
 ```bash
 $ git checkout -b <topic-branch-name>
 ```
+
 4. Make your commits, follow the [Commit message guidelines](#commit-message-guidelines)
 5. Push your topic branch up to your fork:
+
 ```bash
 $ git push origin <topic-branch-name>
 ```
+
 6. [Open a Pull Request](https://help.github.com/articles/creating-a-pull-request/#creating-the-pull-request) with a clear title and description.
 
 **Tips**:
+
 - For ambitious tasks, open a Pull Request as soon as possible with the `[WIP]` prefix in the title, in order to get feedback and help from the community.
 - [Allow Ultimate Backend maintainers to make changes to your Pull Request branch](https://help.github.com/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork), this way we can rebase it and make some minor changes if necessary. All changes we make will be done in new commit and we'll ask for your approval before merging them.
 
@@ -45,6 +52,7 @@ Greenkeeper uses [semantic-release](https://github.com/semantic-release/semantic
 ### Atomic commits
 
 If possible, make [atomic commits](https://en.wikipedia.org/wiki/Atomic_commit), which means:
+
 - a commit should contain exactly one self-contained functional change
 - a functional change should be contained in exactly one commit
 - a commit should not create an inconsistent state (such as test errors, linting errors, partial fix, feature with a documentation etc...)
@@ -76,7 +84,7 @@ If the commit reverts a previous commit, it should begin with `revert: `, follow
 The type must be one of the following:
 
 | Type         | Description                                                                                                 |
-|--------------|-------------------------------------------------------------------------------------------------------------|
+| ------------ | ----------------------------------------------------------------------------------------------------------- |
 | **build**    | Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)         |
 | **ci**       | Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) |
 | **docs**     | Documentation only changes                                                                                  |
@@ -96,10 +104,12 @@ The subject contains succinct description of the change:
 - no dot (.) at the end
 
 ### Body
+
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes".
 The body should include the motivation for the change and contrast this with previous behavior.
 
 ### Footer
+
 The footer should contain any information about **Breaking Changes** and is also the place to reference GitHub issues that this commit **Closes**.
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.

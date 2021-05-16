@@ -15,7 +15,12 @@ import {
   ProvidersConstants,
 } from './event-store.constant';
 import { getClientProvider, getClientProviderAsync } from './utils';
-import { StanBroker, EventStoreBroker, GooglePubsubBroker, KafkaBroker } from './broker';
+import {
+  StanBroker,
+  EventStoreBroker,
+  GooglePubsubBroker,
+  KafkaBroker,
+} from './broker';
 import { ExplorerService } from '@nestjs/cqrs/dist/services/explorer.service';
 import { EventStoreConfig } from './event-store.config';
 

@@ -10,8 +10,8 @@ const newService: Service = {
   name: 'service',
   tags: ['svc=cluster'],
   meta: {
-    svc: 'cluster'
-  }
+    svc: 'cluster',
+  },
 };
 
 const consulDiscoveryOptions: ConsulDiscoveryOptions = {
@@ -83,12 +83,15 @@ describe('ConsulRegistration', () => {
 
   it('can get registration metadata and tags', async () => {
     let result = new ConsulRegistration(newService, consulDiscoveryOptions);
-    const m = {svc: 'cluster'};
+    const m = { svc: 'cluster' };
     expect(result.getMetadata()).toEqual(m);
     expect(result.getTags()).toEqual(['svc=cluster']);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    result = new ConsulRegistration({ tags: null, meta: null }, consulDiscoveryOptions);
+    result = new ConsulRegistration(
+      { tags: null, meta: null },
+      consulDiscoveryOptions
+    );
     expect(result.getMetadata()).toEqual({});
     expect(result.getTags()).toEqual([]);
   });

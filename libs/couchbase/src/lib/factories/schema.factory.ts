@@ -25,21 +25,16 @@ import { DefinitionsFactory } from './definitions.factory';
 import { SchemaOptions } from 'ottoman/lib/types/schema/interfaces/schema.types';
 
 export class SchemaFactory {
-    static createForClass<
-        TClass extends any = any,
-        TDocument extends ottoman.Model = TClass extends ottoman.Schema
-            ? TClass
-            : ottoman.Model<TClass>
-    >(target: Type<TClass>, options?: SchemaOptions): ottoman.Schema {
-        const schemaDefinition = DefinitionsFactory.createForClass(
-            target,
-            options,
-        );
-        const schemaMetadata = TypeMetadataStorage.getSchemaMetadataByTarget(
-            target,
-        );
-        return new ottoman.Schema(
-            schemaDefinition,
-        );
-    }
+  static createForClass<
+    TClass extends any = any,
+    TDocument extends ottoman.Model = TClass extends ottoman.Schema
+      ? TClass
+      : ottoman.Model<TClass>
+  >(target: Type<TClass>, options?: SchemaOptions): ottoman.Schema {
+    const schemaDefinition = DefinitionsFactory.createForClass(target, options);
+    const schemaMetadata = TypeMetadataStorage.getSchemaMetadataByTarget(
+      target
+    );
+    return new ottoman.Schema(schemaDefinition);
+  }
 }

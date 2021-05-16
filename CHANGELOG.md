@@ -4,44 +4,30 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.4.2](https://github.com/juicycleff/ultimate-backend/compare/v0.4.1...v0.4.2) (2021-05-13)
 
-
 ### Bug Fixes
 
-* **core:** properly called swagger obj ([b8aefce](https://github.com/juicycleff/ultimate-backend/commit/b8aefce5bc8beac449c9d0394241c278a78a0dea))
-* export configstore to external modules ([f933caf](https://github.com/juicycleff/ultimate-backend/commit/f933cafd707aead210e663c2d27f5b712b570dc2))
-
-
+- **core:** properly called swagger obj ([b8aefce](https://github.com/juicycleff/ultimate-backend/commit/b8aefce5bc8beac449c9d0394241c278a78a0dea))
+- export configstore to external modules ([f933caf](https://github.com/juicycleff/ultimate-backend/commit/f933cafd707aead210e663c2d27f5b712b570dc2))
 
 ## [0.4.1](https://github.com/juicycleff/ultimate-backend/compare/v0.4.0...v0.4.1) (2021-05-11)
 
-
-
 # [0.4.0](https://github.com/juicycleff/ultimate-backend/compare/v0.3.0...v0.4.0) (2021-05-08)
-
 
 ### Features
 
-* **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
-
-
+- **event-store:** support for kafka as an event store ([fea46bf](https://github.com/juicycleff/ultimate-backend/commit/fea46bf5543bbad50848e80f3181e37df256e3e2))
 
 # [0.3.0](https://github.com/juicycleff/ultimate-backend/compare/v0.2.0...v0.3.0) (2021-04-08)
 
-
 ### Features
 
-* **cli:** support grouping cqrs commands ([2712fa0](https://github.com/juicycleff/ultimate-backend/commit/2712fa02ec29f4b8084719ec5c74a5072cad7d06))
-
-
+- **cli:** support grouping cqrs commands ([2712fa0](https://github.com/juicycleff/ultimate-backend/commit/2712fa02ec29f4b8084719ec5c74a5072cad7d06))
 
 # [0.2.0](https://github.com/juicycleff/ultimate-backend/compare/v0.1.13...v0.2.0) (2021-04-07)
 
-
 ### Features
 
-* **cli:** support grouping cqrs commands ([50648a5](https://github.com/juicycleff/ultimate-backend/commit/50648a51958b73d0663d79be25a45df16d245df2))
-
-
+- **cli:** support grouping cqrs commands ([50648a5](https://github.com/juicycleff/ultimate-backend/commit/50648a51958b73d0663d79be25a45df16d245df2))
 
 ## [0.1.13](https://github.com/juicycleff/ultimate-backend/compare/v0.1.12...v0.1.13) (2021-04-07)
 

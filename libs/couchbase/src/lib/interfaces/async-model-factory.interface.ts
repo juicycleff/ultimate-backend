@@ -26,11 +26,11 @@ import { ModelDefinition } from './providers.interface';
  */
 
 export interface AsyncModelFactory
-    extends Pick<ModuleMetadata, 'imports'>,
-        Pick<ModelDefinition, 'schema' | 'option' | 'name'> {
-    useFactory: (
-        ...args: any[]
-    ) => ModelDefinition['schema'] | Promise<ModelDefinition['schema']>;
+  extends Pick<ModuleMetadata, 'imports'>,
+    Pick<ModelDefinition, 'schema' | 'option' | 'name'> {
+  useFactory: (
+    ...args: any[]
+  ) => ModelDefinition['schema'] | Promise<ModelDefinition['schema']>;
 
-    inject?: any[];
+  inject?: any[];
 }

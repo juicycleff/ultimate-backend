@@ -3,7 +3,7 @@ export interface SharedHealthCheckOptions {
   serviceName?: string;
   interval?: number | undefined;
   failFast?: boolean;
-  scheme?: string,
+  scheme?: string;
 }
 
 export interface ScriptDiscoveryOptions extends SharedHealthCheckOptions {

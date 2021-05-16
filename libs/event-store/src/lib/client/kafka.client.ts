@@ -34,12 +34,10 @@ let kafkaPackage: any = {};
 export class KafkaClient
   extends EventEmitter
   implements IBrokerClient<Kafka>, OnModuleInit, OnModuleDestroy {
-
   connected = false;
   private _client: Kafka;
   private _producer: Producer;
   private _consumer: Consumer;
-
 
   private logger = new LoggerUtil(this.constructor.name);
 
@@ -82,11 +80,14 @@ export class KafkaClient
 
         this._client = new kafkaPackage.Kafka({
           ...broker.options,
-          clientId
+          clientId,
         });
 
         this._producer = this._client.producer(broker.producerOptions);
-        this._consumer = this._client.consumer({ ...broker.consumerOptions, groupId: broker.groupId });
+        this._consumer = this._client.consumer({
+          ...broker.consumerOptions,
+          groupId: broker.groupId,
+        });
 
         await Promise.all([this._producer.connect(), this._consumer.connect()]);
 
@@ -106,7 +107,9 @@ export class KafkaClient
           this.logger.warn('Kafka event store producer request timeout!');
         });
         this._producer.on('producer.network.request_queue_size', () => {
-          this.logger.warn('Kafka event store producer request queue size error!');
+          this.logger.warn(
+            'Kafka event store producer request queue size error!'
+          );
         });
 
         // consumer events
@@ -131,7 +134,9 @@ export class KafkaClient
           throw new Error('Kafka event store consumer crashed!');
         });
         this._consumer.on('consumer.network.request_queue_size', () => {
-          this.logger.warn('Kafka event store consumer request queue size error!');
+          this.logger.warn(
+            'Kafka event store consumer request queue size error!'
+          );
         });
       })
         .pipe(

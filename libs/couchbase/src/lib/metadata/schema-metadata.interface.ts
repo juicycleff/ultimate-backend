@@ -22,7 +22,7 @@ import { PropertyMetadata } from './property-metadata.interface';
 import { SchemaOptions } from '../interfaces';
 
 export interface SchemaMetadata {
-    target: Function;
-    options?: SchemaOptions;
-    properties?: PropertyMetadata[];
+  target: Function;
+  options?: SchemaOptions;
+  properties?: PropertyMetadata[];
 }

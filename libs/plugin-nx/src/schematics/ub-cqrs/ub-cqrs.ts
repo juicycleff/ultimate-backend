@@ -65,7 +65,8 @@ function generateCQRSHandler(tree: Tree, options: NormalizedSchema): Rule {
   };
 
   let sourcePath = 'files/cqrs/commands';
-  const dirPath = options.directory ? options.directory
+  const dirPath = options.directory
+    ? options.directory
     : `${options.sourceRoot}/app${
         options.group ? `/${options.group}/` : '/'
       }common/`;

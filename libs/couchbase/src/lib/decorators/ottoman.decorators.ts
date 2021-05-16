@@ -24,4 +24,4 @@ import { getConnectionToken, getModelToken } from '../utils';
 export const InjectModel = (model: string) => Inject(getModelToken(model));
 
 export const InjectConnection = (name?: string) =>
-    Inject(getConnectionToken(name));
+  Inject(getConnectionToken(name));

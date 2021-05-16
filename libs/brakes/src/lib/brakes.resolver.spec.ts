@@ -28,7 +28,7 @@ describe('BrakesResolver', () => {
   });
 
   it('should be successfully add brakes and get brakes', async () => {
-    const ops = new Opossum(async () => 'come-text', {resetTimeout: 300});
+    const ops = new Opossum(async () => 'come-text', { resetTimeout: 300 });
 
     service.addBrakes('test', ops);
     expect(service.getBrakes('test')).toBeDefined();

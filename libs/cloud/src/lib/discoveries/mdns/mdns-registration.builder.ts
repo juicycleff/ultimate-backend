@@ -24,7 +24,8 @@ import { MdnsDiscoveryOptions } from './interfaces';
 import { MdnsRegistration } from './mdns-registration';
 import {
   HeartbeatOptions,
-  IpUtils, PlainObjectString,
+  IpUtils,
+  PlainObjectString,
   RegistrationBuilder,
 } from '@ultimate-backend/common';
 import { Service } from 'bonjour';

@@ -25,7 +25,10 @@ export class ZookeeperRegistration implements Registration<Service> {
   private newService: Service;
   private discoveryOptions: ZookeeperDiscoveryOptions;
 
-  constructor(newService: Service, discoveryOptions: ZookeeperDiscoveryOptions) {
+  constructor(
+    newService: Service,
+    discoveryOptions: ZookeeperDiscoveryOptions
+  ) {
     this.newService = newService;
     this.discoveryOptions = discoveryOptions;
   }

@@ -29,11 +29,10 @@ export class BrakesFactory {
   private readonly logger = new Logger(BrakesFactory.name);
 
   constructor(
-    @Inject(BRAKES_CONFIG_OPTIONS) private readonly options: BrakesModuleOptions,
-    private readonly brakesResolver: BrakesResolver,
-  ) {
-
-  }
+    @Inject(BRAKES_CONFIG_OPTIONS)
+    private readonly options: BrakesModuleOptions,
+    private readonly brakesResolver: BrakesResolver
+  ) {}
 
   createBrake(name: string, action: (...args: any) => Promise<any>): Opossum {
     const ops = new Opossum(action, this.options);
@@ -57,5 +56,4 @@ export class BrakesFactory {
 
     return ops;
   }
-
 }

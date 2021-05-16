@@ -19,7 +19,11 @@
  ******************************************************************************/
 
 import { ChannelCredentials } from '@grpc/grpc-js';
-import { DNSClusterOptions, GossipClusterOptions, SingleNodeOptions } from '@eventstore/db-client/dist/Client';
+import {
+  DNSClusterOptions,
+  GossipClusterOptions,
+  SingleNodeOptions,
+} from '@eventstore/db-client/dist/Client';
 import { Credentials } from '@eventstore/db-client/dist/types';
 import { EventStoreBrokerTypes } from './broker.enums';
 
@@ -32,8 +36,11 @@ interface ChannelCredentialOptions {
 }
 
 export interface EventStoreClientOptions {
-  type: EventStoreBrokerTypes.EventStore
-  connectionSettings: DNSClusterOptions | GossipClusterOptions | SingleNodeOptions,
-  channelCredentials?: ChannelCredentialOptions,
-  defaultUserCredentials?: Credentials
+  type: EventStoreBrokerTypes.EventStore;
+  connectionSettings:
+    | DNSClusterOptions
+    | GossipClusterOptions
+    | SingleNodeOptions;
+  channelCredentials?: ChannelCredentialOptions;
+  defaultUserCredentials?: Credentials;
 }

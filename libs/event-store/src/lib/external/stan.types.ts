@@ -17,15 +17,15 @@ import * as events from 'events';
 import * as tls from 'tls';
 
 export interface StanOptions extends ClientOpts {
-  url?: string,
-  connectTimeout?: number,
-  ackTimeout?: number,
-  discoverPrefix?: string,
-  maxPubAcksInflight?: number,
-  stanEncoding?: string,
-  stanMaxPingOut?: number,
-  stanPingInterval?: number,
-  nc?: any
+  url?: string;
+  connectTimeout?: number;
+  ackTimeout?: number;
+  discoverPrefix?: string;
+  maxPubAcksInflight?: number;
+  stanEncoding?: string;
+  stanMaxPingOut?: number;
+  stanPingInterval?: number;
+  nc?: any;
 }
 
 // these are standard node-nats options, some are omitted
@@ -34,38 +34,37 @@ export interface StanOptions extends ClientOpts {
 // it's value must always be set to binary as the client
 // exchanges protobuf messages
 export interface ClientOpts {
-  encoding?: BufferEncoding,
-  maxPingOut?: number,
-  maxReconnectAttempts?: number,
-  name?: string,
-  nkey?: string,
-  noRandomize?: boolean,
-  nonceSigner?: Function,
-  pass?: string,
-  pedantic?: boolean,
-  pingInterval?: number,
-  reconnect?: boolean,
-  reconnectTimeWait?: number,
-  servers?: Array<string>,
-  tls?: boolean | tls.TlsOptions,
-  token?: string,
-  tokenHandler?: Function,
-  url?: string,
-  useOldRequestStyle?: boolean,
-  user?: string,
-  userCreds?: string,
-  userJWT?: string | Function,
-  verbose?: boolean,
-  waitOnFirstConnect?: boolean,
-  yieldTime?: number
+  encoding?: BufferEncoding;
+  maxPingOut?: number;
+  maxReconnectAttempts?: number;
+  name?: string;
+  nkey?: string;
+  noRandomize?: boolean;
+  nonceSigner?: Function;
+  pass?: string;
+  pedantic?: boolean;
+  pingInterval?: number;
+  reconnect?: boolean;
+  reconnectTimeWait?: number;
+  servers?: Array<string>;
+  tls?: boolean | tls.TlsOptions;
+  token?: string;
+  tokenHandler?: Function;
+  url?: string;
+  useOldRequestStyle?: boolean;
+  user?: string;
+  userCreds?: string;
+  userJWT?: string | Function;
+  verbose?: boolean;
+  waitOnFirstConnect?: boolean;
+  yieldTime?: number;
 }
-
 
 export declare class Subscription extends events.EventEmitter {
   /**
    * Returns true if the subscription has been closed or unsubscribed from.
    */
-  isClosed():boolean;
+  isClosed(): boolean;
 
   /**
    * Unregisters the subscription from the streaming server.
@@ -87,50 +86,51 @@ export declare class Subscription extends events.EventEmitter {
  * @param err - undefined if there is no error processing the message
  * @param guid - the guid correlating the message with the callback invocation.
  */
-interface AckHandlerCallback { (err: Error | undefined, guid: string): void; }
-
+interface AckHandlerCallback {
+  (err: Error | undefined, guid: string): void;
+}
 
 export declare class Message {
   /**
    * Returns the subject associated with this Message
    */
-  getSubject():string;
+  getSubject(): string;
 
   /**
    * Returns the sequence number of the message in the stream.
    */
-  getSequence():number;
+  getSequence(): number;
 
   /**
    * Returns a Buffer with the raw message payload
    */
-  getRawData():Buffer;
+  getRawData(): Buffer;
 
   /**
    * Returns the data associated with the message payload. If the stanEncoding is not
    * set to 'binary', a string is returned.
    */
-  getData():String|Buffer;
+  getData(): String | Buffer;
 
   /**
    * Returns the raw timestamp set on the message. This number is not a valid time in JavaScript.
    */
-  getTimestampRaw():number;
+  getTimestampRaw(): number;
 
   /**
    * Returns a Date object representing the timestamp of the message. This is an approximation of the timestamp.
    */
-  getTimestamp():Date;
+  getTimestamp(): Date;
 
   /**
    * Returns a boolean indicating if the message is being redelivered
    */
-  isRedelivered():boolean;
+  isRedelivered(): boolean;
 
   /**
    * Returns an optional IEEE CRC32 checksum
    */
-  getCrc32():number;
+  getCrc32(): number;
 
   /**
    * Acks the message, note this method shouldn't be called unless
@@ -139,9 +139,7 @@ export declare class Message {
   ack(): void;
 }
 
-
 export declare class Stan extends events.EventEmitter {
-
   /**
    * Close the connection to the server.
    */
@@ -154,7 +152,11 @@ export declare class Stan extends events.EventEmitter {
    * @param callback
    * @returns guid generated for the published message
    */
-  publish(subject: string, data?: Uint8Array|string|Buffer, callback?:AckHandlerCallback): string;
+  publish(
+    subject: string,
+    data?: Uint8Array | string | Buffer,
+    callback?: AckHandlerCallback
+  ): string;
 
   /**
    * Subscribes to a given subject as an optional member of a queue group.
@@ -162,14 +164,17 @@ export declare class Stan extends events.EventEmitter {
    * @param qGroup
    * @param opts
    */
-  subscribe(subject: string, opts?: SubscriptionOptions): Subscription
-  subscribe(subject: string, qGroup: string, opts?: SubscriptionOptions): Subscription
+  subscribe(subject: string, opts?: SubscriptionOptions): Subscription;
+  subscribe(
+    subject: string,
+    qGroup: string,
+    opts?: SubscriptionOptions
+  ): Subscription;
 
   /**
    * Returns a SubscriptionOptions initialized to defaults
    */
   subscriptionOptions(): SubscriptionOptions;
-
 }
 
 declare enum StartPosition {
@@ -177,10 +182,10 @@ declare enum StartPosition {
   LAST_RECEIVED,
   TIME_DELTA_START,
   SEQUENCE_START,
-  FIRST
+  FIRST,
 }
 
-export declare interface SubscriptionOptions  {
+export declare interface SubscriptionOptions {
   durableName?: string;
   maxInFlight?: number;
   ackWait?: number;
@@ -194,7 +199,7 @@ export declare interface SubscriptionOptions  {
    * before it sends a message.
    * @param n
    */
-  setMaxInFlight(n: number):SubscriptionOptions;
+  setMaxInFlight(n: number): SubscriptionOptions;
 
   /**
    * Sets the number of milliseconds before a message is considered unacknowledged by
@@ -232,17 +237,17 @@ export declare interface SubscriptionOptions  {
    * Configures the subscription to replay  messages sent milliseconds ago.
    * @param millis - the number of milliseconds ago to use as the start time
    */
-  setStartAtTimeDelta(millis: number):SubscriptionOptions;
+  setStartAtTimeDelta(millis: number): SubscriptionOptions;
 
   /**
    * Configures the subscription to replay with the last received message.
    */
-  setStartWithLastReceived():SubscriptionOptions;
+  setStartWithLastReceived(): SubscriptionOptions;
 
   /**
    * Configures the subscription to replay from first available message.
    */
-  setDeliverAllAvailable():SubscriptionOptions;
+  setDeliverAllAvailable(): SubscriptionOptions;
 
   /**
    * Configures the subscription to require manual acknowledgement of messages

@@ -21,7 +21,7 @@
 import { PropOptions } from '../decorators';
 
 export interface PropertyMetadata {
-    target: Function;
-    propertyKey: string;
-    options: PropOptions;
+  target: Function;
+  propertyKey: string;
+  options: PropOptions;
 }

@@ -23,7 +23,12 @@ import {
   ProvidersConstants,
 } from './event-store.constant';
 import { EventStoreBrokerTypes, EventStoreModuleOptions } from './interface';
-import { EventStoreClient, StanClient, KafkaClient, GooglePubsubClient } from './client';
+import {
+  EventStoreClient,
+  StanClient,
+  KafkaClient,
+  GooglePubsubClient,
+} from './client';
 import { Provider } from '@nestjs/common';
 import { EventStoreConfig } from './event-store.config';
 

@@ -18,9 +18,18 @@
  * Last modified:     14/02/2021, 17:24
  ******************************************************************************/
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { EventBus, IEvent, IEventPublisher, IMessageSource } from '@nestjs/cqrs';
+import {
+  EventBus,
+  IEvent,
+  IEventPublisher,
+  IMessageSource,
+} from '@nestjs/cqrs';
 import { Subject } from 'rxjs';
-import { EventStoreFeatureOptions, ExtendedKafkaStandardSubscription, KafkaSubscription } from '@ultimate-backend';
+import {
+  EventStoreFeatureOptions,
+  ExtendedKafkaStandardSubscription,
+  KafkaSubscription,
+} from '@ultimate-backend';
 import { KafkaClient } from '../client';
 import { BaseBroker } from './base.broker';
 import { ProvidersConstants } from '../event-store.constant';
@@ -102,7 +111,6 @@ export class KafkaBroker
       } else {
         messages.set(streamId, [{ value: payload }]);
       }
-
     }
 
     return messages;
@@ -122,9 +130,11 @@ export class KafkaBroker
     try {
       await this.kafka.producer.send({
         topic: streamId,
-        messages: [{
-          value: payload,
-        }],
+        messages: [
+          {
+            value: payload,
+          },
+        ],
       });
     } catch (e) {
       this.logger.error(e);
@@ -141,10 +151,12 @@ export class KafkaBroker
       const payloads = this.createPayloads(events);
 
       for (const key in payloads) {
-        promises.push(this.kafka.producer.send({
-          topic: key,
-          messages: payloads.get(key),
-        }))
+        promises.push(
+          this.kafka.producer.send({
+            topic: key,
+            messages: payloads.get(key),
+          })
+        );
       }
 
       await Promise.all(promises);
@@ -152,7 +164,6 @@ export class KafkaBroker
       this.logger.error(e);
     }
   }
-
 
   private async subscribeToStandardSubscription(
     opts: Omit<KafkaSubscription, 'type'>
@@ -162,18 +173,13 @@ export class KafkaBroker
     );
 
     try {
-      await this.kafka
-        .consumer
-        .subscribe(opts);
+      await this.kafka.consumer.subscribe(opts);
 
-      await this.kafka
-        .consumer
-        .run({
-          eachMessage: async (payload) => {
-            await this.handleEvent(payload);
-          },
-
-        });
+      await this.kafka.consumer.run({
+        eachMessage: async (payload) => {
+          await this.handleEvent(payload);
+        },
+      });
 
       const resolved = opts as ExtendedKafkaStandardSubscription;
 

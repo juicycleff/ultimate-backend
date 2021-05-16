@@ -23,46 +23,46 @@ import { isUndefined } from '@nestjs/common/utils/shared.utils';
 import * as ottoman from 'ottoman';
 import { TypeMetadataStorage } from '../storages';
 import {
-    SchemaDef,
-    SchemaOptions,
+  SchemaDef,
+  SchemaOptions,
 } from 'ottoman/lib/types/schema/interfaces/schema.types';
 
 export class DefinitionsFactory {
-    static createForClass(
-        target: Type<unknown>,
-        options: SchemaOptions,
-    ): SchemaDef | ottoman.Schema {
-        if (!target) {
-            throw new Error(
-                `Target class "${target}" passed in to the "DefinitionsFactory#createForClass()" method is "undefined".`,
-            );
-        }
-        let schemaDefinition: SchemaDef = {};
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        let parent: Function = target;
-
-        while (!isUndefined(parent.prototype)) {
-            if (parent === Function.prototype) {
-                break;
-            }
-            const schemaMetadata = TypeMetadataStorage.getSchemaMetadataByTarget(
-                parent as Type<unknown>,
-            );
-            if (!schemaMetadata) {
-                parent = Object.getPrototypeOf(parent);
-                continue;
-            }
-            schemaMetadata.properties?.forEach((item) => {
-                const _options = item.options as any;
-
-                schemaDefinition = {
-                    [item.propertyKey]: _options,
-                    ...schemaDefinition,
-                };
-            });
-            parent = Object.getPrototypeOf(parent);
-        }
-
-        return new ottoman.Schema(schemaDefinition, options);
+  static createForClass(
+    target: Type<unknown>,
+    options: SchemaOptions
+  ): SchemaDef | ottoman.Schema {
+    if (!target) {
+      throw new Error(
+        `Target class "${target}" passed in to the "DefinitionsFactory#createForClass()" method is "undefined".`
+      );
     }
+    let schemaDefinition: SchemaDef = {};
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let parent: Function = target;
+
+    while (!isUndefined(parent.prototype)) {
+      if (parent === Function.prototype) {
+        break;
+      }
+      const schemaMetadata = TypeMetadataStorage.getSchemaMetadataByTarget(
+        parent as Type<unknown>
+      );
+      if (!schemaMetadata) {
+        parent = Object.getPrototypeOf(parent);
+        continue;
+      }
+      schemaMetadata.properties?.forEach((item) => {
+        const _options = item.options as any;
+
+        schemaDefinition = {
+          [item.propertyKey]: _options,
+          ...schemaDefinition,
+        };
+      });
+      parent = Object.getPrototypeOf(parent);
+    }
+
+    return new ottoman.Schema(schemaDefinition, options);
+  }
 }

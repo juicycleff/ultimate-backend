@@ -32,7 +32,7 @@ import {
   EventStoreSubscriptionType,
   ExtendedStanPersistentSubscription,
   ExtendedStanStandardSubscription,
-  StanSubscription
+  StanSubscription,
 } from '@ultimate-backend';
 import { StanClient } from '../client';
 import { BaseBroker } from './base.broker';

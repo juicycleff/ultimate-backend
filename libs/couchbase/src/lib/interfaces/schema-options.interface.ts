@@ -25,7 +25,7 @@ import { SchemaOptions as OttomanSchemaOptions } from 'ottoman/lib/types/schema/
  */
 
 export interface SchemaOptions {
-    name?: string;
-    model?: ModelOptions;
-    schema?: OttomanSchemaOptions;
+  name?: string;
+  model?: ModelOptions;
+  schema?: OttomanSchemaOptions;
 }

@@ -26,4 +26,5 @@ type ZookeeperDiscoveryOption = {
   failFast?: boolean;
 };
 
-export type ZookeeperDiscoveryOptions = DiscoveryOptions & ZookeeperDiscoveryOption;
+export type ZookeeperDiscoveryOptions = DiscoveryOptions &
+  ZookeeperDiscoveryOption;

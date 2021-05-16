@@ -41,10 +41,7 @@ export class GenerateCqrsCommand implements ICommand {
       '-d, --directory <directory>',
       'directory where the generated files are placed',
     ],
-    [
-      '-g, --group <group>',
-      'group generated file by folder',
-    ],
+    ['-g, --group <group>', 'group generated file by folder'],
   ];
 
   description = 'generate cqrs handlers for service';

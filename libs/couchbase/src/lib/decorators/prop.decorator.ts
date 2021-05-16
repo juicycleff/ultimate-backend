@@ -34,33 +34,29 @@ export type PropOptions = SchemaTypeOptions<any>;
  * Only properties decorated with this decorator will be defined in the schema.
  */
 export function Property(options?: PropOptions): PropertyDecorator {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    return (target: object, propertyKey: string | symbol) => {
-        options = (options || {}) as SchemaTypeOptions<unknown>;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return (target: object, propertyKey: string | symbol) => {
+    options = (options || {}) as SchemaTypeOptions<unknown>;
 
-        if (!options.type && !Array.isArray(options)) {
-            const type = Reflect.getMetadata(
-                TYPE_METADATA_KEY,
-                target,
-                propertyKey,
-            );
+    if (!options.type && !Array.isArray(options)) {
+      const type = Reflect.getMetadata(TYPE_METADATA_KEY, target, propertyKey);
 
-            if (type === Array) {
-                options.type = [];
-            } else if (type && type !== Object) {
-                options.type = type;
-            } else {
-                throw new CannotDetermineTypeError(
-                    target.constructor?.name,
-                    propertyKey as string,
-                );
-            }
-        }
+      if (type === Array) {
+        options.type = [];
+      } else if (type && type !== Object) {
+        options.type = type;
+      } else {
+        throw new CannotDetermineTypeError(
+          target.constructor?.name,
+          propertyKey as string
+        );
+      }
+    }
 
-        TypeMetadataStorage.addPropertyMetadata({
-            target: target.constructor,
-            propertyKey: propertyKey as string,
-            options: options as PropOptions,
-        });
-    };
+    TypeMetadataStorage.addPropertyMetadata({
+      target: target.constructor,
+      propertyKey: propertyKey as string,
+      options: options as PropOptions,
+    });
+  };
 }

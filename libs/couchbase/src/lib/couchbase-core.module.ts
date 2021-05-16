@@ -20,20 +20,21 @@
 
 import {
   DynamicModule,
-  Global, Logger,
+  Global,
+  Logger,
   Module,
   OnApplicationShutdown,
   Provider,
-  Type
+  Type,
 } from '@nestjs/common';
 import {
-    CouchbaseModuleAsyncOptions,
-    CouchbaseModuleOptions,
-    CouchbaseOptionsFactory,
+  CouchbaseModuleAsyncOptions,
+  CouchbaseModuleOptions,
+  CouchbaseOptionsFactory,
 } from './interfaces';
 import {
-    COUCHBASE_CONNECTION_NAME,
-    COUCHBASE_MODULE_OPTIONS,
+  COUCHBASE_CONNECTION_NAME,
+  COUCHBASE_MODULE_OPTIONS,
 } from './couchbase.constants';
 import { ModuleRef } from '@nestjs/core';
 import { getConnectionToken, handleRetry } from './utils';
@@ -44,162 +45,154 @@ import { defer } from 'rxjs';
 @Global()
 @Module({})
 export class CouchbaseCoreModule implements OnApplicationShutdown {
-    constructor(
-        private readonly moduleRef: ModuleRef,
-    ) {}
+  constructor(private readonly moduleRef: ModuleRef) {}
 
-    static forRoot(options: CouchbaseModuleOptions): DynamicModule {
+  static forRoot(options: CouchbaseModuleOptions): DynamicModule {
+    const {
+      clusterFactory,
+      clusterName,
+      url,
+      scopeName,
+      retryAttempts,
+      retryDelays,
+      ...others
+    } = options;
+
+    const couchbaseConnectionFactory = clusterFactory || ((cluster) => cluster);
+    const couchbaseConnectionName = getConnectionToken(clusterName);
+
+    const couchbaseConnectionNameProvider: Provider = {
+      provide: COUCHBASE_CONNECTION_NAME,
+      useValue: couchbaseConnectionName,
+    };
+
+    const connectionProvider: Provider = {
+      provide: couchbaseConnectionName,
+      useFactory: async () => {
+        const conn = new ottoman.Ottoman();
+
+        try {
+          await conn.connect({
+            bucketName: others.bucketName || 'default',
+            connectionString: url,
+            ...others,
+          });
+
+          return await defer(async () =>
+            couchbaseConnectionFactory(conn, couchbaseConnectionName)
+          )
+            .pipe(handleRetry(retryAttempts, retryDelays))
+            .toPromise();
+        } catch (e) {
+          Logger.log(e, 'CouchbaseCoreModule');
+        }
+      },
+    };
+
+    return {
+      module: CouchbaseCoreModule,
+      providers: [connectionProvider, couchbaseConnectionNameProvider],
+      exports: [connectionProvider],
+    };
+  }
+
+  static forRootAsync(options: CouchbaseModuleAsyncOptions): DynamicModule {
+    const couchbaseConnectionName = getConnectionToken(options.connectionName);
+
+    const couchbaseConnectionNameProvider: Provider = {
+      provide: COUCHBASE_CONNECTION_NAME,
+      useValue: couchbaseConnectionName,
+    };
+
+    const connectionProvider: Provider = {
+      provide: COUCHBASE_CONNECTION_NAME,
+      useFactory: async (couchbaseModuleOptions: CouchbaseModuleOptions) => {
         const {
-            clusterFactory,
-            clusterName,
-            url,
-            scopeName,
-            retryAttempts,
-            retryDelays,
-            ...others
-        } = options;
+          clusterFactory,
+          clusterName,
+          url,
+          scopeName,
+          retryAttempts,
+          retryDelays,
+          ...others
+        } = couchbaseModuleOptions;
 
         const couchbaseConnectionFactory =
-            clusterFactory || ((cluster) => cluster);
-        const couchbaseConnectionName = getConnectionToken(clusterName);
+          clusterFactory || ((cluster) => cluster);
 
-        const couchbaseConnectionNameProvider: Provider = {
-            provide: COUCHBASE_CONNECTION_NAME,
-            useValue: couchbaseConnectionName,
-        };
+        const conn = new ottoman.Ottoman();
+        await conn.connect({
+          bucketName: others.bucketName || 'default',
+          connectionString: url,
+          ...others,
+        });
 
-        const connectionProvider: Provider = {
-            provide: couchbaseConnectionName,
-            useFactory: async () => {
-                const conn = new ottoman.Ottoman();
+        return await defer(async () =>
+          couchbaseConnectionFactory(conn, couchbaseConnectionName)
+        )
+          .pipe(handleRetry(retryAttempts, retryDelays))
+          .toPromise();
+      },
+      inject: [COUCHBASE_MODULE_OPTIONS],
+    };
 
-                try {
-                  await conn.connect({
-                    bucketName: others.bucketName || 'default',
-                    connectionString: url,
-                    ...others,
-                  });
+    const asyncProviders = this.createAsyncProviders(options);
 
-                  return await defer(async () =>
-                    couchbaseConnectionFactory(conn, couchbaseConnectionName),
-                  )
-                    .pipe(handleRetry(retryAttempts, retryDelays))
-                    .toPromise();
-                } catch (e) {
-                  Logger.log(e, 'CouchbaseCoreModule');
-                }
-            },
-        };
+    return {
+      module: CouchbaseCoreModule,
+      imports: options.imports,
+      providers: [
+        ...asyncProviders,
+        connectionProvider,
+        couchbaseConnectionNameProvider,
+      ],
+      exports: [connectionProvider],
+    };
+  }
 
-        return {
-            module: CouchbaseCoreModule,
-            providers: [connectionProvider, couchbaseConnectionNameProvider],
-            exports: [connectionProvider],
-        };
+  async onApplicationShutdown() {
+    // const ottoman = this.moduleRef.get<Ottoman>(this.connectionName);
+    // await ottoman.close();
+  }
+
+  private static createAsyncProviders(
+    options: CouchbaseModuleAsyncOptions
+  ): Provider[] {
+    if (options.useFactory || options.useExisting) {
+      return [this.createAsyncOptionsProviders(options)];
     }
 
-    static forRootAsync(options: CouchbaseModuleAsyncOptions): DynamicModule {
-        const couchbaseConnectionName = getConnectionToken(
-            options.connectionName,
-        );
+    const useClass = options.useExisting as Type<CouchbaseOptionsFactory>;
 
-        const couchbaseConnectionNameProvider: Provider = {
-            provide: COUCHBASE_CONNECTION_NAME,
-            useValue: couchbaseConnectionName,
-        };
+    return [
+      {
+        provide: useClass,
+        useClass,
+      },
+    ];
+  }
 
-        const connectionProvider: Provider = {
-            provide: COUCHBASE_CONNECTION_NAME,
-            useFactory: async (
-                couchbaseModuleOptions: CouchbaseModuleOptions,
-            ) => {
-                const {
-                    clusterFactory,
-                    clusterName,
-                    url,
-                    scopeName,
-                    retryAttempts,
-                    retryDelays,
-                    ...others
-                } = couchbaseModuleOptions;
-
-                const couchbaseConnectionFactory =
-                    clusterFactory || ((cluster) => cluster);
-
-                const conn = new ottoman.Ottoman();
-                await conn.connect({
-                    bucketName: others.bucketName || 'default',
-                    connectionString: url,
-                    ...others,
-                });
-
-                return await defer(async () =>
-                    couchbaseConnectionFactory(conn, couchbaseConnectionName),
-                )
-                    .pipe(handleRetry(retryAttempts, retryDelays))
-                    .toPromise();
-            },
-            inject: [COUCHBASE_MODULE_OPTIONS],
-        };
-
-        const asyncProviders = this.createAsyncProviders(options);
-
-        return {
-            module: CouchbaseCoreModule,
-            imports: options.imports,
-            providers: [
-                ...asyncProviders,
-                connectionProvider,
-                couchbaseConnectionNameProvider,
-            ],
-            exports: [connectionProvider],
-        };
+  private static createAsyncOptionsProviders(
+    options: CouchbaseModuleAsyncOptions
+  ): Provider {
+    if (options.useFactory) {
+      return {
+        useFactory: options.useFactory,
+        inject: options.inject,
+        provide: COUCHBASE_MODULE_OPTIONS,
+      };
     }
 
-    async onApplicationShutdown() {
-        // const ottoman = this.moduleRef.get<Ottoman>(this.connectionName);
-        // await ottoman.close();
-    }
+    const inject = [
+      (options.useClass ||
+        options.useExisting) as Type<CouchbaseOptionsFactory>,
+    ];
 
-    private static createAsyncProviders(
-        options: CouchbaseModuleAsyncOptions,
-    ): Provider[] {
-        if (options.useFactory || options.useExisting) {
-            return [this.createAsyncOptionsProviders(options)];
-        }
-
-        const useClass = options.useExisting as Type<CouchbaseOptionsFactory>;
-
-        return [
-            {
-                provide: useClass,
-                useClass,
-            },
-        ];
-    }
-
-    private static createAsyncOptionsProviders(
-        options: CouchbaseModuleAsyncOptions,
-    ): Provider {
-        if (options.useFactory) {
-            return {
-                useFactory: options.useFactory,
-                inject: options.inject,
-                provide: COUCHBASE_MODULE_OPTIONS,
-            };
-        }
-
-        const inject = [
-            (options.useClass || options.useExisting) as Type<
-                CouchbaseOptionsFactory
-            >,
-        ];
-
-        return {
-            provide: COUCHBASE_MODULE_OPTIONS,
-            useFactory: async (optionsFactory: CouchbaseOptionsFactory) =>
-                await optionsFactory.createCouchbaseOptions(),
-            inject,
-        };
-    }
+    return {
+      provide: COUCHBASE_MODULE_OPTIONS,
+      useFactory: async (optionsFactory: CouchbaseOptionsFactory) =>
+        await optionsFactory.createCouchbaseOptions(),
+      inject,
+    };
+  }
 }
