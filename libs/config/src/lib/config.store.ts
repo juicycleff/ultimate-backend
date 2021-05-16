@@ -42,6 +42,11 @@ export class ConfigStore extends EventEmitter {
 
   set cache(data: any) {
     this._cache = data;
+    this.compileTemplate();
+    this.updateConfigMap();
+  }
+
+  private compileTemplate() {
     if (isObject(this._cache)) {
       for (const key in this._cache) {
         if (this._cache.hasOwnProperty(key)) {
@@ -49,7 +54,6 @@ export class ConfigStore extends EventEmitter {
         }
       }
     }
-    this.updateConfigMap();
   }
 
   get<T extends any>(path: string, defaults?: T): T {
@@ -58,12 +62,14 @@ export class ConfigStore extends EventEmitter {
 
   update<T extends any>(path: string, value: T) {
     set(this._cache, path, value);
+    this.compileTemplate();
     this.updateConfigMap();
   }
 
   merge(data: any) {
     if (isPlainObject(data)) {
       assign(this._cache, data);
+      this.compileTemplate();
       this.emit(this.eventName, this._cache);
     }
   }
