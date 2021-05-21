@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.7.4](https://github.com/juicycleff/ultimate-backend/compare/v0.7.3...v0.7.4) (2021-05-21)
+
+
+### Bug Fixes
+
+* **core:** fixed validation builder ([8f39f8e](https://github.com/juicycleff/ultimate-backend/commit/8f39f8ee5db626097e2f8f02314ade37bacefc66))
+
+
+
 ## [0.7.3](https://github.com/juicycleff/ultimate-backend/compare/v0.7.2...v0.7.3) (2021-05-21)
 
 
