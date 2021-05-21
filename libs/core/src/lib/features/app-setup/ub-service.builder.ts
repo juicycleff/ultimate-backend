@@ -19,7 +19,7 @@
  ******************************************************************************/
 import { Transport } from '@nestjs/microservices';
 import { GrpcOpts, SwaggerConfig } from './grpc-opts';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
@@ -32,6 +32,19 @@ import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
 import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
 import { bloodTearsMiddleware } from './blood-tears.middleware';
 import * as path from 'path';
+import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
+import { ValidationPipeOptions } from '@nestjs/common/pipes/validation.pipe';
+import * as helmet from 'helmet';
+import * as csurf from 'csurf';
+import { CorsOptions, CorsOptionsDelegate } from '@nestjs/common/interfaces/external/cors-options.interface';
+
+type CSurfType = {
+  value?: (req: any) => string;
+  cookie?: csurf.CookieOptions | boolean;
+  ignoreMethods?: string[];
+  sessionKey?: string;
+};
 
 export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
@@ -56,8 +69,79 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withMultiTenancy(option: MultiTenancyConfig) {
-    this.app.use(enableMultiTenancy(option));
+  hardenedSecurity(options?: {
+    helmet?: any,
+    cors?: CorsOptions | CorsOptionsDelegate<any>,
+    csurf?: CSurfType,
+  }) {
+    this.app.use(helmet(options.helmet));
+    this.app.enableCors(options.cors);
+    this.app.use(csurf(options.csurf));
+    return this;
+  }
+
+  withValidation(options?: ValidationPipeOptions) {
+    this.app.use(new ValidationPipe(options));
+    return this;
+  }
+
+  withMultiTenancy(option?: MultiTenancyConfig | string) {
+    let config;
+    if (!option) {
+      config = this.boot.get('multitenancy');
+    }
+
+    if (typeof option === 'string') {
+      config = this.boot.get(option);
+    } else if (typeof option === 'object') {
+      config = option;
+    }
+
+    if (!config) {
+      throw new Error('Missing multitenancy configuration. You provide through boostrap config with default key: [multitenancy]');
+    }
+
+    this.app.use(enableMultiTenancy(config));
+    return this;
+  }
+
+  withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
+    let config;
+    if (!opts) {
+      config = this.boot.get('setup.cookie');
+    }
+
+    if (typeof opts === 'string') {
+      config = this.boot.get(opts);
+    } else if (typeof opts === 'object') {
+      config = opts;
+    }
+
+    if (!config) {
+      throw new Error('Missing session configuration. You provide through boostrap config with default key: [setup.cookie]')
+    }
+
+    this.app.use(session(config));
+    return this;
+  }
+
+  withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
+    let config;
+    if (!opts) {
+      config = this.boot.get('setup.session');
+    }
+
+    if (typeof opts === 'string') {
+      config = this.boot.get(opts);
+    } else if (typeof opts === 'object') {
+      config = opts;
+    }
+
+    if (!config) {
+      throw new Error('Missing cookie configuration. You provide through boostrap config with default key: [setup.cookie]')
+    }
+
+    this.app.use(cookieParser(config.secret, config.options));
     return this;
   }
 
