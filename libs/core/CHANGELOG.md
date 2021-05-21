@@ -4,78 +4,51 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.7.4](https://github.com/juicycleff/ultimate-backend/compare/v0.7.3...v0.7.4) (2021-05-21)
 
-
 ### Bug Fixes
 
-* **core:** fixed validation builder ([8f39f8e](https://github.com/juicycleff/ultimate-backend/commit/8f39f8ee5db626097e2f8f02314ade37bacefc66))
-
-
+- **core:** fixed validation builder ([8f39f8e](https://github.com/juicycleff/ultimate-backend/commit/8f39f8ee5db626097e2f8f02314ade37bacefc66))
 
 ## [0.7.3](https://github.com/juicycleff/ultimate-backend/compare/v0.7.2...v0.7.3) (2021-05-21)
 
-
 ### Bug Fixes
 
-* **core:** session configuration ([4e6630a](https://github.com/juicycleff/ultimate-backend/commit/4e6630a34016f1ee5aa31e23efe0fb6a5cbc7743))
-
-
+- **core:** session configuration ([4e6630a](https://github.com/juicycleff/ultimate-backend/commit/4e6630a34016f1ee5aa31e23efe0fb6a5cbc7743))
 
 ## [0.7.2](https://github.com/juicycleff/ultimate-backend/compare/v0.7.1...v0.7.2) (2021-05-21)
 
-
 ### Bug Fixes
 
-* **core:** fix bad argument access ([cb56bce](https://github.com/juicycleff/ultimate-backend/commit/cb56bce0d86ea374cf845e1c42b4985cb54637a2))
-
-
+- **core:** fix bad argument access ([cb56bce](https://github.com/juicycleff/ultimate-backend/commit/cb56bce0d86ea374cf845e1c42b4985cb54637a2))
 
 ## [0.7.1](https://github.com/juicycleff/ultimate-backend/compare/v0.7.0...v0.7.1) (2021-05-21)
 
-
 ### Bug Fixes
 
-* **core:** allow optional cookie and session ([919f2c4](https://github.com/juicycleff/ultimate-backend/commit/919f2c46dc4ff48f4eec30ea12d9f73ea09efb90))
-
-
+- **core:** allow optional cookie and session ([919f2c4](https://github.com/juicycleff/ultimate-backend/commit/919f2c46dc4ff48f4eec30ea12d9f73ea09efb90))
 
 # [0.7.0](https://github.com/juicycleff/ultimate-backend/compare/v0.6.0...v0.7.0) (2021-05-21)
 
-
 ### Features
 
-* **core:** support more helpers in service builder ([026f0a4](https://github.com/juicycleff/ultimate-backend/commit/026f0a4b884d075388940e476ec1f8759b4bdf27))
-
-
+- **core:** support more helpers in service builder ([026f0a4](https://github.com/juicycleff/ultimate-backend/commit/026f0a4b884d075388940e476ec1f8759b4bdf27))
 
 # [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
 
-
-
 # [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
 
-
-
 # [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
-
-
 
 ## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
 
-
 ### Bug Fixes
 
-* **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
-
-
+- **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
 
 ## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
 
-
 ### Bug Fixes
 
-* **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
-
-
+- **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
 
 # [0.5.0](https://github.com/juicycleff/ultimate-backend/compare/v0.4.2...v0.5.0) (2021-05-16)
 

@@ -37,7 +37,12 @@ import * as session from 'express-session';
 import { ValidationPipeOptions } from '@nestjs/common/pipes/validation.pipe';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
-import { CorsOptions, CorsOptionsDelegate } from '@nestjs/common/interfaces/external/cors-options.interface';
+import * as connectRedis from 'connect-redis';
+import * as redis from 'ioredis';
+import {
+  CorsOptions,
+  CorsOptionsDelegate,
+} from '@nestjs/common/interfaces/external/cors-options.interface';
 
 type CSurfType = {
   value?: (req: any) => string;
@@ -45,6 +50,8 @@ type CSurfType = {
   ignoreMethods?: string[];
   sessionKey?: string;
 };
+
+const RedisSessionStore = connectRedis(session);
 
 export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
@@ -69,11 +76,13 @@ export class UBServiceBuilder {
     return this;
   }
 
-  hardenedSecurity(options: {
-    helmet?: any,
-    cors?: CorsOptions | CorsOptionsDelegate<any>,
-    csurf?: CSurfType,
-  } = {}) {
+  hardenedSecurity(
+    options: {
+      helmet?: any;
+      cors?: CorsOptions | CorsOptionsDelegate<any>;
+      csurf?: CSurfType;
+    } = {}
+  ) {
     let config = options;
     if (!options) {
       config = this.boot.get('security', {});
@@ -102,17 +111,20 @@ export class UBServiceBuilder {
     }
 
     if (!config) {
-      throw new Error('Missing multitenancy configuration. You provide through boostrap config with default key: [multitenancy]');
+      throw new Error(
+        'Missing multitenancy configuration. You provide through boostrap config with default key: [multitenancy]'
+      );
     }
 
     this.app.use(enableMultiTenancy(config));
     return this;
   }
 
-  withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
-    let config = {} as any;
+  withSession(opts?: session.SessionOptions | string, useRedisStore?: boolean) {
+    let config = {} as session.SessionOptions;
+
     if (!opts) {
-      config = this.boot.get('setup.session', {});
+      config = this.boot.get('setup.session', {}) as session.SessionOptions;
     }
 
     if (typeof opts === 'string') {
@@ -121,11 +133,28 @@ export class UBServiceBuilder {
       config = opts;
     }
 
+    if (useRedisStore) {
+      const redisConfig = this.boot.get('clients.redis');
+      if (!redisConfig)
+        throw new Error(
+          'Missing redis configuration. You can supply it using the bootstrap config with key clients.redis using dot notation.'
+        );
+      const redisClient = redis(redisConfig);
+      config.store = new RedisSessionStore({ client: redisClient });
+    }
+
     this.app.use(session(config));
     return this;
   }
 
-  withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
+  withCookie(
+    opts?:
+      | {
+          secret?: string | string[];
+          options?: cookieParser.CookieParseOptions;
+        }
+      | string
+  ) {
     let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.cookie', {});

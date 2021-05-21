@@ -4,49 +4,29 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.7.4](https://github.com/juicycleff/ultimate-backend/compare/v0.7.3...v0.7.4) (2021-05-21)
 
-
-
 ## [0.7.3](https://github.com/juicycleff/ultimate-backend/compare/v0.7.2...v0.7.3) (2021-05-21)
-
-
 
 ## [0.7.2](https://github.com/juicycleff/ultimate-backend/compare/v0.7.1...v0.7.2) (2021-05-21)
 
-
-
 ## [0.7.1](https://github.com/juicycleff/ultimate-backend/compare/v0.7.0...v0.7.1) (2021-05-21)
-
-
 
 # [0.7.0](https://github.com/juicycleff/ultimate-backend/compare/v0.6.0...v0.7.0) (2021-05-21)
 
-
+# [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
 
 # [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
 
-
-
-# [0.6.0](https://github.com/juicycleff/ultimate-backend/compare/v0.5.1...v0.6.0) (2021-05-16)
-
-
-
 ## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
-
 
 ### Bug Fixes
 
-* **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
-
-
+- **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
 
 ## [0.5.1](https://github.com/juicycleff/ultimate-backend/compare/v0.5.0...v0.5.1) (2021-05-16)
 
-
 ### Bug Fixes
 
-* **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
-
-
+- **core:** swagger using bad API prefix ([010c72c](https://github.com/juicycleff/ultimate-backend/commit/010c72c1d9993d816efd70039b334af33e4f3cea))
 
 # [0.5.0](https://github.com/juicycleff/ultimate-backend/compare/v0.4.2...v0.5.0) (2021-05-16)
 
