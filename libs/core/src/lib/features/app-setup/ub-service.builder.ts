@@ -106,7 +106,7 @@ export class UBServiceBuilder {
   }
 
   withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
-    let config;
+    let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.cookie');
     }
@@ -117,16 +117,12 @@ export class UBServiceBuilder {
       config = opts;
     }
 
-    if (!config) {
-      throw new Error('Missing session configuration. You provide through boostrap config with default key: [setup.cookie]')
-    }
-
     this.app.use(session(config));
     return this;
   }
 
   withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
-    let config;
+    let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.session');
     }
@@ -135,10 +131,6 @@ export class UBServiceBuilder {
       config = this.boot.get(opts);
     } else if (typeof opts === 'object') {
       config = opts;
-    }
-
-    if (!config) {
-      throw new Error('Missing cookie configuration. You provide through boostrap config with default key: [setup.cookie]')
     }
 
     this.app.use(cookieParser(config.secret, config.options));
