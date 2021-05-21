@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.7.2](https://github.com/juicycleff/ultimate-backend/compare/v0.7.1...v0.7.2) (2021-05-21)
+
+
+### Bug Fixes
+
+* **core:** fix bad argument access ([cb56bce](https://github.com/juicycleff/ultimate-backend/commit/cb56bce0d86ea374cf845e1c42b4985cb54637a2))
+
+
+
 ## [0.7.1](https://github.com/juicycleff/ultimate-backend/compare/v0.7.0...v0.7.1) (2021-05-21)
 
 
