@@ -74,14 +74,18 @@ export class UBServiceBuilder {
     cors?: CorsOptions | CorsOptionsDelegate<any>,
     csurf?: CSurfType,
   } = {}) {
-    this.app.use(helmet(options.helmet));
-    this.app.enableCors(options.cors);
-    this.app.use(csurf(options.csurf));
+    let config = options;
+    if (!options) {
+      config = this.boot.get('security', {});
+    }
+    this.app.use(helmet(config.helmet));
+    this.app.enableCors(config.cors);
+    this.app.use(csurf(config.csurf));
     return this;
   }
 
   withValidation(options?: ValidationPipeOptions) {
-    this.app.use(new ValidationPipe(options));
+    this.app.useGlobalPipes(new ValidationPipe(options));
     return this;
   }
 
