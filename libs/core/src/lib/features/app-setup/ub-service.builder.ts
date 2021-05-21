@@ -105,10 +105,10 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
+  withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
     let config = {} as any;
     if (!opts) {
-      config = this.boot.get('setup.cookie', {});
+      config = this.boot.get('setup.session', {});
     }
 
     if (typeof opts === 'string') {
@@ -121,10 +121,10 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
+  withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
     let config = {} as any;
     if (!opts) {
-      config = this.boot.get('setup.session', {});
+      config = this.boot.get('setup.cookie', {});
     }
 
     if (typeof opts === 'string') {
