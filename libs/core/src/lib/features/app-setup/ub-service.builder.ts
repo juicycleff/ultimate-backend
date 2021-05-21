@@ -69,11 +69,11 @@ export class UBServiceBuilder {
     return this;
   }
 
-  hardenedSecurity(options?: {
+  hardenedSecurity(options: {
     helmet?: any,
     cors?: CorsOptions | CorsOptionsDelegate<any>,
     csurf?: CSurfType,
-  }) {
+  } = {}) {
     this.app.use(helmet(options.helmet));
     this.app.enableCors(options.cors);
     this.app.use(csurf(options.csurf));
@@ -108,7 +108,7 @@ export class UBServiceBuilder {
   withCookie(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
     let config = {} as any;
     if (!opts) {
-      config = this.boot.get('setup.cookie');
+      config = this.boot.get('setup.cookie', {});
     }
 
     if (typeof opts === 'string') {
@@ -124,7 +124,7 @@ export class UBServiceBuilder {
   withSession(opts?: {secret?: string | string[], options?: cookieParser.CookieParseOptions} | string) {
     let config = {} as any;
     if (!opts) {
-      config = this.boot.get('setup.session');
+      config = this.boot.get('setup.session', {});
     }
 
     if (typeof opts === 'string') {
