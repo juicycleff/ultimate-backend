@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.7.1](https://github.com/juicycleff/ultimate-backend/compare/v0.7.0...v0.7.1) (2021-05-21)
+
+
+### Bug Fixes
+
+* **core:** allow optional cookie and session ([919f2c4](https://github.com/juicycleff/ultimate-backend/commit/919f2c46dc4ff48f4eec30ea12d9f73ea09efb90))
+
+
+
 # [0.7.0](https://github.com/juicycleff/ultimate-backend/compare/v0.6.0...v0.7.0) (2021-05-21)
 
 
