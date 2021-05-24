@@ -120,7 +120,7 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withSession(opts?: session.SessionOptions | string, useRedisStore?: boolean) {
+  withSession(useRedisStore?: boolean, opts?: session.SessionOptions | string) {
     let config = {} as session.SessionOptions;
 
     if (!opts) {
