@@ -38,7 +38,7 @@ import { ValidationPipeOptions } from '@nestjs/common/pipes/validation.pipe';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 import * as connectRedis from 'connect-redis';
-import * as redis from 'ioredis';
+import * as Redis from 'ioredis';
 import {
   CorsOptions,
   CorsOptionsDelegate,
@@ -139,7 +139,7 @@ export class UBServiceBuilder {
         throw new Error(
           'Missing redis configuration. You can supply it using the bootstrap config with key clients.redis using dot notation.'
         );
-      const redisClient = redis(redisConfig);
+      const redisClient = new Redis(redisConfig);
       config.store = new RedisSessionStore({ client: redisClient });
     }
 
