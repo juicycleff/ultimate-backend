@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.8.1](https://github.com/juicycleff/ultimate-backend/compare/v0.8.0...v0.8.1) (2021-05-24)
+
+
+### Bug Fixes
+
+* **core:** fixed bug with default redis store for session ([32c1d80](https://github.com/juicycleff/ultimate-backend/commit/32c1d803841f75d21a5571c5e8004112e24755af))
+
+
+
 # [0.8.0](https://github.com/juicycleff/ultimate-backend/compare/v0.7.4...v0.8.0) (2021-05-21)
 
 
