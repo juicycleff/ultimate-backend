@@ -24,7 +24,7 @@ import { defer } from 'rxjs';
 import * as uuid from 'uuid';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EventEmitter } from 'events';
-import { IBrokerClient } from '@ultimate-backend';
+import { IBrokerClient } from '../interface/broker-client.interface';
 import { KafkaClientOptions } from '../interface/kafka-client.options';
 import { Kafka, Producer, Consumer } from '../external/kafka.types';
 

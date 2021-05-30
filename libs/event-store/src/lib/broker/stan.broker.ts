@@ -33,7 +33,7 @@ import {
   ExtendedStanPersistentSubscription,
   ExtendedStanStandardSubscription,
   StanSubscription,
-} from '@ultimate-backend';
+} from '@ultimate-backend/event-store';
 import { StanClient } from '../client';
 import { BaseBroker } from './base.broker';
 import { ProvidersConstants } from '../event-store.constant';

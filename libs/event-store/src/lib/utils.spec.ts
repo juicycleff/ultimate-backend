@@ -17,13 +17,10 @@
  * File name:         find-type.utils.ts
  * Last modified:     14/02/2021, 18:14
  ******************************************************************************/
+import { EventStoreBrokerTypes } from './interface/broker.enums';
+import { EventStoreModuleOptions } from './interface/event-store-module.options';
 import { getClientProvider, getClientProviderAsync } from './utils';
-import {
-  EventStoreBrokerTypes,
-  EventStoreModuleOptions,
-} from '@ultimate-backend';
-import { Test } from '@nestjs/testing';
-import { ProvidersConstants } from './event-store.constant';
+
 
 describe('Utils', () => {
   const stanOpts: EventStoreModuleOptions = {

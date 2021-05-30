@@ -17,7 +17,7 @@
  * File name:         gpubsub.interface.ts
  * Last modified:     26/02/2021, 01:01
  ******************************************************************************/
-import { EventStoreBrokerTypes } from '@ultimate-backend';
+import { EventStoreBrokerTypes } from './broker.enums';
 import { ClientConfig } from '../external/gpubsub.types';
 
 export interface GooglePubsubClientOptions {

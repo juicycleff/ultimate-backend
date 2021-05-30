@@ -7,7 +7,7 @@ import {
   EventStoreBrokerTypes,
   EventStoreModule,
   EventStoreSubscriptionType,
-} from '@ultimate-backend';
+} from '@ultimate-backend/event-store';
 import { HeroKilledDragonEvent } from './types';
 import { CqrsModule } from '@nestjs/cqrs';
 import { HeroesGameSagas } from './heroes-game.saga';

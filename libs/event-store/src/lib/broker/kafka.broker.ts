@@ -25,15 +25,11 @@ import {
   IMessageSource,
 } from '@nestjs/cqrs';
 import { Subject } from 'rxjs';
-import {
-  EventStoreFeatureOptions,
-  ExtendedKafkaStandardSubscription,
-  KafkaSubscription,
-} from '@ultimate-backend';
 import { KafkaClient } from '../client';
 import { BaseBroker } from './base.broker';
 import { ProvidersConstants } from '../event-store.constant';
 import { EachMessagePayload, Message } from '../external/kafka.types';
+import { EventStoreFeatureOptions, ExtendedKafkaStandardSubscription, KafkaSubscription } from '../interface/feature.options';
 
 @Injectable()
 export class KafkaBroker
