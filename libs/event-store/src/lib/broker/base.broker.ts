@@ -17,14 +17,12 @@
  * File name:         base.broker.ts
  * Last modified:     25/02/2021, 21:12
  ******************************************************************************/
-import {
-  EventStoreFeatureOptions,
-  IEventConstructors,
-} from '@ultimate-backend';
+
 import { Subject } from 'rxjs';
 import { IEvent } from '@nestjs/cqrs';
 import { IAdapterStore } from '../adapter.interface';
 import { Logger } from '@nestjs/common';
+import { EventStoreFeatureOptions, IEventConstructors } from '../interface/feature.options';
 
 export abstract class BaseBroker {
   // special adapter for optionally storing events in an external store

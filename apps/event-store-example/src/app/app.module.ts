@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { EventStoreBrokerTypes, EventStoreModule } from '@ultimate-backend';
+import { EventStoreBrokerTypes, EventStoreModule } from '@ultimate-backend/event-store';
 import { FooModule } from './foo/foo.module';
 
 @Module({
