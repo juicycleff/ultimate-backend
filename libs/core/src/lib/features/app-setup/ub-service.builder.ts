@@ -219,7 +219,8 @@ export class UBServiceBuilder {
   }
 
   prepareSwagger() {
-    const { path, options, customOpts, docOpts } = this._swaggerOptions;
+    const { path, customOpts, docOpts } = this._swaggerOptions;
+    let { options } = this._swaggerOptions;
     if (path) {
       this._swaggerPath = path;
     }
@@ -228,6 +229,7 @@ export class UBServiceBuilder {
       this._swaggerCustomOpts = customOpts;
     }
 
+    options = options || this.boot.get('options', 'swagger.options');
     const title = options?.title || this.boot.get('name', 'ub-service');
     const description =
       options?.description ||
