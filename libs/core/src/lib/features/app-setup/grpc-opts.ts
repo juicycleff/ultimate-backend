@@ -59,4 +59,5 @@ export interface SwaggerConfig {
   description?: string;
   version?: string;
   tag?: string;
+  basePath?: string;
 }

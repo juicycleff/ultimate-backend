@@ -60,6 +60,7 @@ export class UBServiceBuilder {
   private _swaggerCustomOpts;
   private boot: BootConfig;
   private _prefix: string;
+  private _swaggerOptions: Record<string, any>;
 
   constructor(private readonly app: INestApplication) {
     this.boot = app.get<BootConfig>(BootConfig);
@@ -176,31 +177,12 @@ export class UBServiceBuilder {
     customOpts?: SwaggerCustomOptions,
     docOpts?: SwaggerDocumentOptions
   ) {
-    if (path) {
-      this._swaggerPath = path;
+    this._swaggerOptions = {
+      path,
+      options,
+      customOpts,
+      docOpts,
     }
-
-    if (customOpts) {
-      this._swaggerCustomOpts = customOpts;
-    }
-
-    const title = options?.title || this.boot.get('name', 'ub-service');
-    const description =
-      options?.description ||
-      this.boot.get('description', 'ultimate backend service');
-    const version = options?.version || this.boot.get('version', 'latest');
-    const tag = options?.description || this.boot.get('tag', 'service');
-    const builder = new DocumentBuilder()
-      .setTitle(title)
-      .setDescription(description)
-      .setVersion(version)
-      .addTag(tag)
-      .build();
-    this._swaggerObject = SwaggerModule.createDocument(
-      this.app,
-      builder,
-      docOpts
-    );
     return this;
   }
 
@@ -234,6 +216,36 @@ export class UBServiceBuilder {
     }
 
     return this;
+  }
+
+  prepareSwagger() {
+    const { path, options, customOpts, docOpts } = this._swaggerOptions;
+    if (path) {
+      this._swaggerPath = path;
+    }
+
+    if (customOpts) {
+      this._swaggerCustomOpts = customOpts;
+    }
+
+    const title = options?.title || this.boot.get('name', 'ub-service');
+    const description =
+      options?.description ||
+      this.boot.get('description', 'ultimate backend service');
+    const version = options?.version || this.boot.get('version', 'latest');
+    const tag = options?.description || this.boot.get('tag', 'service');
+    const builder = new DocumentBuilder()
+      .setTitle(title)
+      .setDescription(description)
+      .setVersion(version)
+      .addTag(tag)
+      .setBasePath(options.basePath)
+      .build();
+    this._swaggerObject = SwaggerModule.createDocument(
+      this.app,
+      builder,
+      docOpts
+    );
   }
 
   private printGrpcInfo() {
@@ -287,6 +299,9 @@ export class UBServiceBuilder {
     if (this._prefix) {
       this.app.setGlobalPrefix(this._prefix);
     }
+
+    // prepare swagger
+    this.prepareSwagger();
 
     enableKillGracefully(this.app);
     this.createSwaggerDocument();
