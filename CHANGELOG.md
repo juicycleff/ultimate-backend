@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.10.0](https://github.com/juicycleff/ultimate-backend/compare/v0.9.0...v0.10.0) (2021-06-04)
+
+
+### Features
+
+* **core:** read swagger from bootstrap config ([5225ad0](https://github.com/juicycleff/ultimate-backend/commit/5225ad048c8e083445d2266273c7f7ed2aa01d15))
+
+
+
 # [0.9.0](https://github.com/juicycleff/ultimate-backend/compare/v0.8.4...v0.9.0) (2021-06-04)
 
 
