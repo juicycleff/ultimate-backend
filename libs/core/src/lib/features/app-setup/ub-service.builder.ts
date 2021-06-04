@@ -244,6 +244,28 @@ export class UBServiceBuilder {
       builder.setBasePath(options?.basePath);
     }
 
+    if (options?.auth?.authType) {
+      switch (options?.auth?.authType) {
+        case 'bearer':
+          builder.addBearerAuth(options.auth.options, options.auth.name);
+          break;
+        case 'basic':
+          builder.addBasicAuth(options.auth.options, options.auth.name);
+          break;
+        case 'oauth2':
+          builder.addOAuth2(options.auth.options, options.auth.name);
+          break;
+        case 'cookie':
+          builder.addCookieAuth(options.auth.options, options.auth.name);
+          break;
+        case 'apiKey':
+          builder.addApiKey(options.auth.options, options.auth.name);
+          break;
+        default:
+          break;
+      }
+    }
+
     this._swaggerObject = SwaggerModule.createDocument(
       this.app,
       builder.build(),

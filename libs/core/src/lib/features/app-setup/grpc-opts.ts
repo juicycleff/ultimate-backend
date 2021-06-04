@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 import { ChannelOptions } from '@nestjs/microservices/external/grpc-options.interface';
+import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
 export interface GrpcOpts {
   url?: string;
@@ -60,4 +61,9 @@ export interface SwaggerConfig {
   version?: string;
   tag?: string;
   basePath?: string;
+  auth?: {
+    authType: 'bearer' | 'basic' | 'cookie' | 'apiKey' | 'oauth2';
+    option?: SecuritySchemeObject;
+    name?: string;
+  }
 }
