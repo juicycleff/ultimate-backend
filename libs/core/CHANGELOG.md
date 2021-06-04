@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.9.0](https://github.com/juicycleff/ultimate-backend/compare/v0.8.4...v0.9.0) (2021-06-04)
+
+
+### Features
+
+* **core:** expose auth in swagger ([90619fb](https://github.com/juicycleff/ultimate-backend/commit/90619fb3fae167e7a5f5b2a92df02dfb6df379d9))
+
+
+
 ## [0.8.4](https://github.com/juicycleff/ultimate-backend/compare/v0.8.3...v0.8.4) (2021-06-04)
 
 
