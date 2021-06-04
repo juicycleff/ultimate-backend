@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.8.3](https://github.com/juicycleff/ultimate-backend/compare/v0.8.2...v0.8.3) (2021-06-04)
+
+
+### Bug Fixes
+
+* **core:** small patch for swagger missing global prefix ([a70039c](https://github.com/juicycleff/ultimate-backend/commit/a70039c11fcc0ed524e84a1fc9d9f919eabade35))
+
+
+
 ## [0.8.2](https://github.com/juicycleff/ultimate-backend/compare/v0.8.1...v0.8.2) (2021-06-04)
 
 
