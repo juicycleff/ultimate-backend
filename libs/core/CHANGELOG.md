@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.8.4](https://github.com/juicycleff/ultimate-backend/compare/v0.8.3...v0.8.4) (2021-06-04)
+
+
+### Bug Fixes
+
+* **core:** swagger breaking startup ([95788ca](https://github.com/juicycleff/ultimate-backend/commit/95788ca88f1a3fd741582806c201d2bd58e2c872))
+
+
+
 ## [0.8.3](https://github.com/juicycleff/ultimate-backend/compare/v0.8.2...v0.8.3) (2021-06-04)
 
 
