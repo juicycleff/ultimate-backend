@@ -238,12 +238,15 @@ export class UBServiceBuilder {
       .setTitle(title)
       .setDescription(description)
       .setVersion(version)
-      .addTag(tag)
-      .setBasePath(options.basePath)
-      .build();
+      .addTag(tag);
+
+    if (options?.basePath) {
+      builder.setBasePath(options?.basePath);
+    }
+
     this._swaggerObject = SwaggerModule.createDocument(
       this.app,
-      builder,
+      builder.build(),
       docOpts
     );
   }
