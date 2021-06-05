@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.10.1](https://github.com/juicycleff/ultimate-backend/compare/v0.10.0...v0.10.1) (2021-06-05)
+
+
+### Bug Fixes
+
+* **core:** bad swagger auth setup from boot ([a1161ea](https://github.com/juicycleff/ultimate-backend/commit/a1161ea807dc57cfe5a681a94d34ef8d13fda9f3))
+
+
+
 # [0.10.0](https://github.com/juicycleff/ultimate-backend/compare/v0.9.0...v0.10.0) (2021-06-04)
 
 
