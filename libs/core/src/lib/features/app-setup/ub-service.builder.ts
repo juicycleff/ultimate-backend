@@ -229,7 +229,7 @@ export class UBServiceBuilder {
       this._swaggerCustomOpts = customOpts;
     }
 
-    options = options || this.boot.get('options', 'swagger.options');
+    options = options || this.boot.get('swagger.options');
     const title = options?.title || this.boot.get('name', 'ub-service');
     const description =
       options?.description ||
@@ -246,7 +246,7 @@ export class UBServiceBuilder {
       builder.setBasePath(options?.basePath);
     }
 
-    if (options?.auth?.authType) {
+    if (options?.auth) {
       switch (options?.auth?.authType) {
         case 'bearer':
           builder.addBearerAuth(options.auth.options, options.auth.name);
