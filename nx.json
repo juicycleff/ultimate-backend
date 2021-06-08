@@ -1,9 +1,13 @@
 {
   "npmScope": "ultimate-backend",
   "affected": { "defaultBase": "v3" },
+  "workspaceLayout": {
+    "appsDir": "examples",
+    "libsDir": "packages"
+  },
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": { "dependencies": "*", "devDependencies": "*", "peerDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",

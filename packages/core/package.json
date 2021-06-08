@@ -1,0 +1,13 @@
+{
+  "name": "@ultimate-backend/core",
+  "version": "0.10.1",
+  "peerDependencies": {
+    "@ultimate-backend/bootstrap": "^0.10.1",
+    "@ultimate-backend/common": "^0.10.1",
+    "connect-redis": "^5.2.0",
+    "express-session": "^1.17.2",
+    "helmet": "^4.6.0",
+    "csurf": "^1.11.0",
+    "cookie-parser": "^1.4.5"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@ultimate-backend/cloud",
+  "version": "^0.10.1",
+  "peerDependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@nestjs/core": "^7.6.15",
+    "@ultimate-backend/loadbalancer": "^0.10.1",
+    "@ultimate-backend/etcd": "^0.10.1",
+    "@ultimate-backend/zookeeper": "^0.10.1",
+    "@ultimate-backend/common": "^0.10.1",
+    "@ultimate-backend/bootstrap": "^0.10.1",
+    "@ultimate-backend/consul": "^0.10.1"
+  }
+}

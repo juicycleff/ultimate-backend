@@ -16,28 +16,28 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ultimate-backend/core": ["libs/core/src/index.ts"],
-      "@ultimate-backend/common": ["libs/common/src/index.ts"],
-      "@ultimate-backend/cloud": ["libs/cloud/src/index.ts"],
-      "@ultimate-backend/loadbalancer": ["libs/loadbalancer/src/index.ts"],
-      "@ultimate-backend/permissions": ["libs/permissions/src/index.ts"],
-      "@ultimate-backend/cli": ["libs/cli/src/index.ts"],
-      "@ultimate-backend/consul": ["libs/consul/src/index.ts"],
-      "@ultimate-backend/zookeeper": ["libs/zookeeper/src/index.ts"],
-      "@ultimate-backend/etcd": ["libs/etcd/src/index.ts"],
-      "@ultimate-backend/config": ["libs/config/src/index.ts"],
-      "@ultimate-backend/messaging": ["libs/messaging/src/index.ts"],
-      "@ultimate-backend/redis": ["libs/redis/src/index.ts"],
-      "@ultimate-backend/event-store": ["libs/event-store/src/index.ts"],
-      "@ultimate-backend/couchbase": ["libs/couchbase/src/index.ts"],
-      "@ultimate-backend/client": ["libs/client/src/index.ts"],
-      "@ultimate-backend/brakes": ["libs/brakes/src/index.ts"],
-      "@ultimate-backend/nx-plugin": ["libs/plugin-nx/src/index.ts"],
-      "@ultimate-backend/gateway": ["libs/gateway/src/index.ts"],
+      "@ultimate-backend/core": ["packages/core/src/index.ts"],
+      "@ultimate-backend/common": ["packages/common/src/index.ts"],
+      "@ultimate-backend/cloud": ["packages/cloud/src/index.ts"],
+      "@ultimate-backend/loadbalancer": ["packages/loadbalancer/src/index.ts"],
+      "@ultimate-backend/permissions": ["packages/permissions/src/index.ts"],
+      "@ultimate-backend/cli": ["packages/cli/src/index.ts"],
+      "@ultimate-backend/consul": ["packages/consul/src/index.ts"],
+      "@ultimate-backend/zookeeper": ["packages/zookeeper/src/index.ts"],
+      "@ultimate-backend/etcd": ["packages/etcd/src/index.ts"],
+      "@ultimate-backend/config": ["packages/config/src/index.ts"],
+      "@ultimate-backend/messaging": ["packages/messaging/src/index.ts"],
+      "@ultimate-backend/redis": ["packages/redis/src/index.ts"],
+      "@ultimate-backend/event-store": ["packages/event-store/src/index.ts"],
+      "@ultimate-backend/couchbase": ["packages/couchbase/src/index.ts"],
+      "@ultimate-backend/client": ["packages/client/src/index.ts"],
+      "@ultimate-backend/brakes": ["packages/brakes/src/index.ts"],
+      "@ultimate-backend/nx-plugin": ["packages/plugin-nx/src/index.ts"],
+      "@ultimate-backend/gateway": ["packages/gateway/src/index.ts"],
       "@ultimate-backend/create-ub-project": [
-        "libs/create-ub-project/src/index.ts"
+        "packages/create-ub-project/src/index.ts"
       ],
-      "@ultimate-backend/bootstrap": ["libs/bootstrap/src/index.ts"]
+      "@ultimate-backend/bootstrap": ["packages/bootstrap/src/index.ts"]
     },
     "plugins": [
       {
