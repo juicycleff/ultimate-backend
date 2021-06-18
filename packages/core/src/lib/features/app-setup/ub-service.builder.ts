@@ -182,7 +182,7 @@ export class UBServiceBuilder {
       options,
       customOpts,
       docOpts,
-    }
+    };
     return this;
   }
 

@@ -21,7 +21,6 @@ import { EventStoreBrokerTypes } from './interface/broker.enums';
 import { EventStoreModuleOptions } from './interface/event-store-module.options';
 import { getClientProvider, getClientProviderAsync } from './utils';
 
-
 describe('Utils', () => {
   const stanOpts: EventStoreModuleOptions = {
     broker: {

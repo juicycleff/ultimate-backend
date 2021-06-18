@@ -16,7 +16,9 @@ describe('app', () => {
     expect(tree.readContent('examples/my-node-app/src/main.ts')).toContain(
       `await NestFactory.create(AppModule);`
     );
-    expect(tree.exists('examples/my-node-app/src/app/app.module.ts')).toBeTruthy();
+    expect(
+      tree.exists('examples/my-node-app/src/app/app.module.ts')
+    ).toBeTruthy();
 
     const eslintrcJson = readJsonInTree(
       tree,
@@ -66,7 +68,10 @@ describe('app', () => {
 
   it('should have es2015 as the tsconfig target', async () => {
     const tree = await runSchematic('app', { name: 'myNodeApp' }, appTree);
-    const tsconfig = readJsonInTree(tree, 'examples/my-node-app/tsconfig.app.json');
+    const tsconfig = readJsonInTree(
+      tree,
+      'examples/my-node-app/tsconfig.app.json'
+    );
     expect(tsconfig.compilerOptions.target).toBe('es2015');
   });
 
@@ -79,7 +84,10 @@ describe('app', () => {
           appTree
         );
 
-        const tslintJson = readJsonInTree(tree, 'examples/my-node-app/tslint.json');
+        const tslintJson = readJsonInTree(
+          tree,
+          'examples/my-node-app/tslint.json'
+        );
         expect(tslintJson).toMatchInlineSnapshot(`
           Object {
             "extends": "../../tslint.json",

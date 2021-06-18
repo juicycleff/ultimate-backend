@@ -162,7 +162,10 @@ describe('lib', () => {
 
     it('should create a local tsconfig.json', async () => {
       const tree = await runSchematic('lib', { name: 'myLib' }, appTree);
-      const tsconfigJson = readJsonInTree(tree, 'packages/my-lib/tsconfig.json');
+      const tsconfigJson = readJsonInTree(
+        tree,
+        'packages/my-lib/tsconfig.json'
+      );
       expect(tsconfigJson).toMatchInlineSnapshot(`
         Object {
           "extends": "../../tsconfig.base.json",
@@ -204,7 +207,10 @@ describe('lib', () => {
       expect(tree.exists('packages/my-lib/src/index.ts')).toBeTruthy();
       expect(tree.exists(`libs/my-lib/src/lib/my-lib.spec.ts`)).toBeFalsy();
 
-      const eslintrcJson = readJsonInTree(tree, 'packages/my-lib/.eslintrc.json');
+      const eslintrcJson = readJsonInTree(
+        tree,
+        'packages/my-lib/.eslintrc.json'
+      );
       expect(eslintrcJson).toMatchInlineSnapshot(`
         Object {
           "extends": Array [
@@ -418,9 +424,13 @@ describe('lib', () => {
         { name: 'myLib', unitTestRunner: 'none' },
         appTree
       );
-      expect(resultTree.exists('packages/my-lib/tsconfig.spec.json')).toBeFalsy();
+      expect(
+        resultTree.exists('packages/my-lib/tsconfig.spec.json')
+      ).toBeFalsy();
       expect(resultTree.exists('packages/my-lib/jest.config.js')).toBeFalsy();
-      expect(resultTree.exists('packages/my-lib/lib/my-lib.spec.ts')).toBeFalsy();
+      expect(
+        resultTree.exists('packages/my-lib/lib/my-lib.spec.ts')
+      ).toBeFalsy();
       const workspaceJson = readJsonInTree(resultTree, 'workspace.json');
       expect(workspaceJson.projects['my-lib'].architect.test).toBeUndefined();
       const tsconfigJson = readJsonInTree(

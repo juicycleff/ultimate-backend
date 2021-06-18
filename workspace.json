@@ -191,8 +191,8 @@
       }
     },
     "example": {
-      "root": "apps/example",
-      "sourceRoot": "apps/example/src",
+      "root": "examples/example",
+      "sourceRoot": "examples/example/src",
       "projectType": "application",
       "prefix": "example",
       "architect": {
@@ -200,10 +200,10 @@
           "builder": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/example",
-            "main": "apps/example/src/main.ts",
-            "tsConfig": "apps/example/tsconfig.app.json",
-            "assets": ["apps/example/src/assets"]
+            "outputPath": "dist/examples/example",
+            "main": "examples/example/src/main.ts",
+            "tsConfig": "examples/example/tsconfig.app.json",
+            "assets": ["examples/example/src/assets"]
           },
           "configurations": {
             "production": {
@@ -212,8 +212,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/example/src/environments/environment.ts",
-                  "with": "apps/example/src/environments/environment.prod.ts"
+                  "replace": "examples/example/src/environments/environment.ts",
+                  "with": "examples/example/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -228,22 +228,22 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/example/**/*.ts"]
+            "lintFilePatterns": ["examples/example/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/example"],
+          "outputs": ["coverage/examples/example"],
           "options": {
-            "jestConfig": "apps/example/jest.config.js",
+            "jestConfig": "examples/example/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
     "adv-example": {
-      "root": "apps/adv-example",
-      "sourceRoot": "apps/adv-example/src",
+      "root": "examples/adv-example",
+      "sourceRoot": "examples/adv-example/src",
       "projectType": "application",
       "prefix": "adv-example",
       "architect": {
@@ -251,10 +251,10 @@
           "builder": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/adv-example",
-            "main": "apps/adv-example/src/main.ts",
-            "tsConfig": "apps/adv-example/tsconfig.app.json",
-            "assets": ["apps/adv-example/src/assets"]
+            "outputPath": "dist/examples/adv-example",
+            "main": "examples/adv-example/src/main.ts",
+            "tsConfig": "examples/adv-example/tsconfig.app.json",
+            "assets": ["examples/adv-example/src/assets"]
           },
           "configurations": {
             "production": {
@@ -263,8 +263,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/adv-example/src/environments/environment.ts",
-                  "with": "apps/adv-example/src/environments/environment.prod.ts"
+                  "replace": "examples/adv-example/src/environments/environment.ts",
+                  "with": "examples/adv-example/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -279,14 +279,14 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/adv-example/**/*.ts"]
+            "lintFilePatterns": ["examples/adv-example/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/adv-example"],
+          "outputs": ["coverage/examples/adv-example"],
           "options": {
-            "jestConfig": "apps/adv-example/jest.config.js",
+            "jestConfig": "examples/adv-example/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -615,8 +615,8 @@
       }
     },
     "event-store-example": {
-      "root": "apps/event-store-example",
-      "sourceRoot": "apps/event-store-example/src",
+      "root": "examples/event-store-example",
+      "sourceRoot": "examples/event-store-example/src",
       "projectType": "application",
       "prefix": "event-store-example",
       "architect": {
@@ -624,10 +624,10 @@
           "builder": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/event-store-example",
-            "main": "apps/event-store-example/src/main.ts",
-            "tsConfig": "apps/event-store-example/tsconfig.app.json",
-            "assets": ["apps/event-store-example/src/assets"]
+            "outputPath": "dist/examples/event-store-example",
+            "main": "examples/event-store-example/src/main.ts",
+            "tsConfig": "examples/event-store-example/tsconfig.app.json",
+            "assets": ["examples/event-store-example/src/assets"]
           },
           "configurations": {
             "production": {
@@ -636,8 +636,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/event-store-example/src/environments/environment.ts",
-                  "with": "apps/event-store-example/src/environments/environment.prod.ts"
+                  "replace": "examples/event-store-example/src/environments/environment.ts",
+                  "with": "examples/event-store-example/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -652,14 +652,14 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/event-store-example/**/*.ts"]
+            "lintFilePatterns": ["examples/event-store-example/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/event-store-example"],
+          "outputs": ["coverage/examples/event-store-example"],
           "options": {
-            "jestConfig": "apps/event-store-example/jest.config.js",
+            "jestConfig": "examples/event-store-example/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -742,8 +742,8 @@
     },
     "plugin-nx-e2e": {
       "projectType": "application",
-      "root": "apps/plugin-nx-e2e",
-      "sourceRoot": "apps/plugin-nx-e2e/src",
+      "root": "examples/plugin-nx-e2e",
+      "sourceRoot": "examples/plugin-nx-e2e/src",
       "architect": {
         "e2e": {
           "builder": "@nrwl/nx-plugin:e2e",
@@ -751,7 +751,7 @@
             "target": "plugin-nx:build",
             "npmPackageName": "@ultimate-backend/plugin-nx",
             "pluginOutputPath": "dist/packages/plugin-nx",
-            "jestConfig": "apps/plugin-nx-e2e/jest.config.js"
+            "jestConfig": "examples/plugin-nx-e2e/jest.config.js"
           }
         }
       }

@@ -4,45 +4,27 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.10.1](https://github.com/juicycleff/ultimate-backend/compare/v0.10.0...v0.10.1) (2021-06-05)
 
-
-
 # [0.10.0](https://github.com/juicycleff/ultimate-backend/compare/v0.9.0...v0.10.0) (2021-06-04)
-
-
 
 # [0.9.0](https://github.com/juicycleff/ultimate-backend/compare/v0.8.4...v0.9.0) (2021-06-04)
 
-
-
 ## [0.8.4](https://github.com/juicycleff/ultimate-backend/compare/v0.8.3...v0.8.4) (2021-06-04)
-
-
 
 ## [0.8.3](https://github.com/juicycleff/ultimate-backend/compare/v0.8.2...v0.8.3) (2021-06-04)
 
-
-
 ## [0.8.2](https://github.com/juicycleff/ultimate-backend/compare/v0.8.1...v0.8.2) (2021-06-04)
-
 
 ### Bug Fixes
 
-* import issues when using event-store package ([b57b8da](https://github.com/juicycleff/ultimate-backend/commit/b57b8da3c89ed6a0ba073fff1b6fab5ebedef72f))
-
-
+- import issues when using event-store package ([b57b8da](https://github.com/juicycleff/ultimate-backend/commit/b57b8da3c89ed6a0ba073fff1b6fab5ebedef72f))
 
 ## [0.8.1](https://github.com/juicycleff/ultimate-backend/compare/v0.8.0...v0.8.1) (2021-05-24)
 
-
-
 # [0.8.0](https://github.com/juicycleff/ultimate-backend/compare/v0.7.4...v0.8.0) (2021-05-21)
-
 
 ### Features
 
-* **core:** support for redis session store by default ([6d942e2](https://github.com/juicycleff/ultimate-backend/commit/6d942e29d7839866e1f42a75a39e6854a3c3eca3))
-
-
+- **core:** support for redis session store by default ([6d942e2](https://github.com/juicycleff/ultimate-backend/commit/6d942e29d7839866e1f42a75a39e6854a3c3eca3))
 
 ## [0.7.4](https://github.com/juicycleff/ultimate-backend/compare/v0.7.3...v0.7.4) (2021-05-21)
 

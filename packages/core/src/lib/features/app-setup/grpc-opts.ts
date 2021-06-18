@@ -65,5 +65,5 @@ export interface SwaggerConfig {
     authType: 'bearer' | 'basic' | 'cookie' | 'apiKey' | 'oauth2';
     option?: SecuritySchemeObject;
     name?: string;
-  }
+  };
 }
