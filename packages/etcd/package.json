@@ -2,7 +2,6 @@
   "name": "@ultimate-backend/etcd",
   "version": "0.10.1",
   "peerDependencies": {
-    "etcd3": "^1.1.0",
     "@nestjs/common": "^7.6.15",
     "@ultimate-backend/common": "^0.10.1",
     "@nestjs/core": "^7.6.15",

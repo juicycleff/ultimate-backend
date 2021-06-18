@@ -1,4 +1,10 @@
 {
   "name": "@ultimate-backend/zookeeper",
-  "version": "0.10.1"
+  "version": "0.10.1",
+  "dependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@ultimate-backend/common": "0.10.1",
+    "@nestjs/core": "^7.6.17",
+    "@ultimate-backend/bootstrap": "0.10.1"
+  }
 }

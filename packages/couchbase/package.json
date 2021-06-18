@@ -1,4 +1,8 @@
 {
   "name": "@ultimate-backend/couchbase",
-  "version": "0.10.1"
+  "version": "0.10.1",
+  "peerDependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@nestjs/core": "^7.6.17"
+  }
 }
