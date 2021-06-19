@@ -1,6 +1,8 @@
 {
   "npmScope": "ultimate-backend",
-  "affected": { "defaultBase": "v3" },
+  "affected": {
+    "defaultBase": "v3"
+  },
   "workspaceLayout": {
     "appsDir": "examples",
     "libsDir": "packages"
@@ -29,30 +31,84 @@
     }
   },
   "projects": {
-    "core": { "tags": [] },
-    "common": { "tags": [] },
-    "cloud": { "tags": [] },
-    "loadbalancer": { "tags": [] },
-    "permissions": { "tags": [] },
-    "cli": { "tags": [], "implicitDependencies": ["plugin-nx"] },
-    "example": { "tags": [] },
-    "adv-example": { "tags": [] },
-    "consul": { "tags": [], "implicitDependencies": ["common"] },
-    "zookeeper": { "tags": [] },
-    "etcd": { "tags": [], "implicitDependencies": ["common"] },
-    "config": { "tags": [] },
-    "messaging": { "tags": [] },
-    "redis": { "tags": [] },
-    "event-store": { "tags": [] },
-    "couchbase": { "tags": [] },
-    "client": { "tags": [] },
-    "brakes": { "tags": [] },
-    "event-store-example": { "tags": [] },
-    "workspace": { "tags": [] },
-    "plugin-nx": { "tags": [] },
-    "plugin-nx-e2e": { "tags": [], "implicitDependencies": ["plugin-nx"] },
-    "gateway": { "tags": [] },
-    "create-ub-project": { "tags": [] },
-    "bootstrap": { "tags": [] }
+    "core": {
+      "tags": []
+    },
+    "common": {
+      "tags": []
+    },
+    "cloud": {
+      "tags": []
+    },
+    "loadbalancer": {
+      "tags": []
+    },
+    "permissions": {
+      "tags": []
+    },
+    "cli": {
+      "tags": [],
+      "implicitDependencies": ["plugin-nx"]
+    },
+    "example": {
+      "tags": []
+    },
+    "adv-example": {
+      "tags": []
+    },
+    "consul": {
+      "tags": [],
+      "implicitDependencies": ["common"]
+    },
+    "zookeeper": {
+      "tags": []
+    },
+    "etcd": {
+      "tags": [],
+      "implicitDependencies": ["common"]
+    },
+    "config": {
+      "tags": []
+    },
+    "messaging": {
+      "tags": []
+    },
+    "redis": {
+      "tags": []
+    },
+    "event-store": {
+      "tags": []
+    },
+    "couchbase": {
+      "tags": []
+    },
+    "client": {
+      "tags": []
+    },
+    "brakes": {
+      "tags": []
+    },
+    "event-store-example": {
+      "tags": []
+    },
+    "workspace": {
+      "tags": []
+    },
+    "plugin-nx": {
+      "tags": []
+    },
+    "plugin-nx-e2e": {
+      "tags": [],
+      "implicitDependencies": ["plugin-nx"]
+    },
+    "gateway": {
+      "tags": []
+    },
+    "create-ub-project": {
+      "tags": []
+    },
+    "bootstrap": {
+      "tags": []
+    }
   }
 }

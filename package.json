@@ -68,6 +68,7 @@
     "etcd3": "^1.1.0",
     "express-session": "^1.17.2",
     "faker": "^5.5.2",
+    "g": "^2.0.1",
     "got": "^9.6.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
