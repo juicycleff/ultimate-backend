@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/core",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "peerDependencies": {
     "@ultimate-backend/bootstrap": "^0.10.1",
     "@ultimate-backend/common": "^0.10.1",
