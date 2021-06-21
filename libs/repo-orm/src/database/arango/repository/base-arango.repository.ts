@@ -167,12 +167,10 @@ export class BaseArangoRepository<DOC, DTO = DOC> {
         return document;
       }
     } catch (e) {
-      console.log(e);
       if (e instanceof ArangoError) {
         if (e?.isArangoError) {
           switch (e.errorNum) {
             case 1210:
-              console.log(e);
               throw new Error('Unique constraint not met');
             default:
               throw new Error(e?.response?.body);
@@ -824,7 +822,7 @@ export class BaseArangoRepository<DOC, DTO = DOC> {
     // TODO: Initialize tenant data isolation
   }
 
-  public onSave(): { createdAt?: Date; updatedAt?: Date } {
+  public onSave(): { createdAt?: DateTime; updatedAt?: DateTime } {
     return {
       createdAt: DateTime.local(),
       updatedAt: DateTime.local(),

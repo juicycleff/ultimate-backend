@@ -111,9 +111,7 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
       return cachedResult;
     }
 
-    const found = await collection
-      .find(query as Record<string, unknown>)
-      .toArray();
+    const found = await collection.find(query as any).toArray();
 
     const results: DOC[] = [];
     for (const result of found) {
@@ -433,14 +431,14 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     const res = await collection.insertOne(cleanDoc);
 
     let newDocument = res.ops[0];
-    newDocument = this.toggleId(newDocument, false);
+    newDocument = this.toggleId(newDocument, false) as any;
     newDocument = await this.invokeEvents(
       POST_KEY,
       ['SAVE', 'CREATE'],
       newDocument,
     );
     // newDocument = this.convertDateToString(newDocument);
-    return newDocument;
+    return newDocument as DOC;
   }
 
   /**
@@ -462,13 +460,11 @@ export class BaseMongoRepository<DOC, DTO = DOC> {
     delete updates._id;
     const query = { _id: id };
     const res = await collection.updateOne(
-      query as Record<string, unknown>,
+      query as any,
       { $set: updates },
       { upsert: true },
     );
-    let newDocument = await collection.findOne(
-      query as Record<string, unknown>,
-    );
+    let newDocument = (await collection.findOne(query as any)) as any;
 
     // project new items
     if (newDocument) {
