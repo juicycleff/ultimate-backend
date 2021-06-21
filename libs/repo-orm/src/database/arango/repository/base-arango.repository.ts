@@ -22,7 +22,7 @@ import { aql, AqlQuery } from 'arangojs/lib/cjs/aql-query';
 import { ArrayCursor } from 'arangojs/lib/cjs/cursor';
 import { QueryOptions } from 'arangojs/lib/cjs/database';
 import { ArangoError } from 'arangojs/lib/async/error';
-import { GqlArangoParser } from '@juicycleff/repo-orm/utils/arango-parser.utils';
+import { gqlArangoParser } from '@juicycleff/repo-orm/utils/arango-parser.utils';
 
 // that class only can be extended
 export class BaseArangoRepository<DOC, DTO = DOC> {
@@ -849,7 +849,7 @@ export class BaseArangoRepository<DOC, DTO = DOC> {
     try {
       const db = await this.dbSource.db;
       const query = this.parseFindQuery(
-        GqlArangoParser(conditions, 'doc', true),
+        gqlArangoParser(conditions, 'doc', true),
       );
 
       const cursor = await db.query(query, {
@@ -878,7 +878,7 @@ export class BaseArangoRepository<DOC, DTO = DOC> {
     const db = await this.dbSource.db;
 
     const query = this.parseUpdateOneQuery(
-      GqlArangoParser(conditions, 'doc', false),
+      gqlArangoParser(conditions, 'doc', false),
       payload,
     );
 
@@ -898,7 +898,7 @@ export class BaseArangoRepository<DOC, DTO = DOC> {
     options?: QueryArgsOptions,
   ): Promise<DOC | any | DOC[]> {
     const db = await this.dbSource.db;
-    const query = this.parseOneQuery(GqlArangoParser(conditions, 'doc', true));
+    const query = this.parseOneQuery(gqlArangoParser(conditions, 'doc', true));
 
     const cursor = await db.query(query, {
       count: options.count,
