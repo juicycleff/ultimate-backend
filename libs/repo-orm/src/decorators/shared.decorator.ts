@@ -34,13 +34,13 @@ export const InjectCurrentTenant = (connectionName?: string) =>
  * Inject the Db object associated with a connection
  * @param connectionName The unique name associated with the connection
  */
-export const InjectMongoDb = (connectionName?: string) =>
+export const InjectMongoDB = (connectionName?: string) =>
   Inject(getDbToken(connectionName));
 /**
  * Inject the Db object associated with a connection
  * @param connectionName The unique name associated with the connection
  */
-export const InjectArangoDb = (connectionName?: string) =>
+export const InjectArangoDB = (connectionName?: string) =>
   Inject(getArangoDbToken(connectionName));
 
 /**

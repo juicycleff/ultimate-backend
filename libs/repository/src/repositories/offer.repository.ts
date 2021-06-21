@@ -6,7 +6,7 @@ import {
   Before,
   MongoEntityRepository,
   InjectClient,
-  InjectDb,
+  InjectMongoDB,
 } from '@juicycleff/repo-orm';
 import { OfferEntity } from '../entities';
 
@@ -23,7 +23,7 @@ import { OfferEntity } from '../entities';
 export class OfferRepository extends BaseMongoRepository<OfferEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
-    @InjectDb() private readonly db: Db,
+    @InjectMongoDB() private readonly db: Db,
     @Inject(CACHE_MANAGER) private readonly cache: CacheStore,
   ) {
     super({ client: dbc, db }, cache, null);

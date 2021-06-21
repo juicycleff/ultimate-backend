@@ -6,7 +6,7 @@ import {
   Before,
   MongoEntityRepository,
   InjectClient,
-  InjectDb,
+  InjectMongoDB,
   InjectCurrentTenant,
   TenantData,
 } from '@juicycleff/repo-orm';
@@ -25,7 +25,7 @@ import { WebhookEntity } from '../entities';
 export class WebhookRepository extends BaseMongoRepository<WebhookEntity> {
   constructor(
     @InjectClient() private readonly dbc: MongoClient,
-    @InjectDb() private readonly db: Db,
+    @InjectMongoDB() private readonly db: Db,
     @Inject(CACHE_MANAGER) private readonly cache: CacheStore,
     @InjectCurrentTenant() private readonly tenantData: TenantData,
   ) {

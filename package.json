@@ -237,7 +237,7 @@
   "snyk": true,
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format && yarn test && yarn test:e2e"
+      "pre-commit": "yarn format"
     }
   }
 }
