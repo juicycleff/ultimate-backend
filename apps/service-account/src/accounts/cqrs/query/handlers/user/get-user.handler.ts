@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { mongoParser } from '@juicycleff/repo-orm';
+import { utils } from '@juicycleff/repo-orm';
 import { UserRepository, UserEntity } from '@ultimatebackend/repository';
 import { GetUserQuery } from '../../impl';
 
@@ -16,7 +16,7 @@ export class GetUserHandler implements IQueryHandler<GetUserQuery> {
     if (!where) {
       throw Error('Missing get inputs');
     }
-    const filter = mongoParser(where);
+    const filter = utils.gqlMongoParser(where);
 
     return await this.userRepository.findOne({ ...filter }, true);
   }

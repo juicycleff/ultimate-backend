@@ -4,7 +4,7 @@ import { ApolloError } from 'apollo-server-express';
 import { TenantRepository } from '@ultimatebackend/repository/repositories';
 import { GetTenantsQuery } from '../../impl';
 import { ObjectId } from 'mongodb';
-import { mongoParser } from '@juicycleff/repo-orm';
+import { utils } from '@juicycleff/repo-orm';
 import {
   FindTenantResponse,
   Tenant,
@@ -24,7 +24,7 @@ export class GetTenantsHandler implements IQueryHandler<GetTenantsQuery> {
       if (!user) {
         throw new ApolloError('Missing get current user');
       }
-      const filter = mongoParser(where);
+      const filter = utils.gqlMongoParser(where);
 
       const userCond = {
         members: {

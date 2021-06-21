@@ -3,7 +3,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { TenantRepository } from '@ultimatebackend/repository/repositories';
 import { ObjectId } from 'mongodb';
 import { GetTenantQuery } from '../../impl';
-import { mongoParser } from '@juicycleff/repo-orm';
+import { utils } from '@juicycleff/repo-orm';
 import { RpcException } from '@nestjs/microservices';
 import {
   ReadTenantResponse,
@@ -24,7 +24,7 @@ export class GetTenantHandler implements IQueryHandler<GetTenantQuery> {
       if (!where) {
         throw new RpcException('Missing where inputs');
       }
-      const filter = mongoParser(JSON.parse(where.filter));
+      const filter = utils.gqlMongoParser(JSON.parse(where.filter));
 
       const userFilter = inApp
         ? {}

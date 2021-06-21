@@ -45,23 +45,23 @@ function arangoQueryBuilder(query: any, docName?: string, grouped?: boolean) {
         prop = '';
       }
       if (prop === '$or') {
-        for (let i = 0; i < val.length; i++) {
-          aqlOr.push(arangoQueryBuilder(val[i]));
+        for (const el of val) {
+          aqlOr.push(arangoQueryBuilder(el));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators.OR) + ')';
       } else if (prop === '_OR') {
-        for (let i = 0; i < val.length; i++) {
-          aqlOr.push(arangoQueryBuilder(val[i]));
+        for (const el of val) {
+          aqlOr.push(arangoQueryBuilder(el));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators._OR) + ')';
       } else if (prop === '$and') {
-        for (let i = 0; i < val.length; i++) {
-          aqlOr.push(arangoQueryBuilder(val[i]));
+        for (const el of val) {
+          aqlOr.push(arangoQueryBuilder(el));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators._AND) + ')';
       } else if (prop === '_AND') {
-        for (let i = 0; i < val.length; i++) {
-          aqlOr.push(arangoQueryBuilder(val[i]));
+        for (const el of val) {
+          aqlOr.push(arangoQueryBuilder(el));
         }
         returnOrStr = '(' + aqlOr.join(logicalOperators._AND) + ')';
       } else {
@@ -115,6 +115,4 @@ function GraphqlArangoParser() {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export const GqlArangoParser = GraphqlArangoParser();
-
-// admin 1xDKUrMwSbkisUuKJRt7
+export const gqlArangoParser = GraphqlArangoParser();

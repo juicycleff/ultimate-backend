@@ -274,8 +274,8 @@ function GraphqlMongoParser(
   const resolvers: Resolvers = merge
     ? { ...defaultValues, ...customResolvers }
     : customResolvers;
-  return (args: Record<string, unknown>): Record<string, unknown> =>
+  return (args: Record<string, any>): Record<string, any> =>
     buildFilters(args, null, keywords, resolvers);
 }
 
-export const GqlMongoParser = GraphqlMongoParser();
+export const gqlMongoParser = GraphqlMongoParser();

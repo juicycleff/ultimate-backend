@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { mongoParser } from '@juicycleff/repo-orm';
+import { utils } from '@juicycleff/repo-orm';
 import { ProjectRepository } from '@ultimatebackend/repository';
 import { GetProjectsQuery } from '../../impl';
 import { RpcException } from '@nestjs/microservices';
@@ -23,7 +23,7 @@ export class GetProjectsHandler implements IQueryHandler<GetProjectsQuery> {
     try {
       if (input.filter) {
         const where = JSON.parse(input.filter);
-        const filter = mongoParser(where);
+        const filter = utils.gqlMongoParser(where);
         const projectFil = await this.projectRepository.find({
           conditions: { ...filter },
           limit: input.paginate?.limit || 100,

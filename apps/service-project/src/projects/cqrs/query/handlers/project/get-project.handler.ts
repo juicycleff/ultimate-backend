@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ProjectRepository } from '@ultimatebackend/repository';
-import { mongoParser } from '@juicycleff/repo-orm';
+import { utils } from '@juicycleff/repo-orm';
 import { RpcException } from '@nestjs/microservices';
 import {
   ReadProjectResponse,
@@ -26,7 +26,7 @@ export class GetProjectHandler implements IQueryHandler<GetProjectQuery> {
 
     try {
       const where = JSON.parse(input.filter);
-      const filter = mongoParser(where);
+      const filter = utils.gqlMongoParser(where);
       const project = await this.projectRepository.findOne({ ...filter });
 
       return {
