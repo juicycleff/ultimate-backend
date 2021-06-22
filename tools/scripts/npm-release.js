@@ -79,7 +79,9 @@ function command() {
   for (let project of projects) {
     if (project !== 'gateway' || project !== 'messaging') {
       console.info(`Building ${project}`);
-      shell.exec(`nx run ${project}:build --with-deps --optimization --progress --extractLicenses`);
+      shell.exec(
+        `nx run ${project}:build --with-deps --optimization --progress --extractLicenses`
+      );
     }
   }
 

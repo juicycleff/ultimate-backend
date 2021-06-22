@@ -321,7 +321,14 @@
             "main": "packages/consul/src/index.ts",
             "assets": ["packages/consul/*.md"],
             "buildableProjectDepsInPackageJsonType": "peerDependencies",
-            "externalDependencies": ["consul", "rxjs", "reflect-metadata", "lodash", "uuid", "@ultimate-backend/common"],
+            "externalDependencies": [
+              "consul",
+              "rxjs",
+              "reflect-metadata",
+              "lodash",
+              "uuid",
+              "@ultimate-backend/common"
+            ],
             "extractLicenses": true,
             "optimization": true,
             "maxWorkers": 3,
