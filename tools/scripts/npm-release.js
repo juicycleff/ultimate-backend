@@ -21,37 +21,73 @@ const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
 
-const target = process.argv[2];
+function getBuildType(msg = '') {
+  if (msg.startsWith('feat')) {
+    return 'major';
+  } else if (
+    msg.startsWith('fix') ||
+    msg.startsWith('refactor') ||
+    msg.startsWith('docs') ||
+    msg.startsWith('chore')
+  ) {
+    return 'patch';
+  } else {
+    return 'minor';
+  }
+}
 
 function command() {
-  const file = fs.readFileSync(path.join(__dirname, '../../workspace.json'));
-  const ws = JSON.parse(file.toString());
-  const rootProjects = ws.projects || {};
+  const projects = [];
+  let commitMessage;
+  let dryRun = false;
+  let releaseType = 'minor' | 'patch' | 'major';
 
-  if (!rootProjects) {
+  // remove dist and get commit message
+  try {
+    console.info('Removing Dist');
+    shell.exec(`rm -rf dist`);
+    commitMessage = shell.exec("git log -1 --pretty=format:'%s'").stdout;
+    releaseType = getBuildType(commitMessage);
+  } catch (e) {
     return;
   }
 
+  // get affected libs
   try {
     shell.exec(`rm -rf dist`);
+    const strResponse = shell.exec(
+      `npm run affected:libs --plain --exclude="messaging,gateway"`
+    );
+    let tempProject = strResponse.stdout.split('\n');
+    tempProject = tempProject.splice(10);
+
+    for (const project of tempProject) {
+      if (project.length > 0) {
+        projects.push(project.slice(4, project.length));
+      }
+    }
   } catch (e) {
     //
   }
 
+  if (projects.length === 0) {
+    console.info('No packages to publish');
+    return;
+  }
+
   // Build
-  for (let key in rootProjects) {
-    const value = rootProjects[key];
-    if (value.projectType === 'library') {
-      shell.exec(`nx run ${key}:build --with-deps`);
+  for (let project of projects) {
+    if (project !== 'gateway' || project !== 'messaging') {
+      console.info(`Building ${project}`);
+      shell.exec(`nx run ${project}:build --with-deps --optimization --progress --extractLicenses`);
     }
   }
 
   // Publish
-  for (let key in rootProjects) {
-    const value = rootProjects[key];
-    if (value.projectType === 'library' && key !== 'gateway') {
-      shell.exec(`cd dist/packages/${key} && npm publish --access public`);
-      shell.exec('cd ../../../');
+  for (let project of projects) {
+    if (project !== 'gateway' || project !== 'messaging') {
+      // shell.exec(`cd dist/packages/${project} && npm publish --access public`);
+      // shell.exec('cd ../../../');
     }
   }
 }

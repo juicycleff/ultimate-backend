@@ -58,7 +58,7 @@
     },
     "consul": {
       "tags": [],
-      "implicitDependencies": ["common"]
+      "implicitDependencies": []
     },
     "zookeeper": {
       "tags": []

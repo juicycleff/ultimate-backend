@@ -26,7 +26,7 @@ export interface IServiceStore {
 
   getServiceNodes(name: string, passing?: boolean): ServiceInstance[];
 
-  addService(name: string, service: ServiceInstance): void;
+  addService(name: string, service: ServiceInstance, noEmit?: boolean): void;
 
   removeService(name: string): void;
 
