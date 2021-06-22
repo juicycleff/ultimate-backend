@@ -53,7 +53,7 @@ export class ServiceStore
     return this.services;
   }
 
-  addService(name: string, service: ServiceInstance) {
+  addService(name: string, service: ServiceInstance, noEmit?: boolean) {
     if (this.services.has(name)) {
       const idx = this.services
         .get(name)
@@ -66,13 +66,15 @@ export class ServiceStore
     } else {
       this.services.set(name, [service]);
     }
+
+    if (noEmit) return;
     this.emit(this.eventName, 'added', name, [service]);
   }
 
   addServices(name: string, services: ServiceInstance[]): void {
     if (this.services.has(name)) {
       for (const service of services) {
-        this.addService(name, service);
+        this.addService(name, service, true);
       }
     } else {
       this.services.set(name, services);
