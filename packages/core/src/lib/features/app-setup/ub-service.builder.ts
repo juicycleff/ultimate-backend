@@ -88,9 +88,17 @@ export class UBServiceBuilder {
     if (!options) {
       config = this.boot.get('security', {});
     }
-    this.app.use(helmet(config.helmet));
-    this.app.enableCors(config.cors);
-    this.app.use(csurf(config.csurf));
+    // When no config is provided. It will use the default behavior
+    const hasNoKeys = Object.keys(config).length === 0;
+    if (hasNoKeys || config.helmet) {
+      this.app.use(helmet(config.helmet));
+    }
+    if (hasNoKeys || config.cors) {
+      this.app.enableCors(config.cors);
+    }
+    if (hasNoKeys || config.csurf) {
+      this.app.use(csurf(config.csurf));
+    }
     return this;
   }
 
