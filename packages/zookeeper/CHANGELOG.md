@@ -14,6 +14,15 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 # [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
 
 
+### Bug Fixes
+
+* fixed deps for packages ([9322cd5](https://github.com/juicycleff/ultimate-backend/commit/9322cd59ac8e282a72ed8538f0447c0762709c86))
+
+
+
+# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
+
+
 
 ## [0.10.2](https://github.com/juicycleff/ultimate-backend/compare/v0.10.1...v0.10.2) (2021-06-21)
 
