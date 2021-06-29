@@ -62,18 +62,34 @@ export class GrpcClient {
     name: string,
     method: string
   ): { service: T; node: ServiceInstance } {
-    const node = this.lb.choose(this.options.service);
-    const methodKey = `${node.getInstanceId()}/${method}`;
+    let url, methodKey;
+    let instanceId;
+    let node: ServiceInstance;
+    try {
+      node = this.lb.choose(this.options.service);
+      methodKey = `${node.getInstanceId()}/${method}`;
+      instanceId = node.getInstanceId();
+      url = `${node.getHost()}:${node.getPort()}`;
+    } catch (e) {
+      if (this.options.url) {
+        methodKey = `${this.options.url}/${method}`;
+        instanceId = this.options.url;
+        url = this.options.url;
+      } else {
+        throw e;
+      }
+    }
+
     if (!this.serviceCache.get(methodKey)) {
-      if (!this.proxyCache.has(node.getInstanceId())) {
+      if (!this.proxyCache.has(instanceId)) {
         const proxy = new ClientGrpcProxy({
-          url: `${node.getHost()}:${node.getPort()}`,
+          url,
           package: this.options.package,
           protoPath: this.options.protoPath,
         });
-        this.proxyCache.set(node.getInstanceId(), proxy);
+        this.proxyCache.set(instanceId, proxy);
       }
-      const proxy = this.proxyCache.get(node.getInstanceId());
+      const proxy = this.proxyCache.get(instanceId);
       const service = proxy.getService<T>(name);
       this.serviceCache.set(methodKey, service);
     }

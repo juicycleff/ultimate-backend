@@ -18,9 +18,8 @@
  * Last modified:     18/03/2021, 22:23
  ******************************************************************************/
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { ClientOptions } from './interface';
+import { ClientOptions, ClientMetadata } from './interface';
 import { LoadBalancerClient } from '@ultimate-backend/loadbalancer';
-import { ClientMetadata } from './interface/client-metdata.interface';
 import { ClientFactory } from './client.factory';
 import { Brakes } from '@ultimate-backend/brakes';
 

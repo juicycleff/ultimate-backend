@@ -42,10 +42,10 @@ export class HttpClient {
 
   constructor(
     private readonly lb: LoadBalancerClient,
-    options: IHttpServiceClient,
+    private readonly clientOptions: IHttpServiceClient,
     @Optional() private readonly brakes: Brakes
   ) {
-    this.init(options);
+    this.init(clientOptions);
   }
 
   init(options: IHttpServiceClient) {
@@ -179,8 +179,17 @@ export class HttpClient {
     baseUrl: string;
     node: ServiceInstance;
   } {
-    this.node = this.lb.choose(this.serviceId);
-    const baseUrl = `${this.node.getScheme()}://${this.node.getHost()}:${this.node.getPort()}`;
-    return { baseUrl, node: this.node };
+    try {
+      this.node = this.lb.choose(this.serviceId);
+      const baseUrl = `${this.node.getScheme()}://${this.node.getHost()}:${this.node.getPort()}`;
+
+      return { baseUrl: baseUrl ?? this.clientOptions.url, node: this.node };
+    } catch (e) {
+      if (this.clientOptions.url) {
+        return { baseUrl: this.clientOptions.url, node: null };
+      }
+
+      throw e;
+    }
   }
 }

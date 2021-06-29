@@ -19,7 +19,7 @@
  ******************************************************************************/
 import { Reflector } from '@nestjs/core';
 import { Injectable } from '@nestjs/common';
-import { ClientMetadata } from './interface/client-metdata.interface';
+import { ClientMetadata } from './interface';
 import {
   CLIENT_SERVICE,
   GRAPHQL_CLIENT_SERVICE,

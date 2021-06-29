@@ -19,9 +19,8 @@
  ******************************************************************************/
 import { LoadBalancerClient } from '@ultimate-backend/loadbalancer';
 import { ClientOptions } from './interface';
-import { GrpcClient, HttpClient } from './transports';
+import { GrpcClient, HttpClient, GraphQLClient } from './transports';
 import { Brakes } from '@ultimate-backend/brakes';
-import { GraphQLClient } from './transports/graphql.client';
 
 export class ClientFactory {
   private static cache = new Map<

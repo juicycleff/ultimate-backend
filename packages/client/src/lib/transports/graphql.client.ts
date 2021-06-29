@@ -52,7 +52,7 @@ export class GraphQLClient {
 
   init() {
     try {
-      const { service, path, url, transport, ...rest } = this.options;
+      const { service, ...rest } = this.options;
       if (!service) {
         throw new GraphqlClientExecuteException('missing service id/name');
       }
@@ -147,8 +147,17 @@ export class GraphQLClient {
     baseUrl: string;
     node: ServiceInstance;
   } {
-    this.node = this.lb.choose(this.serviceId);
-    const baseUrl = `${this.node.getScheme()}://${this.node.getHost()}:${this.node.getPort()}`;
-    return { baseUrl, node: this.node };
+    try {
+      this.node = this.lb.choose(this.serviceId);
+      const baseUrl = `${this.node.getScheme()}://${this.node.getHost()}:${this.node.getPort()}`;
+
+      return { baseUrl: baseUrl ?? this.options.url, node: this.node };
+    } catch (e) {
+      if (this.options.url) {
+        return { baseUrl: this.options.url, node: null };
+      }
+
+      throw e;
+    }
   }
 }
