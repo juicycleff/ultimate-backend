@@ -630,6 +630,16 @@
             "jestConfig": "packages/kubernetes/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/kubernetes",
+            "tsConfig": "packages/kubernetes/tsconfig.lib.json",
+            "packageJson": "packages/kubernetes/package.json",
+            "main": "packages/kubernetes/src/index.ts",
+            "assets": ["packages/kubernetes/*.md"]
+          }
         }
       }
     },

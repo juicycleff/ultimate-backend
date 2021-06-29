@@ -88,8 +88,12 @@ function command() {
   // Publish
   for (let project of projects) {
     if (project !== 'gateway' || project !== 'messaging') {
-      shell.exec(`cd dist/packages/${project} && npm publish --access public`);
-      shell.exec('cd ../../../');
+      try {
+        shell.exec(`cd dist/packages/${project} && npm publish --access public`);
+        shell.exec('cd ../../../');
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 }
