@@ -1,5 +1,5 @@
 export interface IReactiveClient<C> {
-  connect(opts: any, client: C): Promise<any>;
+  connect(): Promise<any>;
 
   close(): void | Promise<void>;
 }

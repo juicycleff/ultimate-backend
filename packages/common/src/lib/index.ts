@@ -6,3 +6,4 @@ export * from './exceptions';
 export * from './health';
 export * from './meta-store';
 export * from './common.module';
+export * from './config';

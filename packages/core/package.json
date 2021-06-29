@@ -2,8 +2,8 @@
   "name": "@ultimate-backend/core",
   "version": "0.10.2",
   "peerDependencies": {
-    "@ultimate-backend/bootstrap": "^0.10.1",
-    "@ultimate-backend/common": "^0.10.1",
+    "@ultimate-backend/bootstrap": "^0.10.3",
+    "@ultimate-backend/common": "^0.10.3",
     "connect-redis": "^5.2.0",
     "express-session": "^1.17.2",
     "helmet": "^4.6.0",

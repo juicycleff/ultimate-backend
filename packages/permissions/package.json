@@ -3,6 +3,6 @@
   "version": "0.10.2",
   "dependencies": {
     "@nestjs/common": "^7.6.15",
-    "@ultimate-backend/common": "0.10.1"
+    "@ultimate-backend/common": "^0.10.3"
   }
 }
