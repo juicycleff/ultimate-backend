@@ -18,14 +18,18 @@
  * Last modified:     07/02/2021, 11:27
  ******************************************************************************/
 
-import { EnvConfigOptions, IConfigSource } from '../interfaces';
+import { EnvConfigOptions } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { isPlainObject } from 'lodash';
-import { LoggerUtil } from '@ultimate-backend/common';
-import { ConfigOptions } from '../config-options';
-import { ConfigStore } from '../config.store';
-import { ConfigSource } from '../config.enum';
+import {
+  ConfigSource,
+  IConfigSource,
+  IConfigStore,
+  InjectConfigModuleOptions,
+  InjectConfigStore,
+  LoggerUtil,
+} from '@ultimate-backend/common';
 import { readEnv } from 'read-env';
 
 @Injectable()
@@ -34,8 +38,8 @@ export class ConfigEnvSource implements IConfigSource, OnModuleInit {
   private logger = new LoggerUtil(ConfigEnvSource.name);
 
   constructor(
-    private readonly options: ConfigOptions,
-    private readonly store: ConfigStore
+    @InjectConfigModuleOptions() private readonly options: any,
+    @InjectConfigStore() private readonly store: IConfigStore<any>
   ) {}
 
   async onModuleInit() {

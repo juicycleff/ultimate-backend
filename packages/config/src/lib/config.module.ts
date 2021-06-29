@@ -35,6 +35,10 @@ import { DiscoveryModule } from '@nestjs/core';
 import { ConfigMetadataAccessor } from './config-metadata.accessor';
 import { ConfigOrchestrator } from './config.orchestrator';
 import { ConfigDiscovery } from './config.discovery';
+import {
+  CONFIG_MODULE_OPTIONS_SHARED,
+  CONFIG_STORE_SHARED,
+} from '@ultimate-backend/common';
 
 @Global()
 @Module({
@@ -43,27 +47,44 @@ import { ConfigDiscovery } from './config.discovery';
 })
 export class ConfigModule {
   static forRoot(options?: ConfigModuleOptions): DynamicModule {
+    const sharedConfig = {
+      provide: CONFIG_MODULE_OPTIONS_SHARED,
+      useClass: ConfigOptions,
+    };
+    const sharedConfigStore = {
+      provide: CONFIG_STORE_SHARED,
+      useClass: ConfigStore,
+    };
+
     const providers = [
       {
         provide: CONFIG_CONFIGURATION_OPTIONS,
         useValue: options,
       },
-      ConfigOptions,
+      sharedConfig,
       ...configSourceProviders(options),
       ConfigDiscovery,
-      ConfigStore,
+      sharedConfigStore,
     ];
 
     return {
       module: ConfigModule,
       providers,
       global: options.global || true,
-      exports: [ConfigStore],
+      exports: [sharedConfigStore, sharedConfig],
     };
   }
 
   static forRootAsync(options: ConfigModuleAsyncOptions): DynamicModule {
     let providers = [];
+    const sharedConfig = {
+      provide: CONFIG_MODULE_OPTIONS_SHARED,
+      useClass: ConfigOptions,
+    };
+    const sharedConfigStore = {
+      provide: CONFIG_STORE_SHARED,
+      useClass: ConfigStore,
+    };
 
     const configProvider: Provider = {
       provide: CONFIG_CONFIGURATION_OPTIONS,
@@ -82,10 +103,11 @@ export class ConfigModule {
         ...asyncProviders,
         ...providers,
         configProvider,
-        ConfigOptions,
+        sharedConfig,
         ConfigDiscovery,
-        ConfigStore,
+        sharedConfigStore,
       ],
+      exports: [sharedConfigStore, sharedConfig],
       global: options.global || true,
     };
   }

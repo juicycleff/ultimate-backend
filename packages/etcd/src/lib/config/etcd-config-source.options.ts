@@ -14,46 +14,14 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-options.ts
- * Last modified:     14/03/2021, 17:37
+ * File name:         etcd-config-source.options.ts
+ * Last modified:     24/06/2021, 02:18
  ******************************************************************************/
-import { ConfigModuleOptions } from './interfaces';
-import { Injectable, OnModuleInit, Optional } from '@nestjs/common';
-import { merge, isPlainObject, isEmpty } from 'lodash';
-import { BootConfig } from '@ultimate-backend/bootstrap';
-import { InjectConfigOptions } from './decorators/inject-config.decorator';
 
-@Injectable()
-export class ConfigOptions implements OnModuleInit {
-  private CONFIG_PREFIX = 'config';
-  private options: ConfigModuleOptions;
+import { BaseConfigOptions, ConfigSource } from '@ultimate-backend/common';
 
-  constructor(
-    @InjectConfigOptions() private opts: ConfigModuleOptions,
-    @Optional() private readonly bootConfig: BootConfig
-  ) {}
-
-  get config(): ConfigModuleOptions {
-    return this.options;
-  }
-
-  onModuleInit() {
-    let _tempConfig = {};
-    if (this.bootConfig) {
-      _tempConfig = this.bootConfig.get<ConfigModuleOptions>(
-        this.CONFIG_PREFIX,
-        this.opts
-      );
-    }
-
-    if (this.opts) {
-      this.options = merge({}, this.opts, this.options, _tempConfig);
-    }
-
-    if (!isPlainObject(this.options) || isEmpty(this.options)) {
-      throw new Error(
-        'config option is missing in bootstrap and module config'
-      );
-    }
-  }
+export interface EtcdConfigOptions extends BaseConfigOptions {
+  source: ConfigSource.Etcd;
+  key: string;
+  namespace?: string;
 }

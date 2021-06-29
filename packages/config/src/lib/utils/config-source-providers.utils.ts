@@ -21,12 +21,14 @@
 
 import { ConfigModuleOptions } from '../interfaces';
 import { Provider } from '@nestjs/common';
-import { ConfigSource } from '../config.enum';
+import { ConfigSource } from '@ultimate-backend/common';
+import { loadPackage } from '@nestjs/common/utils/load-package.util';
 
 export function configSourceProviders(
   options: ConfigModuleOptions
 ): Provider[] {
   const providers: Provider[] = [];
+  let importPackage;
 
   if (!Array.isArray(options.load)) {
     switch (options.load.source) {
@@ -35,24 +37,44 @@ export function configSourceProviders(
         providers.push(ConfigEnvSource);
         break;
       case ConfigSource.Consul:
-        const {
-          ConfigConsulSource,
-        } = require('../sources/config-consul.source');
-        providers.push(ConfigConsulSource);
+        importPackage = loadPackage(
+          '@ultimate-backend/consul',
+          '@ultimate-backend/consul',
+          () => require('@ultimate-backend/consul')
+        );
+        providers.push(importPackage.ConfigConsulSource);
         break;
       case ConfigSource.Zookeeper:
-        const {
-          ConfigZookeeperSource,
-        } = require('../sources/config-zookeeper.source');
-        providers.push(ConfigZookeeperSource);
+        importPackage = loadPackage(
+          '@ultimate-backend/zookeeper',
+          '@ultimate-backend/zookeeper',
+          () => require('@ultimate-backend/etcd')
+        );
+        providers.push(importPackage.ConfigZookeeperSource);
         break;
       case ConfigSource.File:
         const { ConfigFileSource } = require('../sources/config-file.source');
         providers.push(ConfigFileSource);
         break;
       case ConfigSource.Etcd:
-        const { ConfigEtcdSource } = require('../sources/config-etcd.source');
-        providers.push(ConfigEtcdSource);
+        importPackage = loadPackage(
+          '@ultimate-backend/etcd',
+          '@ultimate-backend/etcd',
+          () => require('@ultimate-backend/etcd')
+        );
+        providers.push(importPackage.ConfigEtcdSource);
+        break;
+      case ConfigSource.Kubernetes:
+        importPackage = loadPackage(
+          '@ultimate-backend/kubernetes',
+          '@ultimate-backend/kubernetes',
+          () => require('@ultimate-backend/kubernetes')
+        );
+        providers.push(importPackage.KubernetesConfigSource);
+        break;
+      default:
+        const importPack = require('../sources/config-env.source');
+        providers.push(importPack.ConfigEnvSource);
         break;
     }
   } else {
@@ -68,8 +90,12 @@ export function configSourceProviders(
       (value) => value.source === ConfigSource.Etcd
     );
     if (etcds.length > 0) {
-      const { ConfigEtcdSource } = require('../sources/config-etcd.source');
-      providers.push(ConfigEtcdSource);
+      importPackage = loadPackage(
+        '@ultimate-backend/etcd',
+        '@ultimate-backend/etcd',
+        () => require('@ultimate-backend/etcd')
+      );
+      providers.push(importPackage.ConfigEtcdSource);
     }
 
     const files = options.load.filter(
@@ -84,97 +110,36 @@ export function configSourceProviders(
       (value) => value.source === ConfigSource.Consul
     );
     if (consuls.length > 0) {
-      const { ConfigConsulSource } = require('../sources/config-consul.source');
-      providers.push(ConfigConsulSource);
+      importPackage = loadPackage(
+        '@ultimate-backend/consul',
+        '@ultimate-backend/consul',
+        () => require('@ultimate-backend/consul')
+      );
+      providers.push(importPackage.ConfigConsulSource);
     }
 
     const zookeepers = options.load.filter(
       (value) => value.source === ConfigSource.Zookeeper
     );
     if (zookeepers.length > 0) {
-      const {
-        ConfigZookeeperSource,
-      } = require('../sources/config-zookeeper.source');
-      providers.push(ConfigZookeeperSource);
+      importPackage = loadPackage(
+        '@ultimate-backend/zookeeper',
+        '@ultimate-backend/zookeeper',
+        () => require('@ultimate-backend/zookeeper')
+      );
+      providers.push(importPackage.ConfigZookeeperSource);
     }
-  }
 
-  return providers;
-}
-
-export function configSourceProvidersAsync(
-  options: ConfigModuleOptions
-): Provider[] {
-  const providers: Provider[] = [];
-
-  if (!Array.isArray(options.load)) {
-    switch (options.load.source) {
-      case ConfigSource.Env:
-        const { ConfigEnvSource } = require('../sources/config-env.source');
-        providers.push(ConfigEnvSource);
-        break;
-      case ConfigSource.Consul:
-        const {
-          ConfigConsulSource,
-        } = require('../sources/config-consul.source');
-        providers.push(ConfigConsulSource);
-        break;
-      case ConfigSource.Zookeeper:
-        const {
-          ConfigZookeeperSource,
-        } = require('../sources/config-zookeeper.source');
-        providers.push(ConfigZookeeperSource);
-        break;
-      case ConfigSource.File:
-        const { ConfigFileSource } = require('../sources/config-file.source');
-        providers.push(ConfigFileSource);
-        break;
-      case ConfigSource.Etcd:
-        const { ConfigEtcdSource } = require('../sources/config-etcd.source');
-        providers.push(ConfigEtcdSource);
-        break;
-    }
-  } else {
-    const envs = options.load.filter(
-      (value) => value.source === ConfigSource.Env
+    const k8s = options.load.filter(
+      (value) => value.source === ConfigSource.Kubernetes
     );
-    if (envs.length > 0) {
-      const { ConfigEnvSource } = require('../sources/config-env.source');
-      providers.push(ConfigEnvSource);
-    }
-
-    const etcds = options.load.filter(
-      (value) => value.source === ConfigSource.Etcd
-    );
-    if (etcds.length > 0) {
-      const { ConfigEtcdSource } = require('../sources/config-etcd.source');
-      providers.push(ConfigEtcdSource);
-    }
-
-    const files = options.load.filter(
-      (value) => value.source === ConfigSource.File
-    );
-    if (files.length > 0) {
-      const { ConfigFileSource } = require('../sources/config-file.source');
-      providers.push(ConfigFileSource);
-    }
-
-    const consuls = options.load.filter(
-      (value) => value.source === ConfigSource.Consul
-    );
-    if (consuls.length > 0) {
-      const { ConfigConsulSource } = require('../sources/config-consul.source');
-      providers.push(ConfigConsulSource);
-    }
-
-    const zookeepers = options.load.filter(
-      (value) => value.source === ConfigSource.Zookeeper
-    );
-    if (zookeepers.length > 0) {
-      const {
-        ConfigZookeeperSource,
-      } = require('../sources/config-zookeeper.source');
-      providers.push(ConfigZookeeperSource);
+    if (k8s.length > 0) {
+      importPackage = loadPackage(
+        '@ultimate-backend/kubernetes',
+        '@ultimate-backend/kubernetes',
+        () => require('@ultimate-backend/kubernetes')
+      );
+      providers.push(importPackage.KubernetesConfigSource);
     }
   }
 

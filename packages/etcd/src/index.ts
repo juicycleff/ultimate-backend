@@ -23,6 +23,7 @@ export * from './lib/etcd.client';
 export * from './lib/etcd.types';
 export * from './lib/service-registry';
 export * from './lib/discovery';
+export * from './lib/config/etcd-config.source';
 
 import * as etcd from 'etcd3';
 

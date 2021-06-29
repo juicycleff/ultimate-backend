@@ -18,19 +18,21 @@
  * Last modified:     07/02/2021, 11:30
  ******************************************************************************/
 
-import { ConsulConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
 import { consul, ConsulClient } from '@ultimate-backend/consul';
-import { ConfigOptions } from '../config-options';
-import { ConfigStore } from '../config.store';
-import { ConfigSource } from '../config.enum';
 import {
+  ConfigSetException,
+  ConfigSource,
+  IConfigSource,
+  IConfigStore,
+  InjectConfigModuleOptions,
+  InjectConfigStore,
   LoggerUtil,
   objectToStringFormat,
   stringToObjectType,
+  BaseConfigOptions,
 } from '@ultimate-backend/common';
-import { ConfigSetException } from '../exceptions';
 
 interface KVResult {
   LockIndex: number;
@@ -39,6 +41,12 @@ interface KVResult {
   Value: string;
   CreateIndex: number;
   ModifyIndex: number;
+}
+
+interface ConsulConfigOptions extends BaseConfigOptions {
+  source: ConfigSource.Consul;
+  prefix?: string;
+  key: string;
 }
 
 /**
@@ -52,8 +60,8 @@ export class ConfigConsulSource implements IConfigSource, OnModuleInit {
 
   constructor(
     private readonly client: ConsulClient,
-    private readonly options: ConfigOptions,
-    private readonly store: ConfigStore
+    @InjectConfigModuleOptions() private readonly options: any,
+    @InjectConfigStore() private readonly store: IConfigStore<any>
   ) {}
 
   onModuleInit(): any {

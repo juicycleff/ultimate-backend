@@ -20,10 +20,15 @@
 import * as fs from 'fs';
 import * as util from 'util';
 import { isPlainObject } from 'lodash';
-import { FileConfigOptions, IConfigSource } from '../interfaces';
+import { FileConfigOptions } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigOptions } from '../config-options';
-import { ConfigSource, ConfigStore } from '@ultimate-backend/config';
+import {
+  ConfigSource,
+  IConfigSource,
+  IConfigStore,
+  InjectConfigModuleOptions,
+  InjectConfigStore,
+} from '@ultimate-backend/common';
 import { LoggerUtil, stringToObjectType } from '@ultimate-backend/common';
 
 // Convert fs.readFile into Promise version of same
@@ -35,8 +40,8 @@ export class ConfigFileSource implements IConfigSource, OnModuleInit {
   private logger = new LoggerUtil(ConfigFileSource.name);
 
   constructor(
-    private readonly options: ConfigOptions,
-    private readonly store: ConfigStore
+    @InjectConfigModuleOptions() private readonly options: any,
+    @InjectConfigStore() private readonly store: IConfigStore<any>
   ) {}
 
   async onModuleInit() {

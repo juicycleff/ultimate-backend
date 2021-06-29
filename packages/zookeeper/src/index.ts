@@ -5,5 +5,6 @@ export * from './lib/zookeeper.module';
 export * from './lib/zookeeper.client';
 export * from './lib/service-registry';
 export * from './lib/discovery';
+export * from './lib/config/config-zookeeper.source';
 
 export { Zookeeper };

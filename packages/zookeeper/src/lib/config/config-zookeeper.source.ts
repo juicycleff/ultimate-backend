@@ -17,18 +17,27 @@
  * File name:         config-zookeeper.source.ts
  * Last modified:     07/02/2021, 11:31
  ******************************************************************************/
-import { ZookeeperConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
 import {
+  BaseConfigOptions,
+  ConfigSetException,
+  ConfigSource,
+  IConfigSource,
+  IConfigStore,
+  InjectConfigModuleOptions,
+  InjectConfigStore,
   LoggerUtil,
   objectToStringFormat,
   stringToObjectType,
 } from '@ultimate-backend/common';
-import { ConfigOptions } from '../config-options';
-import { ConfigSource, ConfigStore } from '@ultimate-backend/config';
-import { ZookeeperClient, Zookeeper } from '@ultimate-backend/zookeeper';
-import { ConfigSetException } from '../exceptions';
+import { ZookeeperClient, Zookeeper } from '../../';
+
+export interface ZookeeperConfigOptions extends BaseConfigOptions {
+  source: ConfigSource.Zookeeper;
+  prefix?: string;
+  key: string;
+}
 
 @Injectable()
 export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
@@ -38,8 +47,8 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
 
   constructor(
     private readonly zookeeper: ZookeeperClient,
-    private readonly options: ConfigOptions,
-    private readonly store: ConfigStore
+    @InjectConfigModuleOptions() private readonly options: any,
+    @InjectConfigStore() private readonly store: IConfigStore<any>
   ) {
     this.storeUpdate.bind(this);
   }
@@ -129,7 +138,7 @@ export class ConfigZookeeperSource implements IConfigSource, OnModuleInit {
 
   private storeUpdate(
     data: string | Buffer,
-    store: ConfigStore,
+    store: IConfigStore<any>,
     logger: LoggerUtil
   ) {
     try {

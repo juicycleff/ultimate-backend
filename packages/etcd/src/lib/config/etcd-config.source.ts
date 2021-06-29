@@ -14,42 +14,46 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * File name:         config-etcd.source.ts
- * Last modified:     08/02/2021, 00:17
+ * File name:         etcd-config.source.ts
+ * Last modified:     28/03/2021, 17:35
  ******************************************************************************/
-import { EtcdConfigOptions, IConfigSource } from '../interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { isPlainObject } from 'lodash';
-import { EtcdClient, etcd, IWatchResponse } from '@ultimate-backend/etcd';
+import * as etcd from 'etcd3';
+import { EtcdClient } from '../etcd.client';
 import {
+  ConfigSetException,
+  ConfigSource,
+  IConfigSource,
+  IConfigStore,
+  InjectConfigModuleOptions,
+  InjectConfigStore,
   LoggerUtil,
   objectToStringFormat,
   stringToObjectType,
 } from '@ultimate-backend/common';
-import { ConfigSetException } from '../exceptions';
-import { ConfigSource } from '../config.enum';
-import { ConfigStore } from '../config.store';
-import { ConfigOptions } from '../config-options';
+import { IWatchResponse } from '../../';
+import { EtcdConfigOptions } from './etcd-config-source.options';
 
 /**
  * This is a client implementation of config for ETCD
  * @packageDocumentation
  */
 @Injectable()
-export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
+export class EtcdConfigSource implements IConfigSource, OnModuleInit {
   private watchers: Map<string, etcd.Watcher> = new Map();
-  private logger = new LoggerUtil(ConfigEtcdSource.name);
+  private logger = new LoggerUtil(EtcdConfigSource.name);
   private defaultNamespace: string;
 
   constructor(
     private readonly etcd: EtcdClient,
-    private readonly options: ConfigOptions,
-    private readonly store: ConfigStore
+    @InjectConfigModuleOptions() private readonly options: any,
+    @InjectConfigStore() private readonly store: IConfigStore<any>
   ) {}
 
   async onModuleInit() {
     this.logger = new LoggerUtil(
-      ConfigEtcdSource.name,
+      EtcdConfigSource.name,
       this.options.config.debug
     );
     this.defaultNamespace = this.options.config.namespace;
@@ -65,7 +69,7 @@ export class ConfigEtcdSource implements IConfigSource, OnModuleInit {
    *
    * @example
    * ```typescript
-   * const config = ConfigEtcdSource(...);
+   * const config = EtcdConfigSource(...);
    * config.get<string>('name.firstname', 'Johny);
    * ```
    */

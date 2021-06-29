@@ -19,11 +19,7 @@
  ******************************************************************************/
 
 import { ModuleMetadata, Type } from '@nestjs/common';
-import { ConfigSource } from '../config.enum';
-
-export interface BaseConfigOptions {
-  enableCache?: boolean;
-}
+import { BaseConfigOptions, ConfigSource } from '@ultimate-backend/common';
 
 export interface EnvConfigOptions extends BaseConfigOptions {
   source: ConfigSource.Env;
@@ -55,11 +51,19 @@ export interface ZookeeperConfigOptions extends BaseConfigOptions {
   key: string;
 }
 
+export interface KubernetesConfigOptions extends BaseConfigOptions {
+  source: ConfigSource.Kubernetes;
+  key: string;
+  name: string;
+  namespace?: string;
+}
+
 export type Configurations =
   | EnvConfigOptions
   | ConsulConfigOptions
   | ZookeeperConfigOptions
   | FileConfigOptions
+  | KubernetesConfigOptions
   | EtcdConfigOptions;
 
 export interface ConfigModuleOptions {

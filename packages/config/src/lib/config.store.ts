@@ -30,9 +30,10 @@ import {
 } from 'lodash';
 import { EventEmitter } from 'events';
 import { Injectable } from '@nestjs/common';
+import { IConfigStore } from '@ultimate-backend/common';
 
 @Injectable()
-export class ConfigStore extends EventEmitter {
+export class ConfigStore extends EventEmitter implements IConfigStore<any> {
   private _cache: Object = {};
   private eventName = 'changed';
 
