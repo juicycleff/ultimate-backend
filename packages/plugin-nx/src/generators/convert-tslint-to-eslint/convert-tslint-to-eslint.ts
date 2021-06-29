@@ -30,6 +30,7 @@ export async function conversionGenerator(
    * See the ProjectConverter implementation for a full breakdown of what it does.
    */
   const projectConverter = new ProjectConverter({
+    ignoreExistingTslintConfig: false,
     host,
     projectName: options.project,
     eslintInitializer: async ({ projectName, projectConfig }) => {
@@ -56,7 +57,7 @@ export async function conversionGenerator(
           js,
         } as AddLintForLibrarySchema);
       }
-    },
+    }
   });
 
   /**
@@ -89,7 +90,7 @@ export async function conversionGenerator(
    */
   projectConverter.setDefaults(
     '@nrwl/nest',
-    options.removeTSLintIfNoMoreTSLintTargets
+    options
   );
 
   /**
