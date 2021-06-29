@@ -31,67 +31,70 @@
     }
   },
   "projects": {
-    "core": {
+    "adv-example": {
       "tags": []
     },
-    "common": {
+    "bootstrap": {
       "tags": []
     },
-    "cloud": {
-      "tags": []
-    },
-    "loadbalancer": {
-      "tags": []
-    },
-    "permissions": {
+    "brakes": {
       "tags": []
     },
     "cli": {
       "tags": [],
       "implicitDependencies": ["plugin-nx"]
     },
-    "example": {
+    "client": {
       "tags": []
     },
-    "adv-example": {
+    "cloud": {
+      "tags": []
+    },
+    "common": {
+      "tags": []
+    },
+    "config": {
       "tags": []
     },
     "consul": {
       "tags": [],
       "implicitDependencies": []
     },
-    "zookeeper": {
+    "core": {
+      "tags": []
+    },
+    "couchbase": {
+      "tags": []
+    },
+    "create-ub-project": {
       "tags": []
     },
     "etcd": {
       "tags": [],
       "implicitDependencies": ["common"]
     },
-    "config": {
-      "tags": []
-    },
-    "messaging": {
-      "tags": []
-    },
-    "redis": {
-      "tags": []
-    },
     "event-store": {
-      "tags": []
-    },
-    "couchbase": {
-      "tags": []
-    },
-    "client": {
-      "tags": []
-    },
-    "brakes": {
       "tags": []
     },
     "event-store-example": {
       "tags": []
     },
-    "workspace": {
+    "example": {
+      "tags": []
+    },
+    "gateway": {
+      "tags": []
+    },
+    "kubernetes": {
+      "tags": []
+    },
+    "loadbalancer": {
+      "tags": []
+    },
+    "messaging": {
+      "tags": []
+    },
+    "permissions": {
       "tags": []
     },
     "plugin-nx": {
@@ -101,13 +104,13 @@
       "tags": [],
       "implicitDependencies": ["plugin-nx"]
     },
-    "gateway": {
+    "redis": {
       "tags": []
     },
-    "create-ub-project": {
+    "workspace": {
       "tags": []
     },
-    "bootstrap": {
+    "zookeeper": {
       "tags": []
     }
   }

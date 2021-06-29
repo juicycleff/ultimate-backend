@@ -27,5 +27,6 @@ module.exports = {
     '<rootDir>/packages/gateway',
     '<rootDir>/packages/create-ub-project',
     '<rootDir>/packages/bootstrap',
+    '<rootDir>/packages/kubernetes',
   ],
 };
