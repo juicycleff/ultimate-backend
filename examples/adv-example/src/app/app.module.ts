@@ -9,19 +9,21 @@ import { BrakesModule } from '@ultimate-backend/brakes';
 import { GraphQLModule } from '@nestjs/graphql';
 import { BootstrapModule } from '@ultimate-backend/bootstrap';
 import { EtcdModule } from '@ultimate-backend/etcd';
-import { ZookeeperModule } from '@ultimate-backend/zookeeper';
 import { UsersModule } from './users/users.module';
 import { PostModule } from './post/post.module';
 import { AppController } from './app.controller';
 import { ConfigModule, ConfigSource } from '@ultimate-backend/config';
 import { PermissionsModule } from '@ultimate-backend/permissions';
 import * as path from 'path';
+import { KubernetesModule } from '@ultimate-backend/kubernetes';
 
 @Module({
   imports: [
     UsersModule,
     PostModule,
-    BootstrapModule.forRoot(),
+    BootstrapModule.forRoot({
+      filePath: path.resolve(__dirname, 'assets/bootstrap.yaml'),
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
@@ -48,6 +50,11 @@ import * as path from 'path';
           source: ConfigSource.Consul,
           key: 'ultimate-backend-config',
         },
+        {
+          source: ConfigSource.Kubernetes,
+          name: 'ultimate-backend-config',
+          key: 'config.yml',
+        },
       ],
     }),
     ConsulModule.forRoot({
@@ -72,6 +79,7 @@ import * as path from 'path';
       services: [{ strategy: 'RoundRobinStrategy', name: 'example' }],
     }),
     BrakesModule.forRoot(),
+    KubernetesModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

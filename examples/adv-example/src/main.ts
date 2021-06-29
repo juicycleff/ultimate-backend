@@ -14,6 +14,7 @@ async function bootstrap() {
   await UBServiceFactory.create(app)
     .withSwagger()
     .withPoweredBy()
+    .withMultiTenancy()
     .withPrefix('api')
     .start(parseInt(process.env.PORT, 10) || 3332);
 }

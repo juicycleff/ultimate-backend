@@ -6,6 +6,13 @@ clients:
     retryAttempts: 6000
   zookeeper:
     retryAttempts: 6000
+  kubernetes:
+    retryAttempts: 6000
+
+multitenancy:
+  tenantId: tenant-id
+  tenantResolver:
+    resolverType: 'Header'
 
 loadbalancer:
   services:
