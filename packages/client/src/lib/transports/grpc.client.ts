@@ -50,8 +50,17 @@ export class GrpcClient {
           return service[key](...args);
         }
 
+        if (this.options.hooks && this.options.hooks.preRequest) {
+          this.options.hooks.preRequest(key, node);
+        }
+
         const observable = service[key](...args);
-        return this.lb.executeGrpc<Observable<any>>(key, node, observable);
+        const req = this.lb.executeGrpc<Observable<any>>(key, node, observable);
+        if (this.options.hooks && this.options.hooks.postRequest) {
+          this.options.hooks.postRequest(req);
+        }
+
+        return req;
       };
     });
 

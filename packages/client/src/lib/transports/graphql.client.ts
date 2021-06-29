@@ -107,11 +107,20 @@ export class GraphQLClient {
   }
 
   private doRequest<T, V>(args: any[]): T {
-    return this.lb.executeGraphql<T, V>(
+    if (this.options.hooks && this.options.hooks.preRequest) {
+      this.options.hooks.preRequest(this.serviceId, this.node);
+    }
+
+    const req = this.lb.executeGraphql<T, V>(
       this.serviceId,
       this.node,
       new LoadBalancerRequest(this.instance, args)
     );
+    if (this.options.hooks && this.options.hooks.postRequest) {
+      this.options.hooks.postRequest(req);
+    }
+
+    return req;
   }
 
   public initiateRequest<T, V>(args: any[]) {
