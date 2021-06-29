@@ -2,9 +2,9 @@
   "name": "@ultimate-backend/loadbalancer",
   "version": "0.11.0",
   "peerDependencies": {
-    "@ultimate-backend/common": "^0.10.3",
+    "@ultimate-backend/common": "^0.11.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.17",
-    "@ultimate-backend/bootstrap": "^0.10.3"
+    "@ultimate-backend/bootstrap": "^0.11.0"
   }
 }

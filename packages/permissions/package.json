@@ -1,8 +1,8 @@
 {
   "name": "@ultimate-backend/permissions",
   "version": "0.11.0",
-  "dependencies": {
+  "peerDependencies": {
     "@nestjs/common": "^7.6.15",
-    "@ultimate-backend/common": "^0.10.3"
+    "@ultimate-backend/common": "^0.11.0"
   }
 }
