@@ -45,7 +45,7 @@ export class GenInterfaceCommand implements ICommand {
   description = 'generate nestjs interface for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:interface`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-interface`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

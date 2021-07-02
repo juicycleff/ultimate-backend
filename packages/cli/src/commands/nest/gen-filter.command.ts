@@ -45,7 +45,7 @@ export class GenFilterCommand implements ICommand {
   description = 'generate nestjs filter for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:filter`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-filter`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

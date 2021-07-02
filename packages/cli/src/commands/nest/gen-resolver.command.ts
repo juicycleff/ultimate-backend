@@ -45,7 +45,7 @@ export class GenResolverCommand implements ICommand {
   description = 'generate nestjs resolver for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:resolver`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-resolver`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

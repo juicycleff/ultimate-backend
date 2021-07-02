@@ -45,7 +45,7 @@ export class GenInterceptorCommand implements ICommand {
   description = 'generate nestjs interceptor for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:interceptor`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-interceptor`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

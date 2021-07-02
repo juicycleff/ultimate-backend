@@ -896,5 +896,11 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "cli"
+  "defaultProject": "cli",
+  "generators": {
+    "@nrwl/node:library": {
+      "buildable": true,
+      "publishable": true
+    }
+  }
 }

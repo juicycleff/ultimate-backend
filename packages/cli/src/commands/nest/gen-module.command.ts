@@ -45,7 +45,7 @@ export class GenModuleCommand implements ICommand {
   description = 'generate nestjs module for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:module`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-module`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

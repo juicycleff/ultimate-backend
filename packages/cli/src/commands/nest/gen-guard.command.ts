@@ -45,7 +45,7 @@ export class GenGuardCommand implements ICommand {
   description = 'generate nestjs class for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:guard`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-guard`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }

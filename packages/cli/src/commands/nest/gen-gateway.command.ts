@@ -45,7 +45,7 @@ export class GenGatewayCommand implements ICommand {
   description = 'generate nestjs gateway for service';
 
   action(name, options, command, ...rest): void {
-    let cmd = `npx nx g @ultimate-backend/plugin-nx:gateway`;
+    let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-gateway`;
     if (name) {
       cmd = cmd + ` ${name}`;
     }
