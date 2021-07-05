@@ -117,28 +117,7 @@ export class KafkaBroker
   }
 
   async publish<T extends IEvent & { streamName?: string }>(event: T) {
-    if (!event) {
-      return;
-    }
-
-    const payload = Buffer.from(JSON.stringify(event));
-    let streamId = this.getStreamId(this.streamName);
-    if (!this.featureStreamConfig.strictStreamName) {
-      streamId = this.getStreamId(event.streamName ?? this.streamName);
-    }
-
-    try {
-      await this.kafka.producer.send({
-        topic: streamId,
-        messages: [
-          {
-            value: payload,
-          },
-        ],
-      });
-    } catch (e) {
-      this.logger.error(e);
-    }
+    return this.publishAll([event]);
   }
 
   async publishAll<T extends IEvent & { streamName?: string }>(events: T[]) {
