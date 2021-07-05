@@ -107,9 +107,9 @@ export class KafkaBroker
       }
 
       if (messages.has(streamId)) {
-        messages.get(streamId).push({ value: payload });
+        messages.get(streamId).push({ value: payload, headers: {eventType: event.constructor.name} });
       } else {
-        messages.set(streamId, [{ value: payload }]);
+        messages.set(streamId, [{ value: payload, headers: {eventType: event.constructor.name} }]);
       }
     }
 
@@ -204,7 +204,7 @@ export class KafkaBroker
       }
 
       const data = JSON.parse(payload.message.value.toString());
-      const eventType = payload.topic;
+      const eventType = payload.message.headers["eventType"] ? payload.message.headers["eventType"] : payload.topic;
 
       const handler = this.eventHandlers[eventType];
       if (!handler) {
