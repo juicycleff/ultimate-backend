@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/common",
-  "version": "0.10.10",
+  "version": "0.11.0",
   "peerDependencies": {
     "@nestjs/common": "^8.0.3",
     "@nestjs/core": "^8.0.3"
