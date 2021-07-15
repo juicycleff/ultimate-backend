@@ -21,48 +21,36 @@ import { Transport } from '@nestjs/microservices';
 import { GrpcOpts, SwaggerConfig } from './grpc-opts';
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import {
-  OpenAPIObject,
-  SwaggerCustomOptions,
-  SwaggerDocumentOptions,
-} from '@nestjs/swagger/dist/interfaces';
 import { BootConfig } from '@ultimate-backend/bootstrap';
 import { MultiTenancyConfig } from '../multitenancy/multi-tenant.config';
 import { enableMultiTenancy } from '../multitenancy/middleware/multi-tenancy-global.middleware';
 import { bloodTearsMiddleware } from './blood-tears.middleware';
 import * as path from 'path';
-import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
 import { ValidationPipeOptions } from '@nestjs/common/pipes/validation.pipe';
-import * as helmet from 'helmet';
-import * as csurf from 'csurf';
-import * as connectRedis from 'connect-redis';
-import * as Redis from 'ioredis';
 import {
   CorsOptions,
   CorsOptionsDelegate,
 } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { loadPackage } from '@nestjs/common/utils/load-package.util';
+import { CookieOptions, SessionOptions, SwaggerCustomOptions, SwaggerDocumentOptions } from './types';
 
 type CSurfType = {
   value?: (req: any) => string;
-  cookie?: csurf.CookieOptions | boolean;
+  cookie?: CookieOptions | boolean;
   ignoreMethods?: string[];
   sessionKey?: string;
 };
 
-const RedisSessionStore = connectRedis(session);
-
 export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
-  private _swaggerObject: OpenAPIObject;
+  private _swaggerObject: any;
   private _swaggerPath = 'docs';
   private _swaggerCustomOpts;
   private boot: BootConfig;
   private _prefix: string;
   private _swaggerOptions: Record<string, any>;
 
-  constructor(private readonly app: INestApplication) {
+  constructor(private readonly app: INestApplication, private readonly isFastify: boolean = false) {
     this.boot = app.get<BootConfig>(BootConfig);
   }
 
@@ -84,6 +72,17 @@ export class UBServiceBuilder {
       csurf?: CSurfType;
     } = {}
   ) {
+    const csurf = loadPackage(
+      'csurf',
+      'csurf',
+      () => require('csurf')
+    );
+    const helmet = loadPackage(
+      'helmet',
+      'helmet',
+      () => require('helmet')
+    );
+
     let config = options;
     if (!options) {
       config = this.boot.get('security', {});
@@ -129,11 +128,31 @@ export class UBServiceBuilder {
     return this;
   }
 
-  withSession(useRedisStore?: boolean, opts?: session.SessionOptions | string) {
-    let config = {} as session.SessionOptions;
+  withSession(useRedisStore?: boolean, opts?: SessionOptions | string) {
+    const connectRedis = loadPackage(
+      'connect-redis',
+      'connect-redis',
+      () => require('connect-redis')
+    );
+
+    const Redis = loadPackage(
+      'ioredis',
+      'ioredis',
+      () => require('ioredis')
+    );
+
+    const session = loadPackage(
+      'express-session',
+      'express-session',
+      () => require('express-session')
+    );
+
+    const RedisSessionStore = connectRedis(session);
+
+    let config = {} as SessionOptions;
 
     if (!opts) {
-      config = this.boot.get('setup.session', {}) as session.SessionOptions;
+      config = this.boot.get('setup.session', {}) as SessionOptions;
     }
 
     if (typeof opts === 'string') {
@@ -160,10 +179,16 @@ export class UBServiceBuilder {
     opts?:
       | {
           secret?: string | string[];
-          options?: cookieParser.CookieParseOptions;
+          options?: Record<string, any>;
         }
       | string
   ) {
+    const cookieParser = loadPackage(
+      'cookie-parser',
+      'cookie-parser',
+      () => require('cookie-parser')
+    );
+
     let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.cookie', {});
@@ -227,6 +252,12 @@ export class UBServiceBuilder {
   }
 
   prepareSwagger() {
+    const swaggerPackage = loadPackage(
+      '@nestjs/swagger',
+      '@nestjs/swagger',
+      () => require('@nestjs/swagger')
+    );
+
     const { path, customOpts, docOpts } = this._swaggerOptions;
     let { options } = this._swaggerOptions;
     if (path) {
@@ -244,7 +275,7 @@ export class UBServiceBuilder {
       this.boot.get('description', 'ultimate backend service');
     const version = options?.version || this.boot.get('version', 'latest');
     const tag = options?.description || this.boot.get('tag', 'service');
-    const builder = new DocumentBuilder()
+    const builder = new swaggerPackage.DocumentBuilder()
       .setTitle(title)
       .setDescription(description)
       .setVersion(version)
@@ -276,7 +307,7 @@ export class UBServiceBuilder {
       }
     }
 
-    this._swaggerObject = SwaggerModule.createDocument(
+    this._swaggerObject = swaggerPackage.SwaggerModule.createDocument(
       this.app,
       builder.build(),
       docOpts
@@ -321,7 +352,13 @@ export class UBServiceBuilder {
 
   private createSwaggerDocument() {
     if (this._swaggerObject) {
-      SwaggerModule.setup(
+      const swaggerPackage = loadPackage(
+        '@nestjs/swagger',
+        '@nestjs/swagger',
+        () => require('@nestjs/swagger')
+      );
+
+      swaggerPackage.SwaggerModule.setup(
         this._swaggerPath,
         this.app,
         this._swaggerObject,

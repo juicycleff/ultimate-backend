@@ -12,7 +12,10 @@
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*",
-      "peerDependencies": "*"
+      "peerDependencies": "*",
+      "scripts": {
+        "check:*": "*"
+      }
     },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
@@ -114,5 +117,13 @@
     "zookeeper": {
       "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }

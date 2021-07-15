@@ -28,6 +28,7 @@ import {
 import { Provider } from '@nestjs/common';
 import { MdnsServiceRegistry } from '../discoveries';
 import { validateOptions } from './validate-options';
+import { loadPackage } from '@nestjs/common/utils/load-package.util';
 
 export function getSharedProviderUtils(
   options: RegistryConfiguration
@@ -41,10 +42,11 @@ export function getSharedProviderUtils(
   };
 
   if (registryOption.discoverer === 'consul') {
-    const {
-      ConsulServiceRegistry,
-      ConsulDiscoveryClient,
-    } = require('@ultimate-backend/consul');
+    const importPackage = loadPackage(
+      '@ultimate-backend/consul',
+      '@ultimate-backend/consul',
+      () => require('@ultimate-backend/consul')
+    );
 
     configProvider.useValue = {
       service: options.service,
@@ -55,13 +57,14 @@ export function getSharedProviderUtils(
       heartbeat: options.heartbeat,
     };
 
-    sharedProviders.push(ConsulServiceRegistry);
-    sharedProviders.push(ConsulDiscoveryClient);
+    sharedProviders.push(importPackage.ConsulServiceRegistry);
+    sharedProviders.push(importPackage.ConsulDiscoveryClient);
   } else if (registryOption.discoverer === 'etcd') {
-    const {
-      EtcdServiceRegistry,
-      EtcdDiscoveryClient,
-    } = require('@ultimate-backend/etcd');
+    const importPackage = loadPackage(
+      '@ultimate-backend/etcd',
+      '@ultimate-backend/etcd',
+      () => require('@ultimate-backend/etcd')
+    );
 
     configProvider.useValue = {
       service: options.service,
@@ -72,13 +75,14 @@ export function getSharedProviderUtils(
       heartbeat: options.heartbeat,
     };
 
-    sharedProviders.push(EtcdServiceRegistry);
-    sharedProviders.push(EtcdDiscoveryClient);
+    sharedProviders.push(importPackage.EtcdServiceRegistry);
+    sharedProviders.push(importPackage.EtcdDiscoveryClient);
   } else if (registryOption.discoverer === 'zookeeper') {
-    const {
-      ZookeeperServiceRegistry,
-      ZookeeperDiscoveryClient,
-    } = require('@ultimate-backend/zookeeper');
+    const importPackage = loadPackage(
+      '@ultimate-backend/zookeeper',
+      '@ultimate-backend/zookeeper',
+      () => require('@ultimate-backend/zookeeper')
+    );
 
     configProvider.useValue = {
       service: options.service,
@@ -89,8 +93,8 @@ export function getSharedProviderUtils(
       heartbeat: options.heartbeat,
     };
 
-    sharedProviders.push(ZookeeperServiceRegistry);
-    sharedProviders.push(ZookeeperDiscoveryClient);
+    sharedProviders.push(importPackage.ZookeeperServiceRegistry);
+    sharedProviders.push(importPackage.ZookeeperDiscoveryClient);
   } else if (registryOption.discoverer === 'local') {
     configProvider.useValue = {
       service: options.service,

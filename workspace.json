@@ -897,7 +897,7 @@
     "defaultCollection": "@nrwl/nest"
   },
   "defaultProject": "cli",
-  "generators": {
+  "schematics": {
     "@nrwl/node:library": {
       "buildable": true,
       "publishable": true

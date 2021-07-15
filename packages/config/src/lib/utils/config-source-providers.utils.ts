@@ -48,7 +48,7 @@ export function configSourceProviders(
         importPackage = loadPackage(
           '@ultimate-backend/zookeeper',
           '@ultimate-backend/zookeeper',
-          () => require('@ultimate-backend/etcd')
+          () => require('@ultimate-backend/zookeeper')
         );
         providers.push(importPackage.ConfigZookeeperSource);
         break;
