@@ -2,51 +2,7 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
-## [0.10.11](https://github.com/juicycleff/ultimate-backend/compare/v0.10.10...v0.10.11) (2021-07-15)
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.10...v0.11.0) (2021-07-15)
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.10...v0.11.0) (2021-07-15)
-
-
-
-## [0.10.10](https://github.com/juicycleff/ultimate-backend/compare/v0.10.9...v0.10.10) (2021-07-15)
-
-
-
-## [0.10.9](https://github.com/juicycleff/ultimate-backend/compare/v0.10.8...v0.10.9) (2021-07-15)
-
-
-
-## [0.10.8](https://github.com/juicycleff/ultimate-backend/compare/v0.10.7...v0.10.8) (2021-07-15)
-
-
-
-## [0.10.7](https://github.com/juicycleff/ultimate-backend/compare/v0.10.6...v0.10.7) (2021-07-15)
-
-
-
-## [0.10.6](https://github.com/juicycleff/ultimate-backend/compare/v0.10.5...v0.10.6) (2021-07-15)
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.5...v0.11.0) (2021-07-15)
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.5...v0.11.0) (2021-07-15)
-
-
-
-## [0.10.5](https://github.com/juicycleff/ultimate-backend/compare/v0.10.4...v0.10.5) (2021-07-15)
-
-
-
-## [0.10.4](https://github.com/juicycleff/ultimate-backend/compare/v0.10.3...v0.10.4) (2021-07-15)
+# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.11...v0.11.0) (2021-07-15)
 
 
 
@@ -57,45 +13,6 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 * braking changes ([1ee416e](https://github.com/juicycleff/ultimate-backend/commit/1ee416e3fe13a3381635790b2908b60bc11d1f37))
 
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
-
-
-### Bug Fixes
-
-* braking changes ([1ee416e](https://github.com/juicycleff/ultimate-backend/commit/1ee416e3fe13a3381635790b2908b60bc11d1f37))
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
-
-
-### Bug Fixes
-
-* braking changes ([1ee416e](https://github.com/juicycleff/ultimate-backend/commit/1ee416e3fe13a3381635790b2908b60bc11d1f37))
-
-
-
-# [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
-
-
-
-## [0.10.2](https://github.com/juicycleff/ultimate-backend/compare/v0.10.1...v0.10.2) (2021-06-21)
-
-## [0.10.1](https://github.com/juicycleff/ultimate-backend/compare/v0.10.0...v0.10.1) (2021-06-05)
-
-# [0.10.0](https://github.com/juicycleff/ultimate-backend/compare/v0.9.0...v0.10.0) (2021-06-04)
-
-# [0.9.0](https://github.com/juicycleff/ultimate-backend/compare/v0.8.4...v0.9.0) (2021-06-04)
-
-## [0.8.4](https://github.com/juicycleff/ultimate-backend/compare/v0.8.3...v0.8.4) (2021-06-04)
-
-## [0.8.3](https://github.com/juicycleff/ultimate-backend/compare/v0.8.2...v0.8.3) (2021-06-04)
-
-## [0.8.2](https://github.com/juicycleff/ultimate-backend/compare/v0.8.1...v0.8.2) (2021-06-04)
-
-## [0.8.1](https://github.com/juicycleff/ultimate-backend/compare/v0.8.0...v0.8.1) (2021-05-24)
 
 # [0.8.0](https://github.com/juicycleff/ultimate-backend/compare/v0.7.4...v0.8.0) (2021-05-21)
 
