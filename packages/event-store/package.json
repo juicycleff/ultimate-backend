@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/event-store",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "peerDependencies": {
     "@nestjs/cqrs": "^8.0.0",
     "@nestjs/common": "^8.0.3",
