@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/kubernetes",
-  "version": "0.10.8",
+  "version": "0.10.9",
   "peerDependencies": {
     "@nestjs/common": "^8.0.3",
     "@nestjs/core": "^8.0.3",
