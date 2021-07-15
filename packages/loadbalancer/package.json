@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/loadbalancer",
-  "version": "0.11.0",
+  "version": "0.10.3",
   "peerDependencies": {
     "@ultimate-backend/common": "^0.11.0",
     "@nestjs/common": "^8.0.3",

@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.10.3](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.10.3) (2021-07-15)
+
+
+### Bug Fixes
+
+* **cli:** fixed failing nestjs generate commands ([9a178d6](https://github.com/juicycleff/ultimate-backend/commit/9a178d65874acfeb92e33747cd78839566b30e09))
+
+
+
 # [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
 
 

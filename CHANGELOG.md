@@ -2,6 +2,25 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.10.3](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.10.3) (2021-07-15)
+
+
+### Bug Fixes
+
+* **cli:** fixed failing nestjs generate commands ([9a178d6](https://github.com/juicycleff/ultimate-backend/commit/9a178d65874acfeb92e33747cd78839566b30e09))
+* braking changes ([1ee416e](https://github.com/juicycleff/ultimate-backend/commit/1ee416e3fe13a3381635790b2908b60bc11d1f37))
+* fixed deps for packages ([9322cd5](https://github.com/juicycleff/ultimate-backend/commit/9322cd59ac8e282a72ed8538f0447c0762709c86))
+* **common:** fixed duplicate service added to the service store events ([2b08298](https://github.com/juicycleff/ultimate-backend/commit/2b08298ab3ea9760a9e28722a692413f7445cd04))
+
+
+### Features
+
+* **client:** added request hooks ([b75d932](https://github.com/juicycleff/ultimate-backend/commit/b75d932c6dba3b5c6a740c7ed6a50a1813847c2d))
+* **client:** support static url ([85ca360](https://github.com/juicycleff/ultimate-backend/commit/85ca360750ef731e671f2b3922a777d20c1860e4))
+* **kubernetes:** support k8s client ([735fa69](https://github.com/juicycleff/ultimate-backend/commit/735fa695a6c593b9a2b9d1aab9f8a5d0c103ade1))
+
+
+
 # [0.11.0](https://github.com/juicycleff/ultimate-backend/compare/v0.10.2...v0.11.0) (2021-06-29)
 
 

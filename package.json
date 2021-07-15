@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.11.0",
+  "version": "0.10.3",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -32,7 +32,8 @@
     "release:minor": "nx affected --target version --version=minor",
     "release:patch": "nx affected --target version --version=patch",
     "release": "nx affected --target version",
-    "publish:npm": "node ./tools/scripts/npm-release.js",
+    "npm:build": "node ./tools/scripts/npm-build.js",
+    "npm:publish": "node ./tools/scripts/npm-release.js",
     "ci:test": "node ./tools/scripts/test-script.js test",
     "postinstall": "patch-package"
   },
