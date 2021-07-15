@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/zookeeper",
-  "version": "0.10.9",
+  "version": "0.10.10",
   "peerDependencies": {
     "@nestjs/common": "^8.0.3",
     "@ultimate-backend/common": "^0.11.0",
