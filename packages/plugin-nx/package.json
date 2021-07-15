@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/plugin-nx",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "main": "src/index.js",
   "executors": "./executors.json",
   "schematics": "./collection.json",

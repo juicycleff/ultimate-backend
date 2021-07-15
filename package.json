@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -106,7 +106,7 @@
     "zookeeper": "^4.9.0"
   },
   "devDependencies": {
-    "@jscutlery/semver": "^2.3.1",
+    "@jscutlery/semver": "^2.4.0",
     "@nestjs/schematics": "^7.3.1",
     "@nestjs/testing": "^7.6.15",
     "@nrwl/cli": "12.5.8",
