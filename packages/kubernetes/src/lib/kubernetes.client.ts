@@ -28,9 +28,9 @@ export class KubernetesClient
   implements IReactiveClient<k8s.KubeConfig>, OnModuleInit {
   private logger = new Logger(KubernetesClient.name);
 
-  kc: k8s.KubeConfig;
-  client: k8s.CoreV1Api;
-  watcher: k8s.Watch;
+  _kc: k8s.KubeConfig;
+  _client: k8s.CoreV1Api;
+  _watcher: k8s.Watch;
 
   constructor(private readonly opts: KubernetesConfig) {}
 
@@ -38,25 +38,50 @@ export class KubernetesClient
     return undefined;
   }
 
+  get watcher(): k8s.Watch {
+    if (!this._watcher) {
+      throw new Error('Kubernetes watcher is not initialized');
+    }
+
+    return this._watcher;
+  }
+
+  get client(): k8s.CoreV1Api {
+    if (!this._watcher) {
+      throw new Error('Kubernetes client is not initialized');
+    }
+
+    return this._client;
+  }
+
+  get kc(): k8s.KubeConfig {
+    if (!this._kc) {
+      this.connect();
+      throw new Error('Kubernetes is not initialized');
+    }
+
+    return this._kc;
+  }
+
   async connect(): Promise<any> {
     try {
       return await defer(() => {
         this.logger.log('KubernetesClient client started');
-        this.kc = new k8s.KubeConfig();
+        this._kc = new k8s.KubeConfig();
 
         if (this.opts.config.k8sOptions) {
-          this.kc.loadFromOptions({
+          this._kc.loadFromOptions({
             clusters: this.opts.config.k8sOptions.clusters,
             users: this.opts.config.k8sOptions.users,
             contexts: this.opts.config.k8sOptions.contexts,
             currentContext: this.opts.config.k8sOptions.currentContext,
           });
         } else {
-          this.kc.loadFromDefault();
+          this._kc.loadFromDefault();
         }
 
-        this.client = this.kc.makeApiClient(k8s.CoreV1Api);
-        this.watcher = new k8s.Watch(this.kc);
+        this._client = this._kc.makeApiClient(k8s.CoreV1Api);
+        this._watcher = new k8s.Watch(this._kc);
         this.logger.log('KubernetesClient client connected successfully');
       })
         .pipe(

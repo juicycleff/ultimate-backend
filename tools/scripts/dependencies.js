@@ -76,15 +76,15 @@ const eventStoreDependency = {
 
 const etcdDependency = {
   name: "@ultimate-backend/etcd",
-  peerDependencies: ["etcd3", "@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap"],
-  dependencies: ["lodash", "rxjs", "uuid"],
+  peerDependencies: ["@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap"],
+  dependencies: ["etcd3", "lodash", "rxjs", "uuid"],
   devDependencies: [],
 }
 
 const consulDependency = {
   name: "@ultimate-backend/consul",
-  peerDependencies: ["consul", "@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap", "@ultimate-backend/loadbalancer"],
-  dependencies: ["lodash", "rxjs", "uuid"],
+  peerDependencies: ["@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap", "@ultimate-backend/loadbalancer"],
+  dependencies: ["consul", "lodash", "rxjs", "uuid"],
   devDependencies: [],
 }
 

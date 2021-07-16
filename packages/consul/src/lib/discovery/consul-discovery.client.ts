@@ -30,7 +30,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   private async addInstancesToList(
     serviceId: string
   ): Promise<ServiceInstance[]> {
-    const token = this.consul.options.config.aclToken;
+    const token = this.consul.options.config?.aclToken;
 
     let serviceOptions: consul.Health.ServiceOptions = {
       service: serviceId,
@@ -91,7 +91,7 @@ export class ConsulDiscoveryClient implements DiscoveryClient {
   }
 
   async getServices(): Promise<string[]> {
-    const token = this.consul.options.config.aclToken;
+    const token = this.consul.options.config?.aclToken;
 
     let services;
     if (token) {

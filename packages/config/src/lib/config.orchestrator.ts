@@ -17,9 +17,10 @@
  * File name:         config.orchestrator.ts
  * Last modified:     14/03/2021, 21:11
  ******************************************************************************/
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigStore } from './config.store';
 import { ConfigValueMetadata } from './interfaces/config-metadata.interface';
+import { CONFIG_STORE_SHARED } from '@ultimate-backend/common';
 
 interface ConfigValue {
   name: string;
@@ -32,7 +33,7 @@ interface ConfigValue {
 export class ConfigOrchestrator {
   private readonly configValues = new Map<string, ConfigValue>();
 
-  constructor(private readonly store: ConfigStore) {}
+  constructor(@Inject(CONFIG_STORE_SHARED) private readonly store: ConfigStore) {}
 
   addConfigValues(target: Function, configValues: ConfigValueMetadata[]) {
     configValues.forEach(({ name, defaults, property }) => {

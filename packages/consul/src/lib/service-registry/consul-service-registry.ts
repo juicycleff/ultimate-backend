@@ -79,8 +79,8 @@ export class ConsulServiceRegistry
   }
 
   private getToken(): { token?: string } {
-    return this.client.options.config.aclToken
-      ? { token: this.client.options.config.aclToken }
+    return this.client.options.config?.aclToken
+      ? { token: this.client.options.config?.aclToken }
       : {};
   }
 
