@@ -48,12 +48,13 @@ export class BootstrapModule {
     const bootOptionsProvider = {
       provide: BOOTSTRAP_CONFIGURATION_OPTIONS,
       useValue: assign(
+        {},
         {
           filePath: path.resolve(process.cwd(), 'assets/bootstrap.yaml'),
           debug: false,
           enableEnv: false,
         },
-        options
+        options,
       ),
     };
 
