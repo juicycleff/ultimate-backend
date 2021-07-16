@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.5](https://github.com/juicycleff/ultimate-backend/compare/v0.12.4...v0.12.5) (2021-07-16)
+
+
+### Bug Fixes
+
+* **core:** support fastify ([d78ccbd](https://github.com/juicycleff/ultimate-backend/commit/d78ccbd69bb4e360cd380ee28f883499b63a8bac))
+
+
+
 ## [0.12.4](https://github.com/juicycleff/ultimate-backend/compare/v0.12.3...v0.12.4) (2021-07-16)
 
 
