@@ -1,7 +1,13 @@
 /* tslint:disable:max-classes-per-file */
 
-import { RpcException } from '@nestjs/microservices';
 import { ServiceError } from './grpc.error';
+
+export declare class RpcException extends Error {
+  private readonly error;
+  constructor(error: string | object);
+  initMessage(): void;
+  getError(): string | object;
+}
 
 export enum GrpcExceptionStatus {
   NOT_FOUND_EXCEPTION = 'NOT_FOUND_EXCEPTION',

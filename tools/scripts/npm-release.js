@@ -18,8 +18,6 @@
  * Last modified:     18/03/2021, 16:08
  ******************************************************************************/
 const shell = require('shelljs');
-const fs = require('fs');
-const path = require('path');
 
 function getBuildType(msg = '') {
   if (msg.startsWith('feat')) {
@@ -37,35 +35,19 @@ function getBuildType(msg = '') {
 }
 
 function command() {
-  const projects = [];
+  let projects = [];
   let commitMessage;
   let dryRun = false;
   let releaseType = 'minor' | 'patch' | 'major';
-
-  // remove dist and get commit message
-  try {
-    console.info('Removing Dist');
-    shell.exec(`rm -rf dist`);
-    commitMessage = shell.exec("git log -1 --pretty=format:'%s'").stdout;
-    releaseType = getBuildType(commitMessage);
-  } catch (e) {
-    return;
-  }
 
   // get affected libs
   try {
     shell.exec(`rm -rf dist`);
     const strResponse = shell.exec(
-      `npm run affected:libs --plain --exclude="messaging,gateway"`
+      `npm run affected:libs -- --all --plain --exclude="messaging,gateway,workspace"`
     );
     let tempProject = strResponse.stdout.split('\n');
-    tempProject = tempProject.splice(10);
-
-    for (const project of tempProject) {
-      if (project.length > 0) {
-        projects.push(project.slice(4, project.length));
-      }
-    }
+    projects = tempProject[4].split(' ');
   } catch (e) {
     //
   }
@@ -75,21 +57,11 @@ function command() {
     return;
   }
 
-  // Build
-  for (let project of projects) {
-    if (project !== 'gateway' || project !== 'messaging') {
-      console.info(`Building ${project}`);
-      shell.exec(
-        `nx run ${project}:build --with-deps --optimization --progress --extractLicenses`
-      );
-    }
-  }
-
   // Publish
   for (let project of projects) {
     if (project !== 'gateway' || project !== 'messaging') {
       try {
-        shell.exec(`cd dist/packages/${project} && npm publish --access public`);
+        shell.exec(`cd tmp/packages/${project} && npm publish --access public`);
         shell.exec('cd ../../../');
       } catch (e) {
         console.error(e);

@@ -1,7 +1,5 @@
-import { ServiceError as GrpcServiceError } from 'grpc';
-
 // Copied from apollo-server-errors
-export class ServiceError extends Error implements GrpcServiceError {
+export class ServiceError extends Error {
   public extensions: Record<string, any>;
   readonly name;
   readonly locations;

@@ -17,7 +17,6 @@
  * File name:         ub-service.builder.ts
  * Last modified:     03/04/2021, 01:04
  ******************************************************************************/
-import { Transport } from '@nestjs/microservices';
 import { GrpcOpts, SwaggerConfig } from './grpc-opts';
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { enableKillGracefully } from '@ultimate-backend/common';
@@ -343,8 +342,14 @@ export class UBServiceBuilder {
 
   private connectGrpc() {
     if (this._grpcOptions) {
+      const impPkg = loadPackage(
+        '@nestjs/microservices',
+        '@nestjs/microservices',
+        () => require('@nestjs/microservices')
+      );
+
       this.app.connectMicroservice({
-        transport: Transport.GRPC,
+        transport: impPkg.Transport.GRPC,
         options: this._grpcOptions,
       });
     }

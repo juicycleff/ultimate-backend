@@ -20,6 +20,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
+const { prunePackages } = require('./dependencies');
 
 function getBuildType(msg = '') {
   if (msg.startsWith('feat')) {
@@ -37,7 +38,7 @@ function getBuildType(msg = '') {
 }
 
 function command() {
-  const projects = [];
+  let projects = [];
   let commitMessage;
   let dryRun = false;
   let releaseType = 'minor' | 'patch' | 'major';
@@ -45,7 +46,7 @@ function command() {
   // remove dist and get commit message
   try {
     console.info('Removing Dist');
-    shell.exec(`rm -rf dist`);
+    // shell.exec(`rm -rf dist`);
     commitMessage = shell.exec("git log -1 --pretty=format:'%s'").stdout;
     releaseType = getBuildType(commitMessage);
   } catch (e) {
@@ -56,16 +57,10 @@ function command() {
   try {
     shell.exec(`rm -rf dist`);
     const strResponse = shell.exec(
-      `npm run affected:libs --plain --exclude="messaging,gateway"`
+      `npm run affected:libs -- --all --plain --exclude="messaging,gateway,workspace"`
     );
     let tempProject = strResponse.stdout.split('\n');
-    tempProject = tempProject.splice(10);
-
-    for (const project of tempProject) {
-      if (project.length > 0) {
-        projects.push(project.slice(4, project.length));
-      }
-    }
+    projects = tempProject[4].split(' ');
   } catch (e) {
     //
   }
@@ -85,15 +80,16 @@ function command() {
     }
   }
 
-  // Publish
+  // Fix dependencies
   for (let project of projects) {
-    if (project !== 'gateway' || project !== 'messaging') {
-      try {
-        shell.exec(`cd dist/packages/${project} && npm publish --access public`);
-        shell.exec('cd ../../../');
-      } catch (e) {
-        console.error(e);
+    try {
+      const rsp = JSON.parse(fs.readFileSync(`./dist/packages/${project}/package.json`).toString());
+      const newPkg = prunePackages(rsp);
+      if (newPkg) {
+        fs.writeFileSync(`./dist/packages/${project}/package.json`, JSON.stringify(newPkg, null, 2));
       }
+    } catch (e) {
+      console.error(e);
     }
   }
 }
