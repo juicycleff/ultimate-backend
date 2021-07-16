@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.3](https://github.com/juicycleff/ultimate-backend/compare/v0.12.2...v0.12.3) (2021-07-16)
+
+
+### Bug Fixes
+
+* **config,consul,kubernetes:** fixed issues with missing dependency ([6ca087b](https://github.com/juicycleff/ultimate-backend/commit/6ca087bd19c03815d4100bb6950a4af336ba0aed))
+
+
+
 ## [0.12.2](https://github.com/juicycleff/ultimate-backend/compare/v0.12.1...v0.12.2) (2021-07-16)
 
 
