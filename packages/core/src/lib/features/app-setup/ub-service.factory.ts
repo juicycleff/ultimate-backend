@@ -21,7 +21,7 @@ import { UBServiceBuilder } from './ub-service.builder';
 import { INestApplication } from '@nestjs/common';
 
 export class UBServiceFactory {
-  static create(app: INestApplication): UBServiceBuilder {
-    return new UBServiceBuilder(app);
+  static create(app: INestApplication, isFastify?: boolean): UBServiceBuilder {
+    return new UBServiceBuilder(app, isFastify);
   }
 }
