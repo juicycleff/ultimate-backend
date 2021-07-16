@@ -42,7 +42,6 @@ function command() {
 
   // get affected libs
   try {
-    shell.exec(`rm -rf dist`);
     const strResponse = shell.exec(
       `npm run affected:libs -- --all --plain --exclude="messaging,gateway,workspace"`
     );
@@ -61,7 +60,7 @@ function command() {
   for (let project of projects) {
     if (project !== 'gateway' || project !== 'messaging') {
       try {
-        shell.exec(`cd tmp/packages/${project} && npm publish --access public`);
+        shell.exec(`cd dist/packages/${project} && npm publish --access public`);
         shell.exec('cd ../../../');
       } catch (e) {
         console.error(e);

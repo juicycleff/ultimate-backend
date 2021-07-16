@@ -46,7 +46,7 @@ function command() {
   // remove dist and get commit message
   try {
     console.info('Removing Dist');
-    // shell.exec(`rm -rf dist`);
+    shell.exec(`rm -rf dist`);
     commitMessage = shell.exec("git log -1 --pretty=format:'%s'").stdout;
     releaseType = getBuildType(commitMessage);
   } catch (e) {
@@ -55,7 +55,6 @@ function command() {
 
   // get affected libs
   try {
-    shell.exec(`rm -rf dist`);
     const strResponse = shell.exec(
       `npm run affected:libs -- --all --plain --exclude="messaging,gateway,workspace"`
     );
