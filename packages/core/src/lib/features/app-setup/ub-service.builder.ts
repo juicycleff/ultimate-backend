@@ -251,6 +251,8 @@ export class UBServiceBuilder {
   }
 
   prepareSwagger() {
+    if (!this._swaggerOptions) return;
+
     const swaggerPackage = loadPackage(
       '@nestjs/swagger',
       '@nestjs/swagger',
@@ -372,7 +374,7 @@ export class UBServiceBuilder {
     }
   }
 
-  async start(port?: number) {
+  async start(port?: number, host?: string) {
     if (this._prefix) {
       this.app.setGlobalPrefix(this._prefix);
     }
@@ -385,7 +387,12 @@ export class UBServiceBuilder {
     this.connectGrpc();
 
     const appPort = port || this.boot.get('port', 3000);
-    await this.app.listen(appPort);
+    if (this.isFastify) {
+      const appHost = host || this.boot.get('host', '0.0.0.0');
+      await this.app.listen(appPort, appHost);
+    } else {
+      await this.app.listen(appPort);
+    }
 
     // print messages to console
     this.printSwaggerInfo(appPort);
