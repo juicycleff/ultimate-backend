@@ -49,13 +49,23 @@ export class UBServiceBuilder {
   private _prefix: string;
   private _swaggerOptions: Record<string, any>;
 
-  constructor(private readonly app: INestApplication, private readonly isFastify: boolean = false) {
+  constructor(private readonly app: INestApplication & {register?: any}, private readonly isFastify: boolean = false) {
     this.boot = app.get<BootConfig>(BootConfig);
   }
 
   withPrefix(prefix: string) {
     this._prefix = prefix;
     this.app.setGlobalPrefix(prefix);
+    return this;
+  }
+
+  useExpressMiddleware() {
+    const middie = loadPackage(
+      'middie',
+      'middie',
+      () => require('middie')
+    );
+    this.app.register(middie);
     return this;
   }
 
@@ -72,14 +82,15 @@ export class UBServiceBuilder {
     } = {}
   ) {
     const csurf = loadPackage(
-      'csurf',
-      'csurf',
-      () => require('csurf')
+      this.isFastify ? 'fastify-csrf' : 'csurf',
+      this.isFastify ? 'fastify-csrf' : 'csurf',
+      () => require(this.isFastify ? 'fastify-csrf' : 'csurf')
     );
+
     const helmet = loadPackage(
-      'helmet',
-      'helmet',
-      () => require('helmet')
+      this.isFastify ? 'fastify-helmet' : 'helmet',
+      this.isFastify ? 'fastify-helmet' : 'helmet',
+      () => require(this.isFastify ? 'fastify-helmet' : 'helmet')
     );
 
     let config = options;
@@ -89,13 +100,13 @@ export class UBServiceBuilder {
     // When no config is provided. It will use the default behavior
     const hasNoKeys = Object.keys(config).length === 0;
     if (hasNoKeys || config.helmet) {
-      this.app.use(helmet(config.helmet));
+      this.isFastify ? this.app.register(helmet, config.helmet) : this.app.use(helmet(config.helmet));
     }
     if (hasNoKeys || config.cors) {
       this.app.enableCors(config.cors);
     }
     if (hasNoKeys || config.csurf) {
-      this.app.use(csurf(config.csurf));
+      this.isFastify ? this.app.use(csurf, config.csurf) : this.app.use(csurf(config.csurf));
     }
     return this;
   }
@@ -182,21 +193,30 @@ export class UBServiceBuilder {
         }
       | string
   ) {
-    const cookieParser = loadPackage(
-      'cookie-parser',
-      'cookie-parser',
-      () => require('cookie-parser')
-    );
 
     let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.cookie', {});
     }
 
+    const cookieParser = loadPackage(
+      this.isFastify ? 'fastify-cookie' : 'cookie-parser',
+      this.isFastify ? 'fastify-cookie' : 'cookie-parser',
+      () => require(this.isFastify ? 'fastify-cookie' : 'cookie-parser')
+    );
+
     if (typeof opts === 'string') {
       config = this.boot.get(opts);
     } else if (typeof opts === 'object') {
       config = opts;
+    }
+
+    if (this.isFastify) {
+      this.app.register(cookieParser, {
+        secret: config.secret,
+        parseOptions: config.options,
+      });
+      return this;
     }
 
     this.app.use(cookieParser(config.secret, config.options));
@@ -387,8 +407,8 @@ export class UBServiceBuilder {
     this.connectGrpc();
 
     const appPort = port || this.boot.get('port', 3000);
-    if (this.isFastify) {
-      const appHost = host || this.boot.get('host', '0.0.0.0');
+    const appHost = host || this.boot.get('host', null);
+    if (this.isFastify && appHost) {
       await this.app.listen(appPort, appHost);
     } else {
       await this.app.listen(appPort);
