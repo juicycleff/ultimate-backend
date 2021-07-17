@@ -59,14 +59,16 @@ export class UBServiceBuilder {
     return this;
   }
 
-  useExpressMiddleware() {
+  /**
+   * @description Allows you express modules with fastify
+   */
+  async enableExpressMiddleware() {
     const middie = loadPackage(
       'middie',
       'middie',
       () => require('middie')
     );
-    this.app.register(middie);
-    return this;
+    await this.app.register(middie);
   }
 
   withPoweredBy() {
@@ -212,10 +214,7 @@ export class UBServiceBuilder {
     }
 
     if (this.isFastify) {
-      this.app.register(cookieParser, {
-        secret: config.secret,
-        parseOptions: config.options,
-      });
+      this.app.register(cookieParser, config);
       return this;
     }
 
