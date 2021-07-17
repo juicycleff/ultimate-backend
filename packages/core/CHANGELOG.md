@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.8](https://github.com/juicycleff/ultimate-backend/compare/v0.12.7...v0.12.8) (2021-07-17)
+
+
+### Bug Fixes
+
+* **core:** fixed bad cookie config options ([92aab9a](https://github.com/juicycleff/ultimate-backend/commit/92aab9a21037de57d997e14ea3620b3709cb90dc))
+
+
+
 ## [0.12.7](https://github.com/juicycleff/ultimate-backend/compare/v0.12.6...v0.12.7) (2021-07-17)
 
 
