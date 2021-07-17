@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.7](https://github.com/juicycleff/ultimate-backend/compare/v0.12.6...v0.12.7) (2021-07-17)
+
+
+### Features
+
+* **core:** support fastify equivalent modules ([33a16a2](https://github.com/juicycleff/ultimate-backend/commit/33a16a2378ca5204bb56217cd7d5da0d105dc231))
+
+
+
 ## [0.12.6](https://github.com/juicycleff/ultimate-backend/compare/v0.12.5...v0.12.6) (2021-07-16)
 
 

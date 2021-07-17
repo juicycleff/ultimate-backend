@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/brakes",
-  "version": "0.12.6",
+  "version": "0.12.7",
   "peerDependencies": {
     "@nestjs/common": "^8.0.3"
   }
