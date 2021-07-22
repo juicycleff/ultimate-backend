@@ -107,9 +107,9 @@ export class KafkaBroker
       }
 
       if (messages.has(streamId)) {
-        messages.get(streamId).push({ value: payload });
+        messages.get(streamId).push({ value: payload, headers: {eventType: event.constructor.name} });
       } else {
-        messages.set(streamId, [{ value: payload }]);
+        messages.set(streamId, [{ value: payload, headers: {eventType: event.constructor.name} }]);
       }
     }
 
@@ -117,28 +117,7 @@ export class KafkaBroker
   }
 
   async publish<T extends IEvent & { streamName?: string }>(event: T) {
-    if (!event) {
-      return;
-    }
-
-    const payload = Buffer.from(JSON.stringify(event));
-    let streamId = this.getStreamId(this.streamName);
-    if (!this.featureStreamConfig.strictStreamName) {
-      streamId = this.getStreamId(event.streamName ?? this.streamName);
-    }
-
-    try {
-      await this.kafka.producer.send({
-        topic: streamId,
-        messages: [
-          {
-            value: payload,
-          },
-        ],
-      });
-    } catch (e) {
-      this.logger.error(e);
-    }
+    return this.publishAll([event]);
   }
 
   async publishAll<T extends IEvent & { streamName?: string }>(events: T[]) {
@@ -225,7 +204,7 @@ export class KafkaBroker
       }
 
       const data = JSON.parse(payload.message.value.toString());
-      const eventType = payload.topic;
+      const eventType = payload.message.headers["eventType"] ? payload.message.headers["eventType"] : payload.topic;
 
       const handler = this.eventHandlers[eventType];
       if (!handler) {

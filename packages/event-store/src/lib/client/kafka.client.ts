@@ -89,8 +89,6 @@ export class KafkaClient
           groupId: broker.groupId,
         });
 
-        await Promise.all([this._producer.connect(), this._consumer.connect()]);
-
         // producer events
         this._producer.on('producer.connect', () => {
           this.connected = true;
@@ -138,6 +136,8 @@ export class KafkaClient
             'Kafka event store consumer request queue size error!'
           );
         });
+
+        await Promise.all([this._producer.connect(), this._consumer.connect()]);
       })
         .pipe(
           handleRetry(
