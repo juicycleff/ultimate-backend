@@ -405,8 +405,8 @@ export class UBServiceBuilder {
     this.createSwaggerDocument();
     this.connectGrpc();
 
-    const appPort = port || this.boot.get('port', 3000);
-    const appHost = host || this.boot.get('host', null);
+    const appPort = port ?? this.boot.get('port', 3000);
+    const appHost = host ?? this.boot.get('host', null);
     if (this.isFastify && appHost) {
       await this.app.listen(appPort, appHost);
     } else {
