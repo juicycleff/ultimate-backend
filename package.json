@@ -103,7 +103,8 @@
     "yaml": "^1.10.0",
     "yaml-schema-validator": "^1.2.2",
     "yaml-validator": "^3.0.0",
-    "zookeeper": "^4.9.0"
+    "zookeeper": "^4.9.0",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@jscutlery/semver": "^2.4.0",
@@ -132,7 +133,6 @@
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
     "clear": "^0.1.0",
-    "dotenv": "^8.2.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^8.1.0",
     "jest": "27.0.3",
