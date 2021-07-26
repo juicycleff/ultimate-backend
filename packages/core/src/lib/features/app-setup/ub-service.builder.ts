@@ -343,19 +343,19 @@ export class UBServiceBuilder {
     }
   }
 
-  private printRestInfo(port: number) {
+  private printRestInfo(port: number, host?: string) {
     Logger.log(
-      `REST api listening on host: http://localhost:${port}${
+      `REST api listening on host: http://${ host ?? 'localhost'}:${port}${
         this._prefix ? '/' + this._prefix : ''
       }`,
       'UBService'
     );
   }
 
-  private printSwaggerInfo(port: number) {
+  private printSwaggerInfo(port: number, host?: string) {
     if (this._swaggerObject) {
       Logger.log(
-        `Swagger Docs for service available at: http://localhost:${port}/${this._swaggerPath}`,
+        `Swagger Docs for service available at: http://${ host ?? 'localhost'}:${port}/${this._swaggerPath}`,
         'UBService'
       );
     }
@@ -414,8 +414,8 @@ export class UBServiceBuilder {
     }
 
     // print messages to console
-    this.printSwaggerInfo(appPort);
-    this.printRestInfo(appPort);
+    this.printSwaggerInfo(appPort, appHost);
+    this.printRestInfo(appPort, appHost);
     this.printGrpcInfo();
   }
 }
