@@ -83,18 +83,6 @@ export class UBServiceBuilder {
       csurf?: CSurfType;
     } = {}
   ) {
-    const csurf = loadPackage(
-      this.isFastify ? 'fastify-csrf' : 'csurf',
-      this.isFastify ? 'fastify-csrf' : 'csurf',
-      () => require(this.isFastify ? 'fastify-csrf' : 'csurf')
-    );
-
-    const helmet = loadPackage(
-      this.isFastify ? 'fastify-helmet' : 'helmet',
-      this.isFastify ? 'fastify-helmet' : 'helmet',
-      () => require(this.isFastify ? 'fastify-helmet' : 'helmet')
-    );
-
     let config = options;
     if (!options) {
       config = this.boot.get('security', {});
@@ -102,12 +90,24 @@ export class UBServiceBuilder {
     // When no config is provided. It will use the default behavior
     const hasNoKeys = Object.keys(config).length === 0;
     if (hasNoKeys || config.helmet) {
+      const helmet = loadPackage(
+        this.isFastify ? 'fastify-helmet' : 'helmet',
+        this.isFastify ? 'fastify-helmet' : 'helmet',
+        () => require(this.isFastify ? 'fastify-helmet' : 'helmet')
+      );
       this.isFastify ? this.app.register(helmet, config.helmet) : this.app.use(helmet(config.helmet));
     }
+
     if (hasNoKeys || config.cors) {
       this.app.enableCors(config.cors);
     }
+
     if (hasNoKeys || config.csurf) {
+      const csurf = loadPackage(
+        this.isFastify ? 'fastify-csrf' : 'csurf',
+        this.isFastify ? 'fastify-csrf' : 'csurf',
+        () => require(this.isFastify ? 'fastify-csrf' : 'csurf')
+      );
       this.isFastify ? this.app.use(csurf, config.csurf) : this.app.use(csurf(config.csurf));
     }
     return this;

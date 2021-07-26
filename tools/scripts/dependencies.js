@@ -91,7 +91,7 @@ const consulDependency = {
 const configDependency = {
   name: "@ultimate-backend/config",
   peerDependencies: ["@nestjs/core", "@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap", "@ultimate-backend/loadbalancer", "@ultimate-backend/consul", "@ultimate-backend/etcd", "@ultimate-backend/zookeeper"],
-  dependencies: ["lodash", "rxjs", "read-env", "handlebars", "reflect-metadata"],
+  dependencies: ["lodash", "rxjs", "dotenv",  "read-env", "handlebars", "reflect-metadata"],
   devDependencies: [],
 }
 
