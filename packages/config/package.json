@@ -1,4 +1,7 @@
 {
   "name": "@ultimate-backend/config",
-  "version": "0.12.10"
+  "version": "0.12.10",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }

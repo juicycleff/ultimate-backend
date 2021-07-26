@@ -204,7 +204,7 @@ export class KafkaBroker
       }
 
       const data = JSON.parse(payload.message.value.toString());
-      const eventType = payload.message.headers["eventType"] ? payload.message.headers["eventType"] : payload.topic;
+      const eventType = (payload.message.headers["eventType"] ?? payload.topic) as string;
 
       const handler = this.eventHandlers[eventType];
       if (!handler) {
