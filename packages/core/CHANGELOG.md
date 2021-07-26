@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.10](https://github.com/juicycleff/ultimate-backend/compare/v0.12.9...v0.12.10) (2021-07-26)
+
+
+### Bug Fixes
+
+* **config:** fixed dotenv not found in production ([625fcc5](https://github.com/juicycleff/ultimate-backend/commit/625fcc534dc0a530b6194f1723b056ce1c191b40))
+
+
+
 ## [0.12.9](https://github.com/juicycleff/ultimate-backend/compare/v0.12.8...v0.12.9) (2021-07-17)
 
 
