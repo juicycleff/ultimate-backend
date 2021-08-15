@@ -1,6 +1,6 @@
 {
   "name": "@ultimate-backend/cli",
-  "version": "0.12.14",
+  "version": "0.12.15",
   "bin": {
     "ub": "./bin/ub.js"
   },
