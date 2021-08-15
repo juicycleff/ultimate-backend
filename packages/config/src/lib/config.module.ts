@@ -113,23 +113,21 @@ export class ConfigModule {
   }
 
   private static createAsyncProviders(
-    options: ConfigModuleAsyncOptions
+    options: ConfigModuleAsyncOptions,
   ): Provider[] {
-    if (options.useFactory || options.useExisting) {
-      return [this.createAsyncOptionsProviders(options)];
+    if (options.useExisting || options.useFactory) {
+      return [this.createAsyncOptionsProvider(options)];
     }
-
-    const useClass = options.useExisting as Type<ConfigModuleOptionsFactory>;
-
     return [
+      this.createAsyncOptionsProvider(options),
       {
-        provide: useClass,
-        useClass,
+        provide: options.useClass,
+        useClass: options.useClass,
       },
     ];
   }
 
-  private static createAsyncOptionsProviders(
+  private static createAsyncOptionsProvider(
     options: ConfigModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {

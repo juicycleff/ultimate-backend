@@ -73,23 +73,21 @@ export class RedisModule {
   }
 
   private static createAsyncProviders(
-    options: RedisModuleAsyncOptions
+    options: RedisModuleAsyncOptions,
   ): Provider[] {
-    if (options.useFactory || options.useExisting) {
-      return [this.createAsyncOptionsProviders(options)];
+    if (options.useExisting || options.useFactory) {
+      return [this.createAsyncOptionsProvider(options)];
     }
-
-    const useClass = options.useExisting as Type<RedisModuleOptionsFactory>;
-
     return [
+      this.createAsyncOptionsProvider(options),
       {
-        provide: useClass,
-        useClass,
+        provide: options.useClass,
+        useClass: options.useClass,
       },
     ];
   }
 
-  private static createAsyncOptionsProviders(
+  private static createAsyncOptionsProvider(
     options: RedisModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {

@@ -36,7 +36,6 @@ import {
   COUCHBASE_CONNECTION_NAME,
   COUCHBASE_MODULE_OPTIONS,
 } from './couchbase.constants';
-import { ModuleRef } from '@nestjs/core';
 import { getConnectionToken, handleRetry } from './utils';
 import * as ottoman from 'ottoman';
 import 'couchbase';
@@ -45,17 +44,13 @@ import { defer } from 'rxjs';
 @Global()
 @Module({})
 export class CouchbaseCoreModule implements OnApplicationShutdown {
-  constructor(private readonly moduleRef: ModuleRef) {}
-
   static forRoot(options: CouchbaseModuleOptions): DynamicModule {
     const {
       clusterFactory,
+      connection,
       clusterName,
-      url,
-      scopeName,
       retryAttempts,
       retryDelays,
-      ...others
     } = options;
 
     const couchbaseConnectionFactory = clusterFactory || ((cluster) => cluster);
@@ -72,11 +67,7 @@ export class CouchbaseCoreModule implements OnApplicationShutdown {
         const conn = new ottoman.Ottoman();
 
         try {
-          await conn.connect({
-            bucketName: others.bucketName || 'default',
-            connectionString: url,
-            ...others,
-          });
+          await conn.connect(connection);
 
           return await defer(async () =>
             couchbaseConnectionFactory(conn, couchbaseConnectionName)
@@ -108,24 +99,17 @@ export class CouchbaseCoreModule implements OnApplicationShutdown {
       provide: COUCHBASE_CONNECTION_NAME,
       useFactory: async (couchbaseModuleOptions: CouchbaseModuleOptions) => {
         const {
+          connection,
           clusterFactory,
-          clusterName,
-          url,
-          scopeName,
           retryAttempts,
           retryDelays,
-          ...others
         } = couchbaseModuleOptions;
 
         const couchbaseConnectionFactory =
           clusterFactory || ((cluster) => cluster);
 
         const conn = new ottoman.Ottoman();
-        await conn.connect({
-          bucketName: others.bucketName || 'default',
-          connectionString: url,
-          ...others,
-        });
+        await conn.connect(connection);
 
         return await defer(async () =>
           couchbaseConnectionFactory(conn, couchbaseConnectionName)
@@ -156,23 +140,21 @@ export class CouchbaseCoreModule implements OnApplicationShutdown {
   }
 
   private static createAsyncProviders(
-    options: CouchbaseModuleAsyncOptions
+    options: CouchbaseModuleAsyncOptions,
   ): Provider[] {
-    if (options.useFactory || options.useExisting) {
-      return [this.createAsyncOptionsProviders(options)];
+    if (options.useExisting || options.useFactory) {
+      return [this.createAsyncOptionsProvider(options)];
     }
-
-    const useClass = options.useExisting as Type<CouchbaseOptionsFactory>;
-
     return [
+      this.createAsyncOptionsProvider(options),
       {
-        provide: useClass,
-        useClass,
+        provide: options.useClass,
+        useClass: options.useClass,
       },
     ];
   }
 
-  private static createAsyncOptionsProviders(
+  private static createAsyncOptionsProvider(
     options: CouchbaseModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {

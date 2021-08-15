@@ -26,7 +26,6 @@ import {
   ZookeeperModuleOptionsFactory,
 } from './zookeeper-module.options';
 import {
-  ZOOKEEPER_CONFIG,
   ZOOKEEPER_CONFIG_OPTIONS,
   ZOOKEEPER_MODULE_OPTIONS,
 } from './zookeeper.constant';
@@ -77,23 +76,21 @@ export class ZookeeperModule {
   }
 
   private static createAsyncProviders(
-    options: ZookeeperModuleAsyncOptions
+    options: ZookeeperModuleAsyncOptions,
   ): Provider[] {
-    if (options.useFactory || options.useExisting) {
-      return [this.createAsyncOptionsProviders(options)];
+    if (options.useExisting || options.useFactory) {
+      return [this.createAsyncOptionsProvider(options)];
     }
-
-    const useClass = options.useExisting as Type<ZookeeperModuleOptionsFactory>;
-
     return [
+      this.createAsyncOptionsProvider(options),
       {
-        provide: useClass,
-        useClass,
+        provide: options.useClass,
+        useClass: options.useClass,
       },
     ];
   }
 
-  private static createAsyncOptionsProviders(
+  private static createAsyncOptionsProvider(
     options: ZookeeperModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {
