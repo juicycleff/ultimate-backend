@@ -18,35 +18,16 @@
  * Last modified:     21/01/2021, 09:58
  ******************************************************************************/
 
-import { SearchConsistency } from 'ottoman';
-import { ModelMetadata } from 'ottoman/lib/types/model/interfaces/model-metadata.interface';
 import { ModuleMetadata, Type } from '@nestjs/common';
+import { ConnectOptions } from 'ottoman/lib/types/ottoman/ottoman';
 
 export interface CouchbaseModuleOptions {
-  url: string;
-  ottoman?: OttomanConfig;
+  connection: ConnectOptions | string;
+  clusterFactory?: (connection: any, name: string) => any;
   clusterName?: string;
-  scopeName?: string;
-  username: string;
-  password: string;
-  bucketName: string;
-  clientCertificate?: string;
-  certificateChain?: string;
-  transcoder?: unknown;
   logFunc?: unknown;
   retryAttempts?: number;
   retryDelays?: number;
-  clusterFactory?: (connection: any, name: string) => any;
-}
-
-interface OttomanConfig {
-  collectionName?: string;
-  scopeName?: string;
-  modelKey?: string;
-  populateMaxDeep?: number;
-  searchConsistency?: SearchConsistency;
-  maxExpiry?: number;
-  keyGenerator?: (params: { metadata: ModelMetadata; id: string }) => string;
 }
 
 export interface CouchbaseOptionsFactory {
