@@ -69,6 +69,8 @@ export class BootConfigSourceLoader {
   private getFilesPath(): string[] {
     const filenames: string[] = [];
     const env = process.env.NODE_ENV || 'development';
+
+
     const dirname = path.dirname(this.options.filePath);
     const filename = path.basename(this.options.filePath);
     const tokens = /(.+)\.(.+)/.exec(filename);

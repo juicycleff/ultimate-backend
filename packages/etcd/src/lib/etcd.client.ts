@@ -47,6 +47,7 @@ export class EtcdClient
     try {
       return await defer(() => {
         this.logger.log('EtcdClient client started');
+        console.log('EtcdClient connected', this.opts.config);
         this.client = new Etcd3(this.opts.config.etcdOptions);
         this.logger.log('EtcdClient client connected successfully');
       })

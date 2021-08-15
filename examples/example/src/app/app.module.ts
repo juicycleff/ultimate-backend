@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common';
 import { CloudModule } from '@ultimate-backend/cloud';
-import { ConsulModule } from '@ultimate-backend/consul';
 import { ClientModule } from '@ultimate-backend/client';
 import { LoadBalancerModule } from '@ultimate-backend/loadbalancer';
 import { BrakesModule } from '@ultimate-backend/brakes';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BootstrapModule } from '@ultimate-backend/bootstrap';
+import * as path from 'path';
 
 @Module({
   imports: [
     CloudModule.forRoot({
       registry: {
-        discoverer: 'consul',
+        discoverer: 'local',
         service: {
           id: 'example',
           port: 3333,
@@ -25,11 +26,9 @@ import { AppService } from './app.service';
         },
       },
     }),
-    ConsulModule.forRoot({
-      port: '8500',
-      host: 'localhost',
-      promisify: true,
-      secure: false,
+    BootstrapModule.forRoot({
+      filePath: path.resolve(__dirname, 'assets/bootstrap.yaml'),
+      enableEnv: true,
     }),
     ClientModule.forRoot(),
     LoadBalancerModule.forRoot(),

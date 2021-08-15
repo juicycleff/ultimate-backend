@@ -3,7 +3,7 @@ port: 9000
 
 clients:
   etcd:
-    retryAttempts: 2
+    retryAttempts: 6000
   zookeeper:
     retryAttempts: 6000
   kubernetes:

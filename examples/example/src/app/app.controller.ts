@@ -2,7 +2,6 @@ import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
 import {
-  ServiceClient,
   GraphQLServiceClient,
   GraphQLClient,
 } from '@ultimate-backend/client';

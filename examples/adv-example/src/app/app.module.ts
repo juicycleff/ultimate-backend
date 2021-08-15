@@ -28,21 +28,17 @@ import { KubernetesModule } from '@ultimate-backend/kubernetes';
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
-    PermissionsModule.forRoot({
-      polars: {
-        polar: path.resolve(__dirname, 'assets/example.polar'),
-        file: true,
+    CloudModule.forRoot({
+      registry: {
+        discoverer: 'consul',
+        service: {
+          id: 'adv-example',
+          port: 3332,
+          address: 'localhost',
+          name: 'adv-example',
+        },
       },
     }),
-    EtcdModule.forRoot({
-      etcdOptions: {
-        hosts: 'localhost:2379',
-      },
-    }),
-    LoadBalancerModule.forRoot({
-      services: [{ strategy: 'RoundRobinStrategy', name: 'example' }],
-    }),
-    KubernetesModule.forRoot(),
     ConsulModule.forRoot({
       host: 'localhost',
       port: '8500',
@@ -61,6 +57,22 @@ import { KubernetesModule } from '@ultimate-backend/kubernetes';
         },
       ],
     }),
+    PermissionsModule.forRoot({
+      polars: {
+        polar: path.resolve(__dirname, 'assets/example.polar'),
+        file: true,
+      },
+    }),
+    EtcdModule.forRoot({
+      etcdOptions: {
+        hosts: 'localhost:2379',
+      },
+      retryAttempts: 3
+    }),
+    LoadBalancerModule.forRoot({
+      services: [{ strategy: 'RoundRobinStrategy', name: 'example' }],
+    }),
+    KubernetesModule.forRoot(),
     RedisModule.forRoot({
       redisOptions: {
         host: 'localhost',
@@ -69,17 +81,6 @@ import { KubernetesModule } from '@ultimate-backend/kubernetes';
       },
     }),
     ClientModule.forRoot(),
-    CloudModule.forRoot({
-      registry: {
-        discoverer: 'consul',
-        service: {
-          id: 'adv-example',
-          port: 3332,
-          address: 'localhost',
-          name: 'adv-example',
-        },
-      },
-    }),
   ],
   controllers: [AppController],
   providers: [AppService],

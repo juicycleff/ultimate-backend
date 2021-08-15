@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { delay, retryWhen, scan } from 'rxjs/operators';
 import { Logger } from '@nestjs/common';
 
@@ -20,7 +20,7 @@ export function handleRetry(
               ''
             );
             if (errorCount + 1 >= retryAttempts) {
-              throw error;
+              return throwError(error);
             }
             return errorCount + 1;
           }, 0),
