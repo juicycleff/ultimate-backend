@@ -47,10 +47,6 @@ export class KubernetesModule {
       module: KubernetesModule,
       imports: options.imports,
       providers: [
-        {
-          provide: KUBERNETES_CONFIG_OPTIONS,
-          useValue: options,
-        },
         ...asyncProviders,
         ...providers,
         configProvider,

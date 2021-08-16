@@ -26,7 +26,7 @@ import {
   PermissionsModuleOptions,
   PermissionsOptionsFactory,
 } from './interfaces';
-import { PERMISSION_MODULE_OPTIONS } from './permissions.constants';
+import { PERMISSION_CONFIG_OPTIONS, PERMISSION_MODULE_OPTIONS } from './permissions.constants';
 
 @Global()
 @Module({})
@@ -37,7 +37,7 @@ export class PermissionsModule {
    */
   static forRoot(options: PermissionsModuleOptions): DynamicModule {
     const permissionModuleOptionsProvider: Provider = {
-      provide: PERMISSION_MODULE_OPTIONS,
+      provide: PERMISSION_CONFIG_OPTIONS,
       useValue: options,
     };
 
@@ -63,12 +63,21 @@ export class PermissionsModule {
       useValue: options,
     };
 
+    const configProvider: Provider = {
+      provide: PERMISSION_CONFIG_OPTIONS,
+      useFactory: async (modOptions: PermissionsModuleOptions) => {
+        return modOptions;
+      },
+      inject: [PERMISSION_MODULE_OPTIONS],
+    };
+
     const asyncProviders = this.createAsyncProviders(options);
 
     return {
       module: PermissionsModule,
       providers: [
         ...asyncProviders,
+        configProvider,
         permissionModuleOptionsProvider,
         PermissionsService,
         OsoService,

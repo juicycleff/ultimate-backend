@@ -19,3 +19,4 @@
  ******************************************************************************/
 
 export const PERMISSION_MODULE_OPTIONS = 'PERMISSION_MODULE_OPTIONS';
+export const PERMISSION_CONFIG_OPTIONS = 'PERMISSION_CONFIG_OPTIONS';
