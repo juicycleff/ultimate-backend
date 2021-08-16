@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.16](https://github.com/juicycleff/ultimate-backend/compare/v0.12.15...v0.12.16) (2021-08-16)
+
+
+### Bug Fixes
+
+* fixed failing async modules ([20ea053](https://github.com/juicycleff/ultimate-backend/commit/20ea053ca12d9537a854c04d16e6f2ffcadac799))
+
+
+
 ## [0.12.15](https://github.com/juicycleff/ultimate-backend/compare/v0.12.14...v0.12.15) (2021-08-15)
 
 
