@@ -36,15 +36,13 @@ export class PermissionsModule {
    * @param options {PermissionsModuleOptions}
    */
   static forRoot(options: PermissionsModuleOptions): DynamicModule {
-    const permissionModuleOptionsProvider: Provider = {
-      provide: PERMISSION_CONFIG_OPTIONS,
-      useValue: options,
-    };
-
     return {
       module: PermissionsModule,
       providers: [
-        permissionModuleOptionsProvider,
+        {
+          provide: PERMISSION_CONFIG_OPTIONS,
+          useValue: options,
+        },
         PermissionsService,
         OsoService,
       ],
@@ -58,11 +56,6 @@ export class PermissionsModule {
    * @param options {PermissionsModuleAsyncOptions}
    */
   static forRootAsync(options: PermissionsModuleAsyncOptions): DynamicModule {
-    const permissionModuleOptionsProvider: Provider = {
-      provide: PERMISSION_MODULE_OPTIONS,
-      useValue: options,
-    };
-
     const configProvider: Provider = {
       provide: PERMISSION_CONFIG_OPTIONS,
       useFactory: async (modOptions: PermissionsModuleOptions) => {
@@ -78,7 +71,6 @@ export class PermissionsModule {
       providers: [
         ...asyncProviders,
         configProvider,
-        permissionModuleOptionsProvider,
         PermissionsService,
         OsoService,
       ],
