@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.12.18](https://github.com/juicycleff/ultimate-backend/compare/v0.12.17...v0.12.18) (2021-08-27)
+
+
+### Bug Fixes
+
+* **common:** missing ip deps in common ([38f5921](https://github.com/juicycleff/ultimate-backend/commit/38f5921b42875d713663bdbf9d4293e35dcbc9df))
+
+
+
 ## [0.12.17](https://github.com/juicycleff/ultimate-backend/compare/v0.12.16...v0.12.17) (2021-08-17)
 
 
