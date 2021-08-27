@@ -98,7 +98,7 @@ const configDependency = {
 const commonDependency = {
   name: "@ultimate-backend/common",
   peerDependencies: ["@nestjs/core", "@nestjs/common"],
-  dependencies: ["lodash", "rxjs", "yaml", "@iarna/toml", "reflect-metadata"],
+  dependencies: ["lodash", "rxjs", "yaml", "@iarna/toml", "reflect-metadata", "ip"],
   devDependencies: [],
 }
 
