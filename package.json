@@ -85,7 +85,7 @@
     "handlebars": "^4.7.7",
     "helmet": "^4.6.0",
     "inquirer": "^8.1.1",
-    "ioredis": "^4.19.4",
+    "ioredis": "^4.27.8",
     "ip": "^1.1.5",
     "js-yaml": "^4.0.0",
     "kafkajs": "^1.15.0",
