@@ -2,6 +2,16 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.13.0](https://github.com/juicycleff/ultimate-backend/compare/v0.12.19...v0.13.0) (2021-09-05)
+
+
+### Bug Fixes
+
+* **common:** fixed tslint issue ([f33292b](https://github.com/juicycleff/ultimate-backend/commit/f33292bb02eb1c01f849de90e5f6e8e3348d5d93))
+* **core:** fixed grpc not starting ([16cba20](https://github.com/juicycleff/ultimate-backend/commit/16cba2088567dc089e63314e8d265ee7f461474e))
+
+
+
 ## [0.12.19](https://github.com/juicycleff/ultimate-backend/compare/v0.12.18...v0.12.19) (2021-08-29)
 
 
