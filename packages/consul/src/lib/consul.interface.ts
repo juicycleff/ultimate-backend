@@ -22,9 +22,10 @@ import * as Consul from 'consul';
 import ConsulCheck = Consul.Agent.Check.RegisterOptions;
 import ConsulService = Consul.Agent.Service.RegisterOptions;
 
-export type Check = ConsulCheck;
+export type Check = ConsulCheck & any;
 
 export interface Service extends ConsulService {
   region?: string;
   status?: string;
+  meta?: any;
 }

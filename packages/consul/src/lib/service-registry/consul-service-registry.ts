@@ -226,6 +226,8 @@ export class ConsulServiceRegistry
       method: this.client.consul.health.service,
       options: {
         timeout: this.WATCH_TIMEOUT,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         service: serviceName,
         wait: '5m',
         ...this.getToken(),
