@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.13.2](https://github.com/juicycleff/ultimate-backend/compare/v0.13.1...v0.13.2) (2021-09-05)
+
+
+### Bug Fixes
+
+* **core:** fixed grpc service not starting ([0f3ac5c](https://github.com/juicycleff/ultimate-backend/commit/0f3ac5c61663d2682798d4a0f8645bc86b7e96d7))
+
+
+
 ## [0.13.1](https://github.com/juicycleff/ultimate-backend/compare/v0.13.0...v0.13.1) (2021-09-05)
 
 
