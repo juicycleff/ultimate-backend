@@ -1,12 +1,12 @@
 {
   "migrations": [
     {
-      "version": "12.5.0-beta.1",
-      "description": "Rename the workspace-schematic script into workspace-generator script",
-      "factory": "./src/migrations/update-12-5-0/add-target-dependencies",
+      "version": "12.6.0-beta.0",
       "cli": "nx",
-      "package": "@nrwl/workspace",
-      "name": "add-target-dependencies"
+      "description": "Uses `getJestProjects()` to populate projects array in root level `jest.config.js` file.",
+      "factory": "./src/migrations/update-12-6-0/update-base-jest-config",
+      "package": "@nrwl/jest",
+      "name": "update-jest-config-to-use-util"
     }
   ]
 }

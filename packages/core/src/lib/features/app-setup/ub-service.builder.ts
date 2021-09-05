@@ -31,7 +31,12 @@ import {
   CorsOptionsDelegate,
 } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { CookieOptions, SessionOptions, SwaggerCustomOptions, SwaggerDocumentOptions } from './types';
+import {
+  CookieOptions,
+  SessionOptions,
+  SwaggerCustomOptions,
+  SwaggerDocumentOptions,
+} from './types';
 
 type CSurfType = {
   value?: (req: any) => string;
@@ -44,12 +49,16 @@ export class UBServiceBuilder {
   private _grpcOptions: GrpcOpts;
   private _swaggerObject: any;
   private _swaggerPath = 'docs';
+  private _disableMicroservice = false;
   private _swaggerCustomOpts;
   private boot: BootConfig;
   private _prefix: string;
   private _swaggerOptions: Record<string, any>;
 
-  constructor(private readonly app: INestApplication & {register?: any}, private readonly isFastify: boolean = false) {
+  constructor(
+    private readonly app: INestApplication & { register?: any },
+    private readonly isFastify: boolean = false
+  ) {
     this.boot = app.get<BootConfig>(BootConfig);
   }
 
@@ -63,16 +72,17 @@ export class UBServiceBuilder {
    * @description Allows you express modules with fastify
    */
   async enableExpressMiddleware() {
-    const middie = loadPackage(
-      'middie',
-      'middie',
-      () => require('middie')
-    );
+    const middie = loadPackage('middie', 'middie', () => require('middie'));
     await this.app.register(middie);
   }
 
   withPoweredBy() {
     this.app.use(bloodTearsMiddleware);
+    return this;
+  }
+
+  disableMicroservice() {
+    this._disableMicroservice = true;
     return this;
   }
 
@@ -95,7 +105,9 @@ export class UBServiceBuilder {
         this.isFastify ? 'fastify-helmet' : 'helmet',
         () => require(this.isFastify ? 'fastify-helmet' : 'helmet')
       );
-      this.isFastify ? this.app.register(helmet, config.helmet) : this.app.use(helmet(config.helmet));
+      this.isFastify
+        ? this.app.register(helmet, config.helmet)
+        : this.app.use(helmet(config.helmet));
     }
 
     if (hasNoKeys || config.cors) {
@@ -108,7 +120,9 @@ export class UBServiceBuilder {
         this.isFastify ? 'fastify-csrf' : 'csurf',
         () => require(this.isFastify ? 'fastify-csrf' : 'csurf')
       );
-      this.isFastify ? this.app.use(csurf, config.csurf) : this.app.use(csurf(config.csurf));
+      this.isFastify
+        ? this.app.use(csurf, config.csurf)
+        : this.app.use(csurf(config.csurf));
     }
     return this;
   }
@@ -141,22 +155,14 @@ export class UBServiceBuilder {
   }
 
   withSession(useRedisStore?: boolean, opts?: SessionOptions | string) {
-    const connectRedis = loadPackage(
-      'connect-redis',
-      'connect-redis',
-      () => require('connect-redis')
+    const connectRedis = loadPackage('connect-redis', 'connect-redis', () =>
+      require('connect-redis')
     );
 
-    const Redis = loadPackage(
-      'ioredis',
-      'ioredis',
-      () => require('ioredis')
-    );
+    const Redis = loadPackage('ioredis', 'ioredis', () => require('ioredis'));
 
-    const session = loadPackage(
-      'express-session',
-      'express-session',
-      () => require('express-session')
+    const session = loadPackage('express-session', 'express-session', () =>
+      require('express-session')
     );
 
     const RedisSessionStore = connectRedis(session);
@@ -195,7 +201,6 @@ export class UBServiceBuilder {
         }
       | string
   ) {
-
     let config = {} as any;
     if (!opts) {
       config = this.boot.get('setup.cookie', {});
@@ -238,26 +243,24 @@ export class UBServiceBuilder {
   }
 
   withGrpc(options?: GrpcOpts) {
-    if (!options) {
-      this._grpcOptions = this.boot.get('transport.grpc');
-      if (this._grpcOptions && this._grpcOptions.protoPath) {
-        if (Array.isArray(this._grpcOptions.protoPath)) {
-          const protoPath = [];
-          for (const proto of this._grpcOptions.protoPath) {
-            if (proto.startsWith('dist/examples')) {
-              protoPath.push(path.resolve(process.cwd(), proto));
-            }
+    this._grpcOptions = this.boot.get('transport.grpc', options);
+    if (this._grpcOptions && this._grpcOptions.protoPath) {
+      if (Array.isArray(this._grpcOptions.protoPath)) {
+        const protoPath = [];
+        for (const proto of this._grpcOptions.protoPath) {
+          if (proto.startsWith('./')) {
+            protoPath.push(path.resolve(process.cwd(), proto));
+          } else {
+            protoPath.push(proto);
           }
-          this._grpcOptions.protoPath = protoPath;
-        } else if (this._grpcOptions.protoPath.startsWith('dist/examples')) {
-          this._grpcOptions.protoPath = path.resolve(
-            process.cwd(),
-            this._grpcOptions.protoPath
-          );
         }
+        this._grpcOptions.protoPath = protoPath;
+      } else if (this._grpcOptions.protoPath.startsWith('./')) {
+        this._grpcOptions.protoPath = path.resolve(
+          process.cwd(),
+          this._grpcOptions.protoPath
+        );
       }
-    } else {
-      this._grpcOptions = options;
     }
 
     if (!this._grpcOptions) {
@@ -344,8 +347,10 @@ export class UBServiceBuilder {
   }
 
   private printRestInfo(port: number, host?: string) {
+    const hostname =
+      (host && host.startsWith('::') ? '[::]' : host) ?? 'localhost';
     Logger.log(
-      `REST api listening on host: http://${ host ?? 'localhost'}:${port}${
+      `REST api listening on host: http://${hostname}:${port}${
         this._prefix ? '/' + this._prefix : ''
       }`,
       'UBService'
@@ -353,15 +358,17 @@ export class UBServiceBuilder {
   }
 
   private printSwaggerInfo(port: number, host?: string) {
+    const hostname =
+      (host && host.startsWith('::') ? '[::]' : host) ?? 'localhost';
     if (this._swaggerObject) {
       Logger.log(
-        `Swagger Docs for service available at: http://${ host ?? 'localhost'}:${port}/${this._swaggerPath}`,
+        `Swagger Docs for service available at: http://${hostname}:${port}/${this._swaggerPath}`,
         'UBService'
       );
     }
   }
 
-  private connectGrpc() {
+  private setupGrpc() {
     if (this._grpcOptions) {
       const impPkg = loadPackage(
         '@nestjs/microservices',
@@ -373,6 +380,12 @@ export class UBServiceBuilder {
         transport: impPkg.Transport.GRPC,
         options: this._grpcOptions,
       });
+    }
+  }
+
+  private async startMicroservice() {
+    if (this.app.getMicroservices().length > 0 && this._disableMicroservice) {
+      await this.app.startAllMicroservices();
     }
   }
 
@@ -403,7 +416,8 @@ export class UBServiceBuilder {
 
     enableKillGracefully(this.app);
     this.createSwaggerDocument();
-    this.connectGrpc();
+    this.setupGrpc();
+    await this.startMicroservice();
 
     const appPort = port ?? this.boot.get('port', 3000);
     const appHost = host ?? this.boot.get('host', null);

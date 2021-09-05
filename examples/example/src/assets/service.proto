@@ -1,0 +1,10 @@
+syntax = "proto3";
+package ultimate_backend.srv.example;
+
+message Message {
+  string body = 1;
+}
+
+service ExampleService {
+  rpc SayHello(Message) returns (Message) {}
+}

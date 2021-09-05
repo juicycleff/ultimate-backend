@@ -1,0 +1,28 @@
+name: adv-service
+port: 9000
+
+clients:
+  etcd:
+    retryAttempts: 6000
+  zookeeper:
+    retryAttempts: 6000
+  kubernetes:
+    retryAttempts: 6000
+
+multitenancy:
+  tenantId: tenant-id
+  tenantResolver:
+    resolverType: 'Header'
+
+loadbalancer:
+  services:
+    - strategy: 'RoundRobinStrategy'
+      name: 'example'
+    - strategy: 'RoundRobinStrategy'
+      name: 'adv-example'
+
+transport:
+  grpc:
+    package: 'ultimate_backend.srv.example'
+    protoPath: './dist/examples/example/assets/service.proto'
+    url: 0.0.0.0:{{port}}
