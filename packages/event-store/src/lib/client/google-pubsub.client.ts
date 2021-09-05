@@ -22,7 +22,7 @@ import { GooglePubsubClientOptions, IBrokerClient } from '../interface';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { PubSub } from '../external/gpubsub.types';
 import { EventStoreConfig } from '../event-store.config';
 import { EventEmitter } from 'events';
@@ -64,6 +64,7 @@ export class GooglePubsubClient
         this.connected = true;
         this.emit('connected');
         this.logger.log('GooglePubsubClient client connected successfully');
+        return EMPTY;
       })
         .pipe(
           handleRetry(

@@ -24,7 +24,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { Stan } from '../external/stan.types';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { EventStoreConfig } from '../event-store.config';
 import { EventEmitter } from 'events';
 
@@ -84,6 +84,7 @@ export class StanClient
           this.logger.error('Stan Event Store client closed!');
           throw new Error('Stan Event Store client closed!');
         });
+        return EMPTY;
       })
         .pipe(
           handleRetry(

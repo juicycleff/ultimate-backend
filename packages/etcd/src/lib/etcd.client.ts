@@ -27,7 +27,7 @@ import {
 import { handleRetry, IReactiveClient } from '@ultimate-backend/common';
 import { Etcd3 } from 'etcd3';
 import { EtcdConfig } from './etcd.config';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 
 @Injectable()
 export class EtcdClient
@@ -50,6 +50,7 @@ export class EtcdClient
         console.log('EtcdClient connected', this.opts.config);
         this.client = new Etcd3(this.opts.config.etcdOptions);
         this.logger.log('EtcdClient client connected successfully');
+        return EMPTY;
       })
         .pipe(
           handleRetry(

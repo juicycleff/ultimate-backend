@@ -37,7 +37,7 @@ import {
   Status,
   Watch,
 } from 'consul';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { ConsulConfig } from './consul.config';
 
 @Injectable()
@@ -111,6 +111,7 @@ export class ConsulClient
         });
         this.logger.log('ConsulClient client connected successfully');
         this._initFields(this.consul);
+        return EMPTY;
       })
         .pipe(
           handleRetry(

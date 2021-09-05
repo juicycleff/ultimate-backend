@@ -22,7 +22,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EventStoreDBClient } from '@eventstore/db-client';
 import { EventStoreClientOptions, IBrokerClient } from '../interface';
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { EventStoreConfig } from '../event-store.config';
 import { EventEmitter } from 'events';
 
@@ -72,6 +72,7 @@ export class EventStoreClient
         this.connected = true;
         this.emit('connected');
         this.logger.log('EventStoreClient client connected successfully');
+        return EMPTY;
       })
         .pipe(
           handleRetry(

@@ -20,7 +20,7 @@
 import * as k8s from '@kubernetes/client-node';
 import { handleRetry, IReactiveClient } from '@ultimate-backend/common';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { KubernetesConfig } from './kubernetes.config';
 
 @Injectable()
@@ -83,6 +83,7 @@ export class KubernetesClient
         this._client = this._kc.makeApiClient(k8s.CoreV1Api);
         this._watcher = new k8s.Watch(this._kc);
         this.logger.log('KubernetesClient client connected successfully');
+        return EMPTY;
       })
         .pipe(
           handleRetry(

@@ -20,7 +20,7 @@
 import { handleRetry, LoggerUtil } from '@ultimate-backend/common';
 import { EventStoreConfig } from '../event-store.config';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import * as uuid from 'uuid';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EventEmitter } from 'events';
@@ -138,6 +138,7 @@ export class KafkaClient
         });
 
         await Promise.all([this._producer.connect(), this._consumer.connect()]);
+        return EMPTY;
       })
         .pipe(
           handleRetry(

@@ -25,7 +25,7 @@ import {
 } from '@nestjs/common';
 import { Cluster } from 'ioredis';
 import { IReactiveClient, handleRetry } from '@ultimate-backend/common';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { RedisConfig } from './redis.config';
 
 @Injectable()
@@ -54,6 +54,7 @@ export class RedisClusterClient
         this.options.config.redisOptions
       );
       this.logg.log('Redis cluster client connected successfully');
+      return EMPTY;
     })
       .pipe(
         handleRetry(

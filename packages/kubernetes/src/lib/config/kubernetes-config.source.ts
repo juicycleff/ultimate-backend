@@ -102,7 +102,7 @@ export class KubernetesConfigSource implements IConfigSource, OnModuleInit {
         await this.kubernetes.client.patchNamespacedConfigMap(
           path,
           this.defaultNamespace || 'default',
-          payStr
+          payStr as any
         );
       }
     } catch (e) {

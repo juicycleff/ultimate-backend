@@ -26,7 +26,7 @@ import {
 } from '@nestjs/common';
 import * as Redis from 'ioredis';
 import { IReactiveClient, handleRetry } from '@ultimate-backend/common';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { RedisConfig } from './redis.config';
 
 @Injectable()
@@ -52,6 +52,7 @@ export class RedisClient
       this.logg.log('Redis client is connecting');
       this.client = new Redis(this.options.config.redisOptions);
       this.logg.log('Redis client connected successfully');
+      return EMPTY;
     })
       .pipe(
         handleRetry(

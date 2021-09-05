@@ -17,16 +17,16 @@
  * File name:         http-client-interface.ts
  * Last modified:     18/03/2021, 22:46
  ******************************************************************************/
-import { GotJSONOptions, GotPromise, GotUrl } from 'got';
+import { GotRequestFunction } from 'got';
 
 export interface IHttpClient<T> {
-  get<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+  get: GotRequestFunction;
 
-  post<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+  post: GotRequestFunction;
 
-  put<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+  put: GotRequestFunction;
 
-  patch<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+  patch: GotRequestFunction;
 
-  head<T>(path: GotUrl, options: Partial<GotJSONOptions>): GotPromise<any>;
+  head: GotRequestFunction;
 }

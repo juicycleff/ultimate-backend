@@ -26,7 +26,7 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { defer } from 'rxjs';
+import { defer, EMPTY } from 'rxjs';
 import { merge } from 'lodash';
 import { handleRetry } from '@ultimate-backend/common';
 import { ZookeeperConfig } from './zookeeper.config';
@@ -72,6 +72,7 @@ export class ZookeeperClient
         super.connect(this.opts, () => {
           this.connected = true;
         });
+        return EMPTY;
       })
         .pipe(
           handleRetry(
