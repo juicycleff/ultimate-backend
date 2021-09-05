@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.13.1](https://github.com/juicycleff/ultimate-backend/compare/v0.13.0...v0.13.1) (2021-09-05)
+
+
+### Bug Fixes
+
+* fixed breaking defer type ([f738580](https://github.com/juicycleff/ultimate-backend/commit/f738580afd85328c61d47a144d9e5c0de2162381))
+
+
+
 # [0.13.0](https://github.com/juicycleff/ultimate-backend/compare/v0.12.19...v0.13.0) (2021-09-05)
 
 
