@@ -17,7 +17,8 @@
  * File name:         http.client.ts
  * Last modified:     18/03/2021, 23:08
  ******************************************************************************/
-import * as got from 'got';
+import got from 'got';
+import { Got, GotRequestFunction } from 'got';
 import {
   LoadBalancerClient,
   LoadBalancerRequest,
@@ -38,7 +39,7 @@ export class HttpClient {
   } = {
     responseType: 'json',
   };
-  private instance: got.GotInstance<got.GotBodyFn<string>>;
+  private instance: Got;
 
   constructor(
     private readonly lb: LoadBalancerClient,
@@ -52,7 +53,7 @@ export class HttpClient {
     try {
       this.serviceId = options.service;
       const { baseUrl } = this.getServiceAddress();
-      this.httpOpts = this.mergeOptions(options, {
+      this.httpOpts = this.mergeOptions(options as any, {
         responseType: 'json',
         baseUrl,
       });
@@ -68,66 +69,68 @@ export class HttpClient {
   async get<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'GET', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'GET', options);
   }
 
   async head<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'HEAD', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'HEAD', options);
   }
 
   async delete<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'DELETE', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'DELETE', options);
   }
 
   async post<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'POST', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'POST', options);
   }
 
   async options<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'OPTIONS', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'OPTIONS', options);
   }
 
   async trace<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'TRACE', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'TRACE', options);
   }
 
   async put<T>(
     path: string,
     options?: Partial<HttpGotOptions>
-  ): Promise<got.GotPromise<any>> {
-    return await this.request(path, 'PUT', options);
+  ): Promise<GotRequestFunction> {
+    return this.request(path, 'PUT', options);
   }
 
   private doRequest(
     path: string,
     method: string,
     options?: Partial<HttpGotOptions>
-  ): got.GotPromise<string> {
-    return this.lb.execute(
+  ): GotRequestFunction {
+    return this.lb.execute<GotRequestFunction>(
       this.serviceId,
       this.node,
-      new LoadBalancerRequest<
-        Promise<got.Response<string>> & { cancel(): void }
-      >(this.instance, path, {
-        ...options,
-        method,
-      })
+      new LoadBalancerRequest<Promise<GotRequestFunction> & { cancel(): void }>(
+        this.instance,
+        path,
+        {
+          ...options,
+          method,
+        }
+      )
     );
   }
 

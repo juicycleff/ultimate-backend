@@ -18,8 +18,7 @@
  * Last modified:     18/03/2021, 22:33
  ******************************************************************************/
 import { ChannelOptions } from '@nestjs/microservices/external/grpc-options.interface';
-import { GotBodyOptions, Hooks, RetryOptions, TimeoutOptions } from 'got';
-import * as nodeStream from 'stream';
+import { ExtendOptions } from 'got';
 import * as Dom from 'graphql-request/dist/types.dom';
 import { ServiceInstance } from '@ultimate-backend/common';
 
@@ -27,7 +26,7 @@ export interface RequestHooks {
   hooks?: {
     preRequest: (serviceId?: string, node?: ServiceInstance) => void;
     postRequest: (req?: any) => void;
-  }
+  };
 }
 
 export interface IGrpcServiceClient extends RequestHooks {
@@ -66,21 +65,7 @@ export interface IGrpcServiceClient extends RequestHooks {
   };
 }
 
-export interface HttpGotOptions {
-  header?: { [key: string]: string };
-  body?: string | Buffer | nodeStream.Readable;
-  hooks?: Hooks<GotBodyOptions<any>, string | Buffer | nodeStream.Readable>;
-  timeout?: number | TimeoutOptions;
-  retry?: number | RetryOptions;
-  decompress?: boolean;
-  throwHttpErrors?: boolean;
-  http2?: boolean;
-  followRedirect?: boolean;
-  isStream?: boolean;
-  auth?: string;
-  ca?: string;
-  searchParams?: URLSearchParams;
-}
+export type HttpGotOptions = ExtendOptions;
 
 export interface IHttpServiceClient extends HttpGotOptions {
   transport: 'http';
