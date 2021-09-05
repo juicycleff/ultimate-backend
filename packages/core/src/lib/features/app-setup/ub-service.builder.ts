@@ -384,7 +384,7 @@ export class UBServiceBuilder {
   }
 
   private async startMicroservice() {
-    if (this.app.getMicroservices().length > 0 && this._disableMicroservice) {
+    if (this.app.getMicroservices().length > 0 && !this._disableMicroservice) {
       await this.app.startAllMicroservices();
     }
   }
@@ -417,6 +417,7 @@ export class UBServiceBuilder {
     enableKillGracefully(this.app);
     this.createSwaggerDocument();
     this.setupGrpc();
+
     await this.startMicroservice();
 
     const appPort = port ?? this.boot.get('port', 3000);
