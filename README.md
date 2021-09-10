@@ -20,7 +20,8 @@ ULTIMATE BACKEND
 </p>  
   
 ## Description  
-  
+Note: The current boilerplate repo is here [WIP Ultimate Backend Boilerplate](https://github.com/juicycleff/ultimate-backend-boilerplate). This repo is currently houses the microservice packages [Next Branch](https://github.com/juicycleff/ultimate-backend/tree/next/packages).
+
 This should be the go to backend base for your next scalable project. This is a proof of concept project designed to be extremely slim and scalable, with distributed data request and process handling, built from the ground up for production use. It comes with Multi-Tenancy SaaS support, following different multi-tenancy database strategy as well as different resolver patterns  
 to identify your tenants. The goal is to give your next big project that extra leap to awesomeness. To get started read the instructions below. With support for both [Event Store](https://eventstore.org) and [NATS Streaming](https://nats.io) for event streaming and Kafka comming soon.
   
