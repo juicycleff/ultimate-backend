@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.13.5](https://github.com/juicycleff/ultimate-backend/compare/v0.13.4...v0.13.5) (2021-09-16)
+
+
+### Bug Fixes
+
+* **consul:** fixed breaking changes from consul update ([e5f7c25](https://github.com/juicycleff/ultimate-backend/commit/e5f7c25db751b5bb7bdbfce96466be2315277ee4))
+
+
+
 ## [0.13.4](https://github.com/juicycleff/ultimate-backend/compare/v0.13.3...v0.13.4) (2021-09-05)
 
 

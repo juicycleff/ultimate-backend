@@ -2,6 +2,10 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.13.5](https://github.com/juicycleff/ultimate-backend/compare/v0.13.4...v0.13.5) (2021-09-16)
+
+
+
 ## [0.13.4](https://github.com/juicycleff/ultimate-backend/compare/v0.13.3...v0.13.4) (2021-09-05)
 
 
