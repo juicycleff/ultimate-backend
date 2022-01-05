@@ -12,7 +12,7 @@ for PROJECT_DIR in ${PROJECTS} ; do
     continue
   fi
 
-  SVC_NAME=$(yq r ./"${PROJECT_DIR}"/${BOOTSTRAP_PATH} 'service.name' )
+  SVC_NAME=$(yq e '.service.name' ./"${PROJECT_DIR}"/${BOOTSTRAP_PATH} )
   echo "Registering ${SVC_NAME}"
 
   if [ ! -f "./${PROJECT_DIR}/${CONFIG_PATH}" ]; then
