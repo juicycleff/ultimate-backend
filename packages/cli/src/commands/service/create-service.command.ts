@@ -28,7 +28,7 @@ export class CreateServiceCommand implements ICommand {
 
   description = 'create a new ultimate-backend service';
 
-  action(serviceName, actions, options, command): void {
+  action(): void {
     try {
       execSync(`npx nx g @ultimate-backend/plugin-nx:service`, {
         stdio: [0, 1, 2],

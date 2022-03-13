@@ -44,7 +44,7 @@ export class GenPipeCommand implements ICommand {
 
   description = 'generate nestjs pipe for service';
 
-  action(name, options, command, ...rest): void {
+  action(name, options): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-pipe`;
     if (name) {
       cmd = cmd + ` ${name}`;

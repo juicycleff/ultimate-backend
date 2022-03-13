@@ -7,6 +7,6 @@
     "types": ["node"],
     "target": "es6"
   },
-  "exclude": ["**/*.spec.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
   "include": ["**/*.ts"]
 }

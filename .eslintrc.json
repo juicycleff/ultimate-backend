@@ -12,11 +12,20 @@
             "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
-              { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
             ]
           }
         ],
-        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "quotes": [
+          "error",
+          "single",
+          {
+            "allowTemplateLiterals": true
+          }
+        ],
         "semi": ["error", "always"],
         "sort-imports": [
           "error",
@@ -33,7 +42,6 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "parserOptions": { "project": "./tsconfig.*?.json" },
       "rules": {
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/no-var-requires": "off"

@@ -35,6 +35,7 @@ import { GenServiceCommand } from './gen-service.command';
 const nestCommand = new Command('nest');
 nestCommand.description('nestjs providers generator');
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commands = [
   new GenControllerCommand(nestCommand),
   new GenDecoratorCommand(nestCommand),

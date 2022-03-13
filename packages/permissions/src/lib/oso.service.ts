@@ -52,7 +52,7 @@ export class OsoService extends Oso implements OnModuleInit {
       this.logger.log(`register ${os.target.name}...`);
 
       if (os.options.name) {
-        this.registerClass(os.target as Class, os.options.name);
+        this.registerClass(os.target as Class, { name: os.options.name });
       } else {
         this.registerClass(os.target as Class);
       }
@@ -64,22 +64,25 @@ export class OsoService extends Oso implements OnModuleInit {
       if (typeof this.options.polars === 'string') {
         await this.loadStr(this.options.polars);
       } else if (this.options.polars.file) {
-        await this.loadFile(this.options.polars.polar);
+        await this.loadFiles([this.options.polars.polar]);
       } else {
         await this.loadStr(this.options.polars.polar, this.options.polars.name);
       }
     } else {
+      const filesToLoad = [];
       for (const po of this.options.polars) {
         if (typeof po === 'string') {
           await this.loadStr(po);
         } else {
           if (po.file) {
-            await this.loadFile(po.name);
+            filesToLoad.push(po.name);
           } else {
             await this.loadStr(po.polar, po.name);
           }
         }
       }
+
+      if (filesToLoad.length > 0) await this.loadFiles(filesToLoad);
     }
     this.logger.log('Initializing completed... [Permission]');
   }

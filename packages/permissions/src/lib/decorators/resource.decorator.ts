@@ -19,10 +19,9 @@
  ******************************************************************************/
 
 import { TypeMetadataStorage } from '../storages';
+import { ClassParams } from 'oso/dist/src/types';
 
-export interface ResourceMetadataOptions {
-  name?: string;
-}
+export type ResourceMetadataOptions = ClassParams;
 
 /**
  * @Resource decorator is used to mark a class as a Oso actor class.

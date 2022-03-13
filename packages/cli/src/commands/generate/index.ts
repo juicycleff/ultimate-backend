@@ -23,6 +23,7 @@ const { Command } = require('commander');
 const moduleCommand = new Command('generate');
 moduleCommand.description('generate ultimate backend modules');
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commands = [new GenerateCqrsCommand(moduleCommand)];
 
 export const generateCommands = moduleCommand;

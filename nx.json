@@ -29,93 +29,9 @@
         "accessToken": "MDVhYjA4NTUtZDY0YS00MzhlLWI1YTgtNjE2MjVmYWNmNGQxfHJlYWQtd3JpdGU=",
         "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
-        "showUsageWarnings": true
+        "showUsageWarnings": true,
+        "parallel": 1
       }
-    }
-  },
-  "projects": {
-    "adv-example": {
-      "tags": []
-    },
-    "bootstrap": {
-      "tags": []
-    },
-    "brakes": {
-      "tags": []
-    },
-    "cli": {
-      "tags": [],
-      "implicitDependencies": ["plugin-nx"]
-    },
-    "client": {
-      "tags": []
-    },
-    "cloud": {
-      "tags": []
-    },
-    "common": {
-      "tags": []
-    },
-    "config": {
-      "tags": [],
-      "implicitDependencies": []
-    },
-    "consul": {
-      "tags": [],
-      "implicitDependencies": []
-    },
-    "core": {
-      "tags": []
-    },
-    "couchbase": {
-      "tags": []
-    },
-    "create-ub-project": {
-      "tags": []
-    },
-    "etcd": {
-      "tags": [],
-      "implicitDependencies": []
-    },
-    "event-store": {
-      "tags": []
-    },
-    "event-store-example": {
-      "tags": []
-    },
-    "example": {
-      "tags": []
-    },
-    "gateway": {
-      "tags": []
-    },
-    "kubernetes": {
-      "tags": []
-    },
-    "loadbalancer": {
-      "tags": []
-    },
-    "messaging": {
-      "tags": []
-    },
-    "permissions": {
-      "tags": []
-    },
-    "plugin-nx": {
-      "tags": []
-    },
-    "plugin-nx-e2e": {
-      "tags": [],
-      "implicitDependencies": ["plugin-nx"]
-    },
-    "redis": {
-      "tags": []
-    },
-    "workspace": {
-      "tags": []
-    },
-    "zookeeper": {
-      "tags": []
     }
   },
   "targetDependencies": {
@@ -125,5 +41,15 @@
         "projects": "dependencies"
       }
     ]
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "cli",
+  "generators": {
+    "@nrwl/node:library": {
+      "buildable": true,
+      "publishable": true
+    }
   }
 }

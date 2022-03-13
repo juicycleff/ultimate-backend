@@ -44,7 +44,7 @@ export class GenDecoratorCommand implements ICommand {
 
   description = 'generate nestjs decorator for service';
 
-  action(name, options, command, ...rest): void {
+  action(name, options): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-decorator`;
     if (name) {
       cmd = cmd + ` ${name}`;

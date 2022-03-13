@@ -8,7 +8,7 @@
       "prefix": "adv-example",
       "architect": {
         "build": {
-          "builder": "@nrwl/node:build",
+          "builder": "@nrwl/node:webpack",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/examples/adv-example",
@@ -31,7 +31,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "@nrwl/node:node",
           "options": {
             "buildTarget": "adv-example:build"
           }
@@ -40,7 +40,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["examples/adv-example/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -50,7 +51,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "bootstrap": {
       "root": "packages/bootstrap",
@@ -61,7 +63,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/bootstrap/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -72,7 +75,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/bootstrap",
@@ -82,7 +85,8 @@
             "assets": ["packages/bootstrap/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "brakes": {
       "root": "packages/brakes",
@@ -93,7 +97,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/brakes/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -104,7 +109,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/brakes",
@@ -114,7 +119,8 @@
             "assets": ["packages/brakes/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "cli": {
       "root": "packages/cli",
@@ -125,7 +131,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/cli/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -136,7 +143,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/cli",
@@ -146,7 +153,9 @@
             "assets": ["packages/cli/*.md"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["plugin-nx"]
     },
     "client": {
       "root": "packages/client",
@@ -157,7 +166,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/client/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -168,7 +178,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/client",
@@ -178,7 +188,8 @@
             "assets": ["packages/client/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "cloud": {
       "root": "packages/cloud",
@@ -190,7 +201,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/cloud/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -201,7 +213,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "options": {
             "outputPath": "dist/packages/cloud",
             "tsConfig": "packages/cloud/tsconfig.lib.json",
@@ -210,7 +222,8 @@
             "assets": ["packages/cloud/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "common": {
       "root": "packages/common",
@@ -222,7 +235,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/common/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -232,7 +246,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "options": {
             "outputPath": "dist/packages/common",
             "tsConfig": "packages/common/tsconfig.lib.json",
@@ -241,7 +255,8 @@
             "assets": ["packages/common/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "config": {
       "root": "packages/config",
@@ -252,7 +267,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/config/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -263,7 +279,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/config",
@@ -273,7 +289,9 @@
             "assets": ["packages/config/*.md"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": []
     },
     "consul": {
       "root": "packages/consul",
@@ -284,7 +302,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/consul/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -295,7 +314,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/consul",
@@ -314,7 +333,9 @@
             "progress": true
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": []
     },
     "core": {
       "root": "packages/core",
@@ -326,7 +347,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/core/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -336,7 +358,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/core",
@@ -346,7 +368,8 @@
             "assets": ["packages/core/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "couchbase": {
       "root": "packages/couchbase",
@@ -357,7 +380,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/couchbase/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -368,7 +392,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/couchbase",
@@ -378,7 +402,8 @@
             "assets": ["packages/couchbase/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "create-ub-project": {
       "root": "packages/create-ub-project",
@@ -389,7 +414,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/create-ub-project/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -400,7 +426,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/create-ub-project",
@@ -410,7 +436,8 @@
             "assets": ["packages/create-ub-project/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "etcd": {
       "root": "packages/etcd",
@@ -421,7 +448,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/etcd/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -432,7 +460,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/etcd",
@@ -444,7 +472,9 @@
             "parallel": true
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": []
     },
     "event-store": {
       "root": "packages/event-store",
@@ -455,7 +485,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/event-store/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -466,7 +497,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/event-store",
@@ -476,7 +507,8 @@
             "assets": ["packages/event-store/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "event-store-example": {
       "root": "examples/event-store-example",
@@ -485,7 +517,7 @@
       "prefix": "event-store-example",
       "architect": {
         "build": {
-          "builder": "@nrwl/node:build",
+          "builder": "@nrwl/node:webpack",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/examples/event-store-example",
@@ -508,7 +540,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "@nrwl/node:node",
           "options": {
             "buildTarget": "event-store-example:build"
           }
@@ -517,7 +549,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["examples/event-store-example/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -527,7 +560,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "example": {
       "root": "examples/example",
@@ -536,7 +570,7 @@
       "prefix": "example",
       "architect": {
         "build": {
-          "builder": "@nrwl/node:build",
+          "builder": "@nrwl/node:webpack",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/examples/example",
@@ -559,7 +593,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "@nrwl/node:node",
           "options": {
             "buildTarget": "example:build"
           }
@@ -568,7 +602,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["examples/example/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -578,7 +613,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "gateway": {
       "root": "packages/gateway",
@@ -589,7 +625,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/gateway/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -600,7 +637,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/gateway",
@@ -610,7 +647,8 @@
             "assets": ["packages/gateway/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "kubernetes": {
       "root": "packages/kubernetes",
@@ -621,7 +659,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/kubernetes/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -632,7 +671,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "options": {
             "outputPath": "dist/packages/kubernetes",
             "tsConfig": "packages/kubernetes/tsconfig.lib.json",
@@ -641,7 +680,8 @@
             "assets": ["packages/kubernetes/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "loadbalancer": {
       "root": "packages/loadbalancer",
@@ -653,7 +693,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/loadbalancer/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -663,7 +704,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "options": {
             "outputPath": "dist/packages/loadbalancer",
             "tsConfig": "packages/loadbalancer/tsconfig.lib.json",
@@ -672,7 +713,8 @@
             "assets": ["packages/loadbalancer/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "messaging": {
       "root": "packages/messaging",
@@ -683,7 +725,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/messaging/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -694,7 +737,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/messaging",
@@ -704,7 +747,8 @@
             "assets": ["packages/messaging/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "permissions": {
       "root": "packages/permissions",
@@ -715,7 +759,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/permissions/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -726,7 +771,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "options": {
             "outputPath": "dist/packages/permissions",
             "tsConfig": "packages/permissions/tsconfig.lib.json",
@@ -735,7 +780,8 @@
             "assets": ["packages/permissions/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "plugin-nx": {
       "root": "packages/plugin-nx",
@@ -746,7 +792,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/plugin-nx/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -757,7 +804,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/plugin-nx",
@@ -799,7 +846,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": []
     },
     "plugin-nx-e2e": {
       "projectType": "application",
@@ -815,7 +863,9 @@
             "jestConfig": "examples/plugin-nx-e2e/jest.config.js"
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["plugin-nx"]
     },
     "redis": {
       "root": "packages/redis",
@@ -826,7 +876,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/redis/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -837,7 +888,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/redis",
@@ -847,7 +898,8 @@
             "assets": ["packages/redis/*.md"]
           }
         }
-      }
+      },
+      "tags": []
     },
     "workspace": {
       "architect": {
@@ -858,7 +910,8 @@
           }
         }
       },
-      "root": "."
+      "root": ".",
+      "tags": []
     },
     "zookeeper": {
       "root": "packages/zookeeper",
@@ -869,7 +922,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/zookeeper/**/*.ts"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -880,7 +934,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/node:package",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/zookeeper",
@@ -890,17 +944,8 @@
             "assets": ["packages/zookeeper/*.md"]
           }
         }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
-  "defaultProject": "cli",
-  "schematics": {
-    "@nrwl/node:library": {
-      "buildable": true,
-      "publishable": true
+      },
+      "tags": []
     }
   }
 }

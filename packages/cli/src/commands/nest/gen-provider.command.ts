@@ -44,7 +44,7 @@ export class GenProviderCommand implements ICommand {
 
   description = 'generate nestjs provider for service';
 
-  action(name, options, command, ...rest): void {
+  action(name, options): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:nest-provider`;
     if (name) {
       cmd = cmd + ` ${name}`;

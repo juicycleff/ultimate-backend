@@ -46,7 +46,7 @@ export class GenerateCqrsCommand implements ICommand {
 
   description = 'generate cqrs handlers for service';
 
-  action(handlerName, options, command, ...rest): void {
+  action(handlerName, options): void {
     let cmd = `npx nx g @ultimate-backend/plugin-nx:cqrs ${handlerName}`;
     if (options.service) {
       cmd = cmd + ` -p ${options.service}`;
