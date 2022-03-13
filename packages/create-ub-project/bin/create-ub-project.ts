@@ -24,7 +24,7 @@ import * as inquirer from 'inquirer';
 import * as path from 'path';
 import { dirSync } from 'tmp';
 import * as yargsParser from 'yargs-parser';
-import * as ora from 'ora';
+import ora from 'ora';
 import { showNxWarning, unparse } from './shared';
 import { output } from '../src';
 

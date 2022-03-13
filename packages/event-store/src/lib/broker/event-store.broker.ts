@@ -207,7 +207,7 @@ export class EventStoreBroker
 
       const resolved = (await this.eventStore
         .client()
-        .connectToPersistentSubscription(
+        .subscribeToPersistentSubscriptionToStream(
           opts.streamName,
           opts.groupName,
           opts.options,

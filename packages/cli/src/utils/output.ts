@@ -166,8 +166,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: chalk.reset.inverse.bold.keyword('orange')(' NOTE '),
-      title: chalk.bold.keyword('orange')(title),
+      label: chalk.reset.inverse.bold.bgYellow(' NOTE '),
+      title: chalk.bold.bgYellow(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);

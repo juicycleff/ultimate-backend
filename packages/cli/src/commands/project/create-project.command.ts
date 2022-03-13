@@ -34,7 +34,7 @@ export class CreateProjectCommand implements ICommand {
 
   action(buildTarget): void {
     try {
-      ora.promise(
+      ora.oraPromise(
         exec(
           `create-ub-project ${buildTarget} --preset=nest --interactive=false --appName=demo-service --nx-cloud=true --packageManager=npm`
         ),

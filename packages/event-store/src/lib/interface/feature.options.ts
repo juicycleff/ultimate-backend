@@ -22,10 +22,9 @@ import { IAdapterStore } from '../adapter.interface';
 import { IEvent } from '@nestjs/cqrs';
 import { ModuleMetadata, Type } from '@nestjs/common';
 import { DuplexOptions, ReadableOptions } from 'stream';
-import { ConnectToPersistentSubscriptionOptions } from '@eventstore/db-client/dist/persistentSubscription';
 import {
   EventType,
-  PersistentSubscription,
+  PersistentSubscriptionToStream,
   StreamSubscription,
 } from '@eventstore/db-client/dist/types';
 import {
@@ -38,6 +37,7 @@ import {
   Subscription as PubsubSubscription,
 } from '../external/gpubsub.types';
 import { ConsumerSubscribeTopic } from '../external/kafka.types';
+import {SubscribeToPersistentSubscriptionToStreamOptions} from "@eventstore/db-client";
 
 export interface IEventConstructors {
   [key: string]: (...args: any[]) => IEvent;
@@ -60,7 +60,7 @@ export interface EventStorePersistentSubscription {
   type: EventStoreSubscriptionType.Persistent;
   streamName: string;
   groupName: string;
-  options?: ConnectToPersistentSubscriptionOptions;
+  options?: SubscribeToPersistentSubscriptionToStreamOptions;
   duplexOptions?: DuplexOptions;
 }
 
@@ -137,7 +137,7 @@ export interface KafkaBrokerFeature extends BaseBrokerFeatureOption {
 }
 
 export interface ExtendedPersistentSubscription<E extends EventType = EventType>
-  extends PersistentSubscription<E> {
+  extends PersistentSubscriptionToStream<E> {
   type: 'persistent';
   isLive?: boolean | undefined;
 }
