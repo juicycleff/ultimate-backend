@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -30,7 +30,7 @@
     "release:pre": "nx affected --target version --version=prerelease --preid=alpha",
     "release:major": "nx affected --target version --version=major",
     "release:minor": "nx affected --target version --version=minor",
-    "release:patch": "nx affected --target version --version=patch",
+    "release:patch": "nx affected --target version --releaseAs=patch",
     "release": "nx affected --target version",
     "npm:build": "node ./tools/scripts/npm-build.js",
     "npm:publish": "node ./tools/scripts/npm-release.js",
@@ -107,13 +107,13 @@
     "tslib": "^2.3.1",
     "uuid": "^8.3.2",
     "vhost": "^3.0.2",
-    "yaml": "^1.10.2",
+    "yaml": "^2.0.0-11",
     "yaml-schema-validator": "^1.2.3",
     "yaml-validator": "^4.0.0",
     "zookeeper": "^5.3.2"
   },
   "devDependencies": {
-    "@jscutlery/semver": "^2.20.1",
+    "@jscutlery/semver": "^2.21.3",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@nrwl/cli": "13.8.8",
