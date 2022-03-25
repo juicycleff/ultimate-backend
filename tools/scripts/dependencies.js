@@ -90,15 +90,15 @@ const consulDependency = {
 
 const configDependency = {
   name: "@ultimate-backend/config",
-  peerDependencies: ["@nestjs/core", "@ultimate-backend/common", "@nestjs/common", "@ultimate-backend/bootstrap", "@ultimate-backend/loadbalancer", "@ultimate-backend/consul", "@ultimate-backend/etcd", "@ultimate-backend/zookeeper"],
-  dependencies: ["lodash", "rxjs", "dotenv",  "read-env", "handlebars", "reflect-metadata"],
+  peerDependencies: ["@nestjs/core", "consul", "@ultimate-backend/kubernetes", "@kubernetes/client-node", "@ultimate-backend/common",  "etcd3", "zookeeper", "@nestjs/common", "@ultimate-backend/bootstrap", "@ultimate-backend/loadbalancer", "@ultimate-backend/consul", "@ultimate-backend/etcd", "@ultimate-backend/zookeeper"],
+  dependencies: ["lodash", "rxjs", "dotenv",  "read-env", "handlebars", "reflect-metadata", "ip", "yaml", "@iarna/toml", "uuid"],
   devDependencies: [],
 }
 
 const commonDependency = {
   name: "@ultimate-backend/common",
   peerDependencies: ["@nestjs/core", "@nestjs/common"],
-  dependencies: ["lodash", "rxjs", "yaml", "@iarna/toml", "reflect-metadata", "ip"],
+  dependencies: ["lodash", "js-yaml", "yaml-schema-validator", "yaml-validator", "rxjs", "yaml", "@iarna/toml", "reflect-metadata", "ip"],
   devDependencies: [],
 }
 
@@ -138,53 +138,50 @@ const bootstrapDependency = {
 }
 
 function cleaDepsTree(obj, replacement) {
-  const deps = obj.dependencies;
-  const peerDeps = obj.peerDependencies;
-  const devDeps = obj.devDependencies;
 
   const newDeps = {};
   const newDevDeps = {};
   const newPeerDeps = {};
 
-  for (const key in deps) {
+  for (const key in obj.devDependencies) {
     if ((replacement.dependencies || []).includes(key)) {
-      newDeps[key] = deps[key];
+      newDeps[key] = obj.devDependencies[key];
     }
 
     if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+      newPeerDeps[key] = obj.devDependencies[key];
     }
 
-    if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+    if ((replacement.devDependencies || []).includes(key)) {
+      newDevDeps[key] = obj.devDependencies[key];
     }
   }
 
-  for (const key in peerDeps) {
+  for (const key in obj.dependencies) {
     if ((replacement.dependencies || []).includes(key)) {
-      newDeps[key] = deps[key];
+      newDeps[key] = obj.dependencies[key];
     }
 
     if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+      newPeerDeps[key] = obj.dependencies[key];
     }
 
-    if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+    if ((replacement.devDependencies || []).includes(key)) {
+      newDevDeps[key] = obj.dependencies[key];
     }
   }
 
-  for (const key in devDeps) {
+  for (const key in obj.peerDependencies) {
     if ((replacement.dependencies || []).includes(key)) {
-      newDeps[key] = deps[key];
+      newDeps[key] = obj.peerDependencies[key];
     }
 
     if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+      newPeerDeps[key] = obj.peerDependencies[key];
     }
 
-    if ((replacement.peerDependencies || []).includes(key)) {
-      newPeerDeps[key] = peerDeps[key];
+    if ((replacement.devDependencies || []).includes(key)) {
+      newDevDeps[key] = obj.peerDependencies[key];
     }
   }
 

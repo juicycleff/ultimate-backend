@@ -46,7 +46,7 @@ function command() {
   // remove dist and get commit message
   try {
     console.info('Removing Dist');
-    shell.exec(`rm -rf dist`);
+    shell.exec(`rimraf dist`);
     commitMessage = shell.exec("git log -1 --pretty=format:'%s'").stdout;
     releaseType = getBuildType(commitMessage);
   } catch (e) {
@@ -74,7 +74,7 @@ function command() {
     if (project !== 'gateway' || project !== 'messaging') {
       console.info(`Building ${project}`);
       shell.exec(
-        `nx run ${project}:build --with-deps --optimization --progress --extractLicenses`
+        `nx run ${project}:build --optimization --progress --extractLicenses`
       );
     }
   }
