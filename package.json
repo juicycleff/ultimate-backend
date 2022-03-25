@@ -1,6 +1,6 @@
 {
   "name": "ultimate-backend",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -27,9 +27,9 @@
     "help": "nx help",
     "link:cli": "nx build plugin-nx && nx build cli && nx build create-ub-project && cd dist/libs/cli && npm link && cd ../../../ && cd dist/libs/create-ub-project && npm link && cd ../../../ && cd dist/libs/plugin-nx && npm link  && cd ../../../ && npm link @ultimate-backend/plugin-nx",
     "patch-package": "npx patch-package consul",
-    "release:pre": "nx affected --target version --version=prerelease --preid=alpha",
-    "release:major": "nx affected --target version --version=major",
-    "release:minor": "nx affected --target version --version=minor",
+    "release:pre": "nx affected --target version --releaseAs=prerelease --preid=alpha",
+    "release:major": "nx affected --target version --releaseAs=major",
+    "release:minor": "nx affected --target version --releaseAs=minor",
     "release:patch": "nx affected --target version --releaseAs=patch",
     "release": "nx affected --target version",
     "npm:build": "node ./tools/scripts/npm-build.js",
@@ -149,6 +149,7 @@
     "jest-ts-auto-mock": "^2.1.0",
     "patch-package": "^6.4.7",
     "prettier": "2.5.1",
+    "rimraf": "^3.0.2",
     "ts-auto-mock": "^3.5.0",
     "ts-jest": "27.0.5",
     "ts-node": "~10.7.0",
