@@ -93,7 +93,7 @@
     "kubernetes-client": "^9.0.0",
     "lodash": "^4.17.21",
     "middie": "^6.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "node-nats-streaming": "^0.3.2",
     "opossum": "^6.3.0",
     "ora": "^6.1.0",
