@@ -42,7 +42,7 @@
     "@angular-devkit/schematics": "^13.2.6",
     "@azure/event-hubs": "^5.7.0",
     "@eventstore/db-client": "^3.2.0",
-    "@google-cloud/pubsub": "^2.19.0",
+    "@google-cloud/pubsub": "^3.0.0",
     "@grpc/grpc-js": "^1.5.7",
     "@iarna/toml": "^2.2.5",
     "@kubernetes/client-node": "^0.16.3",
