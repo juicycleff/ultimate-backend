@@ -98,7 +98,7 @@
     "opossum": "^6.3.0",
     "ora": "^6.1.0",
     "oso": "^0.26.0",
-    "ottoman": "^2.1.0",
+    "ottoman": "^2.2.2",
     "read-env": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5",
