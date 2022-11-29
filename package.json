@@ -52,7 +52,7 @@
     "@nestjs/graphql": "^10.0.6",
     "@nestjs/microservices": "^8.4.0",
     "@nestjs/platform-express": "^8.4.0",
-    "@nestjs/platform-fastify": "^8.4.0",
+    "@nestjs/platform-fastify": "^9.2.1",
     "@nestjs/swagger": "^5.2.0",
     "@nrwl/linter": "13.8.8",
     "@types/faker": "^6.6.9",
