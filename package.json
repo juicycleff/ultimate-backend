@@ -54,7 +54,7 @@
     "@nestjs/platform-express": "^8.4.0",
     "@nestjs/platform-fastify": "^8.4.0",
     "@nestjs/swagger": "^5.2.0",
-    "@nrwl/linter": "13.8.8",
+    "@nrwl/linter": "13.9.0",
     "@types/faker": "^6.6.9",
     "apollo-server-express": "^3.6.4",
     "async-retry": "^1.3.3",
