@@ -47,7 +47,7 @@
     "@iarna/toml": "^2.2.5",
     "@kubernetes/client-node": "^0.16.3",
     "@nestjs/common": "^8.4.0",
-    "@nestjs/core": "^8.4.0",
+    "@nestjs/core": "^9.0.5",
     "@nestjs/cqrs": "^8.0.3",
     "@nestjs/graphql": "^10.0.6",
     "@nestjs/microservices": "^8.4.0",
