@@ -107,7 +107,7 @@
     "tslib": "^2.3.1",
     "uuid": "^8.3.2",
     "vhost": "^3.0.2",
-    "yaml": "^2.0.0-11",
+    "yaml": "^2.2.2",
     "yaml-schema-validator": "^1.2.3",
     "yaml-validator": "^4.0.0",
     "zookeeper": "^5.3.2"
