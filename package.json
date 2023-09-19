@@ -79,7 +79,7 @@
     "fastify-helmet": "^7.0.1",
     "fastify-swagger": "^5.0.0",
     "got": "^12.0.1",
-    "graphql": "^16.0.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^4.1.0",
     "graphql-scalars": "^1.15.0",
     "graphql-tools": "^8.2.0",
