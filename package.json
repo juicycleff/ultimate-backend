@@ -87,7 +87,7 @@
     "helmet": "^5.0.2",
     "inquirer": "^8.2.1",
     "ioredis": "^4.28.5",
-    "ip": "^1.1.5",
+    "ip": "^1.1.9",
     "js-yaml": "^4.1.0",
     "kafkajs": "^1.16.0",
     "kubernetes-client": "^9.0.0",
